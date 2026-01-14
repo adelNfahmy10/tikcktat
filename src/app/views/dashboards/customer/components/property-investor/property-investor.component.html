@@ -1,0 +1,93 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Property Investor</h4>
+  </div>
+  <div class="card-body">
+    <div class="d-flex align-items-center gap-3">
+      <img
+        src="assets/images/users/avatar-2.jpg"
+        class="rounded avatar-xl img-thumbnail"
+        alt="img-7"
+      />
+      <div class="">
+        <h4 class="mb-1">
+          <a routerLink="/customers/details" class="mb-1 link-dark fw-semibold"
+            >Daavid Nummi</a
+          >
+        </h4>
+        <a href="javascript:void(0);" class="link-primary fw-medium fs-14"
+          >EastTribune.nl</a
+        >
+        <ul
+          class="list-inline d-flex flex-wrap gap-1 mb-0 align-items-center mt-2"
+        >
+          <li class="list-inline-item">
+            <a
+              href="javascript: void(0);"
+              class="btn btn-soft-primary avatar-sm d-flex align-items-center justify-content-center fs-20"
+            >
+              <i class="ri-facebook-fill"></i>
+            </a>
+          </li>
+
+          <li class="list-inline-item">
+            <a
+              href="javascript: void(0);"
+              class="btn btn-soft-danger avatar-sm d-flex align-items-center justify-content-center fs-20"
+            >
+              <i class="ri-instagram-fill"></i>
+            </a>
+          </li>
+
+          <li class="list-inline-item">
+            <a
+              href="javascript: void(0);"
+              class="btn btn-soft-info avatar-sm d-flex align-items-center justify-content-center fs-20"
+            >
+              <i class="ri-twitter-fill"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a
+              href="javascript: void(0);"
+              class="btn btn-soft-success avatar-sm d-flex align-items-center justify-content-center fs-20"
+            >
+              <i class="ri-whatsapp-fill"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a
+              href="javascript: void(0);"
+              class="btn btn-soft-warning avatar-sm d-flex align-items-center justify-content-center fs-20"
+            >
+              <i class="ri-mail-fill"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="">
+      <div id="customer_invest" data-colors="#604ae3" class="apex-charts mt-3">
+        <apx-chart
+          [chart]="investChart.chart!"
+          [series]="investChart.series!"
+          [plotOptions]="investChart.plotOptions!"
+          [grid]="investChart.grid!"
+          [colors]="investChart.colors!"
+          [dataLabels]="investChart.dataLabels!"
+          [legend]="investChart.legend!"
+          [xaxis]="investChart.xaxis!"
+          [yaxis]="investChart.yaxis!"
+          [tooltip]="investChart.tooltip!"
+          [responsive]="investChart.responsive!"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="card-footer border-top border-dashed gap-1 hstack">
+    <a href="javascript:void(0);" class="btn btn-primary w-100">Open Chat</a>
+    <a href="javascript:void(0);" class="btn btn-light w-100"
+      >Call To Customer</a
+    >
+  </div>
+</div>

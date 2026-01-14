@@ -1,0 +1,73 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Recent Customers Invest</h4>
+  </div>
+  <div class="card-body">
+    <div
+      class="d-flex flex-wrap gap-2 align-items-center bg-light-subtle border justify-content-between p-3 rounded mb-3"
+    >
+      <div>
+        <h5 class="fw-medium mb-1 text-dark fs-16">Customer Buy Property</h5>
+        <div class="avatar-group mt-3">
+          <div class="avatar d-flex align-items-center justify-content-center">
+            <img
+              src="assets/images/users/avatar-6.jpg"
+              alt=""
+              class="rounded-circle avatar border border-light border-3"
+            />
+          </div>
+          <div class="avatar d-flex align-items-center justify-content-center">
+            <img
+              src="assets/images/users/avatar-7.jpg"
+              alt=""
+              class="rounded-circle avatar border border-light border-3"
+            />
+          </div>
+          <div class="avatar d-flex align-items-center justify-content-center">
+            <img
+              src="assets/images/users/avatar-8.jpg"
+              alt=""
+              class="rounded-circle avatar border border-light border-3"
+            />
+          </div>
+          <div class="avatar d-flex align-items-center justify-content-center">
+            <img
+              src="assets/images/users/avatar-9.jpg"
+              alt=""
+              class="rounded-circle avatar border border-light border-3"
+            />
+          </div>
+          <div class="avatar d-flex align-items-center justify-content-center">
+            <img
+              src="assets/images/users/avatar-10.jpg"
+              alt=""
+              class="rounded-circle avatar border border-light border-3"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="text-end">
+        <h5 class="fw-medium mb-3 text-dark fs-16">Revenue</h5>
+        <h3 class="text-dark fw-bold d-flex align-items-center gap-2 mb-0">
+          <span class="text-success mb-0 fs-16 fw-semibold"
+            ><i class="ri-arrow-drop-up-fill"></i>+22.0</span
+          >
+          {{ currency }}67435.00
+        </h3>
+      </div>
+    </div>
+    <div id="datalabels-column2" class="apex-charts" data-colors="#604ae3">
+      <apx-chart
+        [chart]="dataColumn2Chart.chart!"
+        [series]="dataColumn2Chart.series!"
+        [plotOptions]="dataColumn2Chart.plotOptions!"
+        [dataLabels]="dataColumn2Chart.dataLabels!"
+        [colors]="dataColumn2Chart.colors!"
+        [legend]="dataColumn2Chart.legend!"
+        [xaxis]="dataColumn2Chart.xaxis!"
+        [yaxis]="dataColumn2Chart.yaxis!"
+        [grid]="dataColumn2Chart.grid!"
+      />
+    </div>
+  </div>
+</div>

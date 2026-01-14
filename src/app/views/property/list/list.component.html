@@ -1,0 +1,14 @@
+<app-page-title title="Real Estate" subTitle="Listing List" />
+
+<div class="row">
+  @for (item of stateList; track $index) {
+    <div class="col-md-6 col-xl-3">
+      <property-state [item]="item"></property-state>
+    </div>
+  }
+</div>
+<div class="row">
+  <div class="col-xl-12">
+    <property-data />
+  </div>
+</div>

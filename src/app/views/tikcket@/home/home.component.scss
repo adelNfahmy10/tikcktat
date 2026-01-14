@@ -1,0 +1,81 @@
+@import '../../../../../public/assets/scss/varibales';
+.home{
+  background: linear-gradient(to right, #000000b9, #000000b9), url('/assets/images/tikecktImages/home-image/bg-home.png');
+  background-size: cover;
+  background-position: center center;
+  overflow: hidden;
+  color: #fff;
+}
+.events {
+  perspective: 1000px; // مهم عشان تظهر الـ 3D effect
+  .event-category {
+    box-shadow: 0 0 5px 5px $main-color;
+    text-align: center;
+    position: relative;
+    img {
+      width: 180px;
+      display: block;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      border-radius: 10px;
+    }
+    p{
+      position: absolute;
+      bottom:-20px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    &:hover {
+      margin-inline: 35px;
+      transform: translateY(-20px) scale(.4);
+      img {
+        transform: rotateY(-10deg) rotateX(20deg) scale(3.1);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 15px $main-color;
+      }
+      p{
+        border-radius: 5px;
+        left: -10px;
+        bottom: 130%;
+        width: 120%;
+        background-color: $main-color;
+        transform: rotateY(20deg) rotateX(10deg) scale(3.1);
+      }
+    }
+  }
+}
+.auth-section{
+  span{
+    padding: 5px 20px;
+    color: $main-color;
+    border: 2px solid $main-color;
+    border-radius: 20px;
+  }
+  span:hover{
+    color: $light-color;
+    background-color: $main-color;
+  }
+}
+@media (max-width:567px) {
+  .home{
+    align-items: center !important;
+    height: 100vh;
+  }
+  .events {
+    gap: 30px !important;
+    .event-category {
+      &:hover{
+        margin-inline: 20px;
+      }
+      img {
+        width: 130px;
+      }
+      p{
+        font-size: 12px;
+        width: 100%;
+      }
+    }
+  }
+}

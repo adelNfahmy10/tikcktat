@@ -1,0 +1,49 @@
+
+<section class="checkout" id="checkout">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3">
+      <div class="row g-3">
+        <div class="col-md-7">
+          <div class="image-event">
+            <img src="assets/images/tikecktImages/home-image/bg-home.png" class="w-100 rounded-4" alt="">
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <form class="d-flex flex-column gap-2 p-2 shadow-lg rounded-3" [formGroup]="checkoutForm" (ngSubmit)="submitCheckout()">
+            <h1 class="main-color fw-bold">Checkout Event</h1>
+            <div class="fullName">
+              <label for="photo" class="form-label">Photo</label>
+              <input class="form-control" formControlName="photo" type="file" name="photo" id="photo">
+            </div>
+
+
+            <div class="fullName">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input class="form-control" formControlName="fullName" type="text" name="fullName" id="fullName" placeholder="Enter Your Full Name...">
+            </div>
+
+            <div class="phone">
+              <label for="phone" class="form-label">Phone</label>
+              <input class="form-control" formControlName="phone" type="tel" name="phone" id="phone" placeholder="Enter Your Phone...">
+            </div>
+
+            <div class="email">
+              <label for="email" class="form-label">Email</label>
+              <input class="form-control" formControlName="email" type="email" name="email" id="email" placeholder="Enter Your Email...">
+            </div>
+
+            <div class="visistor">
+              <label for="visistor" class="form-label">Visitor</label>
+              <input class="form-control" formControlName="visitor" type="number" name="visistor" id="visistor" placeholder="Enter Your Visitor Count...">
+            </div>
+
+            <div class="submit-btn text-center">
+              <button class="btn btn-bg"> Checkout </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

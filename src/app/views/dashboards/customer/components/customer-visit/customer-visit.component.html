@@ -1,0 +1,138 @@
+<div class="card">
+  <div
+    class="card-header d-flex justify-content-between align-items-center pb-1"
+  >
+    <h4 class="card-title">Customer Visit by Device</h4>
+    <div ngbDropdown>
+      <a
+        ngbDropdownToggle
+        class="dropdown-toggle btn btn-sm btn-outline-light rounded"
+        role="button"
+      >
+        Today
+      </a>
+      <div ngbDropdownMenu class="dropdown-menu-end">
+        <a href="javascript:void(0);" class="dropdown-item">Today</a>
+
+        <a href="javascript:void(0);" class="dropdown-item">Month</a>
+
+        <a href="javascript:void(0);" class="dropdown-item">Years</a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+        <h3 class="d-flex align-items-center text-dark gap-2 mb-0">
+          67,893<span class="badge text-danger bg-danger-subtle px-2 py-1 fs-12"
+            ><i class="ri-arrow-down-line"></i>0.66%</span
+          >
+        </h3>
+        <small>(Total Devices)</small>
+      </div>
+      <div class="avatar-md bg-light bg-opacity-50 rounded">
+        <iconify-icon
+          icon="solar:devices-broken"
+          class="fs-32 text-primary avatar-title"
+        ></iconify-icon>
+      </div>
+    </div>
+    <div class="mx-n3">
+      <div id="customer_devices" data-colors="#604ae3" class="apex-charts my-3">
+        <apx-chart
+          [chart]="visitChart.chart!"
+          [series]="visitChart.series!"
+          [stroke]="visitChart.stroke!"
+          [fill]="visitChart.fill!"
+          [markers]="visitChart.markers!"
+          [colors]="visitChart.colors!"
+          [tooltip]="visitChart.tooltip!"
+        />
+      </div>
+    </div>
+    <div class="row mt-4 mb-1">
+      <div class="col-lg-6">
+        <div class="border rounded p-2">
+          <p class="mb-1 text-muted">
+            <i class="ri-smartphone-line text-dark"></i> Mobile
+          </p>
+          <p class="fs-18 text-dark fw-medium">
+            2.435 <span class="text-muted fs-14">60%</span>
+          </p>
+          <div class="d-flex justify-content-between">
+            <div>
+              <p class="text-dark mb-0">Android</p>
+              <p class="mb-0">2,545</p>
+            </div>
+            <div class="text-end">
+              <p class="text-dark mb-0">IOS</p>
+              <p class="mb-0">487</p>
+            </div>
+          </div>
+          <ngb-progressbar-stacked
+            class="progress-lg rounded-0 gap-1 overflow-visible mt-3 bg-light-subtle"
+          >
+            <ngb-progressbar
+              type="success"
+              [value]="70"
+              class="rounded-pill"
+              style="height: 10px"
+            ></ngb-progressbar>
+            <ngb-progressbar
+              type="dark"
+              [value]="30"
+              class="rounded-pill"
+              style="height: 10px"
+            ></ngb-progressbar>
+          </ngb-progressbar-stacked>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="border rounded p-2 text-end">
+          <p class="mb-1 text-muted">
+            <i class="ri-computer-line text-dark"></i> Desktop
+          </p>
+          <p class="fs-18 text-dark fw-medium">
+            578 <span class="text-muted fs-14">20%</span>
+          </p>
+          <div class="d-flex justify-content-between">
+            <div class="text-start">
+              <p class="text-dark mb-0">Windows</p>
+              <p class="mb-0">523</p>
+            </div>
+            <div>
+              <p class="text-dark mb-0">Mac</p>
+              <p class="mb-0">876</p>
+            </div>
+          </div>
+          <ngb-progressbar-stacked
+            class="progress-lg rounded-0 gap-1 overflow-visible mt-3 bg-light-subtle"
+          >
+            <ngb-progressbar
+              type="dark"
+              [value]="30"
+              class="rounded-pill"
+              style="height: 10px"
+            ></ngb-progressbar>
+            <ngb-progressbar
+              type="warning"
+              [value]="70"
+              class="rounded-pill"
+              style="height: 10px"
+            ></ngb-progressbar>
+          </ngb-progressbar-stacked>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer border-top">
+    <div class="row g-2">
+      <div class="col-lg-7">
+        <a href="javascript:void(0);" class="btn btn-primary w-100">View All</a>
+      </div>
+      <div class="col-lg-5">
+        <a href="javascript:void(0);" class="btn btn-light w-100">Edit Data</a>
+      </div>
+    </div>
+  </div>
+</div>

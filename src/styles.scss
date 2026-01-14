@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+@import "nouislider/dist/nouislider.css";
+@import "ngx-toastr/toastr";
+@import "flatpickr/dist/flatpickr.css";
+@import "quill/dist/quill.snow.css";
+@import "quill/dist/quill.bubble.css";
+@import "simplebar/dist/simplebar.css";
+@import "../public/assets/scss/app.scss";
+@import "../public/assets/scss/icons.scss";
+@import "../public/assets/scss/varibales";
+
+*{
+  transition: all .4s ease;
+}
+.cr{
+  cursor: pointer;
+}
+.main-color{
+  color: $main-color;
+}
+.main-bg{
+  background-color: $main-color;
+  color: #fff;
+}
+.second-color{
+  color: $second-color;
+}
+.bg-white{
+  background-color: #fff;
+}
+.btn-bg{
+  background-color: $main-color;
+  color: #fff;
+  &:hover{
+    background-color: #0f45b8;
+    color: #fff;
+  }
+}

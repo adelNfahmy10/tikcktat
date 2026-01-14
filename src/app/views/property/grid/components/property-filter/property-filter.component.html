@@ -1,0 +1,284 @@
+<div class="card">
+  <div class="card-header border-bottom">
+    <div>
+      <h4 class="card-title">Properties</h4>
+      <p class="mb-0">Show 15,780 Properties</p>
+    </div>
+  </div>
+  <div class="card-body border-light">
+    <form>
+      <label for="choices-single-groups" class="form-label"
+        >Properties Location</label
+      >
+      <select
+        selectFormInput
+        class="form-control"
+        id="choices-single-groups"
+        data-choices
+        data-choices-groups
+        data-placeholder="Select City"
+        name="choices-single-groups"
+      >
+        <option value="">Choose a city</option>
+        <optgroup label="UK">
+          <option value="London">London</option>
+          <option value="Manchester">Manchester</option>
+          <option value="Liverpool">Liverpool</option>
+        </optgroup>
+        <optgroup label="FR">
+          <option value="Paris">Paris</option>
+          <option value="Lyon">Lyon</option>
+          <option value="Marseille">Marseille</option>
+        </optgroup>
+        <optgroup label="DE" disabled>
+          <option value="Hamburg">Hamburg</option>
+          <option value="Munich">Munich</option>
+          <option value="Berlin">Berlin</option>
+        </optgroup>
+        <optgroup label="US">
+          <option value="New York">New York</option>
+          <option value="Washington" disabled>Washington</option>
+          <option value="Michigan">Michigan</option>
+        </optgroup>
+        <optgroup label="SP">
+          <option value="Madrid">Madrid</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="Malaga">Malaga</option>
+        </optgroup>
+        <optgroup label="CA">
+          <option value="Montreal">Montreal</option>
+          <option value="Toronto">Toronto</option>
+          <option value="Vancouver">Vancouver</option>
+        </optgroup>
+      </select>
+
+      <div class="mb-3">
+        <label for="typeplace" class="form-label">Type Of Place</label>
+        <input type="text" id="typeplace" class="form-control" />
+      </div>
+    </form>
+    <h5 class="text-dark fw-medium my-3">Custom Price Range :</h5>
+    <div id="product-price-range" data-slider-size="md" class="">
+      <nouislider
+        [config]="rangeConfig"
+        [(ngModel)]="someRange"
+        class="mt-0"
+      ></nouislider>
+    </div>
+    <div class="formCost d-flex gap-2 align-items-center mt-3">
+      <input
+        class="form-control form-control-sm text-center"
+        type="text"
+        id="minCost"
+        [value]="'$' + someRange[0]"
+      />
+      <span class="fw-semibold text-muted">to</span>
+      <input
+        class="form-control form-control-sm text-center"
+        type="text"
+        id="maxCost"
+        [value]="'$' + someRange[1]"
+      />
+    </div>
+    <h5 class="text-dark fw-medium my-3">Accessibility Features :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck11"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck11">
+            For Rent
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck12"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck12">
+            For Sale
+          </label>
+        </div>
+      </div>
+    </div>
+    <h5 class="text-dark fw-medium my-3">Properties Type :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck"
+            checked
+          />
+          <label class="form-check-label ms-1" for="defaultCheck">
+            All Properties
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck1"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Cottage
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck2"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Villas
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck3"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Apartment
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck4"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Duplex Bungalow
+          </label>
+        </div>
+      </div>
+    </div>
+    <h5 class="text-dark fw-medium my-3">Bedrooms :</h5>
+    <div
+      class="d-flex flex-wrap gap-1"
+      role="group"
+      aria-label="Basic checkbox toggle button group"
+    >
+      <input type="checkbox" class="btn-check" id="btncheck1" />
+      <label class="btn btn-outline-primary" for="btncheck1">1 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck2" />
+      <label class="btn btn-outline-primary" for="btncheck2">2 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck3" checked />
+      <label class="btn btn-outline-primary" for="btncheck3">3 BHK</label>
+
+      <input type="checkbox" class="btn-check" id="btncheck4" />
+      <label class="btn btn-outline-primary my-1" for="btncheck4"
+        >4 & 5 BHK</label
+      >
+    </div>
+    <h5 class="text-dark fw-medium my-3">Accessibility Features :</h5>
+    <div class="row g-1">
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck5"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Balcony
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck6"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Parking
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck7"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1"> Spa </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck8"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Pool
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck9"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Restaurant
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck10"
+          />
+          <label class="form-check-label ms-1" for="defaultCheck1">
+            Fitness Club
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <a href="javascript:void(0);" class="btn btn-primary w-100">Apply</a>
+  </div>
+</div>

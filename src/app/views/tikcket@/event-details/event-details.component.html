@@ -1,0 +1,54 @@
+<section class="event" id="event">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3">
+      <div class="event-banner rounded-4">
+        <img src="assets/images/tikecktImages/event-image/grad-cover-tikcket.png" class="w-100 h-100 rounded-2" alt="">
+      </div>
+
+      <div class="event-details my-3">
+        <h3 class="main-color fw-bold">Graduation Party – Faculty of Arts, Ain Shams University 2026</h3>
+        <p>
+          Location : <span><a class="cr">Four Seasons Hotel</a></span> <br>
+          Date : <span class="main-color fw-bold"> 15 January 2026 </span> <br>
+          Price: <span class="main-color fw-bold"> {{500 | number}} EGP </span>
+        </p>
+
+        <h4 class="main-color fw-bold">Event Details :</h4>
+        <ul>
+          <li>Robe Collection</li>
+          <li>Certificate Pickup for Graduation</li>
+          <li>Personalized Graduation Sash Collection</li>
+          <li>Live DJ Performance</li>
+          <li>Spacious Stage for Performances</li>
+          <li>Presence of Professors for Certificate Ceremony</li>
+          <li>Event Venue: Grand Ballroom, Four Seasons Hotel</li>
+        </ul>
+
+        <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
+          <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
+            <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
+              <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Terms of entry </button>
+            </h2>
+            <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body" ngbAccordionBody >
+                <ul class="entry-rules">
+                  <li>Valid Ticket is required for entry</li>
+                  <li>Guests must show a valid ID</li>
+                  <li>Dress Code: Smart Casual</li>
+                  <li>No outside food or drinks allowed</li>
+                  <li>All attendees must follow event staff instructions</li>
+                  <li>Children under 12 must be accompanied by an adult</li>
+                  <li>No professional cameras or recording equipment without permission</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-bg p-0 px-4 py-1 mt-2" routerLink="/checkout">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,121 @@
+<div class="row">
+  @for (item of propertyList; track $index) {
+    <div class="col-lg-4 col-md-6">
+      <div class="card overflow-hidden">
+        <div class="position-relative">
+          <img [src]="item.image" alt="" class="img-fluid rounded-top" />
+          <span class="position-absolute top-0 start-0 p-1">
+            @if (item.type != 'Sold') {
+              <button
+                type="button"
+                class="btn avatar-sm d-inline-flex align-items-center justify-content-center fs-20 rounded"
+                [ngClass]="
+                  item.save
+                    ? 'btn-warning text-light'
+                    : 'bg-warning-subtle text-warning'
+                "
+              >
+                <iconify-icon icon="solar:bookmark-broken"></iconify-icon>
+              </button>
+            }
+          </span>
+          <span class="position-absolute top-0 end-0 p-1">
+            <span class="badge bg-{{ item.variant }} text-white fs-13">
+              @if (item.type != 'Sold') {
+                For
+              }
+              {{ item.type }}</span
+            >
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2">
+            <div class="avatar bg-light rounded">
+              <iconify-icon
+                [icon]="item.icon"
+                class="fs-24 text-primary avatar-title"
+              ></iconify-icon>
+            </div>
+            <div>
+              <a href="javascript:void(0);" class="text-dark fw-medium fs-16">{{
+                item.name
+              }}</a>
+              <p class="text-muted mb-0">{{ item.location }}</p>
+            </div>
+          </div>
+          <div class="row mt-2 g-2">
+            <div class="col-lg-4 col-4">
+              <span class="badge bg-light-subtle text-muted border fs-12">
+                <span class="fs-16"
+                  ><iconify-icon
+                    icon="solar:bed-broken"
+                    class="align-middle"
+                  ></iconify-icon
+                ></span>
+                {{ item.beds }} Beds
+              </span>
+            </div>
+            <div class="col-lg-4 col-4">
+              <span class="badge bg-light-subtle text-muted border fs-12">
+                <span class="fs-16"
+                  ><iconify-icon
+                    icon="solar:bath-broken"
+                    class="align-middle"
+                  ></iconify-icon
+                ></span>
+                {{ item.bath }} Bath
+              </span>
+            </div>
+            <div class="col-lg-4 col-4">
+              <span class="badge bg-light-subtle text-muted border fs-12">
+                <span class="fs-16"
+                  ><iconify-icon
+                    icon="solar:scale-broken"
+                    class="align-middle"
+                  ></iconify-icon
+                ></span>
+                {{ item.size }}ft
+              </span>
+            </div>
+            <div class="col-lg-4 col-4">
+              <span class="badge bg-light-subtle text-muted border fs-12">
+                <span class="fs-16"
+                  ><iconify-icon
+                    icon="solar:double-alt-arrow-up-broken"
+                    class="align-middle"
+                  ></iconify-icon
+                ></span>
+                {{ item.flor }} Floor
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="card-footer bg-light-subtle d-flex justify-content-between align-items-center border-top"
+        >
+          <p class="fw-medium text-dark fs-16 mb-0">
+            {{ currency }}{{ item.price | number: '2.2' }}
+          </p>
+          <div>
+            <a href="javascript:void(0);" class="link-primary fw-medium"
+              >More Inquiry <i class="ri-arrow-right-line align-middle"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="p-3 border-top">
+  <nav aria-label="Page navigation example">
+    <ngb-pagination
+      [collectionSize]="30"
+      [page]="1"
+      class="pagination justify-content-end mb-0"
+    >
+      <ng-template ngbPaginationPrevious>Previous</ng-template>
+      <ng-template ngbPaginationNext>Next</ng-template>
+    </ngb-pagination>
+  </nav>
+</div>

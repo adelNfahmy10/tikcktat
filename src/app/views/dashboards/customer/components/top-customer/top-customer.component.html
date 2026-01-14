@@ -1,0 +1,62 @@
+<div class="card">
+  <div
+    class="card-header d-flex justify-content-between align-items-center border-0"
+  >
+    <div>
+      <h4 class="card-title mb-1">Top Customer</h4>
+      <p class="mb-0 fs-13">390 Customer</p>
+    </div>
+    <div ngbDropdown>
+      <a ngbDropdownToggle class="rounded arrow-none">
+        <i class="ri-edit-box-line fs-20 text-dark"></i>
+      </a>
+      <div ngbDropdownMenu class="dropdown-menu-end">
+        <a href="javascript:void(0);" class="dropdown-item">New Agent</a>
+
+        <a href="javascript:void(0);" class="dropdown-item">Old Agent</a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    @for (
+      item of customerList;
+      track $index;
+      let first = $first;
+      let last = $last
+    ) {
+      <div
+        class="d-flex align-items-center justify-content-between"
+        [ngClass]="{
+          'pb-3': first,
+          'border-bottom': !last,
+          'py-3': !first && !last,
+          'pt-3': last,
+        }"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar">
+            <img
+              [src]="item.avatar"
+              alt="avatar-3"
+              class="img-fluid rounded-circle"
+            />
+          </div>
+          <div class="d-block">
+            <span class="text-dark">
+              <a href="javascript:void(0);" class="text-dark fw-medium fs-15">{{
+                item.name
+              }}</a>
+            </span>
+            <p class="mb-0 fs-14 text-muted">{{ item.email }}</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-muted fw-medium mb-0">{{ item.amount }}</p>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="card-footer border-top">
+    <a href="javascript:void(0);" class="btn btn-primary w-100">View All</a>
+  </div>
+</div>

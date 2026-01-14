@@ -1,0 +1,76 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Weekly Sales</h4>
+  </div>
+  <div class="card-body">
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <ngb-carousel [showNavigationIndicators]="false">
+        <ng-template ngbSlide>
+          <img
+            src="assets/images/properties/p-9.jpg"
+            class="d-block w-100 rounded"
+            alt="img-6"
+          />
+        </ng-template>
+        <ng-template ngbSlide>
+          <img
+            src="assets/images/properties/p-7.jpg"
+            class="d-block w-100 rounded"
+            alt="img-7"
+          />
+        </ng-template>
+        <ng-template ngbSlide>
+          <img
+            src="assets/images/properties/p-8.jpg"
+            class="d-block w-100 rounded"
+            alt="img-5"
+          />
+        </ng-template>
+        <ng-template ngbSlide>
+          <img
+            src="assets/images/properties/p-6.jpg"
+            class="d-block w-100 rounded"
+            alt="img-"
+          />
+        </ng-template>
+        <ng-template ngbSlide>
+          <img
+            src="assets/images/properties/p-10.jpg"
+            class="d-block w-100 rounded"
+            alt="img-5"
+          />
+        </ng-template>
+      </ngb-carousel>
+    </div>
+
+    <div id="sales_funnel" class="apex-charts mt-4">
+      <apx-chart
+        [chart]="weeklyChart.chart!"
+        [series]="weeklyChart.series!"
+        [plotOptions]="weeklyChart.plotOptions!"
+        [grid]="weeklyChart.grid!"
+        [colors]="weeklyChart.colors!"
+        [dataLabels]="weeklyChart.dataLabels!"
+        [legend]="weeklyChart.legend!"
+        [xaxis]="weeklyChart.xaxis!"
+        [yaxis]="weeklyChart.yaxis!"
+        [tooltip]="weeklyChart.tooltip!"
+        [responsive]="weeklyChart.responsive!"
+      />
+    </div>
+  </div>
+  <div
+    class="card-footer border-top d-flex align-items-center justify-content-between"
+  >
+    <p class="text-muted fw-medium fs-15 mb-0">
+      <span class="text-dark me-1">Total Property Seals : </span>5,746
+    </p>
+    <div>
+      <a href="javascript:void(0);" class="btn btn-primary btn-sm">View More</a>
+    </div>
+  </div>
+</div>

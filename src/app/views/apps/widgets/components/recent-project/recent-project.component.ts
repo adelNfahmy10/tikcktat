@@ -1,0 +1,14 @@
+import { Component } from '@angular/core'
+import { RecentProject } from '../../data'
+import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap'
+import { SimplebarAngularModule } from 'simplebar-angular'
+
+@Component({
+    selector: 'widgets-recent-project',
+    imports: [NgbProgressbarModule, SimplebarAngularModule],
+    templateUrl: './recent-project.component.html',
+    styles: ``
+})
+export class RecentProjectComponent {
+  projectList = RecentProject
+}

@@ -1,0 +1,57 @@
+<div class="card">
+  <div
+    class="card-header d-flex align-items-center justify-content-between pb-0"
+  >
+    <h4 class="card-title">Goals</h4>
+    <div>
+      <a href="javascript:void(0);" class="link-dark fs-20"
+        ><i class="ri-settings-4-line"></i
+      ></a>
+    </div>
+  </div>
+  <div class="card-body pt-0">
+    <div id="agent_goals" class="apex-charts mb-4">
+      <apx-chart
+        [chart]="goalChart.chart!"
+        [plotOptions]="goalChart.plotOptions!"
+        [fill]="goalChart.fill!"
+        [stroke]="goalChart.stroke!"
+        [colors]="goalChart.colors!"
+        [series]="goalChart.series!"
+        [labels]="goalChart.labels!"
+        [responsive]="goalChart.responsive!"
+      />
+    </div>
+    <h5>Income Statistic</h5>
+    <div class="row align-items-center justify-content-center mt-3">
+      <div class="col-lg-6 col-6">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar bg-light bg-opacity-50 rounded">
+            <iconify-icon
+              icon="solar:wallet-money-broken"
+              class="fs-28 text-primary avatar-title"
+            ></iconify-icon>
+          </div>
+          <div>
+            <p class="mb-0 fs-16 text-dark fw-semibold">{{ currency }}12,167</p>
+            <small>From June</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-6">
+        <div class="d-flex align-items-center justify-content-end gap-2">
+          <div class="avatar bg-light bg-opacity-50 rounded">
+            <iconify-icon
+              icon="solar:wallet-money-broken"
+              class="fs-28 text-primary avatar-title"
+            ></iconify-icon>
+          </div>
+          <div>
+            <p class="mb-0 fs-16 text-dark fw-semibold">{{ currency }}14,900</p>
+            <small>From July</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
