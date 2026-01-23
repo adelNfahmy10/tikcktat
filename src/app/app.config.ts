@@ -12,6 +12,7 @@ import {
 import {
   provideHttpClient,
   withFetch,
+  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http'
 
@@ -27,6 +28,8 @@ import { AuthenticationEffects } from '@store/authentication/authentication.effe
 import { FakeBackendProvider } from '@core/helper/fake-backend'
 import { provideToastr } from 'ngx-toastr'
 import { DecimalPipe } from '@angular/common'
+import { headerInterceptor } from '@core/interceptors/header/header.interceptor'
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -46,7 +49,8 @@ export const appConfig: ApplicationConfig = {
     provideStore(rootReducer, { metaReducers: [localStorageSyncReducer] }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(AuthenticationEffects, CalendarEffects),
-    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    provideHttpClient(withFetch(), withInterceptors([headerInterceptor])),
     provideToastr({}),
+    provideAnimations()
   ],
 }

@@ -8,5 +8,5 @@ import { RouterLink } from "@angular/router";
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-
+  token:string | null = localStorage.getItem('token')
 }

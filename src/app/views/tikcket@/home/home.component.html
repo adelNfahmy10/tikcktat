@@ -1,25 +1,30 @@
 <section class="home d-flex" id="home">
   <div class="container py-5">
     <div class="head-section text-center">
+      <img class="logo shadow rounded p-3" src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" alt="">
+
       <h1>Welcome To Ticketat</h1>
       <h3>Explore and book the parties and conferences you need</h3>
     </div>
 
     <div class="events d-flex justify-content-center align-items-center gap-3 mt-5">
-      <div class="event-category rounded-3 cr" routerLink="/event">
+      <div class="event-category rounded-3 cr" routerLink="/event/GraduationParty">
         <img class="rounded-3" src="assets/images/tikecktImages/home-image/party-logo.png" loading="lazy" alt="event party">
         <p>Graduation Party</p>
       </div>
 
-       <div class="event-category rounded-3 cr" routerLink="/event">
+       <div class="event-category rounded-3 cr" routerLink="/event/Conferences">
           <img class="rounded-3" src="assets/images/tikecktImages/home-image/conference-logo.png" loading="lazy" alt="event party">
           <p>Conference</p>
         </div>
     </div>
 
 
-    <div class="auth-section text-center mt-5 fs-4">
-      <span class="cr" routerLink="auth/sign-in">SignIn</span> || <span class="cr" routerLink="/auth/sign-up">Register Now</span>
-    </div>
+    @if(!token){
+      <div class="auth-section text-center mt-5 fs-4">
+        <span class="cr" routerLink="/login">SignIn</span> || <span class="cr" routerLink="/register">Register Now</span>
+      </div>
+    }
+
   </div>
 </section>

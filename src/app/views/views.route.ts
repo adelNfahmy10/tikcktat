@@ -9,6 +9,9 @@ import { HomeComponent } from './tikcket@/home/home.component'
 import { EventComponent } from './tikcket@/event/event.component'
 import { EventDetailsComponent } from './tikcket@/event-details/event-details.component'
 import { CheckoutComponent } from './tikcket@/checkout/checkout.component'
+import { AddEventComponent } from './tikcket@/add-event/add-event.component'
+import { SigninComponent } from './tikcket@/authorization/signin/signin.component';
+import { SignupComponent } from './tikcket@/authorization/signup/signup.component'
 
 export const VIEWS_ROUTES: Route[] = [
    {
@@ -22,21 +25,36 @@ export const VIEWS_ROUTES: Route[] = [
      data: { title: 'Home' },
   },
   {
-    path: 'event',
+    path: 'event/:type',
     component: EventComponent,
      data: { title: 'Events' },
   },
   {
-    path: 'event-details',
+    path: 'event-details/:id',
     component: EventDetailsComponent,
      data: { title: 'Event Details' },
   },
   {
-    path: 'checkout',
+    path: 'checkout/:id',
     component: CheckoutComponent,
      data: { title: 'Checkout' },
   },
+  {
+    path: 'add-event',
+    component: AddEventComponent,
+     data: { title: 'Add Eevent' },
+  },
 
+  {
+    path: 'login',
+    component: SigninComponent,
+     data: { title: 'SignIn' },
+  },
+  {
+    path: 'register',
+    component: SignupComponent,
+     data: { title: 'SignUp' },
+  },
 
 
 

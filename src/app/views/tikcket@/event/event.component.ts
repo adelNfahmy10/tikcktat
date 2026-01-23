@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { EventService } from '@core/services/event/event.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event',
@@ -8,6 +10,33 @@ import { RouterLink } from '@angular/router';
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
 })
-export class EventComponent {
+export class EventComponent implements OnInit{
+  private readonly _EventService = inject(EventService)
+  private readonly _ActivatedRoute = inject(ActivatedRoute)
+
+  allEvents:any[] = []
+  token:string | null = localStorage.getItem('token')
+
+  ngOnInit(): void {
+    this.getEvents()
+  }
+
+  getEvents(): void {
+    this._ActivatedRoute.paramMap.pipe(
+        switchMap(params => {
+          const type = params.get('type');
+          return this._EventService.getAllEvents(type);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.allEvents = res.data;
+          console.log(this.allEvents);
+        },
+        error: (err) => {
+          console.error(err.msg);
+        }
+      });
+  }
 
 }

@@ -2,26 +2,24 @@
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3">
       <div class="event-banner rounded-4">
-        <img src="assets/images/tikecktImages/event-image/grad-cover-tikcket.png" class="w-100 h-100 rounded-2" alt="">
+        <img [src]="eventData.imageUrl" class="w-100 h-100 rounded-2" alt="Event image">
       </div>
 
       <div class="event-details my-3">
-        <h3 class="main-color fw-bold">Graduation Party – Faculty of Arts, Ain Shams University 2026</h3>
+        <h3 class="main-color fw-bold">{{eventData.name}}</h3>
         <p>
-          Location : <span><a class="cr">Four Seasons Hotel</a></span> <br>
-          Date : <span class="main-color fw-bold"> 15 January 2026 </span> <br>
-          Price: <span class="main-color fw-bold"> {{500 | number}} EGP </span>
+          Location : <span><a class="cr">{{eventData.location}}</a></span> <br>
+          Date : <span class="main-color fw-bold"> {{eventData.date | date:'dd/mm/yyyy'}} </span> <br>
+          Price: <span class="main-color fw-bold"> {{eventData.price | number}} EGP </span>
         </p>
 
         <h4 class="main-color fw-bold">Event Details :</h4>
         <ul>
-          <li>Robe Collection</li>
-          <li>Certificate Pickup for Graduation</li>
-          <li>Personalized Graduation Sash Collection</li>
-          <li>Live DJ Performance</li>
-          <li>Spacious Stage for Performances</li>
-          <li>Presence of Professors for Certificate Ceremony</li>
-          <li>Event Venue: Grand Ballroom, Four Seasons Hotel</li>
+          @for (detail of eventDetailsList; track $index) {
+            <li>
+              {{ detail }}
+            </li>
+          }
         </ul>
 
         <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
@@ -32,13 +30,11 @@
             <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body" ngbAccordionBody >
                 <ul class="entry-rules">
-                  <li>Valid Ticket is required for entry</li>
-                  <li>Guests must show a valid ID</li>
-                  <li>Dress Code: Smart Casual</li>
-                  <li>No outside food or drinks allowed</li>
-                  <li>All attendees must follow event staff instructions</li>
-                  <li>Children under 12 must be accompanied by an adult</li>
-                  <li>No professional cameras or recording equipment without permission</li>
+                  @for (term of termsList; track $index) {
+                    <li>
+                      {{ term }}
+                    </li>
+                  }
                 </ul>
               </div>
             </div>
@@ -46,7 +42,7 @@
         </div>
 
         <div class="text-center">
-          <button class="btn btn-bg p-0 px-4 py-1 mt-2" routerLink="/checkout">Book Now</button>
+          <button class="btn btn-bg p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData.id" >Book Now</button>
         </div>
       </div>
     </div>

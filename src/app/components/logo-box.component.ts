@@ -9,31 +9,31 @@ import { RouterLink } from '@angular/router'
     <div [class]="className">
       <a routerLink="/" class="logo-dark">
         @if (size) {
-          <img src="assets/images/logo-sm.png" class="logo-sm" alt="logo sm" />
+          <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" class="logo-sm" alt="logo sm" />
           <img
-            src="assets/images/logo-dark.png"
+            src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png"
             class="logo-lg"
             alt="logo dark"
           />
         } @else {
-          <img src="assets/images/logo-dark.png" height="32" alt="logo dark" />
+          <div class="p-3 border border-2 rounded bg-light-subtle">
+            <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" height="50" alt="logo dark" />
+          </div>
         }
       </a>
 
       <a routerLink="/" class="logo-light">
         @if (size) {
-          <img src="assets/images/logo-sm.png" class="logo-sm" alt="logo sm" />
+          <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" class="logo-sm" alt="logo sm" />
           <img
-            src="assets/images/logo-light.png"
+            src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png"
             class="logo-lg"
             alt="logo light"
           />
         } @else {
-          <img
-            src="assets/images/logo-light.png"
-            height="32"
-            alt="logo light"
-          />
+          <div class="p-3 border border-2 rounded bg-light-subtle">
+            <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" height="50" alt="logo dark" />
+          </div>
         }
       </a>
     </div>

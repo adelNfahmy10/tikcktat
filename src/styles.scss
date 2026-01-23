@@ -22,6 +22,14 @@
   background-color: $main-color;
   color: #fff;
 }
+.main-btn{
+  background-color: $main-color;
+  color: #fff;
+  &:hover{
+    background-color: $second-color;
+    color: #fff;
+  }
+}
 .second-color{
   color: $second-color;
 }

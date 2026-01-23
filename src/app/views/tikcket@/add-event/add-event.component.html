@@ -1,0 +1,125 @@
+<section class="checkout" id="checkout">
+  <div class="container-fluid py-3">
+    <div class="light:bg-white rounded-3 p-3">
+      <form class="row p-2 shadow-lg rounded-3" [formGroup]="eventForm" (ngSubmit)="submitCheckout()">
+        <div class="col-12">
+          <h1 class="main-color fw-bold">New Event</h1>
+        </div>
+
+        <div class="col-md-5">
+          <div class="Image">
+            <label for="Image" class="form-label">Event Image</label>
+            <input
+              class="form-control"
+              type="file"
+              id="Image"
+              name="Image"
+              accept="image/*"
+              (change)="onImageChange($event)"
+            />
+          </div>
+
+          @if(imagePreview){
+            <div class="image-event-view text-center">
+              <img
+                  [src]="imagePreview"
+                  alt="preview"
+                  style="width: 200px; margin-top: 10px"
+                />
+            </div>
+          }
+        </div>
+
+
+        <div class="col-md-6">
+
+          <div class="row g-2">
+            <!-- Event Type -->
+            <div class="col-md-6">
+               <div class="Type">
+                <label for="Type" class="form-label">Type</label>
+                <select class="form-select" name="Type" id="Type" formControlName="Type">
+                  <option value="" selected disabled>Choose Event Type</option>
+                  <option value="GraduationParty">Graduation</option>
+                  <option value="Conferences">Conference</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Event Name -->
+            <div class="col-md-6">
+              <div class="EventName">
+                <label for="EventName" class="form-label">Event Name</label>
+                <input class="form-control" formControlName="Name" name="EventName" id="EventName">
+              </div>
+            </div>
+
+            <!-- Event Location -->
+            <div class="col-md-6">
+              <div class="Location">
+                <label for="Location" class="form-label">Location</label>
+                <input class="form-control" formControlName="Location" type="text" name="Location" id="Location" placeholder="Enter Event Location...">
+              </div>
+            </div>
+
+            <!-- Event Date -->
+            <div class="col-md-6">
+              <div class="Date">
+                <label for="Date" class="form-label">Date</label>
+                <input class="form-control" formControlName="Date" type="date" name="Date" id="Date" placeholder="Enter Event Date...">
+              </div>
+            </div>
+
+
+            <!-- Event NumberOfVisitorsAllowed -->
+            <div class="col-md-6">
+              <div class="NumberOfVisitorsAllowed">
+                <label for="NumberOfVisitorsAllowed" class="form-label">Visitor</label>
+                <input class="form-control" formControlName="NumberOfVisitorsAllowed" type="number" name="NumberOfVisitorsAllowed" id="NumberOfVisitorsAllowed" placeholder="Enter Your Visitor Count...">
+              </div>
+            </div>
+
+            <!-- Event Price -->
+            <div class="col-md-6">
+              <div class="Price">
+                <label for="Price" class="form-label">Price</label>
+                <input class="form-control" formControlName="Price" type="number" name="Price" id="Price" placeholder="Enter Event Price...">
+              </div>
+            </div>
+
+            <!-- Event Descriptions -->
+            <div class="col-12">
+              <div class="Description">
+                <label for="Description" class="form-label">Description</label>
+                <textarea name="Description" id="Description" class="form-control" formControlName="Description" placeholder="Enter Event Description..."></textarea>
+              </div>
+            </div>
+
+            <!-- Event EventDetails -->
+            <div class="col-12">
+              <div class="EventDetails">
+                <label for="EventDetails" class="form-label">Event Details</label>
+                <textarea name="EventDetails" id="EventDetails" class="form-control" formControlName="EventDetails" placeholder="Enter Event EventDetails..."></textarea>
+              </div>
+            </div>
+
+            <!-- Event TermsOfEntries -->
+            <div class="col-12">
+              <div class="TermsOfEntries">
+                <label for="TermsOfEntries" class="form-label">Event Terms</label>
+                <textarea name="TermsOfEntries" id="TermsOfEntries" class="form-control" formControlName="TermsOfEntries" placeholder="Enter Event TermsOfEntries..."></textarea>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="submit-btn text-center mt-3">
+          <button class="btn main-btn"> Create Event </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

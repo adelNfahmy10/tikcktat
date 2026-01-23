@@ -14,7 +14,6 @@ import { getLayoutColor } from '@store/layout/layout-selector'
 import { SimplebarAngularModule } from 'simplebar-angular'
 import { notificationsData } from './data'
 import { DOCUMENT } from '@angular/common'
-import { logout } from '@store/authentication/authentication.actions'
 
 type FullScreenTypes = {
   requestFullscreen?: () => Promise<void>
@@ -106,6 +105,8 @@ export class TopbarComponent {
   }
 
   logout() {
-    this.store.dispatch(logout())
+    // this.store.dispatch(logout())
+    this.router.navigate(['/signin'])
+    localStorage.clear()
   }
 }

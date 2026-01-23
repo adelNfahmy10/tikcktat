@@ -30,7 +30,7 @@ import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap'
             />
             <img
               class="logo-light"
-              src="assets/images/logo-light.png"
+              src="assets/images/tikecktImages/logos/fav-tiecktat-logo-removebg-preview.png"
               alt="logo-light"
               height="18"
             />
