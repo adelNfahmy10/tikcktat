@@ -12,6 +12,9 @@ import { CheckoutComponent } from './tikcket@/checkout/checkout.component'
 import { AddEventComponent } from './tikcket@/add-event/add-event.component'
 import { SigninComponent } from './tikcket@/authorization/signin/signin.component';
 import { SignupComponent } from './tikcket@/authorization/signup/signup.component'
+import { ViewEventsComponent } from './tikcket@/view-events/view-events.component'
+import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-event-details.component'
+import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
 
 export const VIEWS_ROUTES: Route[] = [
    {
@@ -44,6 +47,22 @@ export const VIEWS_ROUTES: Route[] = [
     component: AddEventComponent,
      data: { title: 'Add Eevent' },
   },
+  {
+    path: 'all-events',
+    component: AdminViewEventComponent,
+     data: { title: 'All Events' },
+  },
+  {
+    path: 'user-events',
+    component: ViewEventsComponent,
+     data: { title: 'My Events' },
+  },
+  {
+    path: 'user-event-details/:eventId',
+    component: ViewEventDetailsComponent,
+     data: { title: 'My Events' },
+  },
+
 
   {
     path: 'login',

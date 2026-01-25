@@ -15,6 +15,7 @@ export class EventComponent implements OnInit{
   private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allEvents:any[] = []
+  type:string | null = ''
   token:string | null = localStorage.getItem('token')
 
   ngOnInit(): void {
@@ -24,8 +25,8 @@ export class EventComponent implements OnInit{
   getEvents(): void {
     this._ActivatedRoute.paramMap.pipe(
         switchMap(params => {
-          const type = params.get('type');
-          return this._EventService.getAllEvents(type);
+          this.type = params.get('type');
+          return this._EventService.getAllEvents(this.type);
         })
       )
       .subscribe({

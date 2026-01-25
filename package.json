@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^19.2.18",
     "@angular/platform-browser-dynamic": "^19.2.18",
     "@angular/router": "^19.2.18",
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "@fullcalendar/angular": "^6.1.15",
     "@fullcalendar/bootstrap": "^6.1.15",
     "@fullcalendar/core": "^6.1.15",

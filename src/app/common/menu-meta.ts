@@ -28,11 +28,19 @@ export type TabMenuItem = {
   icon: string
 }
 
+let userId:string | null = localStorage.getItem('userId')
+
 export const MENU_ITEMS: MenuItemType[] = [
   {
     key: 'menu',
     label: 'MENU',
     isTitle: true,
+  },
+  {
+    key: 'home',
+    label: 'Home',
+    url: '/home',
+    parentKey: 'home',
   },
   {
     key: 'events',
@@ -47,14 +55,19 @@ export const MENU_ITEMS: MenuItemType[] = [
         parentKey: 'add-event',
       },
       {
-        key: 'view-event',
-        label: 'View Eevents',
-        url: '/view-event',
-        parentKey: 'view-event',
+        key: 'all-view',
+        label: 'All Eevents',
+        url: '/all-events',
+        parentKey: 'all-view',
       }
     ],
   },
-
+  {
+    key: 'user-events',
+    label: 'My Events',
+    url: '/user-events',
+    parentKey: 'user-events',
+  }
 
 
 
@@ -714,24 +727,24 @@ export const MENU_ITEMS: MenuItemType[] = [
   //   ],
   // },
   // {
-  //   key: 'tables',
-  //   label: 'Tables',
-  //   icon: 'ri-table-line',
-  //   collapsed: true,
-  //   children: [
-  //     {
-  //       key: 'tables-basic',
-  //       label: 'Basic Tables',
-  //       url: '/tables/basic',
-  //       parentKey: 'tables',
-  //     },
-  //     {
-  //       key: 'dataTable',
-  //       label: 'DataTables',
-  //       url: '/tables/data-table',
-  //       parentKey: 'tables',
-  //     },
-  //   ],
+  // key: 'tables',
+  // label: 'Tables',
+  // icon: 'ri-table-line',
+  // collapsed: true,
+  // children: [
+  //   {
+  //     key: 'tables-basic',
+  //     label: 'Basic Tables',
+  //     url: '/tables/basic',
+  //     parentKey: 'tables',
+  //   },
+  //   {
+  //     key: 'dataTable',
+  //     label: 'DataTables',
+  //     url: '/tables/data-table',
+  //     parentKey: 'tables',
+  //   },
+  // ],
   // },
   // {
   //   key: 'icons',

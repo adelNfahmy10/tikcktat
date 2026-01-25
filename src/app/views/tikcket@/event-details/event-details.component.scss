@@ -1,20 +1,11 @@
+
 .event-banner{
   height: 300px;
+  background-color: #0D1323;
 }
 .event-details{
-  h3{
-    font-size:30px;
-  }
   span{
     font-weight: 600;
-    font-style: italic;
     font-size: 18px;
-  }
-}
-
-
-@media (max-width:768px) {
-  h3{
-    font-size: 20px;
   }
 }

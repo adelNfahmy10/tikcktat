@@ -1,0 +1,215 @@
+<section class="all-events" id="all-events">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3">
+      <h1 class="text-black fw-bold">All Events</h1>
+      <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
+        <!-- Search -->
+        <div class="search">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search events..."
+            [(ngModel)]="searchText"
+            (input)="applySearch()"
+          />
+        </div>
+
+        <!-- Download Table XSL -->
+        <div class="download">
+          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th (click)="sort('id')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>ID</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('company')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Company</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'company' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'company' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('eventName')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Event Name</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('location')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Location</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('price')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Price</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('bookingCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Bookings</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('totalAmount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Total</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('active')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Status</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'active' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'active' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th>
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Action</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (event of paginatedData; track $index) {
+              <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.company }}</td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <img [src]="event.eventimg" width="50" class="rounded" />
+                    <h6 class="m-0">{{ event.eventName }}</h6>
+                  </div>
+                </td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.price | number }} EGP</td>
+                <td>{{ event.bookingCount }} Tickets</td>
+                <td>{{ event.totalAmount | number }} EGP</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.bg-success]="event.active"
+                    [class.bg-danger]="!event.active"
+                  >
+                    {{ event.active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>
+                  <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + '1'"></i>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="changePage(page - 1)">Prev</a>
+        </li>
+
+        @for (p of totalPages; track $index) {
+          <li class="page-item" [class.active]="p === page">
+            <a class="page-link" (click)="changePage(p)">{{ p }}</a>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="page === totalPages.length">
+          <a class="page-link" (click)="changePage(page + 1)">Next</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

@@ -1,12 +1,11 @@
 <section class="event-subCategory" id="event-subCategory">
-  <div class="container py-3">
+  <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3">
       <div class="head-section position-relative my-3">
-        <img src="assets/images/tikecktImages/event-image/cap-grad.png" alt="graduation party">
         <div class="d-flex justify-content-between">
-          <h1 class="main-color fw-bold m-0">Graduation's Events</h1>
+          <h1 class="text-black fw-bold m-0">{{ type === 'GraduationParty' ? 'Graduations' : type }} Events</h1>
           @if(token){
-            <button class="btn main-bg" routerLink="/add-event">Add Event</button>
+            <button class="btn main-btn" routerLink="/add-event">Add Event</button>
           }
         </div>
 
@@ -44,7 +43,7 @@
                           Price: <span> {{event.price | number}} EGP </span>
                         </p>
                         <div class="card-text d-flex justify-content-between align-items-end">
-                          <button class="btn book-btn main-bg p-0 px-2 py-1" [routerLink]="'/event-details/' + event.id">Book Now</button>
+                          <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/event-details/' + event.id">Book Now</button>
                           @if(!token){
                             <small class="text-muted">{{event.availableNumberOfVisitors}} From {{event.numberOfVisitorsAllowed}}</small>
                           }@else {

@@ -1,0 +1,178 @@
+<section class="event-data" id="event-data">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3">
+      <h1 class="text-black">Event Details</h1>
+      <div class="row g-2">
+        @for (item of allData; track $index) {
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <h4 class="card-title mb-2">{{ item.title }}</h4>
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ item.amount }}</p>
+                  </div>
+                  <div>
+                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                      <i [class]="item.icon" class="fs-32 main-color avatar-title"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="row">
+        <div class="col-xl-3 col-lg-4">
+          <div class="card">
+            <div class="card-header bg-light-subtle">
+              <h4 class="card-title">Event Owner</h4>
+            </div>
+            <div class="card-body">
+              <div class="text-center">
+                <img
+                  src="assets/images/users/avatar-1.jpg"
+                  alt=""
+                  class="avatar-xl rounded-circle border border-2 border-light mx-auto"
+                />
+                <div class="mt-2">
+                  <a href="javascript:void(0);" class="fw-medium text-dark fs-16">Gaston Lapierre</a>
+                  <p class="mb-0">(Owner)</p>
+                </div>
+                <div class="mt-2">
+                  <ul class="list-unstyled d-flex flex-column align-items-center gap-1 m-0">
+                    <li>01234523423</li>
+                    <li>Example&#64;gmail.com</li>
+                  </ul>
+                  <!-- <ul class="list-inline justify-content-center d-flex gap-1 mb-0 align-items-center" >
+                    <li class="list-inline-item">
+                      <a href="javascript: void(0);" class="btn btn-light avatar-sm d-flex align-items-center justify-content-center main-color fs-20" >
+                        <i class="ri-facebook-fill"></i>
+                      </a>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-light avatar-sm d-flex align-items-center justify-content-center text-danger fs-20"
+                      >
+                        <i class="ri-instagram-fill"></i>
+                      </a>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-light avatar-sm d-flex align-items-center justify-content-center text-info fs-20"
+                      >
+                        <i class="ri-twitter-fill"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-light avatar-sm d-flex align-items-center justify-content-center text-success fs-20"
+                      >
+                        <i class="ri-whatsapp-fill"></i>
+                      </a>
+                    </li>
+                  </ul> -->
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-light-subtle">
+              <div class="row g-2">
+                <div class="col-lg-6">
+                  <a href="javascript:void(0);" class="btn btn-primary w-100">
+                    <iconify-icon icon="solar:phone-calling-bold-duotone" class="align-middle fs-18"></iconify-icon>
+                    Call Us
+                  </a>
+                </div>
+                <div class="col-lg-6">
+                  <a href="javascript:void(0);" class="btn btn-success w-100"
+                    ><iconify-icon
+                      icon="solar:chat-round-dots-bold-duotone"
+                      class="align-middle fs-16"
+                    ></iconify-icon>
+                    Message</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-9 col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="position-relative overflow-hidden">
+                <img src="assets/images/properties/p-11.jpg" alt="" class="img-fluid rounded" />
+                <span class="badge bg-success text-light fs-18 avaliable-badge position-absolute">Active</span>
+              </div>
+
+              <div class="d-flex flex-wrap justify-content-between mt-3 mb-2 gap-2">
+                <div>
+                  <h1 class="fs-20 text-dark fw-bold">
+                    Hayfield Ashton Place Residences at Willow Brook Valley
+                  </h1>
+                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                    <iconify-icon icon="solar:map-point-wave-bold-duotone" class="fs-18 main-color" ></iconify-icon>
+                    1668 Lincoln Drive Harrisburg, PA 17101 U.S.A
+                  </p>
+                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                    <i class="ri-calendar-check-line fs-18 main-color"></i>
+                    20/5/2026
+                  </p>
+                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                    <i class="ri-money-pound-circle-line fs-18 main-color"></i>
+                    550 EGP
+                  </p>
+                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                    <i class="ri-graduation-cap-line fs-18 main-color"></i>
+                    1800 Graduates
+                  </p>
+                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                    <i class="ri-user-line fs-18 main-color"></i>
+                    750 Companions
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-sm rounded">
+                  <iconify-icon icon="solar:wallet-money-bold-duotone" class="fs-24 main-color border border-2 rounded-3 avatar-title" ></iconify-icon>
+                </div>
+                <p class="fw-bold fs-18 mb-0 main-color">80,675.00 EGP</p>
+              </div>
+
+              <h5 class="text-dark fw-medium mt-3">Event Details :</h5>
+              <ul>
+                <li>Robe Collection</li>
+                <li>Certificate Pickup for Graduation</li>
+                <li>Personalized Graduation Sash Collection</li>
+                <li>Live DJ Performance</li>
+                <li>Spacious Stage for Performances</li>
+                <li>Presence of Professors for Certificate Ceremony</li>
+                <li>Event Venue: Grand Ballroom, Four Seasons Hotel</li>
+              </ul>
+
+              <h5 class="text-dark fw-medium mt-3">Terms Of Entry :</h5>
+              <ul>
+                <li>All guests must register in advance and have a valid ticket to attend.</li>
+                <li>Attendance is allowed for guests aged [insert age, e.g., 18+] only.</li>
+                <li>Please follow the official/casual-smart dress code as instructed in the invitation.</li>
+                <li>Any inappropriate behavior, harassment, or disturbance to other guests is strictly prohibited.</li>
+                <li>No dangerous items, weapons, or prohibited substances allowed.</li>
+                <li>Please follow all instructions from the security team on-site.</li>
+                <li>Guests are expected to arrive on time to ensure smooth entry and event flow.</li>
+                <li>Do not alter decorations or event setups without prior approval from the event organizers.</li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
