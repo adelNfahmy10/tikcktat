@@ -7,4 +7,11 @@
       width: 300px;
     }
   }
+  .qr-wrapper {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    border-bottom-left-radius: 20px; /* أو أي قيمة تحبها */
+    border-bottom-right-radius: 20px; /* أو أي قيمة تحبها */
+  }
 }

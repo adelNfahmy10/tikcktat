@@ -4,16 +4,17 @@
       <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" loading="lazy" alt="ticketat">
     </div>
     <div class="d-flex justify-content-center align-items-center">
-      <qrcode
-        [qrdata]="qrValue!"
-        [width]="240"
-        [margin]="2"
-        colorDark="#fff"
-        colorLight="#519AE1"
-        errorCorrectionLevel="M"
-        elementType="canvas"
-        ariaLabel="Scan to complete checkout">
-      </qrcode>
+      <div class="qr-wrapper">
+        <qrcode
+          [qrdata]="qrValue!"
+          [width]="250"
+          [margin]="1"
+          colorDark="#ffffff"
+          colorLight="#519AE1"
+          errorCorrectionLevel="M"
+          ariaLabel="Scan to complete checkout">
+        </qrcode>
+      </div>
     </div>
   </div>
 </section>

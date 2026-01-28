@@ -23,6 +23,8 @@ export class QrcodeComponent implements OnInit {
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.qrValue = params.get('ip')
+        this.qrValue = 'https://tikcktat.vercel.app/'
+        console.log(this.qrValue);
       }
     })
   }

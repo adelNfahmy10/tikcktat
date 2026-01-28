@@ -62,6 +62,12 @@
   .home{
     align-items: center !important;
     height: 100vh;
+    .logo{
+      width: 350px;
+    }
+    h3{
+      font-size: 16px;
+    }
   }
   .events {
     gap: 30px !important;

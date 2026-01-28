@@ -55,13 +55,10 @@ export class TopbarComponent {
   ngOnInit(): void {
     const path = window.location.pathname;
 
-    // لو URL فيه /qrcode → اخفي الـ Topbar
     if (path.includes('qrcode')) {
       this.showTopbar = false;
-      console.log(this.showTopbar);
     } else {
       this.showTopbar = true;
-      console.log(this.showTopbar);
     }
   }
 
