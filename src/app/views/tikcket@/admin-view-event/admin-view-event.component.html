@@ -15,8 +15,9 @@
         </div>
 
         <!-- Download Table XSL -->
-        <div class="download">
-          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+        <div class="download d-flex align-items-center gap-2">
+          <button class="btn btn-outline-primary" (click)="open(content)">Assign Owner</button>
+          <button class="btn btn-outline-primary">Download <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -213,3 +214,61 @@
 
   </div>
 </section>
+<ng-template
+  #content
+  let-modal
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Assign Owner To Event</h5>
+      <button
+        (click)="modal.close('click')"
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form class="row g-3">
+        <div class="Owner col-md-6">
+          <label for="Owner" class="form-label">Owner</label>
+          <select class="form-select" name="Owner" id="Owner">
+            <option value="" selected disabled>Choose Event Owner</option>
+            @for (user of allUsers; track $index) {
+              <option [value]="user.id">{{user.fullName}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="Events col-md-6">
+          <label for="Events" class="form-label">Events</label>
+          <select class="form-select" name="Events" id="Events">
+            <option value="" selected disabled>Choose Event</option>
+            @for (event of data; track $index) {
+              <option [value]="event.id">{{event.eventName}}</option>
+            }
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        (click)="modal.close('click')"
+        type="button"
+        class="btn btn-secondary"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button type="button" class="btn btn-primary">
+        Save changes
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '@core/services/auth/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-admin-view-event',
@@ -9,7 +11,17 @@ import { RouterLink } from '@angular/router';
   templateUrl: './admin-view-event.component.html',
   styleUrl: './admin-view-event.component.scss'
 })
-export class AdminViewEventComponent {
+export class AdminViewEventComponent implements OnInit{
+  private modalService = inject(NgbModal)
+  private readonly _AuthService = inject(AuthService)
+
+  allUsers:any[] = []
+
+  ngOnInit() {
+    this.updatePagination();
+    this.getAllUsers()
+  }
+
   data = [
     {
       id: 1,
@@ -136,9 +148,6 @@ export class AdminViewEventComponent {
   filteredData = [...this.data];
   paginatedData: any[] = [];
 
-  ngOnInit() {
-    this.updatePagination();
-  }
 
   // 🔍 Search
   applySearch() {
@@ -194,5 +203,19 @@ export class AdminViewEventComponent {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
     this.updatePagination();
+  }
+
+  getAllUsers():void{
+    this._AuthService.getAllUsers().subscribe({
+      next:(res)=>{
+        this.allUsers = res.data
+        console.log(this.allUsers);
+
+      }
+    })
+  }
+
+  open(content: TemplateRef<any>) {
+    this.modalService.open(content)
   }
 }

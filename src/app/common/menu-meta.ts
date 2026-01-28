@@ -40,7 +40,6 @@ export const MENU_ITEMS: MenuItemType[] = [
     key: 'home',
     label: 'Home',
     url: '/home',
-    parentKey: 'home',
   },
   {
     key: 'events',
@@ -52,13 +51,13 @@ export const MENU_ITEMS: MenuItemType[] = [
         key: 'add-event',
         label: 'Add Eevent',
         url: '/add-event',
-        parentKey: 'add-event',
+        parentKey: 'events',
       },
       {
         key: 'all-view',
         label: 'All Eevents',
         url: '/all-events',
-        parentKey: 'all-view',
+        parentKey: 'events',
       }
     ],
   },
@@ -66,7 +65,6 @@ export const MENU_ITEMS: MenuItemType[] = [
     key: 'user-events',
     label: 'My Events',
     url: '/user-events',
-    parentKey: 'user-events',
   }
 
 

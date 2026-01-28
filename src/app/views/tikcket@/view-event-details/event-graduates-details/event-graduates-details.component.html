@@ -1,14 +1,14 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3">
-      <h1 class="text-black fw-bold">My Events</h1>
+      <h1 class="text-black fw-bold">All Graduates</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <!-- Search -->
         <div class="search">
           <input
             type="text"
             class="form-control"
-            placeholder="Search events..."
+            placeholder="Search..."
             [(ngModel)]="searchText"
             (input)="applySearch()"
           />
@@ -40,65 +40,65 @@
                 </div>
               </th>
 
-              <th (click)="sort('eventName')" class="sortable">
+              <th (click)="sort('fullName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Event Name</span>
+                  <span>Full Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('location')" class="sortable">
+              <th (click)="sort('phone')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Location</span>
+                  <span>Phone</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'phone' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'phone' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('price')" class="sortable">
+              <th (click)="sort('email')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Price</span>
+                  <span>Email</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('bookingCount')" class="sortable">
+              <th (click)="sort('companions')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Bookings</span>
+                  <span>Companions</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'companions' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'companions' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -106,7 +106,7 @@
 
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Total</span>
+                  <span>Total Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
@@ -136,43 +136,43 @@
                 </div>
               </th>
 
-              <th>
+              <!-- <th>
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Action</span>
                 </div>
-              </th>
+              </th> -->
             </tr>
           </thead>
 
           <tbody>
-            @for (event of paginatedData; track $index) {
+            @for (grad of paginatedData; track $index) {
               <tr>
-                <td>{{ event.id }}</td>
+                <td>{{ grad.id }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <img [src]="event.eventimg" width="50" class="rounded" />
-                    <h6 class="m-0">{{ event.eventName }}</h6>
+                    <img [src]="grad.imageUrl" width="50" class="rounded" />
+                    <h6 class="m-0">{{ grad.fullName }}</h6>
                   </div>
                 </td>
-                <td>{{ event.location }}</td>
-                <td>{{ event.price | number }} EGP</td>
-                <td>{{ event.bookingCount }} Tickets</td>
-                <td>{{ event.totalAmount | number }} EGP</td>
+                <td>{{ grad.phone }}</td>
+                <td>{{ grad.email }}</td>
+                <td>{{ grad.companions }} Companions</td>
+                <td>{{ grad.totalAmount | number }} EGP</td>
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="event.active"
-                    [class.bg-danger]="!event.active"
+                    [class.bg-success]="grad.active"
+                    [class.bg-danger]="!grad.active"
                   >
-                    {{ event.active ? 'Active' : 'Inactive' }}
+                    {{ grad.active ? 'Active' : 'Inactive' }}
                   </span>
                 </td>
-                <td>
+                <!-- <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
                     <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + 1"></i>
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + 1"></i>
                   </div>
-                </td>
+                </td> -->
               </tr>
             }
           </tbody>

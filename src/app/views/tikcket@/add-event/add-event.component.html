@@ -34,6 +34,19 @@
         <div class="col-md-6">
 
           <div class="row g-2">
+            <!-- Event Owners -->
+            <div class="col-md-12">
+              <div class="Owner">
+                <label for="Owner" class="form-label">Owner</label>
+                <select class="form-select" name="Owner" id="Owner" formControlName="Owner">
+                  <option value="" selected disabled>Choose Event Owner</option>
+                  @for (user of allUsers; track $index) {
+                    <option [value]="user.id">{{user.fullName}}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
             <!-- Event Type -->
             <div class="col-md-6">
                <div class="Type">

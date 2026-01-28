@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
@@ -10,12 +11,21 @@ import { map } from 'rxjs/operators';
   templateUrl: './add-event.component.html',
   styleUrl: './add-event.component.scss'
 })
-export class AddEventComponent {
+export class AddEventComponent implements OnInit{
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _EventService = inject(EventService)
+  private readonly _AuthService = inject(AuthService)
   private readonly _ToastrService = inject(ToastrService)
 
+  imagePreview: string | ArrayBuffer | null = null;
+  allUsers:any[] = []
+
+  ngOnInit(): void {
+    this.getAllUsers()
+  }
+
   eventForm:FormGroup = this._FormBuilder.group({
+    Owner:[null],
     Name:[null],
     Description:[null],
     Location:[null],
@@ -27,8 +37,6 @@ export class AddEventComponent {
     Type:[null],
     Image:[null],
   })
-
-  imagePreview: string | ArrayBuffer | null = null;
 
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -78,6 +86,16 @@ export class AddEventComponent {
         this._ToastrService.error('Failed Create Event')
       }
     });
+  }
+
+  getAllUsers():void{
+    this._AuthService.getAllUsers().subscribe({
+      next:(res)=>{
+        this.allUsers = res.data
+        console.log(this.allUsers);
+
+      }
+    })
   }
 
 }

@@ -1,6 +1,6 @@
 <section class="checkout" id="checkout">
   <div class="container-fluid py-3">
-    <div class="bg-white rounded-3 p-3">
+    <div class="dark:bg-white rounded-3 p-3">
       <div class="row g-3">
         <div class="col-md-7">
           <div class="image-event">
@@ -11,7 +11,7 @@
         <div class="col-md-5">
           <form class="d-flex flex-column gap-2 p-2 shadow-lg rounded-3" [formGroup]="checkoutForm">
             <h1 class="main-color fw-bold">Checkout Event</h1>
-            <div class="fullName">
+            <div class="photo">
               <label for="photo" class="form-label">Photo</label>
               <input
                 class="form-control"
@@ -30,7 +30,6 @@
                 />
               }
             </div>
-
 
             <div class="FullName">
               <label for="FullName" class="form-label">Full Name</label>

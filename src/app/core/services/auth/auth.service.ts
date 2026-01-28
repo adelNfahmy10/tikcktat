@@ -16,4 +16,8 @@ export class AuthService {
   register(body:any):Observable<any>{
     return this._HttpClient.post(`${environment.baseUrl}UserManager/RegisterNewUser`, body)
   }
+
+  getAllUsers():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}UserManager/GetAll`)
+  }
 }

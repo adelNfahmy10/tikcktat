@@ -15,6 +15,7 @@ import { SignupComponent } from './tikcket@/authorization/signup/signup.componen
 import { ViewEventsComponent } from './tikcket@/view-events/view-events.component'
 import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-event-details.component'
 import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
+import { EventGraduatesDetailsComponent } from './tikcket@/view-event-details/event-graduates-details/event-graduates-details.component'
 
 export const VIEWS_ROUTES: Route[] = [
    {
@@ -36,6 +37,11 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'event-details/:id',
     component: EventDetailsComponent,
      data: { title: 'Event Details' },
+  },
+  {
+    path: 'graduates-details/:eventId',
+    component: EventGraduatesDetailsComponent,
+     data: { title: 'Grad Details' },
   },
   {
     path: 'checkout/:id',
@@ -62,8 +68,6 @@ export const VIEWS_ROUTES: Route[] = [
     component: ViewEventDetailsComponent,
      data: { title: 'My Events' },
   },
-
-
   {
     path: 'login',
     component: SigninComponent,
