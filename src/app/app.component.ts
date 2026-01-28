@@ -15,9 +15,10 @@ import {
   type NgProgressRef,
 } from 'ngx-progressbar'
 
+
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, NgProgressModule],
+    imports: [RouterOutlet, NgProgressModule, ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })

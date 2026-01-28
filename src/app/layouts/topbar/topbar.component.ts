@@ -6,7 +6,7 @@ import {
   inject,
   Output,
 } from '@angular/core'
-import { Router, RouterLink } from '@angular/router'
+import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { Store } from '@ngrx/store'
 import { changetheme } from '@store/layout/layout-action'
@@ -14,6 +14,7 @@ import { getLayoutColor } from '@store/layout/layout-selector'
 import { SimplebarAngularModule } from 'simplebar-angular'
 import { notificationsData } from './data'
 import { DOCUMENT } from '@angular/common'
+import { filter } from 'rxjs'
 
 type FullScreenTypes = {
   requestFullscreen?: () => Promise<void>
@@ -47,6 +48,21 @@ export class TopbarComponent {
 
   constructor(@Inject(DOCUMENT) private document: Document & FullScreenTypes) {
     this.element = this.document.documentElement as FullScreenTypes
+  }
+
+  showTopbar = true;
+
+  ngOnInit(): void {
+    const path = window.location.pathname;
+
+    // لو URL فيه /qrcode → اخفي الـ Topbar
+    if (path.includes('qrcode')) {
+      this.showTopbar = false;
+      console.log(this.showTopbar);
+    } else {
+      this.showTopbar = true;
+      console.log(this.showTopbar);
+    }
   }
 
   settingMenu() {

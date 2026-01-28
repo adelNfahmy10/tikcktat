@@ -34,6 +34,7 @@
     "@ngrx/store-devtools": "^18.0.2",
     "@popperjs/core": "^2.11.8",
     "angularx-flatpickr": "^8.0.0",
+    "angularx-qrcode": "^19.0.0",
     "apexcharts": "^3.53.0",
     "bootstrap": "^5.3.3",
     "choices.js": "^11.0.2",

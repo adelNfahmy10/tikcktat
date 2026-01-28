@@ -16,9 +16,10 @@ import { ViewEventsComponent } from './tikcket@/view-events/view-events.componen
 import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-event-details.component'
 import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
 import { EventGraduatesDetailsComponent } from './tikcket@/view-event-details/event-graduates-details/event-graduates-details.component'
+import { QrcodeComponent } from './tikcket@/qrcode/qrcode.component'
 
 export const VIEWS_ROUTES: Route[] = [
-   {
+  {
     path: '',
     redirectTo: 'home',
     pathMatch:'full'
@@ -26,58 +27,68 @@ export const VIEWS_ROUTES: Route[] = [
   {
     path: 'home',
     component: HomeComponent,
-     data: { title: 'Home' },
+    data: { title: 'Home' },
   },
   {
     path: 'event/:type',
     component: EventComponent,
-     data: { title: 'Events' },
+    data: { title: 'Events' },
   },
   {
     path: 'event-details/:id',
     component: EventDetailsComponent,
-     data: { title: 'Event Details' },
+    data: { title: 'Event Details' },
   },
   {
     path: 'graduates-details/:eventId',
     component: EventGraduatesDetailsComponent,
-     data: { title: 'Grad Details' },
+    data: { title: 'Grad Details' },
   },
   {
     path: 'checkout/:id',
     component: CheckoutComponent,
-     data: { title: 'Checkout' },
+    data: { title: 'Checkout' },
   },
   {
     path: 'add-event',
     component: AddEventComponent,
-     data: { title: 'Add Eevent' },
+    data: { title: 'Add Eevent' },
   },
   {
     path: 'all-events',
     component: AdminViewEventComponent,
-     data: { title: 'All Events' },
+    data: { title: 'All Events' },
   },
   {
     path: 'user-events',
     component: ViewEventsComponent,
-     data: { title: 'My Events' },
+    data: { title: 'My Events' },
   },
   {
     path: 'user-event-details/:eventId',
     component: ViewEventDetailsComponent,
-     data: { title: 'My Events' },
+    data: { title: 'My Events' },
   },
   {
     path: 'login',
     component: SigninComponent,
-     data: { title: 'SignIn' },
+    data: { title: 'SignIn' },
   },
   {
     path: 'register',
     component: SignupComponent,
-     data: { title: 'SignUp' },
+    data: { title: 'SignUp' },
   },
+  {
+    path: 'qrcode/:ip',
+    component: QrcodeComponent,
+    data: { title: 'QRCode' },
+  },
+
+
+
+
+
 
 
 
