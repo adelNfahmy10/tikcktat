@@ -20,4 +20,25 @@ export class AuthService {
   getAllUsers():Observable<any>{
     return this._HttpClient.get(`${environment.baseUrl}UserManager/GetAll`)
   }
+
+  getUserById(userId:any):Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}UserManager/GetById/${userId}`)
+  }
+
+  deleteUser(userId:any):Observable<any>{
+    return this._HttpClient.delete(`${environment.baseUrl}UserManager/DeleteUser/${userId}`)
+  }
+
+  updateUser(userId:any, body:any):Observable<any>{
+    return this._HttpClient.put(`${environment.baseUrl}UserManager/Update?id=${userId}`, body)
+  }
+
+  updateUserRole(body:any):Observable<any>{
+    return this._HttpClient.put(`${environment.baseUrl}UserManager/UpdateUserRoles`, body)
+  }
+
+  swichActiveUser(userId:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}UserManager/SwitchUserActive/${userId}`, {})
+  }
+
 }

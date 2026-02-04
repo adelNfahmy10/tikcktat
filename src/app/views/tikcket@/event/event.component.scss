@@ -1,13 +1,30 @@
-.book-btn:hover{
-  background-color: #0f45b8;
-  color: #fff;
+.event-subCategory{
+  min-height: 100vh;
+  .badge{
+    position: absolute;
+    top: 18px;
+    right: -30px;
+    padding: 5px 40px;
+    transform: rotate(30deg);
+    z-index: 3;
+  }
 }
 
-.badge{
-  position: absolute;
-  top: 18px;
-  right: -30px;
-  padding: 5px 40px;
-  transform: rotate(30deg);
-  z-index: 3;
+@media (min-width: 768px) {
+  .card{
+    height: 250px;
+    .event-img{
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+  }
 }
+
+@media (min-width: 768px) {
+  .card{
+    height: 250px;
+    .event-img{
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+  }
+}
+

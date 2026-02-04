@@ -1,16 +1,20 @@
 <section class="checkout" id="checkout">
-  <div class="container-fluid py-3">
-    <div class="dark:bg-white rounded-3 p-3">
-      <div class="row g-3">
-        <div class="col-md-7">
+  <div class="container-fluid">
+    <div class="rounded-3 p-3 shadow-lg">
+      <div class="row g-2">
+        <div class="col-12">
           <div class="image-event">
-            <img src="assets/images/tikecktImages/home-image/bg-home.png" class="w-100 rounded-4" alt="">
+            <img src="assets/images/tikecktImages/home-image/bg-home.png" class="rounded-3" alt="">
           </div>
         </div>
 
-        <div class="col-md-5">
-          <form class="d-flex flex-column gap-2 p-2 shadow-lg rounded-3" [formGroup]="checkoutForm">
-            <h1 class="main-color fw-bold">Checkout Event</h1>
+        <div class="col-md-7">
+          <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+            <h1 class="fw-bold">Checkout Event</h1>
+            <div class="text-right" dir="rtl">
+              <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
+              <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
+            </div>
             <div class="photo">
               <label for="photo" class="form-label">Photo</label>
               <input
@@ -47,15 +51,34 @@
             </div>
 
             <div class="VisitorCount">
-              <label for="VisitorCount" class="form-label">Visitor</label>
+              <label for="VisitorCount" class="form-label">Visitor <sub>Option</sub></label>
               <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Your Visitor Count...">
             </div>
 
-            <div class="submit-btn text-center">
-              <button class="btn btn-bg" (click)="submitCheckout()"> Checkout </button>
+            <div class="text-center">
+              <button class="btn main-btn" (click)="viewCheckOutData()"> Checkout </button>
             </div>
           </form>
         </div>
+
+        <div class="col-md-5">
+          <div class="summary p-3 shadow-lg border rounded-3 h-100 text-center">
+            <img src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo text-center" alt="ticketat">
+
+            <div class="d-flex flex-column align-items-start g-0 justify-content-between border p-3">
+              <p>Name : {{ checkoutData?.FullName}}</p>
+              <p>Phone : {{ checkoutData?.Phone}}</p>
+              <p>Email : {{ checkoutData?.Email}}</p>
+              <p>companions : {{ checkoutData?.VisitorCount || 2}}</p>
+              <p>Price : {{ 500 + ((checkoutData?.VisitorCount || 0) * 250) }} EGP</p>
+
+              <div class="text-center w-100">
+                <button class="btn main-btn w-100" (click)="submitCheckout()"> Confirm </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

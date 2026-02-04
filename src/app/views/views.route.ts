@@ -65,7 +65,7 @@ export const VIEWS_ROUTES: Route[] = [
     data: { title: 'My Events' },
   },
   {
-    path: 'user-event-details/:eventId',
+    path: 'user-event-details/:id',
     component: ViewEventDetailsComponent,
     data: { title: 'My Events' },
   },

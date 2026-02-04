@@ -39,13 +39,14 @@ export class EventDetailsComponent implements OnInit{
         }
       });
   }
-get eventDetailsList(): string[] {
-  if (!this.eventData?.eventDetails) return [];
-  return this.eventData.eventDetails
-    .split('\r\n')          // نفصل كل سطر
-    .map((item:any) => item.trim()) // نشيل أي فراغات
-    .filter((item:any) => item);    // نشيل أي عناصر فاضية
-}
+  
+  get eventDetailsList(): string[] {
+    if (!this.eventData?.eventDetails) return [];
+    return this.eventData.eventDetails
+      .split('\r\n')          // نفصل كل سطر
+      .map((item:any) => item.trim()) // نشيل أي فراغات
+      .filter((item:any) => item);    // نشيل أي عناصر فاضية
+  }
 
 get termsList(): string[] {
   if (!this.eventData?.termsOfEntries) return [];

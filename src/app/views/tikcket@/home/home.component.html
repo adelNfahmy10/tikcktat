@@ -1,4 +1,4 @@
-<section class="home d-flex" id="home">
+<section class="home" id="home">
   <div class="container py-5">
     <div class="head-section text-center">
       <img class="logo shadow rounded p-3" src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" alt="">
@@ -19,11 +19,14 @@
     </div>
 
 
-    @if(!token){
-      <div class="auth-section text-center mt-5 fs-4">
-        <span class="cr" routerLink="/login">SignIn</span> || <span class="cr" routerLink="/register">Register Now</span>
-      </div>
-    }
+    <!-- <div class="auth-section text-center mt-5 fs-4">
+      @if(!token){
+        <span class="cr" routerLink="/login">SignIn</span>
+      }
+      @if(role == 'Admin'){
+        <span class="cr" routerLink="/register">Add New Owner</span>
+      }
+    </div> -->
 
   </div>
 </section>

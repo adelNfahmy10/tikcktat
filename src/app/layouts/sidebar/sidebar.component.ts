@@ -26,6 +26,8 @@ import { getSidebarsize } from '@store/layout/layout-selector'
 export class SidebarComponent implements OnInit {
   menuItems: MenuItemType[] = []
   activeMenuItems: string[] = []
+  role:string | null = localStorage.getItem('role')
+  token:string | null = localStorage.getItem('token')
 
   router = inject(Router)
   trimmedURL = this.router.url?.replaceAll(
@@ -55,7 +57,13 @@ export class SidebarComponent implements OnInit {
   }
 
   initMenu(): void {
-    this.menuItems = MENU_ITEMS
+    const adminOnlyKeys = ['events', 'add-new-owner'];
+    this.menuItems = MENU_ITEMS.filter(item => {
+      if (adminOnlyKeys.includes(item.key) && this.role !== 'Admin') {
+        return false;
+      }
+      return true;
+    });
   }
 
   ngAfterViewInit() {

@@ -1,27 +1,79 @@
 <section class="event-data" id="event-data">
   <div class="container-fluid py-3">
-    <div class="bg-white rounded-3 p-3">
-      <h1 class="text-black">Event Details</h1>
+    <div class="bg-white rounded-3 p-3 shadow-lg">
+      <h1>Event Details</h1>
       <div class="row g-2">
-        @for (item of allData; track $index) {
-          <div class="col-md-3">
-            <div class="card cr" [routerLink]="'/graduates-details/' + 1">
-              <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <h4 class="card-title mb-2">{{ item.title }}</h4>
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ item.amount }}</p>
-                  </div>
-                  <div>
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                      <i [class]="item.icon" class="fs-32 main-color avatar-title"></i>
-                    </div>
+        <div class="col-md-4">
+          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Graduates</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Grads</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-graduation-cap-line"></i>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        }
+        </div>
+
+        <div class="col-md-4">
+          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Companions</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Comps</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-user-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-3">
+          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Tickets</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Grads</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-ticket-2-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="col-md-4">
+          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.price * (eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors) }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="row">

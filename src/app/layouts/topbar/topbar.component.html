@@ -4,15 +4,17 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <div class="d-flex align-items-center gap-2">
-            <div class="topbar-item">
-              <button
-                type="button"
-                (click)="toggleMobileMenu()"
-                class="button-toggle-menu topbar-button"
-              >
-                <i class="ri-menu-2-line fs-24"></i>
-              </button>
-            </div>
+            @if (token) {
+              <div class="topbar-item">
+                <button
+                  type="button"
+                  (click)="toggleMobileMenu()"
+                  class="button-toggle-menu topbar-button"
+                >
+                  <i class="ri-menu-2-line fs-24"></i>
+                </button>
+              </div>
+            }
 
             <!-- <form class="app-search d-none d-md-block me-auto">
               <div class="position-relative">
@@ -46,7 +48,7 @@
               </button>
             </div>
 
-            <!-- <div class="dropdown topbar-item d-none d-lg-flex">
+            <div class="dropdown topbar-item d-none d-lg-flex">
               <button
                 type="button"
                 class="topbar-button"
@@ -58,7 +60,7 @@
               </button>
             </div>
 
-            <div ngbDropdown class="topbar-item">
+            <!-- <div ngbDropdown class="topbar-item">
               <button
                 ngbDropdownToggle
                 type="button"
@@ -133,9 +135,9 @@
                   ></a>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="topbar-item d-none d-md-flex">
+            <!-- <div class="topbar-item d-none d-md-flex">
               <button
                 type="button"
                 class="topbar-button"
@@ -144,53 +146,61 @@
               >
                 <i class="ri-settings-4-line fs-24"></i>
               </button>
-            </div>
-
-            <div ngbDropdown class="topbar-item">
-              <a
-                ngbDropdownToggle
-                type="button"
-                class="topbar-button arrow-none"
-                id="page-header-user-dropdown"
-              >
-                <span class="d-flex align-items-center">
-                  <img
-                    class="rounded-circle"
-                    width="32"
-                    src="assets/images/users/avatar-1.jpg"
-                    alt="avatar-3"
-                  />
-                </span>
-              </a>
-              <div ngbDropdownMenu class="dropdown-menu-end">
-                <h6 class="dropdown-header">Welcome Gaston!</h6>
-
-                <a class="dropdown-item" routerLink="/pages/calendar">
-                  <i class="bx bx-calendar align-middle me-2 fs-18"></i
-                  ><span class="align-middle">My Schedules</span>
-                </a>
-
-                <a class="dropdown-item" routerLink="/pages/pricing">
-                  <i class="bx bx-wallet-alt align-middle me-2 fs-18"></i
-                  ><span class="align-middle">Pricing</span>
-                </a>
-                <a class="dropdown-item" routerLink="/pages/faqs">
-                  <i class="bx bx-help-circle align-middle me-2 fs-18"></i
-                  ><span class="align-middle">Help</span>
-                </a>
-                <a class="dropdown-item" routerLink="/auth/lock-screen">
-                  <i class="bx bx-lock align-middle me-2 fs-18"></i
-                  ><span class="align-middle">Lock screen</span>
-                </a>
-
-                <div class="dropdown-divider my-1"></div>
-
-                <a class="dropdown-item text-danger" (click)="logout()">
-                  <i class="bx bx-log-out align-middle me-2 fs-18"></i
-                  ><span class="align-middle">Logout</span>
-                </a>
-              </div>
             </div> -->
+
+            @if (!token) {
+              <div class="topbar-item d-none d-md-flex">
+                <button
+                  type="button"
+                  class="topbar-button fw-bold"
+                  id="theme-settings-btn"
+                  routerLink="/login"
+                >
+                  Login
+                </button>
+              </div>
+            }
+            @if(token){
+              <div ngbDropdown class="topbar-item">
+                <a
+                  ngbDropdownToggle
+                  type="button"
+                  class="topbar-button arrow-none"
+                  id="page-header-user-dropdown"
+                >
+                  <span class="account-user-avatar">
+                    {{fullName!.slice(0,2).toUpperCase()}}
+                  </span>
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu-end">
+                  <h6 class="dropdown-header">Welcome {{fullName}}!</h6>
+
+                  <a class="dropdown-item" routerLink="/pages/calendar">
+                    <i class="bx bx-calendar align-middle me-2 fs-18"></i
+                    ><span class="align-middle">My Schedules</span>
+                  </a>
+                  <!-- <a class="dropdown-item" routerLink="/pages/pricing">
+                    <i class="bx bx-wallet-alt align-middle me-2 fs-18"></i
+                    ><span class="align-middle">Pricing</span>
+                  </a>
+                  <a class="dropdown-item" routerLink="/pages/faqs">
+                    <i class="bx bx-help-circle align-middle me-2 fs-18"></i
+                    ><span class="align-middle">Help</span>
+                  </a>
+                  <a class="dropdown-item" routerLink="/auth/lock-screen">
+                    <i class="bx bx-lock align-middle me-2 fs-18"></i
+                    ><span class="align-middle">Lock screen</span>
+                  </a> -->
+
+                  <div class="dropdown-divider my-1"></div>
+
+                  <a class="dropdown-item text-danger cr" (click)="logout()">
+                    <i class="bx bx-log-out align-middle me-2 fs-18"></i
+                    ><span class="align-middle">Logout</span>
+                  </a>
+                </div>
+              </div>
+            }
           </div>
         </div>
       </div>

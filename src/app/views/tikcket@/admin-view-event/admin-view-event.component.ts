@@ -1,25 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, TemplateRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
+import { EventService } from '@core/services/event/event.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-view-event',
-  imports: [FormsModule, RouterLink, CommonModule],
+  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule],
   templateUrl: './admin-view-event.component.html',
   styleUrl: './admin-view-event.component.scss'
 })
 export class AdminViewEventComponent implements OnInit{
   private modalService = inject(NgbModal)
+  private readonly _FormBuilder = inject(FormBuilder)
   private readonly _AuthService = inject(AuthService)
+  private readonly _EventService = inject(EventService)
+  private readonly _ToastrService = inject(ToastrService)
 
   allUsers:any[] = []
-
+  allEvents:any[] = []
   ngOnInit() {
-    this.updatePagination();
     this.getAllUsers()
+    this.getAllEvent()
   }
 
   data = [
@@ -145,13 +150,13 @@ export class AdminViewEventComponent implements OnInit{
   pageSize = 5;
   totalPages: number[] = [];
 
-  filteredData = [...this.data];
+  filteredData:any[] = [];
   paginatedData: any[] = [];
 
 
   // 🔍 Search
   applySearch() {
-    this.filteredData = this.data.filter(item =>
+    this.filteredData = this.allEvents.filter(item =>
       Object.values(item)
         .join(' ')
         .toLowerCase()
@@ -197,6 +202,9 @@ export class AdminViewEventComponent implements OnInit{
 
     const start = (this.page - 1) * this.pageSize;
     this.paginatedData = this.filteredData.slice(start, start + this.pageSize);
+    console.log(total);
+    console.log(this.allEvents);
+
   }
 
   changePage(p: number) {
@@ -209,8 +217,36 @@ export class AdminViewEventComponent implements OnInit{
     this._AuthService.getAllUsers().subscribe({
       next:(res)=>{
         this.allUsers = res.data
-        console.log(this.allUsers);
+      }
+    })
+  }
 
+  getAllEvent():void{
+    this._EventService.getAllAdminEvents().subscribe({
+      next:(res)=>{
+        this.allEvents = res.data
+        this.filteredData =[...this.allEvents]
+        this.updatePagination();
+      }
+    })
+  }
+
+  assignForm:FormGroup = this._FormBuilder.group({
+    userId: [null, Validators.required],
+    eventId: [null, Validators.required]
+  })
+
+  submitAssignOwnerToEvent():void{
+    let data  = this.assignForm.value
+
+    this._EventService.assignOwnerToEvent(data).subscribe({
+      next:(res)=>{
+        this._ToastrService.success(res.msg)
+        this.assignForm.reset()
+        this.modalService.dismissAll()
+      },
+      error:(err)=>{
+        this._ToastrService.error(err.error.msg)
       }
     })
   }

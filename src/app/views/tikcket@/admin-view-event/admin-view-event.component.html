@@ -1,7 +1,7 @@
 <section class="all-events" id="all-events">
   <div class="container-fluid py-3">
-    <div class="bg-white rounded-3 p-3">
-      <h1 class="text-black fw-bold">All Events</h1>
+    <div class="bg-white rounded-3 p-3 shadow-lg">
+      <h1 class="fw-bold">All Events</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <!-- Search -->
         <div class="search">
@@ -57,17 +57,17 @@
                 </div>
               </th>
 
-              <th (click)="sort('eventName')" class="sortable">
+              <th (click)="sort('name')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Event Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'name' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'name' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -105,17 +105,17 @@
                 </div>
               </th>
 
-              <th (click)="sort('bookingCount')" class="sortable">
+              <th (click)="sort('availableNumberOfVisitors')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Bookings</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'availableNumberOfVisitors' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'availableNumberOfVisitors' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -132,6 +132,22 @@
                     <i
                       class="fa-solid fa-caret-down"
                       [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('date')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Date</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -164,18 +180,21 @@
           <tbody>
             @for (event of paginatedData; track $index) {
               <tr>
-                <td>{{ event.id }}</td>
+                <td>{{ $index + 1 }}</td>
                 <td>{{ event.company }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <img [src]="event.eventimg" width="50" class="rounded" />
-                    <h6 class="m-0">{{ event.eventName }}</h6>
+                    <img [src]="event.imageUrl" width="50" class="rounded" />
+                    <h6 class="m-0">{{ event.name }}</h6>
                   </div>
                 </td>
                 <td>{{ event.location }}</td>
                 <td>{{ event.price | number }} EGP</td>
-                <td>{{ event.bookingCount }} Tickets</td>
-                <td>{{ event.totalAmount | number }} EGP</td>
+                <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors }} Tickets</td>
+                <td>{{ event.price * (event.numberOfVisitorsAllowed - event.availableNumberOfVisitors)  | number }} EGP</td>
+                <td>
+                    {{ event.date | date:'dd/MM/yyyy' }}
+                </td>
                 <td>
                   <span
                     class="badge"
@@ -186,7 +205,7 @@
                   </span>
                 </td>
                 <td>
-                  <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + '1'"></i>
+                  <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + event.id"></i>
                 </td>
               </tr>
             }
@@ -214,6 +233,8 @@
 
   </div>
 </section>
+
+
 <ng-template
   #content
   let-modal
@@ -235,10 +256,10 @@
       ></button>
     </div>
     <div class="modal-body">
-      <form class="row g-3">
+      <form class="row g-3" [formGroup]="assignForm">
         <div class="Owner col-md-6">
           <label for="Owner" class="form-label">Owner</label>
-          <select class="form-select" name="Owner" id="Owner">
+          <select class="form-select" formControlName="userId" name="Owner" id="Owner">
             <option value="" selected disabled>Choose Event Owner</option>
             @for (user of allUsers; track $index) {
               <option [value]="user.id">{{user.fullName}}</option>
@@ -248,10 +269,10 @@
 
         <div class="Events col-md-6">
           <label for="Events" class="form-label">Events</label>
-          <select class="form-select" name="Events" id="Events">
+          <select class="form-select" formControlName="eventId" name="Events" id="Events">
             <option value="" selected disabled>Choose Event</option>
-            @for (event of data; track $index) {
-              <option [value]="event.id">{{event.eventName}}</option>
+            @for (event of allEvents; track $index) {
+              <option [value]="event.id">{{event.name}}</option>
             }
           </select>
         </div>
@@ -266,7 +287,7 @@
       >
         Close
       </button>
-      <button type="button" class="btn btn-primary">
+      <button type="button" class="btn btn-primary" (click)="submitAssignOwnerToEvent()">
         Save changes
       </button>
     </div>

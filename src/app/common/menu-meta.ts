@@ -28,8 +28,6 @@ export type TabMenuItem = {
   icon: string
 }
 
-let userId:string | null = localStorage.getItem('userId')
-
 export const MENU_ITEMS: MenuItemType[] = [
   {
     key: 'menu',
@@ -62,10 +60,16 @@ export const MENU_ITEMS: MenuItemType[] = [
     ],
   },
   {
+    key: 'add-new-owner',
+    label: 'Add New Owner',
+    url: '/register',
+  },
+  {
     key: 'user-events',
     label: 'My Events',
     url: '/user-events',
   }
+
 
 
 

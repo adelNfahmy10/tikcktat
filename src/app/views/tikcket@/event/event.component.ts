@@ -32,7 +32,6 @@ export class EventComponent implements OnInit{
       .subscribe({
         next: (res) => {
           this.allEvents = res.data;
-          console.log(this.allEvents);
         },
         error: (err) => {
           console.error(err.msg);

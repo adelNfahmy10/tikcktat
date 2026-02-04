@@ -39,6 +39,8 @@ type FullScreenTypes = {
 export class TopbarComponent {
   notificationList = notificationsData
   element!: FullScreenTypes
+  token:string | null = localStorage.getItem('token')
+  fullName:string | null = localStorage.getItem('fullName')
 
   @Output() settingsButtonClicked = new EventEmitter()
   @Output() mobileMenuButtonClicked = new EventEmitter()
@@ -119,7 +121,10 @@ export class TopbarComponent {
 
   logout() {
     // this.store.dispatch(logout())
-    this.router.navigate(['/signin'])
     localStorage.clear()
+
+    this.router.navigate(['/home']).then(() => {
+      window.location.reload();
+    });
   }
 }

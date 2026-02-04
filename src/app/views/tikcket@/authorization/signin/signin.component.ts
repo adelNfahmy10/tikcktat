@@ -13,7 +13,6 @@ import { ToastrService } from 'ngx-toastr';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    LogoBoxComponent,
   ],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
@@ -38,9 +37,11 @@ export class SigninComponent {
         localStorage.setItem('refreshToken', res.data.refreshToken)
         localStorage.setItem('userId', res.data.userId)
         localStorage.setItem('fullName', res.data.fullName)
-        localStorage.setItem('refreshToken', res.data.refreshToken)
+        localStorage.setItem('role', res.data.roles[0])
         this._ToastrService.success('Login Successfully..!')
-        this._Router.navigate(['/home'])
+        this._Router.navigate(['/home']).then(() => {
+          window.location.reload();
+        });
       }
     })
   }

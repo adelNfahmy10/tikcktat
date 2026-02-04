@@ -60,6 +60,11 @@ export class CheckoutComponent implements OnInit{
     }
   }
 
+  checkoutData:any = {}
+  viewCheckOutData():void{
+    this.checkoutData = this.checkoutForm.value
+  }
+
 
   submitCheckout(): void {
     // تأكد ان الـ eventId موجود

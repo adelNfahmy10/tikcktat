@@ -9,19 +9,58 @@ import { Observable } from 'rxjs';
 export class EventService {
   private readonly _HttpClient = inject(HttpClient)
 
-  createEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Events/CreateNewEvent`, body)
+  // Get All Event ((Admin))
+  getAllAdminEvents():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents`)
   }
 
-  getAllEvents(eventType:any):Observable<any>{
+  // Get All Event ((Public))
+  getAllEvents(eventType?:any):Observable<any>{
     return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents?type=${eventType}`)
   }
 
+  // Get Event By Id
   getEventById(id:any):Observable<any>{
     return this._HttpClient.get(`${environment.baseUrl}Events/GetEventById/${id}`)
   }
 
+  // Get Event Attendees
+  getEventAttendees(eventId:any):Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/${eventId}/attendees`)
+  }
+
+  // Get All Owners
+  getAllEventsOwner():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEventOwners`)
+  }
+
+  // Get Event By Owner
+  GetEventsByOwner(userId:any):Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetEventsByOwner/${userId}`)
+  }
+
+  // Create Event
+  createEvent(body:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}Events/CreateNewEvent`, body)
+  }
+
+  // Update Event
+  updateEvent(body:any):Observable<any>{
+    return this._HttpClient.put(`${environment.baseUrl}Events/UpdateEvent`, body)
+  }
+
+  // Delete Event
+  deleteEvent(id:any):Observable<any>{
+    return this._HttpClient.delete(`${environment.baseUrl}Events/DeleteEvent/${id}`)
+  }
+
+  // Assign Owner To Event
+  assignOwnerToEvent(body:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}Events/AssignEventToOwner`, body)
+  }
+
+  // Checkout To Event
   checkoutEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Events/Checkout`, body)
+    return this._HttpClient.post(`${environment.baseUrl}Checkout/checkout`, body)
   }
 }

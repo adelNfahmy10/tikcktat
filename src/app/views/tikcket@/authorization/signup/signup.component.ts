@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LogoBoxComponent } from '@component/logo-box.component';
 import { AuthService } from '@core/services/auth/auth.service';
+import { RoleService } from '@core/services/role/role.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -11,21 +12,38 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit{
   private readonly _AuthService = inject(AuthService)
   private readonly _FormBuilder = inject(FormBuilder)
+  private readonly _RoleService = inject(RoleService)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _Router = inject(Router)
+
+  allRoles:any[] = []
+
+  ngOnInit(): void {
+    this.getAllRoles()
+  }
 
   registerForm:FormGroup = this._FormBuilder.group({
     fullName:[null],
     email:[null],
     mobile:[null],
-    password:[null]
+    password:[null],
+    roleId:[null],
   })
+
+  getAllRoles():void{
+    this._RoleService.getAllRoles().subscribe({
+      next:(res)=>{
+        this.allRoles = res.data
+      }
+    })
+  }
 
   submitRegisterForm():void{
     let data = this.registerForm.value
+
     this._AuthService.register(data).subscribe({
       next:(res)=>{
         this._ToastrService.success('Create Account Is Successfully')
@@ -33,7 +51,7 @@ export class SignupComponent {
         this._Router.navigate(['/login'])
       },
       error:(err)=>{
-        console.log(err);
+        this._ToastrService.error('Faild')
       }
     })
   }

@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { EventService } from '@core/services/event/event.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-view-event-details',
@@ -10,34 +12,67 @@ import { RouterLink } from '@angular/router';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ViewEventDetailsComponent {
+  private readonly _EventService = inject(EventService)
+  private readonly _ActivatedRoute = inject(ActivatedRoute)
+
+  eventData:any = {}
+  eventId:string | null = null
+
+  ngOnInit(): void {
+    this.getEventById()
+  }
+
+  getEventById(): void {
+    this._ActivatedRoute.paramMap
+      .pipe(
+        switchMap(params => {
+          this.eventId = params.get('id');
+          return this._EventService.getEventById(this.eventId);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.eventData = res.data;
+          console.log(this.eventData);
+
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
+
   allData:any = [
     {
-      title: 'Total Graduates',
-      amount: '1800 Grad',
-      icon: 'ri-graduation-cap-line',
+      title: '',
+      amount: ` `,
+      icon: '',
       change: 34.4,
       variant: 'success',
     },
     {
-      title: 'Total Companions',
+      title: '',
       amount: '750 Comp',
-      icon: 'ri-user-line',
+      icon: '',
       change: 8.5,
       variant: 'danger',
     },
     {
-      title: 'Total Tickets',
+      title: '',
       amount: '893 Ticket',
-      icon: 'ri-ticket-2-line',
+      icon: '',
       change: 17,
       variant: 'success',
     },
     {
-      title: 'Total Event Amount',
+      title: '',
       amount: '430,586 EGP',
-      icon: 'ri-money-pound-circle-line',
+      icon: '',
       change: 12,
       variant: 'danger',
     },
   ]
+
+
+
 }

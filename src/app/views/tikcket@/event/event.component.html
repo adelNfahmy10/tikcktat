@@ -1,20 +1,16 @@
 <section class="event-subCategory" id="event-subCategory">
   <div class="container-fluid py-3">
-    <div class="bg-white rounded-3 p-3">
+    <div class="bg-white rounded-3 p-3 shadow-lg">
       <div class="head-section position-relative my-3">
         <div class="d-flex justify-content-between">
-          <h1 class="text-black fw-bold m-0">{{ type === 'GraduationParty' ? 'Graduations' : type }} Events</h1>
-          @if(token){
-            <button class="btn main-btn" routerLink="/add-event">Add Event</button>
-          }
+          <h1 class="fw-bold m-0">{{ type === 'GraduationParty' ? 'Graduations' : type }} Events</h1>
         </div>
-
       </div>
       <div class="event-items">
         <div class="row">
           @for (event of allEvents; track $index) {
             <div class="col-lg-6">
-              <div class="card rounded-3 overflow-hidden position-relative h-100">
+              <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
                 <div class="badge" [ngClass]="{
                   'bg-danger': false,
                   'bg-success': true,
@@ -26,11 +22,11 @@
                     @if(event.imageUrl){
                       <img
                         [src]="event.imageUrl"
-                        class="img-fluid rounded-start h-100"
+                        class="event-img w-100 img-fluid roundedobject-fit-cover"
                         alt="img-1"
                       />
                     } @else {
-                      <img class="img-fluid rounded-start h-100" src="assets/images/tikecktImages/event-image/cap-grad.png" alt="graduation party">
+                      <img class="event-img w-100 img-fluid rounded" src="assets/images/tikecktImages/event-image/cap-grad.png" alt="graduation party">
                     }
                   </div>
                   <div class="col-md-8">
@@ -40,15 +36,16 @@
                         <p class="card-text party-details">
                           Location : <span><a class="cr" [href]="event.location">{{event.location}}</a></span> <br>
                           Date : <span> {{event.date | date}} </span> <br>
-                          Price: <span> {{event.price | number}} EGP </span>
+                          Ticket Price: <span> {{event.price | number}} EGP </span> <br>
+                          Companion Price: <span> {{event.price | number}} EGP </span>
                         </p>
                         <div class="card-text d-flex justify-content-between align-items-end">
                           <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/event-details/' + event.id">Book Now</button>
-                          @if(!token){
+                          <!-- @if(!token){
                             <small class="text-muted">{{event.availableNumberOfVisitors}} From {{event.numberOfVisitorsAllowed}}</small>
                           }@else {
                             <small class="text-muted">Updated....</small>
-                          }
+                          } -->
                         </div>
                       </div>
                     </div>
