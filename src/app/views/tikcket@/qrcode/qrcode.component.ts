@@ -23,6 +23,7 @@ export class QrcodeComponent implements OnInit {
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.qrValue = params.get('ip')
+        console.log(this.qrValue);
       }
     })
   }
