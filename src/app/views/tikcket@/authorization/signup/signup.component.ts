@@ -1,14 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LogoBoxComponent } from '@component/logo-box.component';
 import { AuthService } from '@core/services/auth/auth.service';
 import { RoleService } from '@core/services/role/role.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
-  imports: [RouterLink, LogoBoxComponent, ɵInternalFormsSharedModule, ReactiveFormsModule],
+  imports: [RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })

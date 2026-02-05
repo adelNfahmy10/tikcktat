@@ -1,0 +1,14 @@
+.login{
+  min-height: 100vh;
+  .auth-card{
+    width: 75%;
+  }
+}
+
+@media (max-width:991px) {
+  .login{
+    .auth-card{
+      width: 100%;
+    }
+  }
+}
