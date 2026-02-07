@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 export class CheckoutComponent implements OnInit{
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _FormBuilder = inject(FormBuilder)
-  private readonly _EventService = inject(EventService)
+  private readonly _Router = inject(Router)
   private readonly _ToastrService = inject(ToastrService)
 
   eventId:string | null = null
@@ -103,6 +103,7 @@ export class CheckoutComponent implements OnInit{
       Swal.fire("Please go to the office to collect your ticket.", '', 'success')
       this.checkoutForm.reset()
       this.photoPreview = null
+      this._Router.navigate(['/home'])
     } else {
       Swal.fire("Please Fill All Fields", '', 'error')
     }
