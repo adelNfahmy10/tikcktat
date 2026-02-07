@@ -17,6 +17,18 @@ export class AuthService {
     return this._HttpClient.post(`${environment.baseUrl}UserManager/RegisterNewUser`, body)
   }
 
+  refreshToken(body:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}Auth/refresh`, body)
+  }
+
+  changePassword(body:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}Auth/change-password`, body)
+  }
+
+  addNewPassword(body:any):Observable<any>{
+    return this._HttpClient.post(`${environment.baseUrl}Auth/AddNewPassword`, body)
+  }
+
   getAllUsers():Observable<any>{
     return this._HttpClient.get(`${environment.baseUrl}UserManager/GetAll`)
   }

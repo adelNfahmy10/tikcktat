@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { EventService } from '@core/services/event/event.service';
 
 @Component({
   selector: 'app-view-events',
@@ -9,110 +10,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './view-events.component.html',
   styleUrl: './view-events.component.scss'
 })
-export class ViewEventsComponent {
-  data = [
-    {
-      id: 1,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Music Night',
-      location: 'Cairo',
-      price: 200,
-      bookingCount: 50,
-      totalAmount: 10000,
-      active: true,
-    },
-    {
-      id: 2,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Tech Conference',
-      location: 'Giza',
-      price: 500,
-      bookingCount: 20,
-      totalAmount: 10000,
-      active: false,
-    },
-    {
-      id: 3,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Art Exhibition',
-      location: 'Alexandria',
-      price: 150,
-      bookingCount: 80,
-      totalAmount: 12000,
-      active: true,
-    },
-    {
-      id: 4,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Business Summit',
-      location: 'New Cairo',
-      price: 700,
-      bookingCount: 30,
-      totalAmount: 21000,
-      active: true,
-    },
-    {
-      id: 5,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Stand-up Comedy',
-      location: 'Nasr City',
-      price: 250,
-      bookingCount: 60,
-      totalAmount: 15000,
-      active: false,
-    },
-    {
-      id: 6,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Startup Meetup',
-      location: 'Sheikh Zayed',
-      price: 180,
-      bookingCount: 90,
-      totalAmount: 16200,
-      active: true,
-    },
-    {
-      id: 7,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Gaming Tournament',
-      location: '6th of October',
-      price: 350,
-      bookingCount: 40,
-      totalAmount: 14000,
-      active: true,
-    },
-    {
-      id: 8,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Photography Workshop',
-      location: 'Zamalek',
-      price: 220,
-      bookingCount: 35,
-      totalAmount: 7700,
-      active: false,
-    },
-    {
-      id: 9,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'UX/UI Design Bootcamp',
-      location: 'Maadi',
-      price: 600,
-      bookingCount: 25,
-      totalAmount: 15000,
-      active: true,
-    },
-    {
-      id: 10,
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'AI & Future Tech Talk',
-      location: 'Smart Village',
-      price: 400,
-      bookingCount: 55,
-      totalAmount: 22000,
-      active: false,
-    },
+export class ViewEventsComponent implements OnInit{
+  private readonly _EventService = inject(EventService)
 
-  ];
+  ownerEvents:any[] = []
 
   // table state
   searchText = '';
@@ -122,17 +23,35 @@ export class ViewEventsComponent {
   page = 1;
   pageSize = 5;
   totalPages: number[] = [];
-
-  filteredData = [...this.data];
+  filteredData:any[] = [];
   paginatedData: any[] = [];
 
+
   ngOnInit() {
-    this.updatePagination();
+    this.getOwnerEvents()
+  }
+
+
+  getOwnerEvents(){
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this._EventService.GetEventsByOwner(userId).subscribe({
+        next: (res) => {
+          this.ownerEvents = res.data;
+          this.filteredData = [...this.ownerEvents];
+          this.updatePagination();
+        },
+        error: (err) => {
+          console.error('Error fetching owner events:', err);
+
+        }
+      });
+    }
   }
 
   // 🔍 Search
   applySearch() {
-    this.filteredData = this.data.filter(item =>
+    this.filteredData = this.ownerEvents.filter(item =>
       Object.values(item)
         .join(' ')
         .toLowerCase()

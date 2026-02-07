@@ -31,6 +31,7 @@ export class AddEventComponent implements OnInit{
     Location:[null],
     Date:[null],
     Price:[null],
+    VisitorFee:[null],
     NumberOfVisitorsAllowed:[null],
     EventDetails:[null],
     TermsOfEntries:[null],

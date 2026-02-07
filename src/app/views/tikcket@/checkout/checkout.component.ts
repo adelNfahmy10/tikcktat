@@ -1,12 +1,14 @@
+import { NgClass } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -24,18 +26,19 @@ export class CheckoutComponent implements OnInit{
   }
 
   checkoutForm:FormGroup = this._FormBuilder.group({
-    EventId:[null],
-    Photo:[null],
-    FullName :[null],
-    Phone :[null],
-    Email :[null],
-    VisitorCount:[null],
+    EventId:[null, Validators.required],
+    Photo:[null, Validators.required],
+    FullName :[null, Validators.required],
+    Phone :[null, Validators.required],
+    Email :[null, Validators.required],
+    VisitorCount:[null, Validators.required],
   })
 
   getEventId():void{
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.eventId = params.get('id')
+        this.checkoutForm.get('EventId')?.setValue(this.eventId)
       }
     })
   }
@@ -61,8 +64,15 @@ export class CheckoutComponent implements OnInit{
   }
 
   checkoutData:any = {}
+  show:boolean = false
+
   viewCheckOutData():void{
-    this.checkoutData = this.checkoutForm.value
+    if( this.checkoutForm.valid ){
+      this.show = true
+      this.checkoutData = this.checkoutForm.value
+    } else {
+      this.show = false
+    }
   }
 
 
@@ -88,19 +98,27 @@ export class CheckoutComponent implements OnInit{
       }
     });
 
+    if(this.checkoutForm.valid){
+      Swal.fire(" Checkout Successfully, Check Your E-Mail", '', 'success')
+      this.checkoutForm.reset()
+      this.photoPreview = null
+    } else {
+      Swal.fire("Please Fill All Fields", '', 'error')
+    }
+
     // إرسال الفورم
-    this._EventService.checkoutEvent(formData).subscribe({
-      next: (res) => {
-        this._ToastrService.success(
-          'Checkout Successfully, Check Your E-Mail',
-          'Success',
-          { timeOut: 5000 }
-        );
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    // this._EventService.checkoutEvent(formData).subscribe({
+    //   next: (res) => {
+    //     this._ToastrService.success(
+    //       'Checkout Successfully, Check Your E-Mail',
+    //       'Success',
+    //       { timeOut: 5000 }
+    //     );
+    //   },
+    //   error: (err) => {
+    //     console.error(err);
+    //   }
+    // });
   }
 
 

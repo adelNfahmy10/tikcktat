@@ -88,6 +88,22 @@
                 </div>
               </th>
 
+              <th (click)="sort('visitorFee')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Companion</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('bookingCount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Bookings</span>
@@ -147,17 +163,18 @@
           <tbody>
             @for (event of paginatedData; track $index) {
               <tr>
-                <td>{{ event.id }}</td>
+                <td>{{ $index + 1 }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <img [src]="event.eventimg" width="50" class="rounded" />
-                    <h6 class="m-0">{{ event.eventName }}</h6>
+                    <img [src]="event.imageUrl" width="50" class="rounded" />
+                    <h6 class="m-0">{{ event.name }}</h6>
                   </div>
                 </td>
                 <td>{{ event.location }}</td>
-                <td>{{ event.price | number }} EGP</td>
-                <td>{{ event.bookingCount }} Tickets</td>
-                <td>{{ event.totalAmount | number }} EGP</td>
+                <td>{{ event.price}} EGP</td>
+                <td>{{ event.visitorFee}} EGP</td>
+                <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors}} Tickets</td>
+                <td>{{ ((event.numberOfVisitorsAllowed - event.availableNumberOfVisitors) * event.price ) + (event.visitorFee * (event?.companion || 1))}} EGP</td>
                 <td>
                   <span
                     class="badge"
@@ -169,8 +186,8 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + 1"></i>
-                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + 1"></i>
+                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + event.type + '/' + event.id"></i>
+                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + event.id"></i>
                   </div>
                 </td>
               </tr>

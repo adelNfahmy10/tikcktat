@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
@@ -6,7 +6,7 @@ import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-view-event-details',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DatePipe],
   templateUrl: './view-event-details.component.html',
   styleUrl: './view-event-details.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -42,37 +42,19 @@ export class ViewEventDetailsComponent {
       });
   }
 
-  allData:any = [
-    {
-      title: '',
-      amount: ` `,
-      icon: '',
-      change: 34.4,
-      variant: 'success',
-    },
-    {
-      title: '',
-      amount: '750 Comp',
-      icon: '',
-      change: 8.5,
-      variant: 'danger',
-    },
-    {
-      title: '',
-      amount: '893 Ticket',
-      icon: '',
-      change: 17,
-      variant: 'success',
-    },
-    {
-      title: '',
-      amount: '430,586 EGP',
-      icon: '',
-      change: 12,
-      variant: 'danger',
-    },
-  ]
+  get eventDetailsList(): string[] {
+    if (!this.eventData?.eventDetails) return [];
+    return this.eventData.eventDetails
+      .split('\r\n')          // نفصل كل سطر
+      .map((item:any) => item.trim()) // نشيل أي فراغات
+      .filter((item:any) => item);    // نشيل أي عناصر فاضية
+  }
 
-
-
+  get termsList(): string[] {
+    if (!this.eventData?.termsOfEntries) return [];
+    return this.eventData.termsOfEntries
+      .split('\r\n')          // نفصل كل شرط على سطر
+      .map((item:any) => item.trim()) // نشيل أي فراغات
+      .filter((item:any) => item);    // نشيل أي عناصر فاضية
+  }
 }

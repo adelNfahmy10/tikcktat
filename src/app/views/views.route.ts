@@ -17,6 +17,8 @@ import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-ev
 import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
 import { EventGraduatesDetailsComponent } from './tikcket@/view-event-details/event-graduates-details/event-graduates-details.component'
 import { QrcodeComponent } from './tikcket@/qrcode/qrcode.component'
+import { ForgetpasswrodComponent } from './tikcket@/authorization/forgetpasswrod/forgetpasswrod.component'
+import { ResetuserpasswordComponent } from './tikcket@/authorization/resetuserpassword/resetuserpassword.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -40,7 +42,7 @@ export const VIEWS_ROUTES: Route[] = [
     data: { title: 'Event Details' },
   },
   {
-    path: 'graduates-details/:eventId',
+    path: 'graduates-details/:type/:eventId',
     component: EventGraduatesDetailsComponent,
     data: { title: 'Grad Details' },
   },
@@ -78,6 +80,16 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'register',
     component: SignupComponent,
     data: { title: 'SignUp' },
+  },
+  {
+    path: 'reset-password',
+    component: ResetuserpasswordComponent,
+    data: { title: 'Reset Password' },
+  },
+   {
+    path: 'forget-password',
+    component: ForgetpasswrodComponent,
+    data: { title: 'Forget Password' },
   },
   {
     path: 'qrcode/:ip',

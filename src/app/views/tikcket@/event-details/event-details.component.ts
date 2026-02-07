@@ -39,7 +39,7 @@ export class EventDetailsComponent implements OnInit{
         }
       });
   }
-  
+
   get eventDetailsList(): string[] {
     if (!this.eventData?.eventDetails) return [];
     return this.eventData.eventDetails
@@ -48,11 +48,11 @@ export class EventDetailsComponent implements OnInit{
       .filter((item:any) => item);    // نشيل أي عناصر فاضية
   }
 
-get termsList(): string[] {
-  if (!this.eventData?.termsOfEntries) return [];
-  return this.eventData.termsOfEntries
-    .split('\r\n')          // نفصل كل شرط على سطر
-    .map((item:any) => item.trim()) // نشيل أي فراغات
-    .filter((item:any) => item);    // نشيل أي عناصر فاضية
-}
+  get termsList(): string[] {
+    if (!this.eventData?.termsOfEntries) return [];
+    return this.eventData.termsOfEntries
+      .split('\r\n')          // نفصل كل شرط على سطر
+      .map((item:any) => item.trim()) // نشيل أي فراغات
+      .filter((item:any) => item);    // نشيل أي عناصر فاضية
+  }
 }

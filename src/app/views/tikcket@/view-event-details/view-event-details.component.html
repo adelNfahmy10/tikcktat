@@ -4,7 +4,7 @@
       <h1>Event Details</h1>
       <div class="row g-2">
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+          <div class="card cr" [routerLink]="'/graduates-details/'+ eventData.type + '/' + eventData.id">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
@@ -159,35 +159,35 @@
           <div class="card">
             <div class="card-body">
               <div class="position-relative overflow-hidden">
-                <img src="assets/images/properties/p-11.jpg" alt="" class="img-fluid rounded" />
+                <img [src]="eventData.imageUrl" [alt]="eventData.name" class="evnet-image rounded" />
                 <span class="badge bg-success text-light fs-18 avaliable-badge position-absolute">Active</span>
               </div>
 
               <div class="d-flex flex-wrap justify-content-between mt-3 mb-2 gap-2">
                 <div>
                   <h1 class="fs-20 text-dark fw-bold">
-                    Hayfield Ashton Place Residences at Willow Brook Valley
+                    {{eventData.name}}
                   </h1>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <iconify-icon icon="solar:map-point-wave-bold-duotone" class="fs-18 main-color" ></iconify-icon>
-                    1668 Lincoln Drive Harrisburg, PA 17101 U.S.A
+                    {{eventData.location}}
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-calendar-check-line fs-18 main-color"></i>
-                    20/5/2026
+                    {{eventData.date | date:'dd/MM/yyyy'}}
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-money-pound-circle-line fs-18 main-color"></i>
-                    550 EGP
+                    {{eventData.price}} EGP Per Ticket
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-graduation-cap-line fs-18 main-color"></i>
-                    1800 Graduates
+                    {{eventData.visitorFee }} EGP Per Companion
                   </p>
-                  <p class="d-flex align-items-center gap-1 mt-1 mb-0">
+                  <!-- <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-user-line fs-18 main-color"></i>
-                    750 Companions
-                  </p>
+                    {{eventData.companion || 0 }} Companions
+                  </p> -->
                 </div>
               </div>
 
@@ -195,30 +195,25 @@
                 <div class="avatar-sm rounded">
                   <iconify-icon icon="solar:wallet-money-bold-duotone" class="fs-24 main-color border border-2 rounded-3 avatar-title" ></iconify-icon>
                 </div>
-                <p class="fw-bold fs-18 mb-0 main-color">80,675.00 EGP</p>
+                <p class="fw-bold fs-18 mb-0 main-color">{{(eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors) * eventData.price }} EGP</p>
               </div>
 
               <h5 class="text-dark fw-medium mt-3">Event Details :</h5>
               <ul>
-                <li>Robe Collection</li>
-                <li>Certificate Pickup for Graduation</li>
-                <li>Personalized Graduation Sash Collection</li>
-                <li>Live DJ Performance</li>
-                <li>Spacious Stage for Performances</li>
-                <li>Presence of Professors for Certificate Ceremony</li>
-                <li>Event Venue: Grand Ballroom, Four Seasons Hotel</li>
+                 @for (detail of eventDetailsList; track $index) {
+                  <li>
+                    {{ detail }}
+                  </li>
+                }
               </ul>
 
               <h5 class="text-dark fw-medium mt-3">Terms Of Entry :</h5>
               <ul>
-                <li>All guests must register in advance and have a valid ticket to attend.</li>
-                <li>Attendance is allowed for guests aged [insert age, e.g., 18+] only.</li>
-                <li>Please follow the official/casual-smart dress code as instructed in the invitation.</li>
-                <li>Any inappropriate behavior, harassment, or disturbance to other guests is strictly prohibited.</li>
-                <li>No dangerous items, weapons, or prohibited substances allowed.</li>
-                <li>Please follow all instructions from the security team on-site.</li>
-                <li>Guests are expected to arrive on time to ensure smooth entry and event flow.</li>
-                <li>Do not alter decorations or event setups without prior approval from the event organizers.</li>
+                @for (term of termsList; track $index) {
+                  <li>
+                    {{ term }}
+                  </li>
+                }
               </ul>
 
             </div>

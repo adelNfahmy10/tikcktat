@@ -1,0 +1,79 @@
+<section class="forget-password d-flex justify-content-center align-items-center">
+  <div class="container">
+    <div class="card py-2 auth-card mx-auto">
+      <div class="card-body">
+        <!-- <app-logo-box className="mx-auto mb-4 text-center auth-logo" /> -->
+        <div class="head-card d-flex flex-column justify-content-center align-items-center text-center gap-2 mb-3">
+          <div class="head-image">
+            <img src="assets/images/tikecktImages/logos/mini-icon.png" height="70" alt="logo dark" />
+          </div>
+
+          <div class="head-content">
+            <h2 class="fw-bold text-uppercase fs-18 m-0">Forget Password</h2>
+            <p class="mb-0 mt-1">
+              Forgot your password? Let’s get you a new one.
+            </p>
+          </div>
+        </div>
+
+        <div class="px-4">
+          <form class="authentication-form" [formGroup]="forgetPassword">
+
+            <div class="mb-3">
+              <label class="form-label" for="phone">Phone</label>
+              <input
+                type="tel"
+                id="phone"
+                formControlName="mobile"
+                class="form-control bg-light bg-opacity-50 border-light py-2"
+                placeholder="Enter Your Phone"
+              />
+            </div>
+
+
+            @if(step == 2 || step == 3){
+              <div class="mb-3">
+                <label class="form-label" for="new-password">Code</label>
+                <input
+                  type="text"
+                  id="code"
+                  formControlName="newPassword"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder="Enter Code Sent To Your Phone"
+                />
+              </div>
+            }
+
+
+            @if(step == 3){
+              <div class="mb-3">
+                <label class="form-label" for="new-password">New Password</label>
+                <input
+                  type="password"
+                  id="new-password"
+                  formControlName="password"
+                  class="form-control bg-light bg-opacity-50 border-light py-2"
+                  placeholder="Enter New Password"
+                />
+              </div>
+            }
+
+            @if(step < 3){
+              <button class="btn main-btn" (click)="changeStep()">Send Code</button>
+            }
+
+            @if(step == 3){
+              <div class="mb-1 text-center d-grid">
+                <button class="btn btn-danger py-2 fw-medium" type="submit" (click)="submitForgetPassword()">
+                  Reset Password
+                </button>
+              </div>
+            }
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

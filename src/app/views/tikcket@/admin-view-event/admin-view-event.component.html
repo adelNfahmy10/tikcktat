@@ -41,22 +41,6 @@
                 </div>
               </th>
 
-              <th (click)="sort('company')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Company</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'company' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'company' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
               <th (click)="sort('name')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Event Name</span>
@@ -100,6 +84,22 @@
                     <i
                       class="fa-solid fa-caret-down"
                       [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('visitorFee')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Companion</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -181,15 +181,18 @@
             @for (event of paginatedData; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ event.company }}</td>
                 <td>
-                  <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center gap-2 w-100">
                     <img [src]="event.imageUrl" width="50" class="rounded" />
-                    <h6 class="m-0">{{ event.name }}</h6>
+                    <h6 class="m-0 w-100 text-start" >
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event.company || 'Company Test' }}</span>  <br>
+                      {{ event.name }}
+                    </h6>
                   </div>
                 </td>
                 <td>{{ event.location }}</td>
                 <td>{{ event.price | number }} EGP</td>
+                <td>{{ event.visitorFee | number }} EGP</td>
                 <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors }} Tickets</td>
                 <td>{{ event.price * (event.numberOfVisitorsAllowed - event.availableNumberOfVisitors)  | number }} EGP</td>
                 <td>
