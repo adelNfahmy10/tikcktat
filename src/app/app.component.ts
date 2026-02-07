@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, type OnInit } from '@angular/core'
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, ViewChild, type OnInit } from '@angular/core'
 import {
   NavigationCancel,
   NavigationEnd,
@@ -14,13 +14,13 @@ import {
   NgProgressModule,
   type NgProgressRef,
 } from 'ngx-progressbar'
-
+import { NgxSpinnerComponent } from 'ngx-spinner'
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, NgProgressModule, ],
+    imports: [RouterOutlet, NgProgressModule, NgxSpinnerComponent],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+    styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   progressRef!: NgProgressRef

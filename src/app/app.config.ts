@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  importProvidersFrom,
   isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core'
@@ -29,7 +30,9 @@ import { FakeBackendProvider } from '@core/helper/fake-backend'
 import { provideToastr } from 'ngx-toastr'
 import { DecimalPipe } from '@angular/common'
 import { headerInterceptor } from '@core/interceptors/header/header.interceptor'
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { loadingInterceptor } from '@core/interceptors/loading/loading.interceptor'
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -44,13 +47,15 @@ export const appConfig: ApplicationConfig = {
     FakeBackendProvider,
     CookieService,
     DecimalPipe,
+    provideAnimations(),
+    importProvidersFrom(NgxSpinnerModule, BrowserAnimationsModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, inMemoryScrollingFeatures),
     provideStore(rootReducer, { metaReducers: [localStorageSyncReducer] }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(AuthenticationEffects, CalendarEffects),
-    provideHttpClient(withFetch(), withInterceptors([headerInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([headerInterceptor, loadingInterceptor])),
     provideToastr({}),
-    provideAnimations()
+
   ],
 }

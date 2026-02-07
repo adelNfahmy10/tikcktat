@@ -40,24 +40,15 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/home',
   },
   {
-    key: 'events',
-    label: 'Events',
-    icon: 'ri-dashboard-2-line',
-    collapsed: true,
-    children: [
-      {
-        key: 'add-event',
-        label: 'Add Eevent',
-        url: '/add-event',
-        parentKey: 'events',
-      },
-      {
-        key: 'all-view',
-        label: 'All Eevents',
-        url: '/all-events',
-        parentKey: 'events',
-      }
-    ],
+    key: 'user-events',
+    label: 'My Events',
+    url: '/user-events',
+  },
+  {
+    key: 'add-event',
+    label: 'Add Eevents',
+    url: '/add-event',
+    parentKey: 'events',
   },
   {
     key: 'add-new-owner',
@@ -65,10 +56,23 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/register',
   },
   {
-    key: 'user-events',
-    label: 'My Events',
-    url: '/user-events',
-  }
+    key: 'all-view',
+    label: 'View Eevents',
+    url: '/all-events',
+    parentKey: 'events',
+  },
+
+  // {
+  //   key: 'events',
+  //   label: 'Events',
+  //   icon: 'ri-dashboard-2-line',
+  //   collapsed: true,
+  //   children: [
+
+  //   ],
+  // },
+
+
 
 
 
