@@ -99,7 +99,8 @@ export class CheckoutComponent implements OnInit{
     });
 
     if(this.checkoutForm.valid){
-      Swal.fire(" Checkout Successfully, Check Your E-Mail", '', 'success')
+      // Swal.fire(" Checkout Successfully, Check Your E-Mail", '', 'success')
+      Swal.fire("Please go to the office to collect your ticket.", '', 'success')
       this.checkoutForm.reset()
       this.photoPreview = null
     } else {
