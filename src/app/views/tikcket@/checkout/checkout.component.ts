@@ -31,7 +31,7 @@ export class CheckoutComponent implements OnInit{
     FullName :[null, Validators.required],
     Phone :[null, Validators.required],
     Email :[null, Validators.required],
-    VisitorCount:[null, Validators.required],
+    VisitorCount:[null],
   })
 
   getEventId():void{
@@ -100,7 +100,7 @@ export class CheckoutComponent implements OnInit{
 
     if(this.checkoutForm.valid){
       // Swal.fire(" Checkout Successfully, Check Your E-Mail", '', 'success')
-      Swal.fire("Please go to the office to collect your ticket.", '', 'success')
+      Swal.fire("Thank you for booking, Please visit the office to pay and receive you Qrcode ticket", '', 'success')
       this.checkoutForm.reset()
       this.photoPreview = null
       this._Router.navigate(['/home'])
