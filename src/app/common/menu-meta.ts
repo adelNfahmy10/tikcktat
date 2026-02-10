@@ -56,6 +56,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/register',
   },
   {
+    key: 'owners',
+    label: 'Owners',
+    url: '/owners',
+  },
+  {
     key: 'all-view',
     label: 'View Eevents',
     url: '/all-events',

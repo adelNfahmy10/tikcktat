@@ -17,7 +17,7 @@
         <!-- Download Table XSL -->
         <div class="download d-flex align-items-center gap-2">
           <button class="btn btn-outline-primary" (click)="open(content)">Assign Owner</button>
-          <button class="btn btn-outline-primary">Download <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllEvents()">Download <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -121,6 +121,22 @@
                 </div>
               </th>
 
+              <th (click)="sort('totalVisitorsCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Visitor</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Total</span>
@@ -185,7 +201,7 @@
                   <div class="d-flex align-items-center gap-2 w-100">
                     <img [src]="event.imageUrl" width="50" class="rounded" />
                     <h6 class="m-0 w-100 text-start" >
-                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event.company || 'Company Test' }}</span>  <br>
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event.eventOwnerName || 'Unknown' }}</span>  <br>
                       {{ event.name }}
                     </h6>
                   </div>
@@ -194,6 +210,7 @@
                 <td>{{ event.price | number }} EGP</td>
                 <td>{{ event.visitorFee | number }} EGP</td>
                 <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors }} Tickets</td>
+                <td>{{ event.totalVisitorsCount }} Companion</td>
                 <td>{{ event.price * (event.numberOfVisitorsAllowed - event.availableNumberOfVisitors)  | number }} EGP</td>
                 <td>
                     {{ event.date | date:'dd/MM/yyyy' }}
@@ -201,14 +218,17 @@
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="event.active"
-                    [class.bg-danger]="!event.active"
+                    [class.bg-success]="event.status === 'Active'"
+                    [class.bg-danger]="event.status !== 'Active'"
                   >
-                    {{ event.active ? 'Active' : 'Inactive' }}
+                    {{ event.status }}
                   </span>
                 </td>
                 <td>
-                  <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + event.id"></i>
+                  <div class="d-flex align-items-center justify-content-center gap-1">
+                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + event.type + '/' + event.id"></i>
+                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + event.id"></i>
+                  </div>
                 </td>
               </tr>
             }

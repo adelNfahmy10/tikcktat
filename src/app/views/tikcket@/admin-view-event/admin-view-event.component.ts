@@ -22,124 +22,12 @@ export class AdminViewEventComponent implements OnInit{
 
   allUsers:any[] = []
   allEvents:any[] = []
+
   ngOnInit() {
     this.getAllUsers()
     this.getAllEvent()
   }
 
-  data = [
-    {
-      id: 1,
-      company: 'NovaTech',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Music Night',
-      location: 'Cairo',
-      price: 200,
-      bookingCount: 50,
-      totalAmount: 10000,
-      active: true,
-    },
-    {
-      id: 2,
-      company: 'BlueWave Solutions',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Tech Conference',
-      location: 'Giza',
-      price: 500,
-      bookingCount: 20,
-      totalAmount: 10000,
-      active: false,
-    },
-    {
-      id: 3,
-      company: 'Vertex Group',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Art Exhibition',
-      location: 'Alexandria',
-      price: 150,
-      bookingCount: 80,
-      totalAmount: 12000,
-      active: true,
-    },
-    {
-      id: 4,
-      company: 'Apex Digital',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Business Summit',
-      location: 'New Cairo',
-      price: 700,
-      bookingCount: 30,
-      totalAmount: 21000,
-      active: true,
-    },
-    {
-      id: 5,
-      company: 'SkyLine Corp',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Stand-up Comedy',
-      location: 'Nasr City',
-      price: 250,
-      bookingCount: 60,
-      totalAmount: 15000,
-      active: false,
-    },
-    {
-      id: 6,
-      company: 'NextGen Systems',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Startup Meetup',
-      location: 'Sheikh Zayed',
-      price: 180,
-      bookingCount: 90,
-      totalAmount: 16200,
-      active: true,
-    },
-    {
-      id: 7,
-      company: 'Alpha Solutions',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Gaming Tournament',
-      location: '6th of October',
-      price: 350,
-      bookingCount: 40,
-      totalAmount: 14000,
-      active: true,
-    },
-    {
-      id: 8,
-      company: 'BrightPath',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'Photography Workshop',
-      location: 'Zamalek',
-      price: 220,
-      bookingCount: 35,
-      totalAmount: 7700,
-      active: false,
-    },
-    {
-      id: 9,
-      company: 'Infinity Labs',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'UX/UI Design Bootcamp',
-      location: 'Maadi',
-      price: 600,
-      bookingCount: 25,
-      totalAmount: 15000,
-      active: true,
-    },
-    {
-      id: 10,
-      company: 'PrimeEdge',
-      eventimg: 'assets/images/tikecktImages/logos/full-logo.png',
-      eventName: 'AI & Future Tech Talk',
-      location: 'Smart Village',
-      price: 400,
-      bookingCount: 55,
-      totalAmount: 22000,
-      active: false,
-    },
-
-  ];
 
   // table state
   searchText = '';
@@ -229,6 +117,30 @@ export class AdminViewEventComponent implements OnInit{
         this.updatePagination();
       }
     })
+  }
+
+  downloadAllEvents(): void {
+    this._EventService.downloadGetAllEvents().subscribe({
+      next: (res: Blob) => {
+        const blob = new Blob([res], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'All Events.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+        console.log('Download started!');
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+      }
+    });
   }
 
   assignForm:FormGroup = this._FormBuilder.group({

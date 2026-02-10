@@ -4,7 +4,7 @@
       <div class="row g-2">
         <div class="col-12">
           <div class="image-event">
-            <img src="assets/images/tikecktImages/home-image/bg-home.png" class="rounded-3" alt="">
+            <img [src]="eventData.imageUrl" class="rounded-3" [alt]="eventData.name">
           </div>
         </div>
 
@@ -70,11 +70,17 @@
               <img src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo text-center" alt="ticketat">
 
               <div class="d-flex flex-column align-items-start g-0 justify-content-between border p-3 mt-4">
-                <p>Name : {{ checkoutData?.FullName}}</p>
-                <p>Phone : {{ checkoutData?.Phone}}</p>
-                <p>Email : {{ checkoutData?.Email}}</p>
-                <p>companions : {{ checkoutData?.VisitorCount || 2}}</p>
-                <p>Price : {{ 500 + ((checkoutData?.VisitorCount || 0) * 250) }} EGP</p>
+                <p> Name : <span class="main-color fw-medium">{{ checkoutData?.FullName}}</span></p>
+                <p> Phone : <span class="main-color fw-medium">{{ checkoutData?.Phone}}</span></p>
+                <p> Email : <span class="main-color fw-medium">{{ checkoutData?.Email}}</span></p>
+                <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount}} Companion(s)</span></p>
+                <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
+                <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
+                <div class="border border-2 shadow-sm w-100 p-2 mb-2 text-start rounded-3">
+                  <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
+                  <p class="m-0 pb-2 border-bottom"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+                  <p class="m-0 mt-2 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+                </div>
 
                 <div class="text-center w-100">
                   <button class="btn main-btn w-100" (click)="submitCheckout()"> Confirm </button>

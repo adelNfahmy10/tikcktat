@@ -13,6 +13,7 @@ import { EventService } from '@core/services/event/event.service';
 export class ViewEventsComponent implements OnInit{
   private readonly _EventService = inject(EventService)
 
+  userId:string | null = localStorage.getItem('userId')
   ownerEvents:any[] = []
 
   // table state
@@ -31,7 +32,6 @@ export class ViewEventsComponent implements OnInit{
     this.getOwnerEvents()
   }
 
-
   getOwnerEvents(){
     const userId = localStorage.getItem('userId');
     if (userId) {
@@ -47,6 +47,30 @@ export class ViewEventsComponent implements OnInit{
         }
       });
     }
+  }
+
+  downloadOwnerEvent(): void {
+    this._EventService.downloadEventsByOwner(this.userId).subscribe({
+      next: (res: Blob) => {
+        const blob = new Blob([res], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'My Events.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+        console.log('Download started!');
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+      }
+    });
   }
 
   // 🔍 Search
@@ -104,5 +128,4 @@ export class ViewEventsComponent implements OnInit{
     this.page = p;
     this.updatePagination();
   }
-
 }

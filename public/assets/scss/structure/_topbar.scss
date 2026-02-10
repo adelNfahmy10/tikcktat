@@ -65,6 +65,15 @@ header {
           }
      }
 
+     .ticketat-logo-topbar{
+        width: 250px;
+     }
+     @media (max-width:567px) {
+      .ticketat-logo-topbar{
+        width: 130px;
+      }
+     }
+
      .topbar-badge {
           right: -7px;
           top: 7px !important;

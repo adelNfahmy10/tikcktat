@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit {
   }
 
   initMenu(): void {
-    const adminOnlyKeys = ['events', 'add-new-owner', 'add-event', 'all-view'];
+    const adminOnlyKeys = ['events', 'add-new-owner', 'add-event', 'all-view', 'owners'];
     const companyOnlyKeys = ['user-events'];
     this.menuItems = MENU_ITEMS.filter(item => {
       if (adminOnlyKeys.includes(item.key) && this.role !== 'Admin') {

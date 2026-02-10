@@ -1,0 +1,142 @@
+<section class="owners" id="owners">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3 shadow-lg">
+      <h1 class="fw-bold">All Owners</h1>
+      <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
+        <!-- Search -->
+        <div class="search">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search events..."
+            [(ngModel)]="searchText"
+            (input)="applySearch()"
+          />
+        </div>
+
+        <!-- Download Table XSL -->
+        <div class="download">
+          <button class="btn btn-outline-primary" (click)="downloadOwnerEvent()">Download   <i class="fa-solid fa-file-csv"></i></button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th (click)="sort('id')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>ID</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('fullName')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Owner Name</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('email')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Email</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('phoneNumber')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Phone No.</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'phoneNumber' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'phoneNumber' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('ownedEventsCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Owned Count</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'ownedEventsCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'ownedEventsCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (event of paginatedData; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ event.fullName }}</td>
+                <td>{{ event.email }}</td>
+                <td>{{ event.phoneNumber}}</td>
+                <td>{{ event.ownedEventsCount }} Owner(s)</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="changePage(page - 1)">Prev</a>
+        </li>
+
+        @for (p of totalPages; track $index) {
+          <li class="page-item" [class.active]="p === page">
+            <a class="page-link" (click)="changePage(p)">{{ p }}</a>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="page === totalPages.length">
+          <a class="page-link" (click)="changePage(page + 1)">Next</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

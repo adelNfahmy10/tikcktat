@@ -16,7 +16,7 @@
 
         <!-- Download Table XSL -->
         <div class="download">
-          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadOwnerEvent()">Download   <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -120,6 +120,38 @@
                 </div>
               </th>
 
+              <th (click)="sort('totalVisitorsCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Visitor</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+               <th (click)="sort('date')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Date</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Total</span>
@@ -165,23 +197,30 @@
               <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>
-                  <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center gap-2 w-100">
                     <img [src]="event.imageUrl" width="50" class="rounded" />
-                    <h6 class="m-0">{{ event.name }}</h6>
+                    <h6 class="m-0 w-100 text-start" >
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event.eventOwnerName || 'Unknown' }}</span>  <br>
+                      {{ event.name }}
+                    </h6>
                   </div>
                 </td>
                 <td>{{ event.location }}</td>
-                <td>{{ event.price}} EGP</td>
-                <td>{{ event.visitorFee}} EGP</td>
-                <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors}} Tickets</td>
-                <td>{{ ((event.numberOfVisitorsAllowed - event.availableNumberOfVisitors) * event.price ) + (event.visitorFee * (event?.companion || 1))}} EGP</td>
+                <td>{{ event.price | number }} EGP</td>
+                <td>{{ event.visitorFee | number }} EGP</td>
+                <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors }} Tickets</td>
+                <td>{{ event.totalVisitorsCount }} Companion</td>
+                <td>
+                  {{ event.date | date:'dd/MM/yyyy' }}
+                </td>
+                <td>{{ event.price * (event.numberOfVisitorsAllowed - event.availableNumberOfVisitors)  | number }} EGP</td>
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="event.active"
-                    [class.bg-danger]="!event.active"
+                    [class.bg-success]="event.status === 'Active'"
+                    [class.bg-danger]="event.status !== 'Active'"
                   >
-                    {{ event.active ? 'Active' : 'Inactive' }}
+                    {{ event.status || '---' }}
                   </span>
                 </td>
                 <td>

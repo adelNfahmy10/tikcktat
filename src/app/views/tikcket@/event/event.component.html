@@ -11,11 +11,11 @@
           @for (event of allEvents; track $index) {
             <div class="col-lg-6">
               <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
-                <div class="badge" [ngClass]="{
-                  'bg-danger': false,
-                  'bg-success': true,
+                <div class="badge fw-bold" [ngClass]="{
+                  'bg-success': event.status === 'Active',
+                  'bg-danger': event.status !== 'Active'
                 }">
-                  Event Available
+                  {{ event.status }}
                 </div>
                 <div class="row g-0 h-100">
                   <div class="col-md-4">
@@ -37,7 +37,8 @@
                           Location : <span><a class="cr" [href]="event.location">{{event.location}}</a></span> <br>
                           Date : <span> {{event.date | date}} </span> <br>
                           Ticket Price: <span> {{event.price | number}} EGP </span> <br>
-                          Companion Price: <span> {{event.price | number}} EGP </span>
+                          Companion Price: <span> {{event.visitorFee | number}} EGP </span> <br>
+                          Ticket Count: <span> {{event.availableNumberOfVisitors | number}} Ticket </span>
                         </p>
                         <div class="card-text d-flex justify-content-between align-items-end">
                           <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/event-details/' + event.id">Book Now</button>

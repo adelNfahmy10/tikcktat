@@ -16,7 +16,7 @@
 
         <!-- Download Table XSL -->
         <div class="download">
-          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllAttendees()">Download   <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -120,6 +120,22 @@
                 </div>
               </th>
 
+               <th (click)="sort('attendance')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Attendance</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'attendance' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'attendance' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('active')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
@@ -161,18 +177,22 @@
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="grad.status"
-                    [class.bg-danger]="!grad.status"
+                    [class.bg-success]="grad.attendance === 'Active'"
+                    [class.bg-danger]="grad.attendance !== 'Active'"
                   >
-                    {{ grad.status ? 'Active' : 'Inactive' }}
+                    {{ grad.attendance }}
                   </span>
                 </td>
-                <!-- <td>
-                  <div class="d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + 1"></i>
-                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + 1"></i>
-                  </div>
-                </td> -->
+
+                 <td> 
+                  <span
+                    class="badge"
+                    [class.bg-success]="grad.status === 'Active'"
+                    [class.bg-danger]="grad.status !== 'Active'"
+                  >
+                    {{ grad.status }}
+                  </span>
+                </td>
               </tr>
             }
           </tbody>

@@ -4,9 +4,10 @@
     position: absolute;
     top: 18px;
     right: -30px;
-    padding: 5px 40px;
+    padding: 5px 60px;
     transform: rotate(30deg);
     z-index: 3;
+    font-size: 14px;
   }
 }
 
@@ -14,17 +15,12 @@
   .card{
     height: 250px;
     .event-img{
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
   }
 }
 
-@media (min-width: 768px) {
-  .card{
-    height: 250px;
-    .event-img{
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-  }
-}
 

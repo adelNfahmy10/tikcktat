@@ -14,11 +14,12 @@ import { SigninComponent } from './tikcket@/authorization/signin/signin.componen
 import { SignupComponent } from './tikcket@/authorization/signup/signup.component'
 import { ViewEventsComponent } from './tikcket@/view-events/view-events.component'
 import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-event-details.component'
-import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
 import { EventGraduatesDetailsComponent } from './tikcket@/view-event-details/event-graduates-details/event-graduates-details.component'
 import { QrcodeComponent } from './tikcket@/qrcode/qrcode.component'
 import { ForgetpasswrodComponent } from './tikcket@/authorization/forgetpasswrod/forgetpasswrod.component'
 import { ResetuserpasswordComponent } from './tikcket@/authorization/resetuserpassword/resetuserpassword.component'
+import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
+import { OwnersComponent } from './tikcket@/owners/owners.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -35,6 +36,11 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'event/:type',
     component: EventComponent,
     data: { title: 'Events' },
+  },
+  {
+    path: 'owners',
+    component: OwnersComponent,
+    data: { title: 'All Owners' },
   },
   {
     path: 'event-details/:id',

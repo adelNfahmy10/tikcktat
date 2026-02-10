@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, CommonModule],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -17,8 +17,10 @@ export class CheckoutComponent implements OnInit{
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _Router = inject(Router)
   private readonly _ToastrService = inject(ToastrService)
+  private readonly _EventService = inject(EventService)
 
   eventId:string | null = null
+  eventData:any = {}
   photoPreview: string | ArrayBuffer | null = null;
 
   ngOnInit(): void {
@@ -39,6 +41,11 @@ export class CheckoutComponent implements OnInit{
       next:(params)=>{
         this.eventId = params.get('id')
         this.checkoutForm.get('EventId')?.setValue(this.eventId)
+        this._EventService.getEventById(this.eventId).subscribe({
+          next:(res)=>{
+            this.eventData = res.data
+          }
+        })
       }
     })
   }
@@ -64,12 +71,22 @@ export class CheckoutComponent implements OnInit{
   }
 
   checkoutData:any = {}
+  subTotal:number = 0
+  total:number = 0
+  tax:number = 2.7% + 3
   show:boolean = false
 
   viewCheckOutData():void{
     if( this.checkoutForm.valid ){
       this.show = true
       this.checkoutData = this.checkoutForm.value
+      let price  = this.eventData.price
+      let companionPrice  = this.checkoutData?.VisitorCount * this.eventData.visitorFee
+      this.subTotal = price + companionPrice
+      // الضريبة 2.7% من الإجمالي + 23 ثابت
+      this.tax = (this.subTotal * 0.027) + 23;
+      // الإجمالي النهائي
+      this.total = this.subTotal + this.tax;
     } else {
       this.show = false
     }
@@ -98,29 +115,20 @@ export class CheckoutComponent implements OnInit{
       }
     });
 
-    if(this.checkoutForm.valid){
-      // Swal.fire(" Checkout Successfully, Check Your E-Mail", '', 'success')
-      Swal.fire("Thank you for booking, Please visit the office to pay and receive you Qrcode ticket", '', 'success')
-      this.checkoutForm.reset()
-      this.photoPreview = null
-      this._Router.navigate(['/home'])
-    } else {
-      Swal.fire("Please Fill All Fields", '', 'error')
-    }
 
     // إرسال الفورم
-    // this._EventService.checkoutEvent(formData).subscribe({
-    //   next: (res) => {
-    //     this._ToastrService.success(
-    //       'Checkout Successfully, Check Your E-Mail',
-    //       'Success',
-    //       { timeOut: 5000 }
-    //     );
-    //   },
-    //   error: (err) => {
-    //     console.error(err);
-    //   }
-    // });
+    this._EventService.checkoutEvent(formData).subscribe({
+      next: (res) => {
+        Swal.fire(res.msg, '', 'success').then(() => {
+          this.checkoutForm.reset();
+          this.photoPreview = null;
+          this._Router.navigate(['/home']);
+        });
+      },
+      error: (err) => {
+        Swal.fire("Please Fill All Fields", '', 'error')
+      }
+    });
   }
 
 

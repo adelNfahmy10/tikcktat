@@ -63,4 +63,30 @@ export class EventService {
   checkoutEvent(body:any):Observable<any>{
     return this._HttpClient.post(`${environment.baseUrl}Checkout/checkout`, body)
   }
+
+
+  // ########################### Download Excel Sheets ###########################
+  downloadAllEventOwners():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEventOwners/download-excel`, {
+      responseType: 'blob'
+    })
+  }
+
+  downloadGetAllEvents():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents/download-excel`, {
+      responseType: 'blob'
+    })
+  }
+
+  downloadEventAttendees(eventId:any):Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/${eventId}/attendees/download-excel`, {
+      responseType: 'blob'
+    })
+  }
+
+  downloadEventsByOwner(userId:any):Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Events/GetEventsByOwner/download-excel/${userId}`, {
+      responseType: 'blob'
+    })
+  }
 }

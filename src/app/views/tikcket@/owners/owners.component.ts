@@ -1,24 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
-import { switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-event-graduates-details',
+  selector: 'app-owners',
   imports: [FormsModule, CommonModule],
-  templateUrl: './event-graduates-details.component.html',
-  styleUrl: './event-graduates-details.component.scss'
+  templateUrl: './owners.component.html',
+  styleUrl: './owners.component.scss'
 })
-export class EventGraduatesDetailsComponent implements OnInit {
-  private readonly _EventService = inject(EventService)
-  private readonly _ActivatedRoute = inject(ActivatedRoute)
+export class OwnersComponent {
+private readonly _EventService = inject(EventService)
 
-  eventId:string | null = null
-  eventType:string | null = null
-  title: string = ''
-  allAttendees: any[] = [];
+  ownerEvents:any[] = []
+
+  // table state
   searchText = '';
   sortColumn = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -26,40 +22,30 @@ export class EventGraduatesDetailsComponent implements OnInit {
   page = 1;
   pageSize = 5;
   totalPages: number[] = [];
-
   filteredData:any[] = [];
   paginatedData: any[] = [];
 
 
   ngOnInit() {
-    this.getAttendeesByEventId()
+    this.getAllOwners()
   }
 
-  getAttendeesByEventId(): void {
-    this._ActivatedRoute.paramMap
-      .pipe(
-        switchMap(params => {
-          this.eventId = params.get('eventId');
-          this.eventType = params.get('type');
-          this.title = this.eventType === 'GraduationParty' ? 'Graduates' : 'Attendees';
-          return this._EventService.getEventAttendees(this.eventId);
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          this.allAttendees = res.data;
-          this.filteredData = [...this.allAttendees];
-          this.updatePagination()
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
+  getAllOwners(){
+    this._EventService.getAllEventsOwner().subscribe({
+      next: (res) => {
+        this.ownerEvents = res.data;
+        this.filteredData = [...this.ownerEvents];
+        this.updatePagination();
+      },
+      error: (err) => {
+        console.error('Error fetching owner events:', err);
+
+      }
+    });
   }
 
-
-  downloadAllAttendees(): void {
-    this._EventService.downloadEventAttendees(this.eventId).subscribe({
+  downloadOwnerEvent(): void {
+    this._EventService.downloadAllEventOwners().subscribe({
       next: (res: Blob) => {
         const blob = new Blob([res], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -68,7 +54,7 @@ export class EventGraduatesDetailsComponent implements OnInit {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'All Attendees.xlsx';
+        a.download = 'All Owners.xlsx';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -80,11 +66,12 @@ export class EventGraduatesDetailsComponent implements OnInit {
         console.error('Download failed', err);
       }
     });
+
   }
 
   // 🔍 Search
   applySearch() {
-    this.filteredData = this.allAttendees.filter(item =>
+    this.filteredData = this.ownerEvents.filter(item =>
       Object.values(item)
         .join(' ')
         .toLowerCase()
@@ -123,7 +110,6 @@ export class EventGraduatesDetailsComponent implements OnInit {
   // 📄 Pagination
   updatePagination() {
     const total = Math.ceil(this.filteredData.length / this.pageSize);
-
     this.totalPages = Array.from({ length: total }, (_, i) => i + 1);
 
     if (this.page > total) this.page = total || 1;
