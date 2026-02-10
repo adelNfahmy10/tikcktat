@@ -130,7 +130,10 @@ export class CheckoutComponent implements OnInit{
         });
       },
       error: (err) => {
-        Swal.fire("Please Fill All Fields", '', 'error')
+        Swal.fire({
+          icon: 'error',
+          title: err.error?.msg || 'Email Or Phone Already Existed'
+        });
       }
     });
   }
