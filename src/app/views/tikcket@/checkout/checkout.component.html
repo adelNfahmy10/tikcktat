@@ -14,29 +14,34 @@
         }">
           <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
             <h1 class="fw-bold">Checkout Event</h1>
-            <div class="text-right" dir="rtl">
-              <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
-              <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
-            </div>
-            <div class="photo">
-              <label for="photo" class="form-label">Photo</label>
-              <input
-                class="form-control"
-                type="file"
-                id="Photo"
-                accept="image/*"
-                (change)="onPhotoChange($event)"
-              >
+            @if(eventData.type != 'FunDayEvent'){
+              <div class="text-right" dir="rtl">
+                <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
+                <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
+              </div>
 
-              @if (photoPreview) {
-                <!-- Preview -->
-                <img
-                  [src]="photoPreview"
-                  alt="preview"
-                  style="width:200px; margin-top:10px"
-                />
-              }
-            </div>
+              <div class="photo">
+                <label for="photo" class="form-label">Photo</label>
+                <input
+                  class="form-control"
+                  type="file"
+                  id="Photo"
+                  accept="image/*"
+                  (change)="onPhotoChange($event)"
+                >
+
+                @if (photoPreview) {
+                  <!-- Preview -->
+                  <img
+                    [src]="photoPreview"
+                    alt="preview"
+                    style="width:200px; margin-top:10px"
+                  />
+                }
+              </div>
+            }
+
+
 
             <div class="FullName">
               <label for="FullName" class="form-label">Full Name</label>
@@ -78,7 +83,9 @@
                 <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
                 <div class="border border-2 shadow-sm w-100 p-2 mb-2 text-start rounded-3">
                   <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-                  <p class="m-0 pb-2 border-bottom"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+                  @if(eventData.type != 'FunDayEvent'){
+                    <p class="m-0 pb-2 border-bottom"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+                  }
                   <p class="m-0 mt-2 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
                 </div>
 

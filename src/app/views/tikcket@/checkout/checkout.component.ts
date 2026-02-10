@@ -29,7 +29,7 @@ export class CheckoutComponent implements OnInit{
 
   checkoutForm:FormGroup = this._FormBuilder.group({
     EventId:[null, Validators.required],
-    Photo:[null, Validators.required],
+    Photo:[null],
     FullName :[null, Validators.required],
     Phone :[null, Validators.required],
     Email :[null, Validators.required],
@@ -86,7 +86,11 @@ export class CheckoutComponent implements OnInit{
       // الضريبة 2.7% من الإجمالي + 23 ثابت
       this.tax = (this.subTotal * 0.027) + 23;
       // الإجمالي النهائي
-      this.total = this.subTotal + this.tax;
+      if(this.eventData.type != 'FunDayEvent'){
+        this.total = this.subTotal + this.tax;
+      } else {
+        this.total = this.subTotal
+      }
     } else {
       this.show = false
     }

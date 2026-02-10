@@ -94,7 +94,6 @@ export class AddEventComponent implements OnInit{
       next:(res)=>{
         this.allUsers = res.data
         console.log(this.allUsers);
-
       }
     })
   }
