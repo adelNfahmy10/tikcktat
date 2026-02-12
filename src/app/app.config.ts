@@ -33,6 +33,7 @@ import { headerInterceptor } from '@core/interceptors/header/header.interceptor'
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from '@core/interceptors/loading/loading.interceptor'
+import { withHashLocation } from '@angular/router';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -50,7 +51,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     importProvidersFrom(NgxSpinnerModule, BrowserAnimationsModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, inMemoryScrollingFeatures),
+    provideRouter(routes, inMemoryScrollingFeatures, withHashLocation()),
     provideStore(rootReducer, { metaReducers: [localStorageSyncReducer] }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(AuthenticationEffects, CalendarEffects),
