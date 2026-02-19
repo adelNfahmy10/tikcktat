@@ -13,10 +13,20 @@
           'col-md-12' : !show,
         }">
           <h1 class="fw-bold mt-3">Checkout Event</h1>
+          @if(eventData.type != 'FunDayEvent'){
+            <div class="text-right" dir="rtl">
+              <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
+              <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
+            </div>
+          }
 
           @if(eventType == 'GraduationParty'){
             <div class="seat-numbers py-4 overflow-auto shadow-lg border rounded-3 p-3 my-3">
-              <div class="stage-position text-center bg-primary p-3 text-white fw-bold rounded-3">Stage</div>
+            <div class="stage-wrapper text-center mb-4">
+              <div class="stage">
+                🎭 Stage
+              </div>
+            </div>
               @for (cat of categories; track $index) {
                 <div class="my-4">
                   @for (row of cat.rows; track $index) {
@@ -54,11 +64,6 @@
 
           <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
             @if(eventData.type != 'FunDayEvent'){
-              <div class="text-right" dir="rtl">
-                <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
-                <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
-              </div>
-
               <div class="photo">
                 <label for="photo" class="form-label">Photo</label>
                 <input
