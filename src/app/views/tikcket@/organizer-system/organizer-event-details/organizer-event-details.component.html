@@ -4,7 +4,7 @@
       <h1>Event Details</h1>
       <div class="row g-2">
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/graduates-details/'+ eventData.type + '/' + eventData.id">
+          <div class="card cr" [routerLink]="'/event-attendees/'+ eventData.type + '/' + eventData.id">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
@@ -40,7 +40,7 @@
         </div>
 
         <!-- <div class="col-md-3">
-          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
@@ -58,7 +58,7 @@
         </div> -->
 
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/graduates-details/' + 1">
+          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
@@ -157,7 +157,7 @@
           <div class="card">
             <div class="card-body">
               <div class="position-relative overflow-hidden">
-                <img [src]="eventData.imageUrl" [alt]="eventData.name" class="evnet-image rounded" />
+                <img [src]="eventData?.imageUrl" [alt]="eventData?.name" class="evnet-image rounded" />
                 <span
                   class="badge fs-18 position-absolute avaliable-badge"
                   [ngClass]="{
@@ -172,7 +172,7 @@
               <div class="d-flex flex-wrap justify-content-between mt-3 mb-2 gap-2">
                 <div>
                   <h1 class="fs-20 text-dark fw-bold">
-                    {{eventData.name}}
+                    {{eventData?.name}}
                   </h1>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <iconify-icon icon="solar:map-point-wave-bold-duotone" class="fs-18 main-color" ></iconify-icon>

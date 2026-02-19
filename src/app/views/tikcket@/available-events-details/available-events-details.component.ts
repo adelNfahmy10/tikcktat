@@ -1,21 +1,21 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-view-event-details',
-  imports: [CommonModule, RouterLink, DatePipe],
-  templateUrl: './view-event-details.component.html',
-  styleUrl: './view-event-details.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  selector: 'app-available-events-details',
+  imports: [CommonModule, NgbAccordionModule, RouterLink],
+  templateUrl: './available-events-details.component.html',
+  styleUrl: './available-events-details.component.scss'
 })
-export class ViewEventDetailsComponent {
+export class AvailableEventsDetailsComponent {
   private readonly _EventService = inject(EventService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
 
-  eventData:any = {}
+  eventData:any
   eventId:string | null = null
 
   ngOnInit(): void {
@@ -33,8 +33,6 @@ export class ViewEventDetailsComponent {
       .subscribe({
         next: (res) => {
           this.eventData = res.data;
-          console.log(this.eventData);
-
         },
         error: (err) => {
           console.error(err);

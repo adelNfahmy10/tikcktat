@@ -40,9 +40,9 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/home',
   },
   {
-    key: 'user-events',
+    key: 'organizer-events',
     label: 'My Events',
-    url: '/user-events',
+    url: '/organizer-events',
   },
   {
     key: 'add-event',

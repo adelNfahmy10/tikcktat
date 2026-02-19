@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewEventsComponent } from './view-events.component';
+import { OrganizerEventsComponent } from './organizer-events.component';
 
-describe('ViewEventsComponent', () => {
-  let component: ViewEventsComponent;
-  let fixture: ComponentFixture<ViewEventsComponent>;
+describe('OrganizerEventsComponent', () => {
+  let component: OrganizerEventsComponent;
+  let fixture: ComponentFixture<OrganizerEventsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ViewEventsComponent]
+      imports: [OrganizerEventsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ViewEventsComponent);
+    fixture = TestBed.createComponent(OrganizerEventsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

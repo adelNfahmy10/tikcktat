@@ -1,14 +1,14 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
-      <h1 class="fw-bold">My Events</h1>
+      <h1 class="fw-bold">All {{title}}</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <!-- Search -->
         <div class="search">
           <input
             type="text"
             class="form-control"
-            placeholder="Search events..."
+            placeholder="Search..."
             [(ngModel)]="searchText"
             (input)="applySearch()"
           />
@@ -16,7 +16,7 @@
 
         <!-- Download Table XSL -->
         <div class="download">
-          <button class="btn btn-outline-primary" (click)="downloadOwnerEvent()">Download   <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllAttendees()">Download   <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -40,113 +40,65 @@
                 </div>
               </th>
 
-              <th (click)="sort('eventName')" class="sortable">
+              <th (click)="sort('fullName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Event Name</span>
+                  <span>Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('location')" class="sortable">
+              <th (click)="sort('phone')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Location</span>
+                  <span>Phone</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'phone' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'phone' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('price')" class="sortable">
+              <th (click)="sort('email')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Price</span>
+                  <span>Email</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('visitorFee')" class="sortable">
+              <th (click)="sort('companions')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Companion</span>
+                  <span>Companions</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'companions' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('bookingCount')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Bookings</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('totalVisitorsCount')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Visitor</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-               <th (click)="sort('date')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Date</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'date' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'date' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'companions' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -154,7 +106,7 @@
 
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Total</span>
+                  <span>Total Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
@@ -163,6 +115,22 @@
                     <i
                       class="fa-solid fa-caret-down"
                       [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+               <th (click)="sort('attendance')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Attendance</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'attendance' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'attendance' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -184,50 +152,46 @@
                 </div>
               </th>
 
-              <th>
+              <!-- <th>
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Action</span>
                 </div>
-              </th>
+              </th> -->
             </tr>
           </thead>
 
           <tbody>
-            @for (event of paginatedData; track $index) {
+            @for (grad of paginatedData; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>
-                  <div class="d-flex align-items-center gap-2 w-100">
-                    <img [src]="event.imageUrl" width="50" class="rounded" />
-                    <h6 class="m-0 w-100 text-start" >
-                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event.eventOwnerName || 'Unknown' }}</span>  <br>
-                      {{ event.name }}
-                    </h6>
+                  <div class="d-flex align-items-center gap-2">
+                    <img [src]="grad.photoUrl" width="50" class="rounded" />
+                    <h6 class="m-0">{{ grad.fullName }}</h6>
                   </div>
                 </td>
-                <td>{{ event.location }}</td>
-                <td>{{ event.price | number }} EGP</td>
-                <td>{{ event.visitorFee | number }} EGP</td>
-                <td>{{ event.numberOfVisitorsAllowed - event.availableNumberOfVisitors }} Tickets</td>
-                <td>{{ event.totalVisitorsCount }} Companion</td>
-                <td>
-                  {{ event.date | date:'dd/MM/yyyy' }}
-                </td>
-                <td>{{ event.price * (event.numberOfVisitorsAllowed - event.availableNumberOfVisitors)  | number }} EGP</td>
+                <td>{{ grad.phone }}</td>
+                <td>{{ grad.email }}</td>
+                <td>{{ grad.companions }}</td>
+                <td>{{ grad.totalPrice }}</td>
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="event.status === 'Active'"
-                    [class.bg-danger]="event.status !== 'Active'"
+                    [class.bg-success]="grad.attendance === 'Active'"
+                    [class.bg-danger]="grad.attendance !== 'Active'"
                   >
-                    {{ event.status || '---' }}
+                    {{ grad.attendance }}
                   </span>
                 </td>
-                <td>
-                  <div class="d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/graduates-details/' + event.type + '/' + event.id"></i>
-                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/user-event-details/' + event.id"></i>
-                  </div>
+
+                 <td>
+                  <span
+                    class="badge"
+                    [class.bg-success]="grad.status === 'Active'"
+                    [class.bg-danger]="grad.status !== 'Active'"
+                  >
+                    {{ grad.status }}
+                  </span>
                 </td>
               </tr>
             }

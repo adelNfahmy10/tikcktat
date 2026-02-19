@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 
 @Component({
-  selector: 'app-view-events',
+  selector: 'app-organizer-events',
   imports: [FormsModule, RouterLink, CommonModule],
-  templateUrl: './view-events.component.html',
-  styleUrl: './view-events.component.scss'
+  templateUrl: './organizer-events.component.html',
+  styleUrl: './organizer-events.component.scss'
 })
-export class ViewEventsComponent implements OnInit{
+export class OrganizerEventsComponent {
   private readonly _EventService = inject(EventService)
 
   userId:string | null = localStorage.getItem('userId')
+  fullName:string | null = localStorage.getItem('fullName')
   ownerEvents:any[] = []
 
   // table state
@@ -22,7 +23,7 @@ export class ViewEventsComponent implements OnInit{
   sortDirection: 'asc' | 'desc' = 'asc';
 
   page = 1;
-  pageSize = 5;
+  pageSize = 15;
   totalPages: number[] = [];
   filteredData:any[] = [];
   paginatedData: any[] = [];

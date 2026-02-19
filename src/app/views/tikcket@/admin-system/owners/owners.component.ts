@@ -20,7 +20,7 @@ private readonly _EventService = inject(EventService)
   sortDirection: 'asc' | 'desc' = 'asc';
 
   page = 1;
-  pageSize = 5;
+  pageSize = 15;
   totalPages: number[] = [];
   filteredData:any[] = [];
   paginatedData: any[] = [];
@@ -39,7 +39,6 @@ private readonly _EventService = inject(EventService)
       },
       error: (err) => {
         console.error('Error fetching owner events:', err);
-
       }
     });
   }

@@ -1,14 +1,14 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
-      <h1 class="fw-bold">All {{title}}</h1>
+      <h1 class="fw-bold">My Events</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <!-- Search -->
         <div class="search">
           <input
             type="text"
             class="form-control"
-            placeholder="Search..."
+            placeholder="Search events..."
             [(ngModel)]="searchText"
             (input)="applySearch()"
           />
@@ -16,7 +16,7 @@
 
         <!-- Download Table XSL -->
         <div class="download">
-          <button class="btn btn-outline-primary" (click)="downloadAllAttendees()">Download   <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadOwnerEvent()">Download   <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -40,65 +40,113 @@
                 </div>
               </th>
 
-              <th (click)="sort('fullName')" class="sortable">
+              <th (click)="sort('eventName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Name</span>
+                  <span>Event Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'fullName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'fullName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('phone')" class="sortable">
+              <th (click)="sort('location')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Phone</span>
+                  <span>Location</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'phone' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'phone' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('email')" class="sortable">
+              <th (click)="sort('price')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Email</span>
+                  <span>Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'email' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'email' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('companions')" class="sortable">
+              <th (click)="sort('visitorFee')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Companions</span>
+                  <span>Companion</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'companions' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'companions' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('bookingCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Bookings</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('totalVisitorsCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Visitor</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+               <th (click)="sort('date')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Date</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'date' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -106,7 +154,7 @@
 
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Total Price</span>
+                  <span>Total</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
@@ -115,22 +163,6 @@
                     <i
                       class="fa-solid fa-caret-down"
                       [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-               <th (click)="sort('attendance')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Attendance</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'attendance' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'attendance' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -152,46 +184,50 @@
                 </div>
               </th>
 
-              <!-- <th>
+              <th>
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Action</span>
                 </div>
-              </th> -->
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            @for (grad of paginatedData; track $index) {
+            @for (event of paginatedData; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>
-                  <div class="d-flex align-items-center gap-2">
-                    <img [src]="grad.photoUrl" width="50" class="rounded" />
-                    <h6 class="m-0">{{ grad.fullName }}</h6>
+                  <div class="d-flex align-items-center gap-2 w-100">
+                    <img [src]="event?.imageUrl" width="50" class="rounded" />
+                    <h6 class="m-0 w-100 text-start" >
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event?.eventOwnerName ? event?.eventOwnerName : fullName || 'Unknown' }}</span>  <br>
+                      {{ event?.name }}
+                    </h6>
                   </div>
                 </td>
-                <td>{{ grad.phone }}</td>
-                <td>{{ grad.email }}</td>
-                <td>{{ grad.companions }}</td>
-                <td>{{ grad.totalPrice }}</td>
+                <td>{{ event?.location }}</td>
+                <td>{{ event?.price | number }} EGP</td>
+                <td>{{ event?.visitorFee | number }} EGP</td>
+                <td>{{ event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors }} Tickets</td>
+                <td>{{ event?.totalVisitorsCount }} Companion</td>
+                <td>
+                  {{ event?.date | date:'dd/MM/yyyy' }}
+                </td>
+                <td>{{ event?.price * (event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors)  | number }} EGP</td>
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="grad.attendance === 'Active'"
-                    [class.bg-danger]="grad.attendance !== 'Active'"
+                    [class.bg-success]="event?.status === 'Active'"
+                    [class.bg-danger]="event?.status !== 'Active'"
                   >
-                    {{ grad.attendance }}
+                    {{ event?.status || '---' }}
                   </span>
                 </td>
-
-                 <td> 
-                  <span
-                    class="badge"
-                    [class.bg-success]="grad.status === 'Active'"
-                    [class.bg-danger]="grad.status !== 'Active'"
-                  >
-                    {{ grad.status }}
-                  </span>
+                <td>
+                  <div class="d-flex align-items-center justify-content-center gap-1">
+                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.type + '/' + event?.id"></i>
+                    <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>
+                  </div>
                 </td>
               </tr>
             }
@@ -202,17 +238,17 @@
       <!-- Pagination -->
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="page === 1">
-          <a class="page-link" (click)="changePage(page - 1)">Prev</a>
+          <a class="page-link cr" (click)="changePage(page - 1)">Prev</a>
         </li>
 
         @for (p of totalPages; track $index) {
           <li class="page-item" [class.active]="p === page">
-            <a class="page-link" (click)="changePage(p)">{{ p }}</a>
+            <a class="page-link cr" (click)="changePage(p)">{{ p }}</a>
           </li>
         }
 
         <li class="page-item" [class.disabled]="page === totalPages.length">
-          <a class="page-link" (click)="changePage(page + 1)">Next</a>
+          <a class="page-link cr" (click)="changePage(page + 1)">Next</a>
         </li>
       </ul>
     </div>

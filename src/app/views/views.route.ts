@@ -6,20 +6,20 @@ import { ReviewsComponent } from './apps/reviews/reviews.component'
 import { TransactionsComponent } from './apps/transactions/transactions.component'
 import { WidgetsComponent } from './apps/widgets/widgets.component'
 import { HomeComponent } from './tikcket@/home/home.component'
-import { EventComponent } from './tikcket@/event/event.component'
-import { EventDetailsComponent } from './tikcket@/event-details/event-details.component'
 import { CheckoutComponent } from './tikcket@/checkout/checkout.component'
-import { AddEventComponent } from './tikcket@/add-event/add-event.component'
+import { AddEventComponent } from './tikcket@/admin-system/add-event/add-event.component'
 import { SigninComponent } from './tikcket@/authorization/signin/signin.component';
 import { SignupComponent } from './tikcket@/authorization/signup/signup.component'
-import { ViewEventsComponent } from './tikcket@/view-events/view-events.component'
-import { ViewEventDetailsComponent } from './tikcket@/view-event-details/view-event-details.component'
-import { EventGraduatesDetailsComponent } from './tikcket@/view-event-details/event-graduates-details/event-graduates-details.component'
 import { QrcodeComponent } from './tikcket@/qrcode/qrcode.component'
 import { ForgetpasswrodComponent } from './tikcket@/authorization/forgetpasswrod/forgetpasswrod.component'
 import { ResetuserpasswordComponent } from './tikcket@/authorization/resetuserpassword/resetuserpassword.component'
-import { AdminViewEventComponent } from './tikcket@/admin-view-event/admin-view-event.component'
-import { OwnersComponent } from './tikcket@/owners/owners.component'
+import { AdminViewEventComponent } from './tikcket@/admin-system/admin-view-event/admin-view-event.component'
+import { OwnersComponent } from './tikcket@/admin-system/owners/owners.component'
+import { AvailableEventsComponent } from './tikcket@/available-events/available-events.component'
+import { OrganizerEventsComponent } from './tikcket@/organizer-system/organizer-events/organizer-events.component'
+import { OrganizerEventDetailsComponent } from './tikcket@/organizer-system/organizer-event-details/organizer-event-details.component'
+import { OrganizerEventAttendeesComponent } from './tikcket@/organizer-system/organizer-event-attendees/organizer-event-attendees.component'
+import { AvailableEventsDetailsComponent } from './tikcket@/available-events-details/available-events-details.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -27,35 +27,39 @@ export const VIEWS_ROUTES: Route[] = [
     redirectTo: 'home',
     pathMatch:'full'
   },
+  // Booking Cycle
   {
     path: 'home',
     component: HomeComponent,
     data: { title: 'Home' },
   },
   {
-    path: 'event/:type',
-    component: EventComponent,
+    path: 'available-event/:type',
+    component: AvailableEventsComponent,
     data: { title: 'Events' },
   },
   {
-    path: 'owners',
-    component: OwnersComponent,
-    data: { title: 'All Owners' },
-  },
-  {
-    path: 'event-details/:id',
-    component: EventDetailsComponent,
+    path: 'available-event-details/:id',
+    component: AvailableEventsDetailsComponent,
     data: { title: 'Event Details' },
-  },
-  {
-    path: 'graduates-details/:type/:eventId',
-    component: EventGraduatesDetailsComponent,
-    data: { title: 'Grad Details' },
   },
   {
     path: 'checkout/:id',
     component: CheckoutComponent,
     data: { title: 'Checkout' },
+  },
+    {
+    path: 'qrcode/:ip',
+    component: QrcodeComponent,
+    data: { title: 'QRCode' },
+  },
+
+
+  // Admin Components
+  {
+    path: 'all-events',
+    component: AdminViewEventComponent,
+    data: { title: 'All Events' },
   },
   {
     path: 'add-event',
@@ -63,29 +67,38 @@ export const VIEWS_ROUTES: Route[] = [
     data: { title: 'Add Eevent' },
   },
   {
-    path: 'all-events',
-    component: AdminViewEventComponent,
-    data: { title: 'All Events' },
+    path: 'register',
+    component: SignupComponent,
+    data: { title: 'SignUp' },
   },
   {
-    path: 'user-events',
-    component: ViewEventsComponent,
+    path: 'owners',
+    component: OwnersComponent,
+    data: { title: 'All Owners' },
+  },
+
+  // Organizer Components
+  {
+    path: 'organizer-events',
+    component: OrganizerEventsComponent,
     data: { title: 'My Events' },
   },
   {
-    path: 'user-event-details/:id',
-    component: ViewEventDetailsComponent,
+    path: 'organizer-event-details/:id',
+    component: OrganizerEventDetailsComponent,
     data: { title: 'My Events' },
   },
+  {
+    path: 'event-attendees/:type/:eventId',
+    component: OrganizerEventAttendeesComponent,
+    data: { title: 'Grad Details' },
+  },
+
+  // Auth Components
   {
     path: 'login',
     component: SigninComponent,
     data: { title: 'SignIn' },
-  },
-  {
-    path: 'register',
-    component: SignupComponent,
-    data: { title: 'SignUp' },
   },
   {
     path: 'reset-password',
@@ -97,12 +110,6 @@ export const VIEWS_ROUTES: Route[] = [
     component: ForgetpasswrodComponent,
     data: { title: 'Forget Password' },
   },
-  {
-    path: 'qrcode/:ip',
-    component: QrcodeComponent,
-    data: { title: 'QRCode' },
-  },
-
 
 
 

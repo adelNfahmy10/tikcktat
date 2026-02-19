@@ -2,20 +2,20 @@
   <div class="container-fluid">
     <div class="rounded-3 p-3 shadow-lg">
       <div class="event-banner rounded-4 d-flex justify-content-center align-items-center">
-        @if(eventData.imageUrl){
-          <img [src]="eventData.imageUrl" class="w-100 h-100 rounded-2" alt="Event image">
+        @if(eventData?.imageUrl){
+          <img [src]="eventData?.imageUrl" class="w-100 h-100 rounded-2" alt="Event image">
         } @else {
           <img src="assets/images/tikecktImages/logos/tiecktat-logo.png" class="w-75 rounded-2" alt="Event image">
         }
       </div>
 
       <div class="event-details my-3">
-        <h1 class="fs-25 fw-bold">{{eventData.name}}</h1>
+        <h1 class="fs-25 fw-bold">{{eventData?.name}}</h1>
         <p>
-          Location : <span class="text-dark"><a class="cr text-dark">{{eventData.location}}</a></span> <br>
-          Date : <span class="text-dark"> {{eventData.date | date:'dd/mm/yyyy'}} </span> <br>
-          Ticket Price: <span class="text-dark"> {{eventData.price | number}} EGP </span> <br>
-          Companion Price: <span class="text-dark"> {{eventData.visitorFee | number}} EGP </span>
+          Location : <span class="text-dark"><a class="cr text-dark">{{eventData?.location}}</a></span> <br>
+          Date : <span class="text-dark"> {{eventData?.date | date:'dd/mm/yyyy'}} </span> <br>
+          Ticket Price: <span class="text-dark"> {{eventData?.price | number}} EGP </span> <br>
+          Companion Price: <span class="text-dark"> {{eventData?.visitorFee | number}} EGP </span>
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>
@@ -56,7 +56,7 @@
         </div> -->
 
         <div class="text-center">
-          <button class="btn btn-bg p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData.id" >Book Now</button>
+          <button class="btn btn-bg p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
         </div>
       </div>
     </div>

@@ -12,3 +12,56 @@
 .ticketat-logo{
   width: 200px;
 }
+
+.row-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+@media (max-width:991px) {
+  .row-line {
+    justify-content: start;
+  }
+}
+
+@media (max-width:576px) {
+  .stage-position{
+    min-width: 100vh;
+  }
+}
+.row-label {
+  width: 20px;
+  font-weight: bold;
+}
+
+.blocks {
+  display: flex;
+  gap: 30px;
+}
+
+.block {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 6px;
+}
+
+.seat {
+  width: 50px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  background: #e9ecef;
+  text-align: center;
+}
+
+.booked {
+  background: #dc3545;
+  color: white;
+  cursor: not-allowed;
+}
+
+.selected {
+  background: #198754;
+  color: white;
+}

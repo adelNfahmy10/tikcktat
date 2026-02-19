@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-event',
+  selector: 'app-available-events',
   imports: [CommonModule, RouterLink],
-  templateUrl: './event.component.html',
-  styleUrl: './event.component.scss'
+  templateUrl: './available-events.component.html',
+  styleUrl: './available-events.component.scss'
 })
-export class EventComponent implements OnInit{
-  private readonly _EventService = inject(EventService)
+export class AvailableEventsComponent {
+   private readonly _EventService = inject(EventService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allEvents:any[] = []

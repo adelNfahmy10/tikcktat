@@ -35,7 +35,7 @@ export class AdminViewEventComponent implements OnInit{
   sortDirection: 'asc' | 'desc' = 'asc';
 
   page = 1;
-  pageSize = 5;
+  pageSize = 15;
   totalPages: number[] = [];
 
   filteredData:any[] = [];

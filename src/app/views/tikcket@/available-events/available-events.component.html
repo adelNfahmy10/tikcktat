@@ -19,9 +19,9 @@
                 </div>
                 <div class="row g-0 h-100">
                   <div class="col-md-4">
-                    @if(event.imageUrl){
+                    @if(event?.imageUrl){
                       <img
-                        [src]="event.imageUrl"
+                        [src]="event?.imageUrl"
                         class="event-img w-100 img-fluid roundedobject-fit-cover"
                         alt="img-1"
                       />
@@ -44,7 +44,7 @@
                           @if(event.availableNumberOfVisitors == 0 ){
                             <span class="border border-2 border-danger px-3 py-1 fw-bold rounded-3 text-danger">Sold Out</span>
                           } @else {
-                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/event-details/' + event.id">Book Now</button>
+                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event.id">Book Now</button>
                           }
                           <!-- @if(!token){
                             <small class="text-muted">{{event.availableNumberOfVisitors}} From {{event.numberOfVisitorsAllowed}}</small>

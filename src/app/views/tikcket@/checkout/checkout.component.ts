@@ -6,6 +6,29 @@ import { EventService } from '@core/services/event/event.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
+export interface Seat {
+  id: string;
+  number: number;
+  status: 'available' | 'booked' | 'selected';
+}
+
+export interface Block {
+  name: string;
+  seats: Seat[];
+}
+
+export interface Row {
+  name: string;
+  blocks: Block[];
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  price: number;
+  rows: Row[];
+}
+
 @Component({
   selector: 'app-checkout',
   imports: [ReactiveFormsModule, NgClass, CommonModule],
@@ -19,12 +42,14 @@ export class CheckoutComponent implements OnInit{
   private readonly _ToastrService = inject(ToastrService)
   private readonly _EventService = inject(EventService)
 
+  eventType:string | null = null
   eventId:string | null = null
   eventData:any = {}
   photoPreview: string | ArrayBuffer | null = null;
 
   ngOnInit(): void {
     this.getEventId()
+    this.generateLayout();
   }
 
   checkoutForm:FormGroup = this._FormBuilder.group({
@@ -44,6 +69,7 @@ export class CheckoutComponent implements OnInit{
         this._EventService.getEventById(this.eventId).subscribe({
           next:(res)=>{
             this.eventData = res.data
+            this.eventType = this.eventData.type
           }
         })
       }
@@ -96,7 +122,6 @@ export class CheckoutComponent implements OnInit{
     }
   }
 
-
   submitCheckout(): void {
     // تأكد ان الـ eventId موجود
     if (!this.eventId) return;
@@ -138,6 +163,69 @@ export class CheckoutComponent implements OnInit{
     });
   }
 
+  categories: Category[] = [];
+  selectedSeats: Seat[] = [];
+
+  generateLayout(): void {
+    const config = [
+      { id:'vip', name:'VIP', rows:5, blocks:3, seatsPerBlock:6, price:500 },
+      { id:'regular', name:'Regular', rows:8, blocks:2, seatsPerBlock:10, price:250 },
+      { id:'balcony', name:'Balcony', rows:4, blocks:4, seatsPerBlock:5, price:150 }
+    ];
+
+    let globalRowIndex = 0; // لتسلسل الحروف بين كل categories
+
+    config.forEach(cat => {
+
+      const rows: Row[] = [];
+
+      for (let r = 0; r < cat.rows; r++) {
+
+        const rowLetter = String.fromCharCode(65 + globalRowIndex);
+        globalRowIndex++;
+
+        const blocks: Block[] = [];
+        let seatNumber = 1; // كل صف رقم يبدأ من 1 ويكمل عبر كل blocks
+
+        for (let b = 0; b < cat.blocks; b++) {
+
+          const seats: Seat[] = [];
+
+          for (let s = 1; s <= cat.seatsPerBlock; s++) {
+            seats.push({
+              id: `${rowLetter}${seatNumber++}`, // رقم متسلسل عبر كل الصف
+              number: seatNumber - 1,
+              status: Math.random() > 0.9 ? 'booked' : 'available'
+            });
+          }
+
+          blocks.push({ name:`B${b+1}`, seats });
+        }
+
+        rows.push({ name: rowLetter, blocks });
+      }
+
+      this.categories.push({
+        id: cat.id,
+        name: cat.name,
+        price: cat.price,
+        rows
+      });
+
+    });
+  }
+  toggleSeat(seat: Seat) {
+    if (seat.status === 'booked') return;
+
+    if (seat.status === 'selected') {
+      seat.status = 'available';
+      this.selectedSeats =
+        this.selectedSeats.filter(s => s.id !== seat.id);
+    } else {
+      seat.status = 'selected';
+      this.selectedSeats.push(seat);
+    }
+  }
 
 
 

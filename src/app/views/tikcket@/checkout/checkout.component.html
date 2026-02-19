@@ -4,7 +4,7 @@
       <div class="row g-2">
         <div class="col-12">
           <div class="image-event">
-            <img [src]="eventData?.imageUrl" class="rounded-3" [alt]="eventData.name">
+            <img [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/grad-cover-tikcket.png'" class="rounded-3" [alt]="eventData?.name">
           </div>
         </div>
 
@@ -12,8 +12,47 @@
           'col-md-7' : show,
           'col-md-12' : !show,
         }">
+          <h1 class="fw-bold mt-3">Checkout Event</h1>
+
+          @if(eventType == 'GraduationParty'){
+            <div class="seat-numbers py-4 overflow-auto shadow-lg border rounded-3 p-3 my-3">
+              <div class="stage-position text-center bg-primary p-3 text-white fw-bold rounded-3">Stage</div>
+              @for (cat of categories; track $index) {
+                <div class="my-4">
+                  @for (row of cat.rows; track $index) {
+                    <div class="row-line">
+
+                    <!-- <span class="row-label">
+                      {{row.name}}
+                    </span> -->
+
+                    <div class="blocks">
+
+                      @for (block of row.blocks; track $index) {
+                        <div class="block">
+                          @for (seat of block.seats; track $index) {
+                            <div
+                              class="seat"
+                              [ngClass]="seat.status"
+                              (click)="toggleSeat(seat)"
+                            >
+                              {{row.name}}{{seat.number}}
+                            </div>
+                          }
+                        </div>
+                      }
+
+
+                    </div>
+
+                  </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
           <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
-            <h1 class="fw-bold">Checkout Event</h1>
             @if(eventData.type != 'FunDayEvent'){
               <div class="text-right" dir="rtl">
                 <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
@@ -40,8 +79,6 @@
                 }
               </div>
             }
-
-
 
             <div class="FullName">
               <label for="FullName" class="form-label">Full Name</label>

@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-event-graduates-details',
+  selector: 'app-organizer-event-attendees',
   imports: [FormsModule, CommonModule],
-  templateUrl: './event-graduates-details.component.html',
-  styleUrl: './event-graduates-details.component.scss'
+  templateUrl: './organizer-event-attendees.component.html',
+  styleUrl: './organizer-event-attendees.component.scss'
 })
-export class EventGraduatesDetailsComponent implements OnInit {
+export class OrganizerEventAttendeesComponent {
   private readonly _EventService = inject(EventService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
 
@@ -24,7 +24,7 @@ export class EventGraduatesDetailsComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   page = 1;
-  pageSize = 5;
+  pageSize = 15;
   totalPages: number[] = [];
 
   filteredData:any[] = [];
