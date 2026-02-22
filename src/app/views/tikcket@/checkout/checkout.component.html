@@ -20,24 +20,119 @@
             </div>
           }
 
-          @if(eventType == 'GraduationParty'){
+          <ul class="nav nav-tabs justify-content-center align-items-center" id="ticketTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
+                type="button" role="tab" aria-controls="full-ticket" aria-selected="true">
+                Book Ticket
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
+                type="button" role="tab" aria-controls="extra-services" aria-selected="false">
+                Add Companions
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content mt-3" id="ticketTabContent">
+            <!-- تاب الحجز الكامل -->
+            <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
+              <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+                <h3>Book Ticket</h3>
+                @if(eventData.type != 'FunDayEvent'){
+                  <div class="photo">
+                    <label for="photo" class="form-label">Photo</label>
+                    <input
+                      class="form-control"
+                      type="file"
+                      id="Photo"
+                      accept="image/*"
+                      (change)="onPhotoChange($event)"
+                    >
+
+                    @if (photoPreview) {
+                      <!-- Preview -->
+                      <img
+                        [src]="photoPreview"
+                        alt="preview"
+                        style="width:200px; margin-top:10px"
+                      />
+                    }
+                  </div>
+                }
+
+                <div class="FullName">
+                  <label for="FullName" class="form-label">Full Name</label>
+                  <input class="form-control" formControlName="FullName" type="text" name="FullName" id="FullName" placeholder="Enter Your Full Name...">
+                </div>
+
+                <div class="Phone">
+                  <label for="Phone" class="form-label">Phone</label>
+                  <input class="form-control" formControlName="Phone" type="tel" name="Phone" id="Phone" placeholder="Enter Your Phone...">
+                </div>
+
+                <div class="Email">
+                  <label for="Email" class="form-label">Email</label>
+                  <input class="form-control" formControlName="Email" type="Email" name="Email" id="Email" placeholder="Enter Your Email...">
+                </div>
+
+                <div class="VisitorCount">
+                  <label for="VisitorCount" class="form-label">Companion <sub>Option</sub></label>
+                  <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Your Visitor Count...">
+                </div>
+
+                <div class="text-center">
+                  <button class="btn main-btn" (click)="viewCheckOutData()"> Checkout </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- تاب المرافق الإضافية -->
+            <div class="tab-pane fade" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+              <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+                <h3>Add Companions</h3>
+
+                <div class="mb-3">
+                  <label for="companion" class="form-label">Phone No.</label>
+                  <select #phoneSelect class="form-control" >
+                    <option value="">Phone No.</option>
+                    @for (phone of phones; track $index) {
+                      <option [value]="phone">{{phone}}</option>
+                    }
+                  </select>
+                </div>
+
+                <!-- <div class="companion">
+                  <h4>Name: Mohamed Said</h4>
+                </div> -->
+
+
+                <div class="companion">
+                  <label for="companion" class="form-label">Number of Companions</label>
+                  <input class="form-control" formControlName="companion" type="number" name="companion" id="companion" placeholder="Enter Number of Companions...">
+                </div>
+
+                <div class="text-center">
+                  <button class="btn main-btn"> Add Companions </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- @if(eventType == 'GraduationParty'){
             <div class="seat-numbers py-4 overflow-auto shadow-lg border rounded-3 p-3 my-3">
             <div class="stage-wrapper text-center mb-4">
               <div class="stage">
                 🎭 Stage
               </div>
             </div>
-              @for (cat of categories; track $index) {
-                <div class="my-4">
-                  @for (row of cat.rows; track $index) {
-                    <div class="row-line">
-
-                    <!-- <span class="row-label">
-                      {{row.name}}
-                    </span> -->
+            @for (cat of categories; track $index) {
+              <div class="my-4">
+                @for (row of cat.rows; track $index) {
+                  <div class="row-line">
 
                     <div class="blocks">
-
                       @for (block of row.blocks; track $index) {
                         <div class="block">
                           @for (seat of block.seats; track $index) {
@@ -56,59 +151,13 @@
                     </div>
 
                   </div>
-                  }
-                </div>
-              }
-            </div>
-          }
-
-          <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
-            @if(eventData.type != 'FunDayEvent'){
-              <div class="photo">
-                <label for="photo" class="form-label">Photo</label>
-                <input
-                  class="form-control"
-                  type="file"
-                  id="Photo"
-                  accept="image/*"
-                  (change)="onPhotoChange($event)"
-                >
-
-                @if (photoPreview) {
-                  <!-- Preview -->
-                  <img
-                    [src]="photoPreview"
-                    alt="preview"
-                    style="width:200px; margin-top:10px"
-                  />
                 }
               </div>
             }
-
-            <div class="FullName">
-              <label for="FullName" class="form-label">Full Name</label>
-              <input class="form-control" formControlName="FullName" type="text" name="FullName" id="FullName" placeholder="Enter Your Full Name...">
             </div>
+          } -->
 
-            <div class="Phone">
-              <label for="Phone" class="form-label">Phone</label>
-              <input class="form-control" formControlName="Phone" type="tel" name="Phone" id="Phone" placeholder="Enter Your Phone...">
-            </div>
 
-            <div class="Email">
-              <label for="Email" class="form-label">Email</label>
-              <input class="form-control" formControlName="Email" type="Email" name="Email" id="Email" placeholder="Enter Your Email...">
-            </div>
-
-            <div class="VisitorCount">
-              <label for="VisitorCount" class="form-label">Companion <sub>Option</sub></label>
-              <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Your Visitor Count...">
-            </div>
-
-            <div class="text-center">
-              <button class="btn main-btn" (click)="viewCheckOutData()"> Checkout </button>
-            </div>
-          </form>
         </div>
 
         @if(show){

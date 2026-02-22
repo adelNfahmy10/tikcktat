@@ -1,8 +1,11 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
+import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
 import { EventService } from '@core/services/event/event.service';
+import Choices from 'choices.js';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -46,6 +49,39 @@ export class CheckoutComponent implements OnInit{
   eventId:string | null = null
   eventData:any = {}
   photoPreview: string | ArrayBuffer | null = null;
+  @ViewChild('phoneSelect') phoneSelect!: ElementRef;
+
+  phones: string[] = [
+    '01012345678',
+    '01198765432',
+    '01234567890',
+    '01587654321',
+    '01056789012',
+    '01123456789',
+    '01298765432',
+    '01512349876',
+    '01087654321',
+    '01134567890',
+    '01256789012',
+    '01523456789',
+    '01098765432',
+    '01112345678',
+    '01287654321',
+    '01534567890',
+    '01023456789',
+    '01156789012',
+    '01212349876',
+    '01598765432'
+  ];
+
+  ngAfterViewInit(): void {
+    new Choices(this.phoneSelect.nativeElement, {
+      searchEnabled: true,      // تفعيل البحث
+      searchPlaceholderValue: 'Search...', // placeholder داخل البحث
+      // shouldSort: false,        // لو عايز يظهر بالترتيب اللي في الـ array
+      itemSelectText: '',       // يشيل النص الافتراضي عند اختيار عنصر
+    });
+  }
 
   ngOnInit(): void {
     this.getEventId()

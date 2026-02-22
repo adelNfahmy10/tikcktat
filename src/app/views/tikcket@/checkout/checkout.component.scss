@@ -1,3 +1,5 @@
+@import '../../../../../public/assets/scss/varibales';
+
 .checkout{
   min-height: 100vh;
 }
@@ -23,6 +25,21 @@
   .row-line {
     justify-content: start;
   }
+}
+
+.nav-tabs .nav-link{
+  border-top: 2px solid #f3f3f3;
+  width: 300px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: $main-color;
+  color: white;
+}
+
+.tab-content {
+  border-top: none;
+  padding: 20px;
 }
 
 .stage-wrapper {
@@ -90,6 +107,10 @@
     font-size: 16px;
     padding: 10px 15px;
   }
+  .nav-tabs .nav-link{
+    width: 100%;
+  }
+
 }
 
 
