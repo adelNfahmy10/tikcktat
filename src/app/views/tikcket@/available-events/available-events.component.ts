@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs';
   styleUrl: './available-events.component.scss'
 })
 export class AvailableEventsComponent {
-   private readonly _EventService = inject(EventService)
+  private readonly _EventService = inject(EventService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allEvents:any[] = []

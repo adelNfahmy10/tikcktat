@@ -1,11 +1,11 @@
-<section class="event" id="event">
+<section class="event py-3" id="event">
   <div class="container-fluid">
-    <div class="rounded-3 p-3 shadow-lg">
-      <div class="event-banner rounded-4 d-flex justify-content-center align-items-center">
+    <div class="border border-2 rounded-3 p-3 shadow-lg">
+      <div class="event-banner overflow-hidden rounded-4">
         @if(eventData?.imageUrl){
-          <img [src]="eventData?.imageUrl" class="w-100 h-100 rounded-2" alt="Event image">
+          <img loading="lazy" class="rounded-2 w-100 h-100 object-fit-cover" [src]="eventData?.imageUrl" alt="Event image">
         } @else {
-          <img src="assets/images/tikecktImages/logos/tiecktat-logo.png" class="w-75 rounded-2" alt="Event image">
+          <img loading="lazy" class="rounded-2 w-100 h-100 object-fit-cover" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="Event image">
         }
       </div>
 
