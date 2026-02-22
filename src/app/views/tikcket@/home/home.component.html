@@ -1,28 +1,34 @@
 <section class="home" id="home">
   <div class="container py-5">
     <div class="head-section text-center">
-      <img class="logo shadow rounded p-3" src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" alt="">
+      <img loading="lazy" class="logo shadow rounded p-3" src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" alt="ticketat">
       <h1>Welcome To Ticketat</h1>
       <h3>Explore and book the parties and conferences you need</h3>
     </div>
 
-    <div class="events d-flex flex-wrap justify-content-center align-items-center gap-4 mt-5">
-      <div class="event-category rounded-3 cr" routerLink="/available-event/GraduationParty">
-        <img class="rounded-3" src="assets/images/tikecktImages/home-image/party-logo.png" loading="lazy" alt="event party">
-        <p>Graduation Party</p>
+    <div class="events row g-4">
+      <div class="col-lg-6">
+        <div class="event-category rounded-3 cr" routerLink="/available-event/GraduationParty">
+          <img class="rounded-3" src="assets/images/tikecktImages/home-image/graduation-img.png" loading="lazy" alt="event party">
+          <p>Graduation Party</p>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="event-category rounded-3 cr" routerLink="/available-event/FunDayEvent">
+          <img class="rounded-3" src="assets/images/tikecktImages/home-image/funday-img.png" loading="lazy" alt="event party">
+          <p>Funday Party</p>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="event-category rounded-3 cr" routerLink="/available-event/Conferences">
+          <img class="rounded-3" src="assets/images/tikecktImages/home-image/conference-img.png" loading="lazy" alt="event party">
+          <p>Conference Events</p>
+        </div>
       </div>
 
 
-      <div class="event-category rounded-3 cr" routerLink="/available-event/FunDayEvent">
-        <img class="rounded-3" src="assets/images/tikecktImages/home-image/funday.png" loading="lazy" alt="event party">
-        <p>FunDay</p>
-      </div>
-
-
-      <div class="event-category rounded-3 cr" routerLink="/available-event/Conferences">
-        <img class="rounded-3" src="assets/images/tikecktImages/home-image/conference-logo.png" loading="lazy" alt="event party">
-        <p>Conference</p>
-      </div>
     </div>
 
 
