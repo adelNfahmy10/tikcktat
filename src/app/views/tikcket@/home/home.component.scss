@@ -7,6 +7,9 @@
   overflow: hidden;
   color: #fff;
   min-height: 100vh;
+  .logo{
+    width: 500px;
+  }
 }
 .events {
   perspective: 1000px; // مهم عشان تظهر الـ 3D effect
@@ -33,7 +36,6 @@
       font-size: 20px;
       background: rgba($main-color, 0.4);
     }
-
     &:hover {
       margin-inline: 35px;
       transform: translateY(-20px) scale(.4);
