@@ -48,7 +48,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     key: 'add-event',
     label: 'Add Eevents',
     url: '/add-event',
-    parentKey: 'events',
+  },
+  {
+    key: 'all-view',
+    label: 'View Eevents',
+    url: '/all-events',
   },
   {
     key: 'add-new-owner',
@@ -61,11 +65,12 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/owners',
   },
   {
-    key: 'all-view',
-    label: 'View Eevents',
-    url: '/all-events',
-    parentKey: 'events',
+    key: 'terms-condition',
+    label: 'Ticketat Terms & Conditions',
+    url: '/terms-condition',
   },
+
+
 
   // {
   //   key: 'events',

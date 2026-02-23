@@ -20,6 +20,7 @@ import { OrganizerEventsComponent } from './tikcket@/organizer-system/organizer-
 import { OrganizerEventDetailsComponent } from './tikcket@/organizer-system/organizer-event-details/organizer-event-details.component'
 import { OrganizerEventAttendeesComponent } from './tikcket@/organizer-system/organizer-event-attendees/organizer-event-attendees.component'
 import { AvailableEventsDetailsComponent } from './tikcket@/available-events-details/available-events-details.component'
+import { TermsAndConditionsComponent } from './tikcket@/terms-and-conditions/terms-and-conditions.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -105,13 +106,18 @@ export const VIEWS_ROUTES: Route[] = [
     component: ResetuserpasswordComponent,
     data: { title: 'Reset Password' },
   },
-   {
+  {
     path: 'forget-password',
     component: ForgetpasswrodComponent,
     data: { title: 'Forget Password' },
   },
 
-
+  // Terms And Conditions
+  {
+    path: 'terms-condition',
+    component: TermsAndConditionsComponent,
+    data: { title: 'Terms and Conditions' },
+  },
 
 
 

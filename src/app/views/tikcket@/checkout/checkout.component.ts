@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
@@ -38,7 +38,7 @@ export interface Category {
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
-export class CheckoutComponent implements OnInit{
+export class CheckoutComponent implements OnInit, AfterViewInit{
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _Router = inject(Router)

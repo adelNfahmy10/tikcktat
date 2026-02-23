@@ -2,15 +2,11 @@
   <div class="container-fluid">
     <div class="border border-2 rounded-3 p-3 shadow-lg">
       <div class="event-banner overflow-hidden rounded-4">
-        @if(eventData?.imageUrl){
-          <img loading="lazy" class="rounded-2 w-100 h-100 object-fit-cover" [src]="eventData?.imageUrl" alt="Event image">
-        } @else {
-          <img loading="lazy" class="rounded-2 w-100 h-100 object-fit-cover" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="Event image">
-        }
+        <img loading="lazy" class="rounded-2 w-100 h-100 object-fit-cover" [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/gard-party-cover.png'" alt="Event image">
       </div>
 
       <div class="event-details my-3">
-        <h1 class="fs-25 fw-bold">{{eventData?.name}}</h1>
+        <h1 class="fw-bold">{{eventData?.name}}</h1>
         <p>
           Location : <span class="text-dark"><a class="cr text-dark">{{eventData?.location}}</a></span> <br>
           Date : <span class="text-dark"> {{eventData?.date | date:'dd/mm/yyyy'}} </span> <br>
@@ -56,9 +52,138 @@
         </div> -->
 
         <div class="text-center">
-          <button class="btn main-btn p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
+          @if(token){
+            <button class="btn main-btn p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
+          } @else {
+            <button class="btn main-btn p-0 px-4 py-1 mt-2" data-bs-target="#exampleModalCenter" (click)="openModal(centered, { centered: true })">Book Now</button>
+          }
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<ng-template
+  #centered
+  let-modal
+  class="modal fade"
+  id="exampleModalCenter"
+  tabindex="-1"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalCenterTitle">
+        Please Register To Book Your Ticket
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.close()"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      @if(haveAcc){
+        <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
+        <form [formGroup]="signUpUser">
+          <div class="mb-3">
+              <label class="form-label" for="name">Name</label>
+              <input
+                type="name"
+                formControlName="fullName"
+                id="name"
+                name="name"
+                class="form-control bg-light bg-opacity-50 border-light py-2"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="phone">Phone</label>
+              <input
+                type="tel"
+                formControlName="phone"
+                id="phone"
+                name="phone"
+                class="form-control bg-light bg-opacity-50 border-light py-2"
+                placeholder="Enter your phone"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input
+                type="email"
+                formControlName="email"
+                id="email"
+                name="email"
+                class="form-control bg-light bg-opacity-50 border-light py-2"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input
+                type="password"
+                formControlName="password"
+                id="password"
+                class="form-control bg-light bg-opacity-50 border-light py-2"
+                placeholder="Enter your password"
+              />
+            </div>
+        </form>
+      }
+
+      @if(!haveAcc){
+        <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
+        <form [formGroup]="signInUser">
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input
+              type="email"
+              formControlName="Username"
+              id="email"
+              name="email"
+              class="form-control bg-light bg-opacity-50 border-light py-2"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input
+              type="password"
+              formControlName="Password"
+              id="password"
+              class="form-control bg-light bg-opacity-50 border-light py-2"
+              placeholder="Enter your password"
+            />
+          </div>
+        </form>
+      }
+    </div>
+    <div class="modal-footer justify-content-center align-items-center">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.close()"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      @if(haveAcc){
+        <button type="button" class="btn btn-primary save-btn" (click)="submitSignUpForm(); modal.close()">
+          Sign Up
+        </button>
+      } @else {
+        <button type="button" class="btn btn-primary save-btn" (click)="submitSignInForm(); modal.close()">
+          Sign In
+        </button>
+      }
+    </div>
+  </div>
+</ng-template>

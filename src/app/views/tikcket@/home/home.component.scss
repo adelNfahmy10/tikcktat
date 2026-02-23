@@ -13,7 +13,7 @@
 }
 .events {
   perspective: 1000px; // مهم عشان تظهر الـ 3D effect
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
   .event-category {
     box-shadow: 0 0 5px 5px $main-color;
@@ -55,19 +55,9 @@
   }
 }
 
-@media (max-width:567px) {
-  .home{
-    align-items: center !important;
-    min-height: 100vh;
-    .logo{
-      width: 350px;
-    }
-    h3{
-      font-size: 16px;
-    }
-  }
+@media (max-width:991px) {
   .events {
-    width: 90%;
+    width: 100%;
     .event-category {
       &:hover{
         margin-inline: 20px;
@@ -77,6 +67,19 @@
         font-size: 12px;
         width: 100%;
       }
+    }
+  }
+}
+
+@media (max-width:567px) {
+  .home{
+    align-items: center !important;
+    min-height: 100vh;
+    .logo{
+      width: 350px;
+    }
+    h3{
+      font-size: 16px;
     }
   }
 }
