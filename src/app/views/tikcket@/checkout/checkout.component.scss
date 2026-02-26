@@ -11,7 +11,7 @@
     height: 100%;
   }
 }
-.ticketat-logo{ 
+.ticketat-logo{
   width: 200px;
 }
 
@@ -27,19 +27,20 @@
   }
 }
 
-.nav-tabs .nav-link{
-  border-top: 2px solid #f3f3f3;
-  width: 300px;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: $main-color;
-  color: white;
+.nav-tabs {
+  border: none;
+  .nav-link{
+    border-top: 2px solid #f3f3f3;
+    width: 300px;
+    &.active {
+      background-color: $main-color;
+      color: white;
+    }
+  }
 }
 
 .tab-content {
   border-top: none;
-  padding: 20px;
 }
 
 .stage-wrapper {

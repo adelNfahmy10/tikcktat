@@ -4,7 +4,7 @@
       <div class="row g-2">
         <div class="col-12">
           <div class="image-event">
-            <img [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/grad-cover-tikcket.png'" class="rounded-3" [alt]="eventData?.name">
+            <img [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" class="rounded-3" [alt]="eventData?.name">
           </div>
         </div>
 
@@ -12,14 +12,6 @@
           'col-md-7' : show,
           'col-md-12' : !show,
         }">
-          <h1 class="fw-bold mt-3">Checkout Event</h1>
-          @if(eventData.type != 'FunDayEvent'){
-            <div class="text-right" dir="rtl">
-              <h4>كل حجز يشمل طالبًا واحدًا مع مرافقين اثنين.</h4>
-              <h5>يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب تكلفة لكل مرافق إضافي.</h5>
-            </div>
-          }
-
           <ul class="nav nav-tabs justify-content-center align-items-center" id="ticketTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
@@ -35,10 +27,18 @@
             </li>
           </ul>
 
-          <div class="tab-content mt-3" id="ticketTabContent">
+          <div class="tab-content" id="ticketTabContent">
             <!-- تاب الحجز الكامل -->
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+                <h1 class="fw-bold mt-3">Checkout Event</h1>
+                @if(eventData.type == 'GraduationParty'){
+                  <div class="border-bottom">
+                    <h5>Each reservation includes one student and two accompanying guests.</h5>
+                    <h5>Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.</h5>
+                  </div>
+                }
+
                 <h3>Book Ticket</h3>
                 @if(eventData.type != 'FunDayEvent'){
                   <div class="photo">
@@ -62,26 +62,12 @@
                   </div>
                 }
 
-                <div class="FullName">
-                  <label for="FullName" class="form-label">Full Name</label>
-                  <input class="form-control" formControlName="FullName" type="text" name="FullName" id="FullName" placeholder="Enter Your Full Name...">
-                </div>
-
-                <div class="Phone">
-                  <label for="Phone" class="form-label">Phone</label>
-                  <input class="form-control" formControlName="Phone" type="tel" name="Phone" id="Phone" placeholder="Enter Your Phone...">
-                </div>
-
-                <div class="Email">
-                  <label for="Email" class="form-label">Email</label>
-                  <input class="form-control" formControlName="Email" type="Email" name="Email" id="Email" placeholder="Enter Your Email...">
-                </div>
-
                 <div class="VisitorCount">
-                  <label for="VisitorCount" class="form-label">Companion <sub>Option</sub></label>
+                  <label for="VisitorCount" class="form-label">Companions <sub>Option</sub></label>
                   <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Your Visitor Count...">
                 </div>
 
+                <!-- Check Data -->
                 <div class="text-center">
                   <button class="btn main-btn" (click)="viewCheckOutData()"> Checkout </button>
                 </div>
@@ -93,24 +79,16 @@
               <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
                 <h3>Add Companions</h3>
 
-                <div class="mb-3">
-                  <label for="companion" class="form-label">Phone No.</label>
-                  <select #phoneSelect class="form-control" >
-                    <option value="">Phone No.</option>
-                    @for (phone of phones; track $index) {
-                      <option [value]="phone">{{phone}}</option>
-                    }
-                  </select>
+                <div class="companion">
+                  <label for="companion" class="form-label">Name</label>
+                  <h3 class="main-color fw-bold">{{userData.fullName}}</h3>
                 </div>
 
-                <!-- <div class="companion">
-                  <h4>Name: Mohamed Said</h4>
-                </div> -->
 
 
                 <div class="companion">
                   <label for="companion" class="form-label">Number of Companions</label>
-                  <input class="form-control" formControlName="companion" type="number" name="companion" id="companion" placeholder="Enter Number of Companions...">
+                  <input class="form-control" type="number" name="companion" id="companion" placeholder="Enter Number of Companions...">
                 </div>
 
                 <div class="text-center">
@@ -157,21 +135,24 @@
             </div>
           } -->
 
-
         </div>
 
+
+        <!-- Check Data Before Payment -->
         @if(show){
           <div class="col-md-5">
             <div class="summary p-3 shadow-lg border rounded-3 h-100 text-center">
               <img src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo text-center" alt="ticketat">
 
               <div class="d-flex flex-column align-items-start g-0 justify-content-between border p-3 mt-4">
-                <p> Name : <span class="main-color fw-medium">{{ checkoutData?.FullName}}</span></p>
-                <p> Phone : <span class="main-color fw-medium">{{ checkoutData?.Phone}}</span></p>
-                <p> Email : <span class="main-color fw-medium">{{ checkoutData?.Email}}</span></p>
-                <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount}} Companion(s)</span></p>
+                <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
+                <p> Phone : <span class="main-color fw-medium">{{ userData?.mobile}}</span></p>
+                <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
+                <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount + 2}} Companion(s)</span></p>
                 <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
-                <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
+                @if(checkoutData?.VisitorCount){
+                  <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
+                }
                 <div class="border border-2 shadow-sm w-100 p-2 mb-2 text-start rounded-3">
                   <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
                   @if(eventData.type != 'FunDayEvent'){
@@ -180,6 +161,7 @@
                   <p class="m-0 mt-2 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
                 </div>
 
+                <!-- Submit Order -->
                 <div class="text-center w-100">
                   <button class="btn main-btn w-100" (click)="submitCheckout()"> Confirm </button>
                 </div>

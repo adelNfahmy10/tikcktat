@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
 import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
+import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import Choices from 'choices.js';
 import { ToastrService } from 'ngx-toastr';
@@ -39,6 +40,7 @@ export interface Category {
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent implements OnInit, AfterViewInit{
+  private readonly _AuthService = inject(AuthService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _Router = inject(Router)
@@ -47,6 +49,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
   eventType:string | null = null
   eventId:string | null = null
+  userData:any = {}
+  userId:string | null = localStorage.getItem('userId')
   eventData:any = {}
   photoPreview: string | ArrayBuffer | null = null;
   @ViewChild('phoneSelect') phoneSelect!: ElementRef;
@@ -85,17 +89,16 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
     this.getEventId()
+    this.getUserById()
     this.generateLayout();
   }
 
   checkoutForm:FormGroup = this._FormBuilder.group({
     EventId:[null, Validators.required],
     Photo:[null],
-    FullName :[null, Validators.required],
-    Phone :[null, Validators.required],
-    Email :[null, Validators.required],
     VisitorCount:[null],
   })
+
 
   getEventId():void{
     this._ActivatedRoute.paramMap.subscribe({
@@ -108,6 +111,15 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
             this.eventType = this.eventData.type
           }
         })
+      }
+    })
+  }
+
+  getUserById():void{
+    this._AuthService.getUserById(this.userId).subscribe({
+      next:(res)=>{
+        this.userData = res.data
+        console.log(this.userData);
       }
     })
   }
@@ -162,11 +174,17 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     // تأكد ان الـ eventId موجود
     if (!this.eventId) return;
 
-    const formData = new FormData();
-    const formValue = this.checkoutForm.value;
+    let formValue = this.checkoutForm.value;
+    formValue.FullName = this.userData.fullName
+    formValue.Photo = this.userData.mobile
+    formValue.Email = this.userData.email
 
+    const formData = new FormData();
     // أضف EventId
     formData.append('EventId', this.eventId);
+
+    console.log(formValue);
+
 
     // أضف باقي الحقول
     Object.keys(formValue).forEach(key => {
@@ -182,21 +200,21 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
 
     // إرسال الفورم
-    this._EventService.checkoutEvent(formData).subscribe({
-      next: (res) => {
-        Swal.fire(res.msg, '', 'success').then(() => {
-          this.checkoutForm.reset();
-          this.photoPreview = null;
-          this._Router.navigate(['/home']);
-        });
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: err.error?.msg || 'Email Or Phone Already Existed'
-        });
-      }
-    });
+    // this._EventService.checkoutEvent(formData).subscribe({
+    //   next: (res) => {
+    //     Swal.fire(res.msg, '', 'success').then(() => {
+    //       this.checkoutForm.reset();
+    //       this.photoPreview = null;
+    //       this._Router.navigate(['/home']);
+    //     });
+    //   },
+    //   error: (err) => {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: err.error?.msg || 'Email Or Phone Already Existed'
+    //     });
+    //   }
+    // });
   }
 
   categories: Category[] = [];
@@ -250,6 +268,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
     });
   }
+
   toggleSeat(seat: Seat) {
     if (seat.status === 'booked') return;
 

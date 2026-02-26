@@ -100,7 +100,7 @@ export class AvailableEventsDetailsComponent {
         this._Router.navigate([`/checkout/${this.eventData?.id}`])
         localStorage.setItem('userId', res.data.userId)
         localStorage.setItem('fullName', res.data.fullName)
-        localStorage.setItem('accessToken', res.data.accessToken)
+        localStorage.setItem('token', res.data.accessToken)
         localStorage.setItem('refreshToken', res.data.refreshToken)
         localStorage.setItem('roles', res.data.roles[0])
       }
