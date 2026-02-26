@@ -49,7 +49,7 @@ export const VIEWS_ROUTES: Route[] = [
     component: CheckoutComponent,
     data: { title: 'Checkout' },
   },
-    {
+  {
     path: 'qrcode/:ip',
     component: QrcodeComponent,
     data: { title: 'QRCode' },
@@ -218,5 +218,10 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'maps',
     loadChildren: () =>
       import('./maps/maps.route').then((mod) => mod.MAPS_ROUTES),
+  },
+  {
+    path: '**',
+    redirectTo:"home",
+    pathMatch:'full'
   },
 ]
