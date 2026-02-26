@@ -97,7 +97,9 @@ export class AvailableEventsDetailsComponent {
     this._AuthService.login(data).subscribe({
       next:(res)=>{
         this._ToastrService.success('Create User Successfully')
-        this._Router.navigate([`/checkout/${this.eventData?.id}`])
+        this._Router.navigate([`/checkout/${this.eventData?.id}`]).then(() => {
+          window.location.reload();
+        });
         localStorage.setItem('userId', res.data.userId)
         localStorage.setItem('fullName', res.data.fullName)
         localStorage.setItem('token', res.data.accessToken)
