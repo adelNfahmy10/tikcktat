@@ -30,16 +30,16 @@
           <div class="tab-content py-0" id="ticketTabContent">
             <!-- تاب الحجز الكامل -->
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
-              <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+              <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
                 <h1 class="fw-bold m-0">Checkout Event</h1>
                 @if(eventData.type == 'GraduationParty'){
-                  <div class="border-bottom pb-1">
-                    <p class="m-0 mb-1">- Each reservation includes one student and two accompanying guests.</p>
+                  <div class="border-bottom pb-2 note">
+                    <p class="m-0 mb-1">- Each reservation includes (1 student) and (2 accompanying guests).</p>
                     <p class="m-0 mb-1">- Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.</p>
                   </div>
                 }
 
-                <h3>Book Ticket</h3>
+                <h3 class="m-0">Book Ticket</h3>
                 @if(eventData.type != 'FunDayEvent'){
                   <div class="photo">
                     <label for="photo" class="form-label">Photo</label>
@@ -79,7 +79,7 @@
             <!-- تاب المرافق الإضافية -->
             <div class="tab-pane fade" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
-                <h3>Add Companions</h3>
+                <h3 class="m-0">Add Companions</h3>
 
                 <div class="companion">
                   <label for="companion" class="form-label">Name</label>
@@ -171,7 +171,6 @@
             </div>
           </div>
         }
-
 
       </div>
     </div>
