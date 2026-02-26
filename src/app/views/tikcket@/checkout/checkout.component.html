@@ -27,7 +27,7 @@
             </li> -->
           </ul>
 
-          <div class="tab-content" id="ticketTabContent">
+          <div class="tab-content py-0" id="ticketTabContent">
             <!-- تاب الحجز الكامل -->
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
@@ -52,12 +52,14 @@
                     >
 
                     @if (photoPreview) {
-                      <!-- Preview -->
-                      <img
-                        [src]="photoPreview"
-                        alt="preview"
-                        style="width:200px; margin-top:10px"
-                      />
+                      <div class="text-center text-md-start">
+                        <!-- Preview -->
+                        <img
+                          [src]="photoPreview"
+                          alt="preview"
+                          style="width:200px; margin-top:10px"
+                        />
+                      </div>
                     }
                   </div>
                 }

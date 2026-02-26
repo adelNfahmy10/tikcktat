@@ -79,12 +79,15 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
   ];
 
   ngAfterViewInit(): void {
-    new Choices(this.phoneSelect.nativeElement, {
-      searchEnabled: true,      // تفعيل البحث
-      searchPlaceholderValue: 'Search...', // placeholder داخل البحث
-      // shouldSort: false,        // لو عايز يظهر بالترتيب اللي في الـ array
-      itemSelectText: '',       // يشيل النص الافتراضي عند اختيار عنصر
-    });
+    if(this.phoneSelect?.nativeElement){
+       new Choices(this.phoneSelect?.nativeElement, {
+        searchEnabled: true,      // تفعيل البحث
+        searchPlaceholderValue: 'Search...', // placeholder داخل البحث
+        // shouldSort: false,        // لو عايز يظهر بالترتيب اللي في الـ array
+        itemSelectText: '',       // يشيل النص الافتراضي عند اختيار عنصر
+      });
+    }
+
   }
 
   ngOnInit(): void {
@@ -119,7 +122,6 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     this._AuthService.getUserById(this.userId).subscribe({
       next:(res)=>{
         this.userData = res.data
-        console.log(this.userData);
       }
     })
   }
