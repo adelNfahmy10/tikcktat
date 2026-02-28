@@ -39,10 +39,11 @@
                   </div>
                 }
 
-                <h3 class="m-0">Book Ticket</h3>
+                <h3 class="m-0 mb-3">Book Ticket</h3>
                 @if(eventData.type != 'FunDayEvent'){
                   <div class="photo">
-                    <label for="photo" class="form-label">Photo</label>
+                    <label for="photo" class="form-label">Photo <span class="text-bold text-warning">(Payment Image)</span></label>
+
                     <input
                       class="form-control"
                       type="file"
@@ -84,6 +85,7 @@
                     <option value="الفرقة الثانية">الفرقة الثانية</option>
                     <option value="الفرقة الثالثة">الفرقة الثالثة</option>
                     <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                    <option value="خريج">خريج</option>
                   </select>
                 </div>
 
