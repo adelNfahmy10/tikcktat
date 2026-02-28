@@ -98,8 +98,11 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
   checkoutForm:FormGroup = this._FormBuilder.group({
     EventId:[null, Validators.required],
-    Photo:[null],
+    Photo:[null, Validators.required],
     VisitorCount:[null],
+    Faculty:[null, Validators.required],
+    Department:[null, Validators.required],
+    Year:[null, Validators.required],
   })
 
 
@@ -162,7 +165,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       // الضريبة 2.7% من الإجمالي + 23 ثابت
       this.tax = (this.subTotal * 0.027) + 23;
       // الإجمالي النهائي
-      if(this.eventData.type != 'FunDayEvent'){
+      if(this.eventData.type != 'FunDayEvent' && this.eventData.type != 'RamadanIftar'){
         this.total = this.subTotal + this.tax;
       } else {
         this.total = this.subTotal
@@ -178,8 +181,9 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
     let formValue = this.checkoutForm.value;
     formValue.FullName = this.userData.fullName
-    formValue.Photo = this.userData.mobile
+    formValue.Phone = this.userData.mobile
     formValue.Email = this.userData.email
+    formValue.Price = this.total
 
     const formData = new FormData();
     // أضف EventId
@@ -202,21 +206,21 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
 
     // إرسال الفورم
-    // this._EventService.checkoutEvent(formData).subscribe({
-    //   next: (res) => {
-    //     Swal.fire(res.msg, '', 'success').then(() => {
-    //       this.checkoutForm.reset();
-    //       this.photoPreview = null;
-    //       this._Router.navigate(['/home']);
-    //     });
-    //   },
-    //   error: (err) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: err.error?.msg || 'Email Or Phone Already Existed'
-    //     });
-    //   }
-    // });
+    this._EventService.checkoutEvent(formData).subscribe({
+      next: (res) => {
+        Swal.fire(res.msg, '', 'success').then(() => {
+          this.checkoutForm.reset();
+          this.photoPreview = null;
+          this._Router.navigate(['/home']);
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: err.error?.msg || 'Email Or Phone Already Existed'
+        });
+      }
+    });
   }
 
   categories: Category[] = [];

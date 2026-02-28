@@ -88,6 +88,54 @@
                 </div>
               </th>
 
+              <th (click)="sort('faculty')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Faculty</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'faculty' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'faculty' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('department')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Department</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'department' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'department' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('year')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Year</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'year' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'year' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('companions')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Companions</span>
@@ -172,6 +220,9 @@
                 </td>
                 <td>{{ grad.phone }}</td>
                 <td>{{ grad.email }}</td>
+                <td>{{ grad.faculty }}</td>
+                <td>{{ grad.department }}</td>
+                <td>{{ grad.year }}</td>
                 <td>{{ grad.companions }}</td>
                 <td>{{ grad.totalPrice }}</td>
                 <td>

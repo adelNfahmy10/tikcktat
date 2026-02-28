@@ -8,10 +8,12 @@
       <div class="event-details my-3">
         <h1 class="fw-bold">{{eventData?.name}}</h1>
         <p>
-          Location : <span class="text-dark"><a class="cr text-dark">{{eventData?.location}}</a></span> <br>
-          Date : <span class="text-dark"> {{eventData?.date | date:'dd/mm/yyyy'}} </span> <br>
+          Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.location" target="_blank">{{eventData?.id == '58267f5c-306e-486d-bbe6-448a4b56e72e' ? 'Wadi Degla Protectorate' : ''}}</a></span> <br>
+          Date : <span class="text-dark"> {{eventData?.date | date}} {{eventData?.id == '58267f5c-306e-486d-bbe6-448a4b56e72e' ? '- 23 Ramadan' : ''}} </span> <br>
           Ticket Price: <span class="text-dark"> {{eventData?.price | number}} EGP </span> <br>
-          Companion Price: <span class="text-dark"> {{eventData?.visitorFee | number}} EGP </span>
+          @if(eventData?.type !== 'RamadanIftar'){
+            Companion Price: <span class="text-dark"> {{eventData?.visitorFee | number}} EGP </span>
+          }
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>
@@ -105,7 +107,7 @@
               <label class="form-label" for="phone">Phone</label>
               <input
                 type="tel"
-                formControlName="phone"
+                formControlName="mobile"
                 id="phone"
                 name="phone"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
@@ -176,7 +178,7 @@
         Close
       </button>
       @if(haveAcc){
-        <button type="button" class="btn btn-primary save-btn" (click)="submitSignUpForm(); modal.close()">
+        <button type="button" class="btn btn-primary save-btn" (click)="submitSignUpForm()">
           Sign Up
         </button>
       } @else {

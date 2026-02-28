@@ -75,9 +75,9 @@ export class AvailableEventsDetailsComponent {
   }
 
   signUpUser:FormGroup = this._FormBuilder.group({
-    roleId:['33333333-3333-3333-3333-333333333333'],
+    roleId:['e1867588-d877-4537-a250-cffe41fe0311'],
     fullName:[null],
-    phone:[null],
+    mobile:[null],
     email:[null],
     password:[null],
   })
@@ -89,6 +89,12 @@ export class AvailableEventsDetailsComponent {
 
   submitSignUpForm():void{
     let data = this.signUpUser.value
+    this._AuthService.register(data).subscribe({
+      next:(res)=>{
+        this._ToastrService.success('Create User Successfully, Login Now..!')
+        this.toggleForm()
+      }
+    })
     console.log(data);
   }
 
@@ -96,7 +102,7 @@ export class AvailableEventsDetailsComponent {
     let data = this.signInUser.value
     this._AuthService.login(data).subscribe({
       next:(res)=>{
-        this._ToastrService.success('Create User Successfully')
+        this._ToastrService.success('Login Successfully')
         this._Router.navigate([`/checkout/${this.eventData?.id}`]).then(() => {
           window.location.reload();
         });

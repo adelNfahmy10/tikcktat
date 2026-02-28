@@ -64,9 +64,27 @@
                   </div>
                 }
 
-                <div class="VisitorCount">
-                  <label for="VisitorCount" class="form-label">Companions <sub>Option</sub></label>
-                  <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Your Visitor Count...">
+                <!-- Faculty -->
+                <div class="Faculty">
+                  <label for="Faculty" class="form-label">Faculty</label>
+                  <input class="form-control" formControlName="Faculty" type="text" name="Faculty" id="Faculty" placeholder="Enter Your Faculty Name...">
+                </div>
+
+                <!-- Department -->
+                <div class="Department">
+                  <label for="Department" class="form-label">Department</label>
+                  <input class="form-control" formControlName="Department" type="text" name="Department" id="Department" placeholder="Enter Your Department...">
+                </div>
+
+                <!-- Year -->
+                <div class="Year">
+                  <label for="Year" class="form-label">Year</label>
+                  <select formControlName="Year" name="Year" id="Year" class="form-select">
+                    <option value="الفرقة الأولى">الفرقة الأولى</option>
+                    <option value="الفرقة الثانية">الفرقة الثانية</option>
+                    <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                    <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                  </select>
                 </div>
 
                 <!-- Check Data -->
@@ -85,8 +103,6 @@
                   <label for="companion" class="form-label">Name</label>
                   <h3 class="main-color fw-bold">{{userData.fullName}}</h3>
                 </div>
-
-
 
                 <div class="companion">
                   <label for="companion" class="form-label">Number of Companions</label>
@@ -150,17 +166,20 @@
                 <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
                 <p> Phone : <span class="main-color fw-medium">{{ userData?.mobile}}</span></p>
                 <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
-                <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount + 2}} Companion(s)</span></p>
+                @if(eventData?.type !== 'RamadanIftar'){
+                  <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount + 2}} Companion(s)</span></p>
+                }
+
                 <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
                 @if(checkoutData?.VisitorCount){
                   <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
                 }
                 <div class="border border-2 shadow-sm w-100 p-2 mb-2 text-start rounded-3">
-                  <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-                  @if(eventData.type != 'FunDayEvent'){
+                  @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
+                    <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
                     <p class="m-0 pb-2 border-bottom"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
                   }
-                  <p class="m-0 mt-2 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+                    <p class="m-0 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
                 </div>
 
                 <!-- Submit Order -->
