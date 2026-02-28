@@ -211,7 +211,14 @@
           <tbody>
             @for (grad of paginatedData; track $index) {
               <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <span>{{ $index + 1 }}</span>
+                    <span>
+                      <button class="btn btn-outline-success btn-send-qr">Send</button>
+                    </span>
+                  </div>
+                </td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
                     <img [src]="grad.photoUrl" width="50" class="rounded" />
