@@ -198,7 +198,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2 w-100">
-                    <img [src]="event?.imageUrl" width="50" class="rounded" />
+                    <img [src]="event?.imageUrl" width="50" class="rounded" [alt]="event?.name" />
                     <h6 class="m-0 w-100 text-start" >
                       <span class="mb-1 d-inline-block fw-bold main-color">{{ event?.eventOwnerName ? event?.eventOwnerName : fullName || 'Unknown' }}</span>  <br>
                       {{ event?.name }}

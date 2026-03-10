@@ -21,6 +21,8 @@ import { OrganizerEventDetailsComponent } from './tikcket@/organizer-system/orga
 import { OrganizerEventAttendeesComponent } from './tikcket@/organizer-system/organizer-event-attendees/organizer-event-attendees.component'
 import { AvailableEventsDetailsComponent } from './tikcket@/available-events-details/available-events-details.component'
 import { TermsAndConditionsComponent } from './tikcket@/terms-and-conditions/terms-and-conditions.component'
+import { OrderSuccessComponent } from './tikcket@/order-success/order-success.component'
+import { MyBookingComponent } from './tikcket@/my-booking/my-booking.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -48,6 +50,16 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'checkout/:id',
     component: CheckoutComponent,
     data: { title: 'Checkout' },
+  },
+  {
+    path: 'payment-success',
+    component: OrderSuccessComponent,
+    data: { title: 'Order Success' },
+  },
+  {
+    path: 'my-bookings',
+    component: MyBookingComponent,
+    data: { title: 'My Bookings' },
   },
   {
     path: 'qrcode/:ip',

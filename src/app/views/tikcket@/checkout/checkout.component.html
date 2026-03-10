@@ -8,10 +8,7 @@
           </div>
         </div>
 
-        <div class="col-md-7" [ngClass]="{
-          'col-md-7' : show,
-          'col-md-12' : !show,
-        }">
+        <div class="col-12">
           <ul class="nav nav-tabs justify-content-center align-items-center" id="ticketTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
@@ -32,17 +29,15 @@
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
                 <h1 class="fw-bold m-0">Checkout Event</h1>
-                @if(eventData.type == 'GraduationParty'){
+
+                @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
                   <div class="border-bottom pb-2 note">
                     <p class="m-0 mb-1">- Each reservation includes (1 student) and (2 accompanying guests).</p>
                     <p class="m-0 mb-1">- Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.</p>
                   </div>
-                }
 
-                <h3 class="m-0 mb-3">Book Ticket</h3>
-                @if(eventData.type != 'FunDayEvent'){
                   <div class="photo">
-                    <label for="photo" class="form-label">Photo <span class="text-bold text-warning">(Payment Image)</span></label>
+                    <label for="photo" class="form-label">Photo</label>
 
                     <input
                       class="form-control"
@@ -65,33 +60,44 @@
                   </div>
                 }
 
-                <!-- Faculty -->
-                <div class="Faculty">
-                  <label for="Faculty" class="form-label">Faculty</label>
-                  <input class="form-control" formControlName="Faculty" type="text" name="Faculty" id="Faculty" placeholder="Enter Your Faculty Name...">
-                </div>
+                @if(eventData?.type != 'RamadanIftar'){
+                  <div class="VisitorCount">
+                    <label for="VisitorCount" class="form-label">Number of Companions</label>
+                    <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Companions...">
+                  </div>
+                }
 
-                <!-- Department -->
-                <div class="Department">
-                  <label for="Department" class="form-label">Department</label>
-                  <input class="form-control" formControlName="Department" type="text" name="Department" id="Department" placeholder="Enter Your Department...">
-                </div>
+                @if(eventData?.type == 'RamadanIftar'){
+                  <!-- Faculty -->
+                  <div class="Faculty">
+                    <label for="Faculty" class="form-label">Faculty</label>
+                    <input class="form-control" formControlName="Faculty" type="text" name="Faculty" id="Faculty" placeholder="Enter Your Faculty Name...">
+                  </div>
 
-                <!-- Year -->
-                <div class="Year">
-                  <label for="Year" class="form-label">Year</label>
-                  <select formControlName="Year" name="Year" id="Year" class="form-select">
-                    <option value="الفرقة الأولى">الفرقة الأولى</option>
-                    <option value="الفرقة الثانية">الفرقة الثانية</option>
-                    <option value="الفرقة الثالثة">الفرقة الثالثة</option>
-                    <option value="الفرقة الرابعة">الفرقة الرابعة</option>
-                    <option value="خريج">خريج</option>
-                  </select>
-                </div>
+                  <!-- Department -->
+                  <div class="Department">
+                    <label for="Department" class="form-label">Department</label>
+                    <input class="form-control" formControlName="Department" type="text" name="Department" id="Department" placeholder="Enter Your Department...">
+                  </div>
+
+                  <!-- Year -->
+                  <div class="Year">
+                    <label for="Year" class="form-label">Year</label>
+                    <select formControlName="Year" name="Year" id="Year" class="form-select">
+                      <option value="الفرقة الأولى">الفرقة الأولى</option>
+                      <option value="الفرقة الثانية">الفرقة الثانية</option>
+                      <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                      <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                      <option value="خريج">خريج</option>
+                    </select>
+                  </div>
+
+                }
+
 
                 <!-- Check Data -->
                 <div class="text-center">
-                  <button class="btn main-btn" (click)="viewCheckOutData()"> Checkout </button>
+                  <button class="btn main-btn" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Checkout </button>
                 </div>
               </form>
             </div>
@@ -157,41 +163,87 @@
 
         </div>
 
-
         <!-- Check Data Before Payment -->
-        @if(show){
-          <div class="col-md-5">
-            <div class="summary p-3 shadow-lg border rounded-3 h-100 text-center">
-              <img src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo text-center" alt="ticketat">
+        <ng-template
+          #centerScroll
+          let-modal
+          class="modal fade"
+          id="exampleModalCenteredScrollable"
+          tabindex="-1"
+          aria-labelledby="exampleModalCenteredScrollableTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5
+                class="modal-title"
+                id="exampleModalCenteredScrollableTitle"
+              >
+                Checkout
+              </h5>
+              <button
+                type="button"
+                (click)="modal.close()"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="summary rounded-3 h-100">
 
-              <div class="d-flex flex-column align-items-start g-0 justify-content-between border p-3 mt-4">
-                <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
-                <p> Phone : <span class="main-color fw-medium">{{ userData?.mobile}}</span></p>
-                <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
-                @if(eventData?.type !== 'RamadanIftar'){
-                  <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount + 2}} Companion(s)</span></p>
-                }
+          <div class="text-center">
+            <img src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo" alt="ticketat">
+          </div>
 
-                <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
-                @if(checkoutData?.VisitorCount){
-                  <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
-                }
-                <div class="border border-2 shadow-sm w-100 p-2 mb-2 text-start rounded-3">
-                  @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
-                    <p class="m-0 mb-1"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-                    <p class="m-0 pb-2 border-bottom"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
-                  }
-                    <p class="m-0 text-center fs-4"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
-                </div>
+          <div class="d-flex flex-column align-items-start gap-0 mt-3 justify-content-between">
+            <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
+            <p> Phone : <span class="main-color fw-medium">{{ userData?.mobile}}</span></p>
+            <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
 
-                <!-- Submit Order -->
-                <div class="text-center w-100">
-                  <button class="btn main-btn w-100" (click)="submitCheckout()"> Confirm </button>
-                </div>
-              </div>
+            @if(eventData?.type == 'RamadanIftar'){
+              <p> Faculty : <span class="main-color fw-medium">{{ checkoutData?.Faculty}}</span></p>
+              <p> Department : <span class="main-color fw-medium">{{ checkoutData?.Department}}</span></p>
+              <p> Year : <span class="main-color fw-medium">{{ checkoutData?.Year}}</span></p>
+            }
+
+            @if(eventData?.type !== 'RamadanIftar'){
+              <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount }} + 2 Companion(s) </span></p>
+            }
+
+            <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
+
+            @if(checkoutData?.VisitorCount){
+              <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
+            }
+
+            <div class="w-100 pt-2 text-start rounded-3 border-top">
+              @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
+                <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
+                <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+              }
+                <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
             </div>
           </div>
-        }
+        </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              (click)="modal.close()"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+
+            <!-- Submit Order -->
+            <button type="button" class="btn btn-primary" (click)="submitCheckout()">
+              Confirm
+            </button>
+          </div>
+        </ng-template>
 
       </div>
     </div>

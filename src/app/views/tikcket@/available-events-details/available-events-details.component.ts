@@ -75,7 +75,7 @@ export class AvailableEventsDetailsComponent {
   }
 
   signUpUser:FormGroup = this._FormBuilder.group({
-    roleId:['e1867588-d877-4537-a250-cffe41fe0311'],
+    roleId:['147df052-372c-4942-ad75-9801142c44c6'],
     fullName:[null],
     mobile:[null],
     email:[null],
@@ -110,7 +110,7 @@ export class AvailableEventsDetailsComponent {
         localStorage.setItem('fullName', res.data.fullName)
         localStorage.setItem('token', res.data.accessToken)
         localStorage.setItem('refreshToken', res.data.refreshToken)
-        localStorage.setItem('roles', res.data.roles[0])
+        localStorage.setItem('role', res.data.roles[0])
       }
     })
   }

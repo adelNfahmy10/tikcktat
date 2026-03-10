@@ -61,9 +61,13 @@ export class EventService {
 
   // Checkout To Event
   checkoutEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Checkout/checkout`, body)
+    return this._HttpClient.post(`${environment.baseUrl}Bookings/event-checkout`, body)
   }
 
+  // Get User Checkout
+  getUserCheckout():Observable<any>{
+    return this._HttpClient.get(`${environment.baseUrl}Checkout/my-checkouts`)
+  }
 
   // ########################### Download Excel Sheets ###########################
   downloadAllEventOwners():Observable<any>{

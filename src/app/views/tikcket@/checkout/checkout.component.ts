@@ -1,11 +1,13 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
 import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
+import { PaymentService } from '@core/services/payment/payment.service';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import Choices from 'choices.js';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
@@ -35,60 +37,31 @@ export interface Category {
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, NgClass, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
-export class CheckoutComponent implements OnInit, AfterViewInit{
+export class CheckoutComponent implements OnInit{
   private readonly _AuthService = inject(AuthService)
+  private readonly _PaymentService = inject(PaymentService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _Router = inject(Router)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _EventService = inject(EventService)
+  private modalService = inject(NgbModal)
 
-  eventType:string | null = null
-  eventId:string | null = null
-  userData:any = {}
-  userId:string | null = localStorage.getItem('userId')
-  eventData:any = {}
   photoPreview: string | ArrayBuffer | null = null;
-  @ViewChild('phoneSelect') phoneSelect!: ElementRef;
+  eventId:string | null = null
+  eventType:string | null = null
+  userId:string | null = localStorage.getItem('userId')
+  userData:any = {}
+  eventData:any = {}
+  checkoutData:any = {}
+  subTotal:number = 0
+  total:number = 0
+  tax:number = 20
 
-  phones: string[] = [
-    '01012345678',
-    '01198765432',
-    '01234567890',
-    '01587654321',
-    '01056789012',
-    '01123456789',
-    '01298765432',
-    '01512349876',
-    '01087654321',
-    '01134567890',
-    '01256789012',
-    '01523456789',
-    '01098765432',
-    '01112345678',
-    '01287654321',
-    '01534567890',
-    '01023456789',
-    '01156789012',
-    '01212349876',
-    '01598765432'
-  ];
-
-  ngAfterViewInit(): void {
-    if(this.phoneSelect?.nativeElement){
-       new Choices(this.phoneSelect?.nativeElement, {
-        searchEnabled: true,      // تفعيل البحث
-        searchPlaceholderValue: 'Search...', // placeholder داخل البحث
-        // shouldSort: false,        // لو عايز يظهر بالترتيب اللي في الـ array
-        itemSelectText: '',       // يشيل النص الافتراضي عند اختيار عنصر
-      });
-    }
-
-  }
 
   ngOnInit(): void {
     this.getEventId()
@@ -98,11 +71,11 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
 
   checkoutForm:FormGroup = this._FormBuilder.group({
     EventId:[null, Validators.required],
-    Photo:[null, Validators.required],
+    Photo:[null],
     VisitorCount:[null],
-    Faculty:[null, Validators.required],
-    Department:[null, Validators.required],
-    Year:[null, Validators.required],
+    Faculty:[null],
+    Department:[null],
+    Year:[null],
   })
 
 
@@ -149,32 +122,26 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     }
   }
 
-  checkoutData:any = {}
-  subTotal:number = 0
-  total:number = 0
-  tax:number = 2.7% + 3
-  show:boolean = false
-
-  viewCheckOutData():void{
-    if( this.checkoutForm.valid ){
-      this.show = true
+  // Modal Check Data Logic
+  openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
+    if(this.userData.fullName && this.userData.mobile && this.userData.email){
+      this.modalService.open(content, options)
       this.checkoutData = this.checkoutForm.value
       let price  = this.eventData.price
       let companionPrice  = this.checkoutData?.VisitorCount * this.eventData.visitorFee
       this.subTotal = price + companionPrice
       // الضريبة 2.7% من الإجمالي + 23 ثابت
-      this.tax = (this.subTotal * 0.027) + 23;
+      this.tax = (this.subTotal * 0.027) + 20;
       // الإجمالي النهائي
       if(this.eventData.type != 'FunDayEvent' && this.eventData.type != 'RamadanIftar'){
         this.total = this.subTotal + this.tax;
       } else {
         this.total = this.subTotal
       }
-    } else {
-      this.show = false
     }
   }
 
+  // Checkout Logic
   submitCheckout(): void {
     // تأكد ان الـ eventId موجود
     if (!this.eventId) return;
@@ -186,12 +153,6 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     formValue.Price = this.total
 
     const formData = new FormData();
-    // أضف EventId
-    formData.append('EventId', this.eventId);
-
-    console.log(formValue);
-
-
     // أضف باقي الحقول
     Object.keys(formValue).forEach(key => {
       const value = formValue[key];
@@ -204,25 +165,22 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       }
     });
 
-
     // إرسال الفورم
     this._EventService.checkoutEvent(formData).subscribe({
       next: (res) => {
-        Swal.fire(res.msg, '', 'success').then(() => {
-          this.checkoutForm.reset();
-          this.photoPreview = null;
-          this._Router.navigate(['/home']);
-        });
+        window.location.href = res.data.checkoutUrl
       },
       error: (err) => {
         Swal.fire({
           icon: 'error',
-          title: err.error?.msg || 'Email Or Phone Already Existed'
+          title: err.error.msg
         });
       }
     });
   }
 
+
+  // Seating Layout Logic
   categories: Category[] = [];
   selectedSeats: Seat[] = [];
 
@@ -287,7 +245,4 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       this.selectedSeats.push(seat);
     }
   }
-
-
-
 }

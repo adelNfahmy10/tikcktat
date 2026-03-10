@@ -24,7 +24,7 @@
                         loading="lazy"
                         [src]="event?.imageUrl"
                         class="event-img w-100 h-100 object-fit-cover img-fluid rounded"
-                        alt="img-1"
+                        [alt]="event?.name "
                       />
                     } @else {
                       <img loading="lazy" class="event-img w-100 h-100 object-fit-cover img-fluid rounded" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="graduation party">
@@ -35,7 +35,7 @@
                       <div class="card-body">
                         <h5 class="card-title mb-2">{{event?.name}}</h5>
                         <p class="card-text party-details">
-                          Location : <span><a class="cr" [href]="event?.location" target="_blank">{{event?.id == '58267f5c-306e-486d-bbe6-448a4b56e72e' ? 'Wadi Degla Protectorate' : ''}}</a></span> <br>
+                          Location : <span><a class="cr" [href]="event?.location" target="_blank">{{event?.location}}</a></span> <br>
                           Date : <span> {{event?.date | date}} </span> <br>
                           Ticket Price: <span> {{event?.price | number}} EGP </span> <br>
                           @if(type !== 'RamadanIftar'){
@@ -57,6 +57,8 @@
                 </div>
               </div>
             </div>
+          } @empty {
+            <h2 class="text-center border p-3 rounded-3">No events available.</h2>
           }
         </div>
       </div>

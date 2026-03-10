@@ -57,24 +57,33 @@ export class SidebarComponent implements OnInit {
   }
 
   initMenu(): void {
-  const adminOnlyKeys = ['events', 'add-new-owner', 'add-event', 'all-view', 'owners'];
-  const companyOnlyKeys = ['user-events'];
 
-  this.menuItems = MENU_ITEMS.filter(item => {
-    // عناصر Admin فقط
-    if (adminOnlyKeys.includes(item.key) && this.role !== 'Admin') {
-      return false;
-    }
+    const adminOnlyKeys = ['add-event', 'all-view', 'add-new-owner', 'owners'];
+    const ownerOnlyKeys = ['organizer-events'];
+    const userOnlyKeys = ['my-bookings'];
 
-    // عناصر EventOwner فقط
-    if (companyOnlyKeys.includes(item.key) && this.role !== 'EventOwner') {
-      return false;
-    }
+    this.menuItems = MENU_ITEMS.filter(item => {
 
-    // كل العناصر التانية (زي terms-condition) تظهر للجميع
-    return true;
-  });
-}
+      // Admin only
+      if (adminOnlyKeys.includes(item.key)) {
+        return this.role === 'Admin';
+      }
+
+      // Event Owner only
+      if (ownerOnlyKeys.includes(item.key)) {
+        return this.role === 'EventOwner';
+      }
+
+      // User only
+      if (userOnlyKeys.includes(item.key)) {
+        return this.role === 'Visitor';
+      }
+
+      // باقي العناصر تظهر للجميع
+      return true;
+    });
+
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {

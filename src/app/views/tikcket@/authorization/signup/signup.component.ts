@@ -36,18 +36,20 @@ export class SignupComponent implements OnInit{
     this._RoleService.getAllRoles().subscribe({
       next:(res)=>{
         this.allRoles = res.data
+        console.log(this.allRoles);
       }
     })
   }
 
   submitRegisterForm():void{
     let data = this.registerForm.value
+    console.log(data);
 
     this._AuthService.register(data).subscribe({
       next:(res)=>{
-        this._ToastrService.success('Create Account Is Successfully')
+        this._ToastrService.success(res.msg || 'Create Account Is Successfully')
         this.registerForm.reset()
-        this._Router.navigate(['/login'])
+        this._Router.navigate(['/owners'])
       },
       error:(err)=>{
         this._ToastrService.error('Faild')

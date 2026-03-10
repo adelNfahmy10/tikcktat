@@ -90,9 +90,6 @@ export class AdminViewEventComponent implements OnInit{
 
     const start = (this.page - 1) * this.pageSize;
     this.paginatedData = this.filteredData.slice(start, start + this.pageSize);
-    console.log(total);
-    console.log(this.allEvents);
-
   }
 
   changePage(p: number) {

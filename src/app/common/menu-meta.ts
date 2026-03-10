@@ -65,6 +65,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/owners',
   },
   {
+    key: 'my-bookings',
+    label: 'My Bookings',
+    url: '/my-bookings',
+  },
+  {
     key: 'terms-condition',
     label: 'Ticketat Terms & Conditions',
     url: '/terms-condition',

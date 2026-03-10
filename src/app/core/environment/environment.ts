@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // baseUrl: 'https://api.ticketateg.com/api/',
-  baseUrl: 'https://eventsticket.runasp.net/api/'
+  baseUrl: 'https://api.ticketateg.com/api/',
+  // baseUrl: 'https://eventsticket.runasp.net/api/'
 };
 
 /*

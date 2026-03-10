@@ -1,0 +1,28 @@
+@import "../../../../../public/assets/scss/varibales";
+.user-events{
+  min-height: 100vh;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-icons {
+  display: inline-flex;
+  flex-direction: column;
+  margin-left: 6px;
+  font-size: 8px;
+  color: #ccc;
+}
+
+.sort-icons i.active {
+  color: $main-color;
+}
+.search{
+  width: 300px;
+}
+.btn-send-qr{
+  padding: 0;
+  padding-inline: 2px;
+}
