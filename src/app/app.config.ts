@@ -51,12 +51,11 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     importProvidersFrom(NgxSpinnerModule, BrowserAnimationsModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, inMemoryScrollingFeatures),
+    provideRouter(routes, withHashLocation(), inMemoryScrollingFeatures),
     provideStore(rootReducer, { metaReducers: [localStorageSyncReducer] }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(AuthenticationEffects, CalendarEffects),
     provideHttpClient(withFetch(), withInterceptors([headerInterceptor, loadingInterceptor])),
     provideToastr({}),
-
   ],
 }
