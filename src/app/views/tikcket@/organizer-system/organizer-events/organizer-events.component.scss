@@ -1,6 +1,5 @@
 @import "../../../../../../public/assets/scss/varibales";
-
-.user-events{
+.all-events{
   min-height: 100vh;
 }
 .sortable {
@@ -21,4 +20,7 @@
 }
 .search{
   width: 300px;
+}
+th{
+  font-size: 13px;
 }

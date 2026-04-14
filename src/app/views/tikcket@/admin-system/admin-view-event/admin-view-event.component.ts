@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
+import { UsersService } from '@core/services/users/users.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-admin-view-event',
@@ -13,21 +12,13 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin-view-event.component.html',
   styleUrl: './admin-view-event.component.scss'
 })
-export class AdminViewEventComponent implements OnInit{
-  private modalService = inject(NgbModal)
-  private readonly _FormBuilder = inject(FormBuilder)
-  private readonly _AuthService = inject(AuthService)
+export class AdminViewEventComponent{
   private readonly _EventService = inject(EventService)
-  private readonly _ToastrService = inject(ToastrService)
+  private readonly _UsersService = inject(UsersService)
 
-  allUsers:any[] = []
   allEvents:any[] = []
-
-  ngOnInit() {
-    this.getAllUsers()
-    this.getAllEvent()
-  }
-
+  allOwners: any[] = [];
+  eventsWithOwnerName: any[] = [];
 
   // table state
   searchText = '';
@@ -41,15 +32,58 @@ export class AdminViewEventComponent implements OnInit{
   filteredData:any[] = [];
   paginatedData: any[] = [];
 
+  ngOnInit() {
+    this.getAllOwners()
+    this.getAllEvent()
+  }
+
+  getAllEvent(): void {
+    this._EventService.getAllEvents().subscribe({
+      next: (res) => {
+        this.allEvents = res;
+
+        this.mergeData(); // مهم
+
+        this.filteredData = [...this.eventsWithOwnerName]; // 👈 مهم جدًا
+        this.updatePagination();
+      }
+    });
+  }
+
+  getAllOwners(): void {
+    this._UsersService.getOwners().subscribe(res => {
+      this.allOwners = res;
+
+      this.mergeData();
+
+      this.filteredData = [...this.eventsWithOwnerName];
+      this.updatePagination();
+    });
+  }
+
+  mergeData(): void {
+    if (!this.allEvents.length || !this.allOwners.length) return;
+
+    this.eventsWithOwnerName = this.allEvents.map(event => {
+
+      const owner = this.allOwners.find(o => o.uid === event.OwnerId);
+
+      return {
+        ...event,
+        ownerName: owner?.fullName || 'Unknown'
+      };
+    });
+  }
 
   // 🔍 Search
   applySearch() {
-    this.filteredData = this.allEvents.filter(item =>
+    this.filteredData = this.eventsWithOwnerName.filter(item =>
       Object.values(item)
         .join(' ')
         .toLowerCase()
         .includes(this.searchText.toLowerCase())
     );
+
     this.page = 1;
     this.updatePagination();
   }
@@ -98,69 +132,33 @@ export class AdminViewEventComponent implements OnInit{
     this.updatePagination();
   }
 
-  getAllUsers():void{
-    this._AuthService.getAllUsers().subscribe({
-      next:(res)=>{
-        this.allUsers = res.data
-      }
-    })
-  }
-
-  getAllEvent():void{
-    this._EventService.getAllAdminEvents().subscribe({
-      next:(res)=>{
-        this.allEvents = res.data
-        this.filteredData =[...this.allEvents]
-        this.updatePagination();
-      }
-    })
-  }
-
   downloadAllEvents(): void {
-    this._EventService.downloadGetAllEvents().subscribe({
-      next: (res: Blob) => {
-        const blob = new Blob([res], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
-        const url = window.URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'All Events.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+  if (!this.eventsWithOwnerName.length) return;
 
-        window.URL.revokeObjectURL(url);
-        console.log('Download started!');
-      },
-      error: (err) => {
-        console.error('Download failed', err);
-      }
-    });
-  }
+  // نخلي الداتا clean للـ Excel
+  const exportData = this.eventsWithOwnerName.map(event => ({
+    'Event Name': event.EventName,
+    'Owner Name': event.ownerName,
+    'Location Name': event.LocationName,
+    'Location Link': event.Location,
+    'Date': event.Date,
+    'Ticket Price': event.TicketPrice,
+    'Visitor Price': event.VisitorPrice,
+    'Ticket Count': event.TicketCount,
+    'Status': event.status
+  }));
 
-  assignForm:FormGroup = this._FormBuilder.group({
-    userId: [null, Validators.required],
-    eventId: [null, Validators.required]
-  })
+  // create worksheet
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-  submitAssignOwnerToEvent():void{
-    let data  = this.assignForm.value
+  // create workbook
+  const workbook = XLSX.utils.book_new();
 
-    this._EventService.assignOwnerToEvent(data).subscribe({
-      next:(res)=>{
-        this._ToastrService.success(res.msg)
-        this.assignForm.reset()
-        this.modalService.dismissAll()
-      },
-      error:(err)=>{
-        this._ToastrService.error(err.error.msg)
-      }
-    })
-  }
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Events');
 
-  open(content: TemplateRef<any>) {
-    this.modalService.open(content)
-  }
+  // download file
+  XLSX.writeFile(workbook, 'all-events.xlsx');
+}
+
 }

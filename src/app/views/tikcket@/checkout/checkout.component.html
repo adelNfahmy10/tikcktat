@@ -4,7 +4,7 @@
       <div class="row g-2">
         <div class="col-12">
           <div class="image-event">
-            <img [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" class="rounded-3" [alt]="eventData?.name">
+            <img [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" class="rounded-3" [alt]="eventData?.EventName">
           </div>
         </div>
 
@@ -16,21 +16,20 @@
                 Book Ticket
               </button>
             </li>
-            <!-- <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation">
               <button class="nav-link" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
                 type="button" role="tab" aria-controls="extra-services" aria-selected="false">
                 Add Companions
               </button>
-            </li> -->
+            </li>
           </ul>
 
           <div class="tab-content py-0" id="ticketTabContent">
-            <!-- تاب الحجز الكامل -->
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
                 <h1 class="fw-bold m-0">Checkout Event</h1>
 
-                @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
+                @if(eventData.type != 'FunDayEvent'){
                   <div class="border-bottom pb-2 note">
                     <p class="m-0 mb-1">- Each reservation includes (1 student) and (2 accompanying guests).</p>
                     <p class="m-0 mb-1">- Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.</p>
@@ -44,13 +43,13 @@
                       type="file"
                       id="Photo"
                       accept="image/*"
-                      (change)="onPhotoChange($event)"
+                      (change)="onImageChange($event)"
                     >
 
                     @if (photoPreview) {
                       <div class="text-center text-md-start">
-                        <!-- Preview -->
                         <img
+                          loading="lazy"
                           [src]="photoPreview"
                           alt="preview"
                           style="width:200px; margin-top:10px"
@@ -60,51 +59,19 @@
                   </div>
                 }
 
-                @if(eventData?.type != 'RamadanIftar'){
-                  <div class="VisitorCount">
-                    <label for="VisitorCount" class="form-label">Number of Companions</label>
-                    <input class="form-control" formControlName="VisitorCount" type="number" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Companions...">
-                  </div>
-                }
+                <div class="VisitorCount">
+                  <label for="VisitorCount" class="form-label">Visitor Count</label>
+                  <input class="form-control" type="number"  formControlName="VisitorCount" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Visitors...">
+                </div>
 
-                @if(eventData?.type == 'RamadanIftar'){
-                  <!-- Faculty -->
-                  <div class="Faculty">
-                    <label for="Faculty" class="form-label">Faculty</label>
-                    <input class="form-control" formControlName="Faculty" type="text" name="Faculty" id="Faculty" placeholder="Enter Your Faculty Name...">
-                  </div>
-
-                  <!-- Department -->
-                  <div class="Department">
-                    <label for="Department" class="form-label">Department</label>
-                    <input class="form-control" formControlName="Department" type="text" name="Department" id="Department" placeholder="Enter Your Department...">
-                  </div>
-
-                  <!-- Year -->
-                  <div class="Year">
-                    <label for="Year" class="form-label">Year</label>
-                    <select formControlName="Year" name="Year" id="Year" class="form-select">
-                      <option value="الفرقة الأولى">الفرقة الأولى</option>
-                      <option value="الفرقة الثانية">الفرقة الثانية</option>
-                      <option value="الفرقة الثالثة">الفرقة الثالثة</option>
-                      <option value="الفرقة الرابعة">الفرقة الرابعة</option>
-                      <option value="خريج">خريج</option>
-                    </select>
-                  </div>
-
-                }
-
-
-                <!-- Check Data -->
                 <div class="text-center">
-                  <button class="btn main-btn" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Checkout </button>
+                  <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Checkout </button>
                 </div>
               </form>
             </div>
 
-            <!-- تاب المرافق الإضافية -->
             <div class="tab-pane fade" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
-              <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3" [formGroup]="checkoutForm">
+              <form class="d-flex flex-column gap-2 p-3 shadow-lg border rounded-3">
                 <h3 class="m-0">Add Companions</h3>
 
                 <div class="companion">
@@ -163,7 +130,6 @@
 
         </div>
 
-        <!-- Check Data Before Payment -->
         <ng-template
           #centerScroll
           let-modal
@@ -198,32 +164,40 @@
 
           <div class="d-flex flex-column align-items-start gap-0 mt-3 justify-content-between">
             <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
-            <p> Phone : <span class="main-color fw-medium">{{ userData?.mobile}}</span></p>
+            <p> Phone : <span class="main-color fw-medium">{{ userData?.phone}}</span></p>
             <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
-
-            @if(eventData?.type == 'RamadanIftar'){
-              <p> Faculty : <span class="main-color fw-medium">{{ checkoutData?.Faculty}}</span></p>
-              <p> Department : <span class="main-color fw-medium">{{ checkoutData?.Department}}</span></p>
-              <p> Year : <span class="main-color fw-medium">{{ checkoutData?.Year}}</span></p>
-            }
-
-            @if(eventData?.type !== 'RamadanIftar'){
-              <p> companions : <span class="main-color fw-medium">{{ checkoutData?.VisitorCount }} + 2 Companion(s) </span></p>
-            }
-
-            <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.price | number}} EGP</span></p>
-
-            @if(checkoutData?.VisitorCount){
-              <p> companion Price : <span class="main-color fw-medium">{{ eventData?.visitorFee | number}} EGP</span> </p>
+            <p> companions :
+              <span class="main-color fw-medium">
+                @if(checkoutData?.VisitorCount){
+                  {{checkoutData?.VisitorCount}} +
+                }
+                2 Companion(s)
+              </span>
+            </p>
+            <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.TicketPrice | number}} EGP</span></p>
+            @if(checkoutData?.VisitorCount && checkoutData.VisitorCount > 0){
+              <p> Visitor Price : <span class="main-color fw-medium">{{ eventData?.VisitorPrice | number}} EGP</span> </p>
             }
 
             <div class="w-100 pt-2 text-start rounded-3 border-top">
-              @if(eventData.type != 'FunDayEvent' && eventData.type != 'RamadanIftar'){
-                <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-                <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
-              }
-                <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+              <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
+              <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+              <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+              <p class="text-center fs-3"><a href="https://ipn.eg/S/anfahmy2000/instapay/5fLUFC" target="_blank">Pay Now <i class="fa-solid fa-up-right-from-square"></i></a></p>
             </div>
+
+            <small>
+              Transaction reference must be exactly 12 digits
+            </small>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Transaction Reference"
+              maxlength="12"
+              [(ngModel)]="transactionRef"
+              name="transactionRef"
+              inputmode="numeric"
+            />
           </div>
         </div>
             </div>
@@ -238,8 +212,12 @@
               Close
             </button>
 
-            <!-- Submit Order -->
-            <button type="button" class="btn btn-primary" (click)="submitCheckout()">
+             <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="transactionRef.length !== 12"
+              (click)="submitCheckout()"
+            >
               Confirm
             </button>
           </div>

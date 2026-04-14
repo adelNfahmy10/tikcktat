@@ -3,7 +3,6 @@
     <div class="bg-white rounded-3 p-3 shadow-lg">
       <h1 class="fw-bold">All Events</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
-        <!-- Search -->
         <div class="search">
           <input
             type="text"
@@ -14,9 +13,8 @@
           />
         </div>
 
-        <!-- Download Table XSL -->
         <div class="download d-flex align-items-center gap-2">
-          <button class="btn btn-outline-primary" (click)="open(content)">Assign Owner</button>
+          <!-- <button class="btn btn-outline-primary" (click)="open(content)">Assign Owner</button> -->
           <button class="btn btn-outline-primary" (click)="downloadAllEvents()">Download <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
@@ -41,113 +39,97 @@
                 </div>
               </th>
 
-              <th (click)="sort('name')" class="sortable">
+              <th (click)="sort('EventName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Event Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'name' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'name' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('location')" class="sortable">
+              <th (click)="sort('LocationName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Location</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'LocationName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'LocationName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('price')" class="sortable">
+              <th (click)="sort('TicketPrice')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Price</span>
+                  <span>Ticket Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'TicketPrice' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'TicketPrice' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('visitorFee')" class="sortable">
+              <th (click)="sort('VisitorPrice')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Companion</span>
+                  <span>Visitor Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'VisitorPrice' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'VisitorPrice' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('availableNumberOfVisitors')" class="sortable">
+              <th (click)="sort('TicketCount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Bookings</span>
+                  <span>Ticket Count</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'availableNumberOfVisitors' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'TicketCount' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'availableNumberOfVisitors' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'TicketCount' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('totalVisitorsCount')" class="sortable">
+              <th (click)="sort('ticketAvailable')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Visitor</span>
+                  <span>Ticket Available</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'ticketAvailable' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('totalAmount')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Total</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'ticketAvailable' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -169,17 +151,17 @@
                 </div>
               </th>
 
-              <th (click)="sort('active')" class="sortable">
+              <th (click)="sort('status')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -199,21 +181,24 @@
                 <td>{{ $index + 1 }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2 w-100">
-                    <img [src]="event?.imageUrl" width="50" class="rounded" [alt]="event?.name" />
+                    <img [src]="event?.Image" width="50" class="rounded" [alt]="event?.EventName" />
                     <h6 class="m-0 w-100 text-start" >
-                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event?.eventOwnerName || 'Unknown' }}</span>  <br>
-                      {{ event?.name }}
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event?.ownerName || 'Unknown' }}</span>  <br>
+                      {{ event?.EventName }}
                     </h6>
                   </div>
                 </td>
-                <td>{{ event?.location }}</td>
-                <td>{{ event?.price | number }} EGP</td>
-                <td>{{ event?.visitorFee | number }} EGP</td>
-                <td>{{ event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors }} Tickets</td>
-                <td>{{ event?.totalVisitorsCount }} Companion</td>
-                <td>{{ event?.price * (event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors)  | number }} EGP</td>
                 <td>
-                    {{ event?.date | date:'dd/MM/yyyy' }}
+                  <a [href]="event?.Location" target="_blank">
+                    {{ event?.LocationName }}
+                  </a>
+                </td>
+                <td>{{ event?.TicketPrice | number }} EGP</td>
+                <td>{{ event?.VisitorPrice | number }} EGP</td>
+                <td>{{ event?.TicketCount }} Tickets</td>
+                <td>{{ event?.TicketCount + event?.ticketAvailable || event?.TicketCount }} Companion</td>
+                <td>
+                    {{ event?.Date | date:'dd/MM/yyyy' }}
                 </td>
                 <td>
                   <span
@@ -226,7 +211,7 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.type + '/' + event?.id"></i>
+                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.Type + '/' + event?.id"></i>
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>
                   </div>
                 </td>
@@ -236,7 +221,6 @@
         </table>
       </div>
 
-      <!-- Pagination -->
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
@@ -257,7 +241,7 @@
   </div>
 </section>
 
-
+<!--
 <ng-template
   #content
   let-modal
@@ -315,4 +299,4 @@
       </button>
     </div>
   </div>
-</ng-template>
+</ng-template> -->

@@ -39,7 +39,7 @@ type FullScreenTypes = {
 export class TopbarComponent {
   notificationList = notificationsData
   element!: FullScreenTypes
-  token:string | null = localStorage.getItem('token')
+  userId:string | null = localStorage.getItem('userId')
   fullName:string | null = localStorage.getItem('fullName')
 
   @Output() settingsButtonClicked = new EventEmitter()

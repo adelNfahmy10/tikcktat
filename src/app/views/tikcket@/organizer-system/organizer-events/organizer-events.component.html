@@ -1,9 +1,8 @@
-<section class="user-events" id="user-events">
+<section class="all-events" id="all-events">
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
-      <h1 class="fw-bold">My Events</h1>
+      <h1 class="fw-bold">All Events</h1>
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
-        <!-- Search -->
         <div class="search">
           <input
             type="text"
@@ -14,9 +13,8 @@
           />
         </div>
 
-        <!-- Download Table XSL -->
-        <div class="download">
-          <button class="btn btn-outline-primary" (click)="downloadOwnerEvent()">Download   <i class="fa-solid fa-file-csv"></i></button>
+        <div class="download d-flex align-items-center gap-2">
+          <button class="btn btn-outline-primary">Download <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -40,103 +38,103 @@
                 </div>
               </th>
 
-              <th (click)="sort('eventName')" class="sortable">
+              <th (click)="sort('EventName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Event Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('location')" class="sortable">
+              <th (click)="sort('LocationName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Location</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'LocationName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'location' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'LocationName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('price')" class="sortable">
+              <th (click)="sort('TicketPrice')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Price</span>
+                  <span>Ticket Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'TicketPrice' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'price' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'TicketPrice' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('visitorFee')" class="sortable">
+              <th (click)="sort('VisitorPrice')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Companion</span>
+                  <span>Visitor Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'VisitorPrice' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'visitorFee' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'VisitorPrice' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('bookingCount')" class="sortable">
+              <th (click)="sort('TicketCount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Bookings</span>
+                  <span>Ticket Count</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'TicketCount' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'bookingCount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'TicketCount' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('totalVisitorsCount')" class="sortable">
+              <th (click)="sort('ticketAvailable')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Visitor</span>
+                  <span>Ticket Available</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'ticketAvailable' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalVisitorsCount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'ticketAvailable' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-               <th (click)="sort('date')" class="sortable">
+              <th (click)="sort('date')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Date</span>
                   <span class="sort-icons">
@@ -152,33 +150,17 @@
                 </div>
               </th>
 
-              <th (click)="sort('totalAmount')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Total</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('active')" class="sortable">
+              <th (click)="sort('status')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -198,34 +180,37 @@
                 <td>{{ $index + 1 }}</td>
                 <td>
                   <div class="d-flex align-items-center gap-2 w-100">
-                    <img [src]="event?.imageUrl" width="50" class="rounded" [alt]="event?.name" />
+                    <img [src]="event?.Image" width="50" class="rounded" [alt]="event?.EventName" />
                     <h6 class="m-0 w-100 text-start" >
-                      <span class="mb-1 d-inline-block fw-bold main-color">{{ event?.eventOwnerName ? event?.eventOwnerName : fullName || 'Unknown' }}</span>  <br>
-                      {{ event?.name }}
+                      <span class="mb-1 d-inline-block fw-bold main-color">{{ fullName || 'Unknown' }}</span>  <br>
+                      {{ event?.EventName }}
                     </h6>
                   </div>
                 </td>
-                <td>{{ event?.location }}</td>
-                <td>{{ event?.price | number }} EGP</td>
-                <td>{{ event?.visitorFee | number }} EGP</td>
-                <td>{{ event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors }} Tickets</td>
-                <td>{{ event?.totalVisitorsCount }} Companion</td>
                 <td>
-                  {{ event?.date | date:'dd/MM/yyyy' }}
+                  <a [href]="event?.Location" target="_blank">
+                    {{ event?.LocationName }}
+                  </a>
                 </td>
-                <td>{{ event?.price * (event?.numberOfVisitorsAllowed - event?.availableNumberOfVisitors)  | number }} EGP</td>
+                <td>{{ event?.TicketPrice | number }} EGP</td>
+                <td>{{ event?.VisitorPrice | number }} EGP</td>
+                <td>{{ event?.TicketCount }} Tickets</td>
+                <td>{{ event?.TicketCount + event?.ticketAvailable || event?.TicketCount }} Companion</td>
+                <td>
+                    {{ event?.Date | date:'dd/MM/yyyy' }}
+                </td>
                 <td>
                   <span
                     class="badge"
                     [class.bg-success]="event?.status === 'Active'"
                     [class.bg-danger]="event?.status !== 'Active'"
                   >
-                    {{ event?.status || '---' }}
+                    {{ event?.status }}
                   </span>
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
-                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.type + '/' + event?.id"></i>
+                    <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.Type + '/' + event?.id"></i>
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>
                   </div>
                 </td>
@@ -235,23 +220,82 @@
         </table>
       </div>
 
-      <!-- Pagination -->
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="page === 1">
-          <a class="page-link cr" (click)="changePage(page - 1)">Prev</a>
+          <a class="page-link" (click)="changePage(page - 1)">Prev</a>
         </li>
 
         @for (p of totalPages; track $index) {
           <li class="page-item" [class.active]="p === page">
-            <a class="page-link cr" (click)="changePage(p)">{{ p }}</a>
+            <a class="page-link" (click)="changePage(p)">{{ p }}</a>
           </li>
         }
 
         <li class="page-item" [class.disabled]="page === totalPages.length">
-          <a class="page-link cr" (click)="changePage(page + 1)">Next</a>
+          <a class="page-link" (click)="changePage(page + 1)">Next</a>
         </li>
       </ul>
     </div>
 
   </div>
 </section>
+
+<!--
+<ng-template
+  #content
+  let-modal
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Assign Owner To Event</h5>
+      <button
+        (click)="modal.close('click')"
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form class="row g-3" [formGroup]="assignForm">
+        <div class="Owner col-md-6">
+          <label for="Owner" class="form-label">Owner</label>
+          <select class="form-select" formControlName="userId" name="Owner" id="Owner">
+            <option value="" selected disabled>Choose Event Owner</option>
+            @for (user of allUsers; track $index) {
+              <option [value]="user.id">{{user.fullName}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="Events col-md-6">
+          <label for="Events" class="form-label">Events</label>
+          <select class="form-select" formControlName="eventId" name="Events" id="Events">
+            <option value="" selected disabled>Choose Event</option>
+            @for (event of allEvents; track $index) {
+              <option [value]="event?.id">{{event?.name}}</option>
+            }
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        (click)="modal.close('click')"
+        type="button"
+        class="btn btn-secondary"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button type="button" class="btn btn-primary" (click)="submitAssignOwnerToEvent()">
+        Save changes
+      </button>
+    </div>
+  </div>
+</ng-template> -->

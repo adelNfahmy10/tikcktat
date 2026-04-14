@@ -17,81 +17,74 @@
         </div>
 
         <div class="px-4">
-          <form class="authentication-form" [formGroup]="registerForm" (ngSubmit)="submitRegisterForm()">
+          <form class="authentication-form" [formGroup]="registerForm" (ngSubmit)="submitRegisterForm()" >
+            <!-- ROLE -->
             <div class="mb-3">
               <label class="form-label" for="role">Role</label>
-              <select class="form-control bg-light bg-opacity-50 border-light py-2" name="role" id="role" formControlName="roleId">
-                <option value="" selected disabled>Choose Role</option>
+
+              <select class="form-control bg-light bg-opacity-50 border-light py-2" id="role" formControlName="role">
+                <option value="" disabled>Choose Role</option>
                 @for (role of allRoles; track $index) {
-                  <option [value]="role.id">{{role.name}}</option>
+                  <option [value]="role">{{ role }}</option>
                 }
               </select>
             </div>
 
+            <!-- FULL NAME -->
             <div class="mb-3">
               <label class="form-label" for="name">Name</label>
               <input
-                type="name"
-                formControlName="fullName"
+                type="text"
                 id="name"
-                name="name"
+                formControlName="fullName"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
                 placeholder="Enter your full name"
               />
             </div>
 
+            <!-- PHONE -->
             <div class="mb-3">
               <label class="form-label" for="phone">Phone</label>
               <input
                 type="tel"
-                formControlName="mobile"
                 id="phone"
-                name="phone"
+                formControlName="phone"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
                 placeholder="Enter your phone"
               />
             </div>
 
+            <!-- EMAIL -->
             <div class="mb-3">
               <label class="form-label" for="email">Email</label>
               <input
                 type="email"
-                formControlName="email"
                 id="email"
-                name="email"
+                formControlName="email"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
                 placeholder="Enter your email"
               />
             </div>
 
+            <!-- PASSWORD -->
             <div class="mb-3">
               <label class="form-label" for="password">Password</label>
               <input
                 type="password"
-                formControlName="password"
                 id="password"
+                formControlName="password"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
                 placeholder="Enter your password"
               />
             </div>
-            <!-- <div class="mb-3">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="checkbox-signin"
-                />
-                <label class="form-check-label" for="checkbox-signin"
-                  >I accept Terms and Condition</label
-                >
-              </div>
-            </div> -->
 
+            <!-- SUBMIT -->
             <div class="mb-1 text-center d-grid">
               <button class="btn main-btn py-2" type="submit">
                 Create Account
               </button>
             </div>
+
           </form>
 
           <!-- <p class="mb-0 mt-2 text-center">

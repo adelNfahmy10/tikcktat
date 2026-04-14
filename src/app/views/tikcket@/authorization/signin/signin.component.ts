@@ -23,26 +23,39 @@ export class SigninComponent {
   private readonly _ToastrService = inject(ToastrService)
   private readonly _Router = inject(Router)
 
-  loginForm:FormGroup = this._FormBuilder.group({
-    username:[null,[Validators.required,Validators.email]],
-    password:[null,[Validators.required,Validators.minLength(6)]],
-  })
+  loginForm: FormGroup = this._FormBuilder.group({
+    email: [null, [Validators.required, Validators.email]],
+    password: [null, [Validators.required, Validators.minLength(6)]],
+  });
 
-  submitLogin():void{
-    let data = this.loginForm.value
-    console.log(data);
-    this._AuthService.login(data).subscribe({
-      next:(res)=>{
-        localStorage.setItem('token', res.data.accessToken)
-        localStorage.setItem('refreshToken', res.data.refreshToken)
-        localStorage.setItem('userId', res.data.userId)
-        localStorage.setItem('fullName', res.data.fullName)
-        localStorage.setItem('role', res.data.roles[0])
-        this._ToastrService.success('Login Successfully..!')
+  submitLogin(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+
+    this._AuthService.login(email!, password!).subscribe({
+      next: (res: any) => {
+        this._ToastrService.success('Login Successfully');
+        localStorage.setItem('userId', res.uid);
+        localStorage.setItem('fullName', res.fullName);
+        localStorage.setItem('email', res.email);
+        localStorage.setItem('phone', res.phone);
+        localStorage.setItem('role', res.role);
         this._Router.navigate(['/home']).then(() => {
           window.location.reload();
         });
+      },
+      error: (err) => {
+        console.error(err);
+        if (err.code === 'auth/invalid-credential') {
+          this._ToastrService.error('Invalid email or password');
+        } else {
+          this._ToastrService.error('Login failed');
+        }
       }
-    })
+    });
   }
 }

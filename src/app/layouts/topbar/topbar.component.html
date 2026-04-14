@@ -146,7 +146,7 @@
               </button>
             </div> -->
 
-            @if (!token) {
+            @if (!userId) {
               <div class="topbar-item">
                 <button
                   type="button"
@@ -158,7 +158,7 @@
                 </button>
               </div>
             }
-            @if(token){
+            @if(userId){
               <div ngbDropdown class="topbar-item">
                 <a
                   ngbDropdownToggle

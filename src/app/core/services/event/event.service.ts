@@ -1,96 +1,177 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { environment } from '@core/environment/environment';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, addDoc, collectionData, query, where, docData } from '@angular/fire/firestore';
+import { doc, increment, updateDoc } from 'firebase/firestore';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  private readonly _HttpClient = inject(HttpClient)
+  private firestore = inject(Firestore);
 
-  // Get All Event ((Admin))
-  getAllAdminEvents():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents`)
+  // 🔥 Add Event
+  createEvent(event: any) {
+    const eventsRef = collection(this.firestore, 'events');
+
+    return from(addDoc(eventsRef, event));
   }
 
-  // Get All Event ((Public))
-  getAllEvents(eventType?:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents?type=${eventType}`)
+  // 🔥 Update Event Tickets (بعد الحجز)
+  updateEventTickets(eventId: string, bookedTickets: number) {
+
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+
+    return from(
+      updateDoc(eventRef, {
+        bookingCount: increment(bookedTickets),
+        ticketAvailable: increment(-bookedTickets)
+      })
+    );
   }
 
-  // Get Event By Id
-  getEventById(id:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetEventById/${id}`)
+  // 🔥 Get all events
+  getAllEvents(): Observable<any[]> {
+    const eventsRef = collection(this.firestore, 'events');
+
+    return collectionData(eventsRef, { idField: 'id' });
   }
 
-  // Get Event Attendees
-  getEventAttendees(eventId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/${eventId}/attendees`)
+  // 🔥 Get event by ID
+  getEventById(id: string): Observable<any> {
+
+    const eventDocRef = doc(this.firestore, `events/${id}`);
+
+    return docData(eventDocRef, { idField: 'id' });
   }
 
-  // Get All Owners
-  getAllEventsOwner():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEventOwners`)
+  // 🔥 Get events By Type
+  getEventsByType(type: string) {
+    const eventsRef = collection(this.firestore, 'events');
+
+    const q = query(
+      eventsRef,
+      where('Type', '==', type)
+    );
+
+    return collectionData(q, { idField: 'id' });
   }
 
-  // Get Event By Owner
-  GetEventsByOwner(userId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetEventsByOwner/${userId}`)
+  // 🔥 Get events by owner
+  getEventsByOwner(ownerId: string): Observable<any[]> {
+    const eventsRef = collection(this.firestore, 'events');
+
+    const q = query(
+      eventsRef,
+      where('OwnerId', '==', ownerId)
+    );
+
+    return collectionData(q, { idField: 'id' });
   }
 
-  // Create Event
-  createEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Events/CreateNewEvent`, body)
+  // 🔥 Upload Image Urls
+  uploadImage(file: File): Promise<string> {
+    const formData = new FormData();
+
+    formData.append('file', file);
+    formData.append('upload_preset', 'ticketat_upload');
+
+    return fetch(
+      'https://api.cloudinary.com/v1_1/dgaxqy6qf/image/upload',
+      {
+        method: 'POST',
+        body: formData
+      }
+    )
+      .then(res => res.json())
+      .then(data => data.secure_url);
   }
 
-  // Update Event
-  updateEvent(body:any):Observable<any>{
-    return this._HttpClient.put(`${environment.baseUrl}Events/UpdateEvent`, body)
-  }
 
-  // Delete Event
-  deleteEvent(id:any):Observable<any>{
-    return this._HttpClient.delete(`${environment.baseUrl}Events/DeleteEvent/${id}`)
-  }
 
-  // Assign Owner To Event
-  assignOwnerToEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Events/AssignEventToOwner`, body)
-  }
+  // private readonly _HttpClient = inject(HttpClient)
 
-  // Checkout To Event
-  checkoutEvent(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Bookings/event-checkout`, body)
-  }
+  // // Get All Event ((Admin))
+  // getAllAdminEvents():Observable<any>{
+  //   return this._HttpClient.get(` Events/GetAllEvents`)
+  // }
 
-  // Get User Checkout
-  getUserCheckout():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Checkout/my-checkouts`)
-  }
+  // // Get All Event ((Public))
+  // getAllEvents(eventType?:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/GetAllEvents?type=${eventType}`)
+  // }
 
-  // ########################### Download Excel Sheets ###########################
-  downloadAllEventOwners():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEventOwners/download-excel`, {
-      responseType: 'blob'
-    })
-  }
+  // // Get Event By Id
+  // getEventById(id:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/GetEventById/${id}`)
+  // }
 
-  downloadGetAllEvents():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetAllEvents/download-excel`, {
-      responseType: 'blob'
-    })
-  }
+  // // Get Event Attendees
+  // getEventAttendees(eventId:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/${eventId}/attendees`)
+  // }
 
-  downloadEventAttendees(eventId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/${eventId}/attendees/download-excel`, {
-      responseType: 'blob'
-    })
-  }
+  // // Get All Owners
+  // getAllEventsOwner():Observable<any>{
+  //   return this._HttpClient.get(` Events/GetAllEventOwners`)
+  // }
 
-  downloadEventsByOwner(userId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Events/GetEventsByOwner/download-excel/${userId}`, {
-      responseType: 'blob'
-    })
-  }
+  // // Get Event By Owner
+  // GetEventsByOwner(userId:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/GetEventsByOwner/${userId}`)
+  // }
+
+  // // Create Event
+  // createEvent(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Events/CreateNewEvent`, body)
+  // }
+
+  // // Update Event
+  // updateEvent(body:any):Observable<any>{
+  //   return this._HttpClient.put(` Events/UpdateEvent`, body)
+  // }
+
+  // // Delete Event
+  // deleteEvent(id:any):Observable<any>{
+  //   return this._HttpClient.delete(` Events/DeleteEvent/${id}`)
+  // }
+
+  // // Assign Owner To Event
+  // assignOwnerToEvent(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Events/AssignEventToOwner`, body)
+  // }
+
+  // // Checkout To Event
+  // checkoutEvent(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Bookings/event-checkout`, body)
+  // }
+
+  // // Get User Checkout
+  // getUserCheckout():Observable<any>{
+  //   return this._HttpClient.get(` Checkout/my-checkouts`)
+  // }
+
+  // // ########################### Download Excel Sheets ###########################
+  // downloadAllEventOwners():Observable<any>{
+  //   return this._HttpClient.get(` Events/GetAllEventOwners/download-excel`, {
+  //     responseType: 'blob'
+  //   })
+  // }
+
+  // downloadGetAllEvents():Observable<any>{
+  //   return this._HttpClient.get(` Events/GetAllEvents/download-excel`, {
+  //     responseType: 'blob'
+  //   })
+  // }
+
+  // downloadEventAttendees(eventId:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/${eventId}/attendees/download-excel`, {
+  //     responseType: 'blob'
+  //   })
+  // }
+
+  // downloadEventsByOwner(userId:any):Observable<any>{
+  //   return this._HttpClient.get(` Events/GetEventsByOwner/download-excel/${userId}`, {
+  //     responseType: 'blob'
+  //   })
+  // }
 }

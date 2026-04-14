@@ -11,26 +11,26 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './resetuserpassword.component.scss'
 })
 export class ResetuserpasswordComponent {
-  private readonly _FormBuilder = inject(FormBuilder)
-  private readonly _AuthService = inject(AuthService)
-  private readonly _ToastrService = inject(ToastrService)
-  private readonly _Router = inject(Router)
+  // private readonly _FormBuilder = inject(FormBuilder)
+  // private readonly _AuthService = inject(AuthService)
+  // private readonly _ToastrService = inject(ToastrService)
+  // private readonly _Router = inject(Router)
 
-  resetForm:FormGroup = this._FormBuilder.group({
-    userId: [''],
-    oldPassword: [''],
-    newPassword: [''],
-  })
+  // resetForm:FormGroup = this._FormBuilder.group({
+  //   userId: [''],
+  //   oldPassword: [''],
+  //   newPassword: [''],
+  // })
 
-  submitReset(): void {
-    let data = this.resetForm.value
-    data.userId = localStorage.getItem('userId')
-    console.log(data);
-    this._AuthService.changePassword(data).subscribe({
-      next:(res)=>{
-        this._ToastrService.success(res.msg)
-        this._Router.navigate(['/home'])
-      }
-    })
-  }
+  // submitReset(): void {
+  //   let data = this.resetForm.value
+  //   data.userId = localStorage.getItem('userId')
+  //   console.log(data);
+  //   this._AuthService.changePassword(data).subscribe({
+  //     next:(res)=>{
+  //       this._ToastrService.success(res.msg)
+  //       this._Router.navigate(['/home'])
+  //     }
+  //   })
+  // }
 }

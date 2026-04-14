@@ -1,7 +1,7 @@
 <section class="checkout" id="checkout">
   <div class="container-fluid">
     <div class="rounded-3 p-3 shadow-lg">
-      <form class="row p-2 shadow-lg rounded-3" [formGroup]="eventForm" (ngSubmit)="submitCheckout()">
+      <form class="row p-2 shadow-lg rounded-3" [formGroup]="eventForm">
         <div class="col-12">
           <h1 class="main-color fw-bold">New Event</h1>
         </div>
@@ -34,50 +34,51 @@
         <div class="col-md-6">
 
           <div class="row g-2">
-            <!-- Event Owners -->
             <div class="col-md-6">
               <div class="Owner">
                 <label for="Owner" class="form-label">Event Owner</label>
-                <select class="form-select" name="Owner" id="Owner" formControlName="Owner">
+                <select class="form-select" name="Owner" id="Owner" formControlName="OwnerId">
                   <option value="" selected disabled>Choose Event Owner</option>
-                  @for (user of allUsers; track $index) {
-                    <option [value]="user.id">{{user.fullName}}</option>
+                  @for (owner of allOwners; track $index) {
+                    <option [value]="owner.uid">{{owner.fullName}}</option>
                   }
                 </select>
               </div>
             </div>
 
-            <!-- Event Type -->
             <div class="col-md-6">
                <div class="Type">
                 <label for="Type" class="form-label">Event Type</label>
                 <select class="form-select" name="Type" id="Type" formControlName="Type">
                   <option value="" selected disabled>Choose Event Type</option>
-                  <option value="GraduationParty">Graduation</option>
-                  <option value="FunDayEvent">Funday</option>
+                  <option value="Graduation">Graduation</option>
+                  <option value="Funday">Funday</option>
                   <option value="Conferences">Conference</option>
-                  <option value="RamadanIftar">RamadanIftar</option>
                 </select>
               </div>
             </div>
 
-            <!-- Event Name -->
-            <div class="col-md-6">
+            <div class="col-12">
               <div class="EventName">
                 <label for="EventName" class="form-label">Event Name</label>
-                <input class="form-control" formControlName="Name" name="EventName" id="EventName">
+                <input class="form-control" formControlName="EventName" name="EventName" id="EventName">
               </div>
             </div>
 
-            <!-- Event Location -->
             <div class="col-md-6">
               <div class="Location">
-                <label for="Location" class="form-label">Location</label>
-                <input class="form-control" formControlName="Location" type="text" name="Location" id="Location" placeholder="Enter Event Location...">
+                <label for="Location" class="form-label">Location Link</label>
+                <input class="form-control" formControlName="Location" type="text" name="Location" id="Location" placeholder="Enter Event Location Link...">
               </div>
             </div>
 
-            <!-- Event Date -->
+            <div class="col-md-6">
+              <div class="LocationNName">
+                <label for="LocationName" class="form-label">Location Name</label>
+                <input class="form-control" formControlName="LocationName" type="text" name="LocationName" id="LocationName" placeholder="Enter Event Location Name...">
+              </div>
+            </div>
+
             <div class="col-md-6">
               <div class="Date">
                 <label for="Date" class="form-label">Date</label>
@@ -86,39 +87,27 @@
             </div>
 
 
-            <!-- Event NumberOfVisitorsAllowed -->
             <div class="col-md-6">
-              <div class="NumberOfVisitorsAllowed">
-                <label for="NumberOfVisitorsAllowed" class="form-label">Tickets Limit</label>
-                <input class="form-control" formControlName="NumberOfVisitorsAllowed" type="number" name="NumberOfVisitorsAllowed" id="NumberOfVisitorsAllowed" placeholder="Enter Your Visitor Count...">
+              <div class="TicketCount">
+                <label for="TicketCount" class="form-label">Tickets Limit</label>
+                <input class="form-control" formControlName="TicketCount" type="number" name="TicketCount" id="TicketCount" placeholder="Enter Your Ticket Count...">
               </div>
             </div>
 
-            <!-- Event Price -->
             <div class="col-md-6">
-              <div class="Price">
-                <label for="Price" class="form-label">Price</label>
-                <input class="form-control" formControlName="Price" type="number" name="Price" id="Price" placeholder="Enter Event Price...">
+              <div class="TicketPrice">
+                <label for="TicketPrice" class="form-label">TicketPrice</label>
+                <input class="form-control" formControlName="TicketPrice" type="number" name="TicketPrice" id="TicketPrice" placeholder="Enter Event Ticket Price...">
               </div>
             </div>
 
-            <!-- Visitor Price -->
             <div class="col-md-6">
               <div class="VisitorPrice">
                 <label for="VisitorPrice" class="form-label">Companion Price</label>
-                <input class="form-control" formControlName="VisitorFee" type="number" name="VisitorPrice" id="VisitorPrice" placeholder="Enter Event Price...">
+                <input class="form-control" formControlName="VisitorPrice" type="number" name="VisitorPrice" id="VisitorPrice" placeholder="Enter Event Price...">
               </div>
             </div>
 
-            <!-- Event Descriptions -->
-            <div class="col-12">
-              <div class="Description">
-                <label for="Description" class="form-label">Description</label>
-                <textarea name="Description" id="Description" class="form-control" formControlName="Description" placeholder="Enter Event Description..."></textarea>
-              </div>
-            </div>
-
-            <!-- Event EventDetails -->
             <div class="col-12">
               <div class="EventDetails">
                 <label for="EventDetails" class="form-label">Event Details</label>
@@ -126,7 +115,6 @@
               </div>
             </div>
 
-            <!-- Event TermsOfEntries -->
             <div class="col-12">
               <div class="TermsOfEntries">
                 <label for="TermsOfEntries" class="form-label">Event Terms</label>
@@ -140,7 +128,7 @@
 
 
         <div class="submit-btn text-center mt-3">
-          <button class="btn main-btn"> Create Event </button>
+          <button class="btn main-btn" (click)="submitCreateEvent()"> Create Event </button>
         </div>
       </form>
     </div>

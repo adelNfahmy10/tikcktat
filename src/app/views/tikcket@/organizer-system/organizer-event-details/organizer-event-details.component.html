@@ -4,12 +4,12 @@
       <h1>Event Details</h1>
       <div class="row g-2">
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/event-attendees/'+ eventData.type + '/' + eventData.id">
+          <div class="card cr" [routerLink]="'/event-attendees/' + eventData?.Type + '/' + eventData?.id">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Graduates</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Graduates</p>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalTickets }} Graduates</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -22,12 +22,12 @@
         </div>
 
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
+          <div class="card cr">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
-                  <h4 class="card-title mb-2">Total Companions</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Companions</p>
+                  <h4 class="card-title mb-2">Total Visitors</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalCompanions }} Visitors</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -39,31 +39,13 @@
           </div>
         </div>
 
-        <!-- <div class="col-md-3">
-          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between">
-                <div>
-                  <h4 class="card-title mb-2">Total Tickets</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors }} Grads</p>
-                </div>
-                <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-ticket-2-line"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
         <div class="col-md-4">
-          <div class="card cr" [routerLink]="'/event-attendees/' + 1">
+          <div class="card cr">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Amount</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{eventData.price * (eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors) }} EGP</p>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue }} EGP</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -85,18 +67,18 @@
             <div class="card-body">
               <div class="text-center">
                 <span class="owner-logo main-bg fw-bold rounded-circle">
-                  {{ eventData?.eventOwnerName?.slice(0, 2).toUpperCase() || '--' }}
+                  {{ ownerData?.fullName?.slice(0, 2).toUpperCase() || '--' }}
                 </span>
                 <div class="mt-3">
-                  <a class="fw-medium text-dark fs-16">{{eventData.eventOwnerName}}</a>
+                  <a class="fw-medium text-dark fs-16">{{ownerData?.fullName}}</a>
                   <p class="mb-0">(Owner)</p>
                 </div>
                 <div class="mt-2">
                   <ul class="list-unstyled d-flex flex-column align-items-center gap-1 m-0">
-                    <li>{{eventData.eventOwnerPhone || '-'}}</li>
-                    <li>{{eventData.eventOwnerEmail || '-'}}</li>
+                    <li>{{ownerData?.phone || '-'}}</li>
+                    <li>{{ownerData?.email || '-'}}</li>
                   </ul>
-                  <!-- <ul class="list-inline justify-content-center d-flex gap-1 mb-0 align-items-center" >
+                  <ul class="list-inline justify-content-center d-flex gap-1 mb-0 align-items-center mt-2" >
                     <li class="list-inline-item">
                       <a href="javascript: void(0);" class="btn btn-light avatar-sm d-flex align-items-center justify-content-center main-color fs-20" >
                         <i class="ri-facebook-fill"></i>
@@ -128,20 +110,20 @@
                         <i class="ri-whatsapp-fill"></i>
                       </a>
                     </li>
-                  </ul> -->
+                  </ul>
                 </div>
               </div>
             </div>
             <div class="card-footer bg-light-subtle">
               <div class="row g-2">
                 <div class="col-lg-6">
-                  <a [href]="'tel:+2' + eventData.eventOwnerPhone" class="btn btn-primary w-100">
+                  <a [href]="'tel:+2' + ownerData?.phone" class="btn btn-primary w-100">
                     <iconify-icon icon="solar:phone-calling-bold-duotone" class="align-middle fs-18"></iconify-icon>
                     Call Us
                   </a>
                 </div>
                 <div class="col-lg-6">
-                  <a [href]="'https://wa.me/+2' + eventData.eventOwnerPhone" target="_blank" class="btn btn-success w-100">
+                  <a [href]="'https://wa.me/+2' + ownerData?.phone" target="_blank" class="btn btn-success w-100">
                     <iconify-icon
                       icon="solar:chat-round-dots-bold-duotone"
                       class="align-middle fs-16"
@@ -157,43 +139,41 @@
           <div class="card">
             <div class="card-body">
               <div class="position-relative overflow-hidden">
-                <img [src]="eventData?.imageUrl" [alt]="eventData?.name" class="evnet-image rounded" />
+                <img [src]="eventData?.Image" [alt]="eventData?.EventName" class="evnet-image rounded" />
                 <span
                   class="badge fs-18 position-absolute avaliable-badge"
                   [ngClass]="{
-                    'bg-success text-light': eventData.status === 'Active',
-                    'bg-danger text-light': eventData.status !== 'Active'
+                    'bg-success text-light': eventData?.status === 'Active',
+                    'bg-danger text-light': eventData?.status !== 'Active'
                   }"
                 >
-                  {{ eventData.status }}
+                  {{ eventData?.status }}
                 </span>
               </div>
 
               <div class="d-flex flex-wrap justify-content-between mt-3 mb-2 gap-2">
                 <div>
                   <h1 class="fs-20 text-dark fw-bold">
-                    {{eventData?.name}}
+                    {{eventData?.EventName}}
                   </h1>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
-                    <iconify-icon icon="solar:map-point-wave-bold-duotone" class="fs-18 main-color" ></iconify-icon>
-                    {{eventData.location}}
+                    <a [href]="eventData?.Location" target="_blank" class=" d-flex align-items-center gap-1">
+                      <iconify-icon icon="solar:map-point-wave-bold-duotone" class="fs-18 main-color" ></iconify-icon>
+                      <span>{{eventData?.LocationName}}</span>
+                    </a>
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-calendar-check-line fs-18 main-color"></i>
-                    {{eventData.date | date:'dd/MM/yyyy'}}
+                    {{eventData?.Date | date:'dd/MM/yyyy'}}
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-money-pound-circle-line fs-18 main-color"></i>
-                    {{eventData.price}} EGP Per Ticket
+                    {{eventData?.TicketPrice}} EGP Per Ticket
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-graduation-cap-line fs-18 main-color"></i>
-                    {{eventData.visitorFee }} EGP Per Companion
+                    {{eventData?.VisitorPrice }} EGP Per Visitor
                   </p>
-                  <!-- <p class="d-flex align-items-center gap-1 mt-1 mb-0">
-                    <i class="ri-user-line fs-18 main-color"></i>
-                    {{eventData.companion || 0 }} Companions
-                  </p> -->
                 </div>
               </div>
 
@@ -201,7 +181,7 @@
                 <div class="avatar-sm rounded">
                   <iconify-icon icon="solar:wallet-money-bold-duotone" class="fs-24 main-color border border-2 rounded-3 avatar-title" ></iconify-icon>
                 </div>
-                <p class="fw-bold fs-18 mb-0 main-color">{{(eventData.numberOfVisitorsAllowed - eventData.availableNumberOfVisitors) * eventData.price }} EGP</p>
+                <p class="fw-bold fs-18 mb-0 main-color">{{ totalRevenue }} EGP</p>
               </div>
 
               <h5 class="text-dark fw-medium mt-3">Event Details :</h5>

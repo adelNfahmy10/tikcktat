@@ -15,6 +15,7 @@
     "@angular/common": "^19.2.18",
     "@angular/compiler": "^19.2.18",
     "@angular/core": "^19.2.18",
+    "@angular/fire": "^20.0.1",
     "@angular/forms": "^19.2.18",
     "@angular/google-maps": "^18.2.4",
     "@angular/platform-browser": "^19.2.18",
@@ -39,6 +40,7 @@
     "bootstrap": "^5.3.3",
     "choices.js": "^11.0.2",
     "dayjs": "^1.11.13",
+    "firebase": "^11.10.0",
     "flatpickr": "^4.6.13",
     "gumshoejs": "^5.1.2",
     "iconify-icon": "^2.1.0",
@@ -63,6 +65,7 @@
     "sweetalert2": "^11.26.18",
     "swiper": "^11.1.12",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {

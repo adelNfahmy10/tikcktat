@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@core/services/event/event.service';
+import { UsersService } from '@core/services/users/users.service';
 
 @Component({
   selector: 'app-owners',
@@ -10,9 +11,10 @@ import { EventService } from '@core/services/event/event.service';
   styleUrl: './owners.component.scss'
 })
 export class OwnersComponent {
-private readonly _EventService = inject(EventService)
+// private readonly _EventService = inject(EventService)
+  private readonly _UsersService = inject(UsersService)
 
-  ownerEvents:any[] = []
+  allOwners:any[] = []
 
   // table state
   searchText = '';
@@ -31,46 +33,47 @@ private readonly _EventService = inject(EventService)
   }
 
   getAllOwners(){
-    this._EventService.getAllEventsOwner().subscribe({
+    this._UsersService.getOwners().subscribe({
       next: (res) => {
-        this.ownerEvents = res.data;
-        this.filteredData = [...this.ownerEvents];
+        this.allOwners = res;
+        this.filteredData = [...this.allOwners];
         this.updatePagination();
       },
       error: (err) => {
-        console.error('Error fetching owner events:', err);
+        console.error('Error fetching owners:', err);
       }
     });
   }
 
-  downloadOwnerEvent(): void {
-    this._EventService.downloadAllEventOwners().subscribe({
-      next: (res: Blob) => {
-        const blob = new Blob([res], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
-        const url = window.URL.createObjectURL(blob);
+  // downloadOwnerEvent(): void {
+  //   this._EventService.downloadAllEventOwners().subscribe({
+  //     next: (res: Blob) => {
+  //       const blob = new Blob([res], {
+  //         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  //       });
+  //       const url = window.URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'All Owners.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'All Owners.xlsx';
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
 
-        window.URL.revokeObjectURL(url);
-        console.log('Download started!');
-      },
-      error: (err) => {
-        console.error('Download failed', err);
-      }
-    });
+  //       window.URL.revokeObjectURL(url);
+  //       console.log('Download started!');
+  //     },
+  //     error: (err) => {
+  //       console.error('Download failed', err);
+  //     }
+  //   });
 
-  }
+  // }
 
   // 🔍 Search
+
   applySearch() {
-    this.filteredData = this.ownerEvents.filter(item =>
+    this.filteredData = this.allOwners.filter(item =>
       Object.values(item)
         .join(' ')
         .toLowerCase()

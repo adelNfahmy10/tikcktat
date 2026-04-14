@@ -10,15 +10,15 @@ export class PaymentService {
   private readonly _HttpClient = inject(HttpClient)
 
   paymobInitiate(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Payments/paymob/initiate`, body)
+    return this._HttpClient.post(` Payments/paymob/initiate`, body)
   }
 
   paymentsStatus(ticketId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Payments/${ticketId}/status?referenceType=Ticket`)
+    return this._HttpClient.get(` Payments/${ticketId}/status?referenceType=Ticket`)
   }
 
   paymobWebhooks(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}webhooks/paymob`, body)
+    return this._HttpClient.post(` webhooks/paymob`, body)
   }
 
 }

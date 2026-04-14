@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
@@ -24,7 +24,8 @@ export class AvailableEventsDetailsComponent {
   private modalService = inject(NgbModal)
 
   eventData:any
-  eventId:string | null = null
+  eventId:string = ''
+  userId:string | null = localStorage.getItem('userId')
   token:string | null = localStorage.getItem('token')
   haveAcc: boolean = true;
 
@@ -36,13 +37,13 @@ export class AvailableEventsDetailsComponent {
     this._ActivatedRoute.paramMap
       .pipe(
         switchMap(params => {
-          this.eventId = params.get('id');
+          this.eventId = params.get('id')!;
           return this._EventService.getEventById(this.eventId);
         })
       )
       .subscribe({
         next: (res) => {
-          this.eventData = res.data;
+          this.eventData = res;
         },
         error: (err) => {
           console.error(err);
@@ -51,16 +52,16 @@ export class AvailableEventsDetailsComponent {
   }
 
   get eventDetailsList(): string[] {
-    if (!this.eventData?.eventDetails) return [];
-    return this.eventData.eventDetails
+    if (!this.eventData?.EventDetails) return [];
+    return this.eventData.EventDetails
       .split('\r\n')          // نفصل كل سطر
       .map((item:any) => item.trim()) // نشيل أي فراغات
       .filter((item:any) => item);    // نشيل أي عناصر فاضية
   }
 
   get termsList(): string[] {
-    if (!this.eventData?.termsOfEntries) return [];
-    return this.eventData.termsOfEntries
+    if (!this.eventData?.TermsOfEntries) return [];
+    return this.eventData.TermsOfEntries
       .split('\r\n')          // نفصل كل شرط على سطر
       .map((item:any) => item.trim()) // نشيل أي فراغات
       .filter((item:any) => item);    // نشيل أي عناصر فاضية
@@ -74,48 +75,92 @@ export class AvailableEventsDetailsComponent {
     this.haveAcc = !this.haveAcc;
   }
 
-  signUpUser:FormGroup = this._FormBuilder.group({
-    roleId:['147df052-372c-4942-ad75-9801142c44c6'],
-    fullName:[null],
-    mobile:[null],
-    email:[null],
-    password:[null],
-  })
+  registerForm: FormGroup = this._FormBuilder.group({
+    fullName: [null, [Validators.required]],
+    email: [null, [Validators.required, Validators.email]],
+    phone: [null, [Validators.required]],
+    password: [null, [Validators.required, Validators.minLength(6)]],
+    role: ["User", [Validators.required]],
+  });
 
-  signInUser:FormGroup = this._FormBuilder.group({
-    Username:[null],
-    Password:[null],
-  })
+  submitRegisterForm(): void {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
 
-  submitSignUpForm():void{
-    let data = this.signUpUser.value
+    const data = this.registerForm.value;
+
     this._AuthService.register(data).subscribe({
-      next:(res)=>{
-        this._ToastrService.success('Create User Successfully, Login Now..!')
-        this.toggleForm()
-      }
-    })
-    console.log(data);
-  }
+      next: (res) => {
+        this._ToastrService.success('Account Created Successfully');
 
-  submitSignInForm():void{
-    let data = this.signInUser.value
-    this._AuthService.login(data).subscribe({
-      next:(res)=>{
-        this._ToastrService.success('Login Successfully')
+        localStorage.setItem('userId', res.uid);
+        localStorage.setItem('fullName', res.fullName);
+        localStorage.setItem('email', res.email);
+        localStorage.setItem('phone', res.phone);
+        localStorage.setItem('role', res.role);
+
+        this.registerForm.reset({ role: 'user' });
+
         this._Router.navigate([`/checkout/${this.eventData?.id}`]).then(() => {
           window.location.reload();
         });
-        localStorage.setItem('userId', res.data.userId)
-        localStorage.setItem('fullName', res.data.fullName)
-        localStorage.setItem('token', res.data.accessToken)
-        localStorage.setItem('refreshToken', res.data.refreshToken)
-        localStorage.setItem('role', res.data.roles[0])
+      },
+      error: (err) => {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            this._ToastrService.error('This email is already registered');
+            break;
+
+          case 'auth/invalid-email':
+            this._ToastrService .error('Invalid email format');
+            break;
+
+          case 'auth/weak-password':
+            this._ToastrService.error('Password is too weak');
+            break;
+
+          default:
+            this._ToastrService.error('Registration failed');
+        }
       }
-    })
+    });
   }
 
+  loginForm: FormGroup = this._FormBuilder.group({
+    email: [null, [Validators.required, Validators.email]],
+    password: [null, [Validators.required, Validators.minLength(6)]],
+  });
 
+  submitLogin(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
+    const { email, password } = this.loginForm.value;
 
+    this._AuthService.login(email!, password!).subscribe({
+      next: (res: any) => {
+        this._ToastrService.success('Login Successfully');
+        localStorage.setItem('userId', res.uid);
+        localStorage.setItem('fullName', res.fullName);
+        localStorage.setItem('email', res.email);
+        localStorage.setItem('phone', res.phone);
+        localStorage.setItem('role', res.role);
+        this._Router.navigate([`/checkout/${this.eventData?.id}`]).then(() => {
+          window.location.reload();
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        if (err.code === 'auth/invalid-credential') {
+          this._ToastrService.error('Invalid email or password');
+        } else {
+          this._ToastrService.error('Login failed');
+        }
+      }
+    });
+  }
 }

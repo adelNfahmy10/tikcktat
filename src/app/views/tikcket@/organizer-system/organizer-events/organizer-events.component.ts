@@ -6,7 +6,7 @@ import { EventService } from '@core/services/event/event.service';
 
 @Component({
   selector: 'app-organizer-events',
-  imports: [FormsModule, RouterLink, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './organizer-events.component.html',
   styleUrl: './organizer-events.component.scss'
 })
@@ -36,9 +36,11 @@ export class OrganizerEventsComponent {
   getOwnerEvents(){
     const userId = localStorage.getItem('userId');
     if (userId) {
-      this._EventService.GetEventsByOwner(userId).subscribe({
+      this._EventService.getEventsByOwner(userId).subscribe({
         next: (res) => {
-          this.ownerEvents = res.data;
+          this.ownerEvents = res;
+          console.log(this.ownerEvents);
+
           this.filteredData = [...this.ownerEvents];
           this.updatePagination();
         },
@@ -50,31 +52,32 @@ export class OrganizerEventsComponent {
     }
   }
 
-  downloadOwnerEvent(): void {
-    this._EventService.downloadEventsByOwner(this.userId).subscribe({
-      next: (res: Blob) => {
-        const blob = new Blob([res], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
-        const url = window.URL.createObjectURL(blob);
+  // downloadOwnerEvent(): void {
+  //   this._EventService.downloadEventsByOwner(this.userId).subscribe({
+  //     next: (res: Blob) => {
+  //       const blob = new Blob([res], {
+  //         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  //       });
+  //       const url = window.URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'My Events.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+  //       const a = document.createElement('a');
+  //       a.href = url;
+  //       a.download = 'My Events.xlsx';
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
 
-        window.URL.revokeObjectURL(url);
-        console.log('Download started!');
-      },
-      error: (err) => {
-        console.error('Download failed', err);
-      }
-    });
-  }
+  //       window.URL.revokeObjectURL(url);
+  //       console.log('Download started!');
+  //     },
+  //     error: (err) => {
+  //       console.error('Download failed', err);
+  //     }
+  //   });
+  // }
 
   // 🔍 Search
+
   applySearch() {
     this.filteredData = this.ownerEvents.filter(item =>
       Object.values(item)

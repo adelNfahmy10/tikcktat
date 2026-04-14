@@ -27,13 +27,23 @@ import { CalendarEffects } from '@store/calendar/calendar.effects'
 import { CookieService } from 'ngx-cookie-service'
 import { AuthenticationEffects } from '@store/authentication/authentication.effects'
 import { FakeBackendProvider } from '@core/helper/fake-backend'
-import { provideToastr } from 'ngx-toastr'
+import { provideToastr, ToastrModule } from 'ngx-toastr'
 import { DecimalPipe } from '@angular/common'
 import { headerInterceptor } from '@core/interceptors/header/header.interceptor'
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from '@core/interceptors/loading/loading.interceptor'
 import { withHashLocation } from '@angular/router';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp } from 'firebase/app'
+import { environment } from '@core/environment/environment'
+import { provideAuth } from '@angular/fire/auth';
+import { getAuth } from 'firebase/auth'
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+ToastrModule.forRoot({
+  positionClass: 'toast-bottom-right'
+})
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -48,6 +58,14 @@ export const appConfig: ApplicationConfig = {
     FakeBackendProvider,
     CookieService,
     DecimalPipe,
+    provideFirebaseApp(() =>
+      initializeApp(environment.firebase)
+    ),
+
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    // provideStorage(() => getStorage()),
+
     provideAnimations(),
     importProvidersFrom(NgxSpinnerModule, BrowserAnimationsModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -56,6 +74,10 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(AuthenticationEffects, CalendarEffects),
     provideHttpClient(withFetch(), withInterceptors([headerInterceptor, loadingInterceptor])),
-    provideToastr({}),
+    provideToastr({
+      positionClass: 'toast-bottom-right',
+      timeOut: 3000,
+      preventDuplicates: true
+    })
   ],
 }

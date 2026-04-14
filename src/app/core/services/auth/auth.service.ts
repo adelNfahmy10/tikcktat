@@ -1,56 +1,129 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { environment } from '@core/environment/environment';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { from, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly _HttpClient = inject(HttpClient)
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
+  user$ = authState(this.auth);
 
-  login(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Auth/login`, body)
+  // REGISTER
+  register(data: {
+    fullName: string;
+    phone: string;
+    role: string;
+    email: string;
+    password: string;
+  }) {
+    return from(
+      createUserWithEmailAndPassword(
+        this.auth,
+        data.email,
+        data.password
+      )
+    ).pipe(
+      switchMap(async (userCredential) => {
+        const user = userCredential.user;
+
+        const userData = {
+          uid: user.uid,
+          fullName: data.fullName,
+          phone: data.phone,
+          role: data.role,
+          email: data.email,
+          createdAt: new Date()
+        };
+
+        await setDoc(doc(this.firestore, 'users', user.uid), userData);
+
+        return userData;
+      })
+    );
   }
 
-  register(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}UserManager/RegisterNewUser`, body)
+  // LOGIN
+  login(email: string, password: string) {
+    return from(
+      signInWithEmailAndPassword(this.auth, email, password)
+    ).pipe(
+      switchMap(async (userCredential) => {
+
+        const uid = userCredential.user.uid;
+
+        const userRef = doc(this.firestore, 'users', uid);
+        const userSnap = await getDoc(userRef);
+
+        const userData = userSnap.exists() ? userSnap.data() : null;
+
+        return {
+          uid,
+          ...userData
+        };
+      })
+    );
   }
 
-  refreshToken(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Auth/refresh`, body)
+  // LOGOUT
+  logout() {
+    return from(signOut(this.auth));
   }
 
-  changePassword(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Auth/change-password`, body)
+  // GET USER DATA
+  getUserData(uid: string) {
+    return from(getDoc(doc(this.firestore, 'users', uid)))
+      .pipe(
+        switchMap((snap) => {
+          return from([snap.exists() ? snap.data() : null]);
+        })
+      );
   }
+  
+  // login(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Auth/login`, body)
+  // }
 
-  addNewPassword(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Auth/AddNewPassword`, body)
-  }
+  // register(body:any):Observable<any>{
+  //   return this._HttpClient.post(` UserManager/RegisterNewUser`, body)
+  // }
 
-  getAllUsers():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}UserManager/GetAll`)
-  }
+  // refreshToken(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Auth/refresh`, body)
+  // }
 
-  getUserById(userId:any):Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}UserManager/GetById/${userId}`)
-  }
+  // changePassword(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Auth/change-password`, body)
+  // }
 
-  deleteUser(userId:any):Observable<any>{
-    return this._HttpClient.delete(`${environment.baseUrl}UserManager/DeleteUser/${userId}`)
-  }
+  // addNewPassword(body:any):Observable<any>{
+  //   return this._HttpClient.post(` Auth/AddNewPassword`, body)
+  // }
 
-  updateUser(userId:any, body:any):Observable<any>{
-    return this._HttpClient.put(`${environment.baseUrl}UserManager/Update?id=${userId}`, body)
-  }
+  // getAllUsers():Observable<any>{
+  //   return this._HttpClient.get(` UserManager/GetAll`)
+  // }
 
-  updateUserRole(body:any):Observable<any>{
-    return this._HttpClient.put(`${environment.baseUrl}UserManager/UpdateUserRoles`, body)
-  }
+  // getUserById(userId:any):Observable<any>{
+  //   return this._HttpClient.get(` UserManager/GetById/${userId}`)
+  // }
 
-  swichActiveUser(userId:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}UserManager/SwitchUserActive/${userId}`, {})
-  }
+  // deleteUser(userId:any):Observable<any>{
+  //   return this._HttpClient.delete(` UserManager/DeleteUser/${userId}`)
+  // }
+
+  // updateUser(userId:any, body:any):Observable<any>{
+  //   return this._HttpClient.put(` UserManager/Update?id=${userId}`, body)
+  // }
+
+  // updateUserRole(body:any):Observable<any>{
+  //   return this._HttpClient.put(` UserManager/UpdateUserRoles`, body)
+  // }
+
+  // swichActiveUser(userId:any):Observable<any>{
+  //   return this._HttpClient.post(` UserManager/SwitchUserActive/${userId}`, {})
+  // }
 
 }

@@ -10,14 +10,14 @@ export class RoleService {
   private readonly _HttpClient = inject(HttpClient)
 
   getAllRoles():Observable<any>{
-    return this._HttpClient.get(`${environment.baseUrl}Roles/GetAllRoles`)
+    return this._HttpClient.get(` Roles/GetAllRoles`)
   }
 
   createRoles(body:any):Observable<any>{
-    return this._HttpClient.post(`${environment.baseUrl}Roles/AddNewRole`, body)
+    return this._HttpClient.post(` Roles/AddNewRole`, body)
   }
 
   deleteRoles(roleName:any):Observable<any>{
-    return this._HttpClient.delete(`${environment.baseUrl}Roles/DeleteRole/roleName?roleName=${roleName}`)
+    return this._HttpClient.delete(` Roles/DeleteRole/roleName?roleName=${roleName}`)
   }
 }

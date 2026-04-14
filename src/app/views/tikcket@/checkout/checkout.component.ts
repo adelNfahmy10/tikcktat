@@ -1,12 +1,14 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
 import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
 import { AuthService } from '@core/services/auth/auth.service';
+import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { PaymentService } from '@core/services/payment/payment.service';
+import { UsersService } from '@core/services/users/users.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import Choices from 'choices.js';
 import { ToastrService } from 'ngx-toastr';
@@ -37,26 +39,28 @@ export interface Category {
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
-export class CheckoutComponent implements OnInit{
-  private readonly _AuthService = inject(AuthService)
-  private readonly _PaymentService = inject(PaymentService)
+export class CheckoutComponent {
+  private readonly _UsersService = inject(UsersService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _Router = inject(Router)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _EventService = inject(EventService)
+  private readonly _BookingService = inject(BookingService)
   private modalService = inject(NgbModal)
 
-  photoPreview: string | ArrayBuffer | null = null;
-  eventId:string | null = null
-  eventType:string | null = null
   userId:string | null = localStorage.getItem('userId')
   userData:any = {}
   eventData:any = {}
+  eventId:string | null = null
+  transactionRef:string = ''
+
+  selectedFile!: File | null;
+  photoPreview: string | ArrayBuffer | null = null;
   checkoutData:any = {}
   subTotal:number = 0
   total:number = 0
@@ -66,28 +70,16 @@ export class CheckoutComponent implements OnInit{
   ngOnInit(): void {
     this.getEventId()
     this.getUserById()
-    this.generateLayout();
+    // this.generateLayout();
   }
-
-  checkoutForm:FormGroup = this._FormBuilder.group({
-    EventId:[null, Validators.required],
-    Photo:[null],
-    VisitorCount:[null],
-    Faculty:[null],
-    Department:[null],
-    Year:[null],
-  })
-
 
   getEventId():void{
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
-        this.eventId = params.get('id')
-        this.checkoutForm.get('EventId')?.setValue(this.eventId)
+        this.eventId = params.get('id')!
         this._EventService.getEventById(this.eventId).subscribe({
           next:(res)=>{
-            this.eventData = res.data
-            this.eventType = this.eventData.type
+            this.eventData = res
           }
         })
       }
@@ -95,154 +87,197 @@ export class CheckoutComponent implements OnInit{
   }
 
   getUserById():void{
-    this._AuthService.getUserById(this.userId).subscribe({
+    this._UsersService.getUserById(this.userId!).subscribe({
       next:(res)=>{
-        this.userData = res.data
+        this.userData = res
       }
     })
   }
 
-  onPhotoChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
+  checkoutForm:FormGroup = this._FormBuilder.group({
+    EventId:[null, Validators.required],
+    userId:[null, Validators.required],
+    OwnerId:[null, Validators.required],
+    Image:[null],
+    VisitorCount:[null, [Validators.required, Validators.min(0)]],
+    defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
+    transactionRef: [null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]]
+  })
 
-      // نحطه في الفورم
-      this.checkoutForm.patchValue({
-        Photo: file
-      });
-      this.checkoutForm.get('Photo')?.updateValueAndValidity();
-
-      // Preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.photoPreview = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 
   // Modal Check Data Logic
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
-    if(this.userData.fullName && this.userData.mobile && this.userData.email){
+    if(this.userData.fullName && this.userData.phone && this.userData.email){
       this.modalService.open(content, options)
       this.checkoutData = this.checkoutForm.value
-      let price  = this.eventData.price
-      let companionPrice  = this.checkoutData?.VisitorCount * this.eventData.visitorFee
+      let price  = this.eventData?.TicketPrice
+      let companionPrice  = this.checkoutData?.VisitorCount * this.eventData?.VisitorPrice
       this.subTotal = price + companionPrice
+
       // الضريبة 2.7% من الإجمالي + 23 ثابت
-      this.tax = (this.subTotal * 0.027) + 20;
+      this.tax = Math.ceil((this.subTotal * 0.020)) ;
       // الإجمالي النهائي
-      if(this.eventData.type != 'FunDayEvent' && this.eventData.type != 'RamadanIftar'){
-        this.total = this.subTotal + this.tax;
-      } else {
-        this.total = this.subTotal
-      }
+      this.total = this.subTotal + this.tax;
+    } else {
+      this._ToastrService.error('Faild To Cntinue')
     }
   }
 
-  // Checkout Logic
-  submitCheckout(): void {
-    // تأكد ان الـ eventId موجود
-    if (!this.eventId) return;
-
-    let formValue = this.checkoutForm.value;
-    formValue.FullName = this.userData.fullName
-    formValue.Phone = this.userData.mobile
-    formValue.Email = this.userData.email
-    formValue.Price = this.total
-
-    const formData = new FormData();
-    // أضف باقي الحقول
-    Object.keys(formValue).forEach(key => {
-      const value = formValue[key];
-      if (value !== null && value !== undefined) {
-        if (key === 'Photo' && value instanceof File) {
-          formData.append('Photo', value);
-        } else {
-          formData.append(key, value.toString());
-        }
-      }
-    });
-
-    // إرسال الفورم
-    this._EventService.checkoutEvent(formData).subscribe({
-      next: (res) => {
-        window.location.href = res.data.checkoutUrl
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: err.error.msg
-        });
-      }
-    });
+  // // Checkout Logic
+  async submitCheckout(): Promise<void> {
+    // ✅ 1. Validate
+  if (!this.eventId || !this.selectedFile || this.transactionRef?.length !== 12) {
+    this._ToastrService.error('Missing data');
+    return;
   }
 
+    try {
+      // ✅ 2. Check duplicate booking
+      const existingBooking = await this._BookingService.checkUserBooking(
+        this.eventId,
+        this.userId!
+      );
 
-  // Seating Layout Logic
-  categories: Category[] = [];
-  selectedSeats: Seat[] = [];
-
-  generateLayout(): void {
-    const config = [
-      { id:'vip', name:'VIP', rows:5, blocks:3, seatsPerBlock:6, price:500 },
-      { id:'regular', name:'Regular', rows:8, blocks:2, seatsPerBlock:10, price:250 },
-      { id:'balcony', name:'Balcony', rows:4, blocks:4, seatsPerBlock:5, price:150 }
-    ];
-
-    let globalRowIndex = 0; // لتسلسل الحروف بين كل categories
-
-    config.forEach(cat => {
-
-      const rows: Row[] = [];
-
-      for (let r = 0; r < cat.rows; r++) {
-
-        const rowLetter = String.fromCharCode(65 + globalRowIndex);
-        globalRowIndex++;
-
-        const blocks: Block[] = [];
-        let seatNumber = 1; // كل صف رقم يبدأ من 1 ويكمل عبر كل blocks
-
-        for (let b = 0; b < cat.blocks; b++) {
-
-          const seats: Seat[] = [];
-
-          for (let s = 1; s <= cat.seatsPerBlock; s++) {
-            seats.push({
-              id: `${rowLetter}${seatNumber++}`, // رقم متسلسل عبر كل الصف
-              number: seatNumber - 1,
-              status: Math.random() > 0.9 ? 'booked' : 'available'
-            });
-          }
-
-          blocks.push({ name:`B${b+1}`, seats });
-        }
-
-        rows.push({ name: rowLetter, blocks });
+      if (!existingBooking.empty) {
+        this._ToastrService.error('You already booked this event');
+        return;
       }
 
-      this.categories.push({
-        id: cat.id,
-        name: cat.name,
-        price: cat.price,
-        rows
+
+      // ✅ 3. Fill form
+      this.checkoutForm.patchValue({
+        EventId: this.eventId,
+        userId: this.userId,
+        OwnerId: this.eventData.OwnerId,
+        defaultVisitorCount: 2,
+        transactionRef: this.transactionRef
       });
 
-    });
-  }
+      // 🔥 4. Upload image
+      const imageUrl = await this._EventService.uploadImage(this.selectedFile);
 
-  toggleSeat(seat: Seat) {
-    if (seat.status === 'booked') return;
+      const formValue = this.checkoutForm.value;
 
-    if (seat.status === 'selected') {
-      seat.status = 'available';
-      this.selectedSeats =
-        this.selectedSeats.filter(s => s.id !== seat.id);
-    } else {
-      seat.status = 'selected';
-      this.selectedSeats.push(seat);
+      const finalData = {
+        ...formValue,
+        Image: imageUrl,
+        createdAt: new Date(),
+        status: 'Pending'
+      };
+
+      // 🔥 1. Save booking
+      this._BookingService.createBooking(finalData).subscribe({
+        next: () => {
+          // 🔥 2. Update tickets
+          this._EventService.updateEventTickets(
+            this.eventId!,
+            1
+          ).subscribe();
+
+          this.checkoutForm.reset();
+          this.tax = 0
+          this.subTotal = 0
+          this.total = 0
+          this.transactionRef = ''
+          this.selectedFile = null
+          this.photoPreview = ''
+          this.checkoutData = {}
+          this._ToastrService.success('Booking Created Successfully');
+          this.modalService.dismissAll();
+          this._Router.navigate(['/payment-success'])
+
+        },
+        error: () => {
+          this._ToastrService.error('Booking Failed');
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      this._ToastrService.error('Checkout failed');
     }
   }
+
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) return;
+
+    this.selectedFile = input.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.photoPreview = reader.result;
+    };
+
+    reader.readAsDataURL(this.selectedFile);
+  }
+
+
+  // // Seating Layout Logic
+  // categories: Category[] = [];
+  // selectedSeats: Seat[] = [];
+
+  // generateLayout(): void {
+  //   const config = [
+  //     { id:'vip', name:'VIP', rows:5, blocks:3, seatsPerBlock:6, price:500 },
+  //     { id:'regular', name:'Regular', rows:8, blocks:2, seatsPerBlock:10, price:250 },
+  //     { id:'balcony', name:'Balcony', rows:4, blocks:4, seatsPerBlock:5, price:150 }
+  //   ];
+
+  //   let globalRowIndex = 0; // لتسلسل الحروف بين كل categories
+
+  //   config.forEach(cat => {
+
+  //     const rows: Row[] = [];
+
+  //     for (let r = 0; r < cat.rows; r++) {
+
+  //       const rowLetter = String.fromCharCode(65 + globalRowIndex);
+  //       globalRowIndex++;
+
+  //       const blocks: Block[] = [];
+  //       let seatNumber = 1; // كل صف رقم يبدأ من 1 ويكمل عبر كل blocks
+
+  //       for (let b = 0; b < cat.blocks; b++) {
+
+  //         const seats: Seat[] = [];
+
+  //         for (let s = 1; s <= cat.seatsPerBlock; s++) {
+  //           seats.push({
+  //             id: `${rowLetter}${seatNumber++}`, // رقم متسلسل عبر كل الصف
+  //             number: seatNumber - 1,
+  //             status: Math.random() > 0.9 ? 'booked' : 'available'
+  //           });
+  //         }
+
+  //         blocks.push({ name:`B${b+1}`, seats });
+  //       }
+
+  //       rows.push({ name: rowLetter, blocks });
+  //     }
+
+  //     this.categories.push({
+  //       id: cat.id,
+  //       name: cat.name,
+  //       price: cat.price,
+  //       rows
+  //     });
+
+  //   });
+  // }
+
+  // toggleSeat(seat: Seat) {
+  //   if (seat.status === 'booked') return;
+
+  //   if (seat.status === 'selected') {
+  //     seat.status = 'available';
+  //     this.selectedSeats =
+  //       this.selectedSeats.filter(s => s.id !== seat.id);
+  //   } else {
+  //     seat.status = 'selected';
+  //     this.selectedSeats.push(seat);
+  //   }
+  // }
 }

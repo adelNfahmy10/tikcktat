@@ -2,18 +2,16 @@
   <div class="container-fluid">
     <div class="border border-2 rounded-3 p-3 shadow-lg">
       <div class="event-banner overflow-hidden rounded-4">
-        <img loading="lazy" class="rounded-2 w-100 h-100" [src]="eventData?.imageUrl || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" [alt]="eventData?.name">
+        <img loading="lazy" class="rounded-2 w-100 h-100" [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" [alt]="eventData?.EventName">
       </div>
 
       <div class="event-details my-3">
-        <h1 class="fw-bold">{{eventData?.name}}</h1>
+        <h1 class="fw-bold">{{eventData?.EventName}}</h1>
         <p>
-          Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.location" target="_blank">{{eventData?.location}}</a></span> <br>
-          Date : <span class="text-dark"> {{eventData?.date | date}}</span> <br>
-          Ticket Price: <span class="text-dark"> {{eventData?.price | number}} EGP </span> <br>
-          @if(eventData?.type !== 'RamadanIftar'){
-            Companion Price: <span class="text-dark"> {{eventData?.visitorFee | number}} EGP </span>
-          }
+          Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
+          Date : <span class="text-dark"> {{eventData?.Date | date:'dd/MM/yyyy'}}</span> <br>
+          Ticket Price: <span class="text-dark"> {{eventData?.TicketPrice | number}} EGP </span> <br>
+          Visitor Price: <span class="text-dark"> {{eventData?.VisitorPrice | number}} EGP </span>
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>
@@ -25,36 +23,30 @@
           }
         </ul>
 
-        <h4 class="fw-bold">Term Of Entry :</h4>
-        <ul>
-          @for (term of termsList; track $index) {
-            <li>
-              {{ term }}
-            </li>
-          }
-        </ul>
-
-        <!-- <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
-          <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
-            <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
-              <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Terms of entry </button>
-            </h2>
-            <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <div class="accordion-body" ngbAccordionBody >
-                <ul class="entry-rules">
-                  @for (term of termsList; track $index) {
-                    <li>
-                      {{ term }}
-                    </li>
-                  }
-                </ul>
+        @if(eventData?.TermsOfEntries?.length > 0){
+          <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
+            <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
+              <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
+                <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Terms of entry </button>
+              </h2>
+              <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body" ngbAccordionBody >
+                  <ul class="entry-rules">
+                    @for (term of termsList; track $index) {
+                      <li>
+                        {{ term }}
+                      </li>
+                    }
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div> -->
+        }
+
 
         <div class="text-center">
-          @if(token){
+          @if(userId){
             <button class="btn main-btn p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
           } @else {
             <button class="btn main-btn p-0 px-4 py-1 mt-2" data-bs-target="#exampleModalCenter" (click)="openModal(centered, { centered: true })">Book Now</button>
@@ -90,7 +82,7 @@
     <div class="modal-body">
       @if(haveAcc){
         <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
-        <form [formGroup]="signUpUser">
+        <form [formGroup]="registerForm">
           <div class="mb-3">
               <label class="form-label" for="name">Name</label>
               <input
@@ -107,7 +99,7 @@
               <label class="form-label" for="phone">Phone</label>
               <input
                 type="tel"
-                formControlName="mobile"
+                formControlName="phone"
                 id="phone"
                 name="phone"
                 class="form-control bg-light bg-opacity-50 border-light py-2"
@@ -142,12 +134,12 @@
 
       @if(!haveAcc){
         <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
-        <form [formGroup]="signInUser">
+        <form [formGroup]="loginForm">
           <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <input
               type="email"
-              formControlName="Username"
+              formControlName="email"
               id="email"
               name="email"
               class="form-control bg-light bg-opacity-50 border-light py-2"
@@ -159,7 +151,7 @@
             <label class="form-label" for="password">Password</label>
             <input
               type="password"
-              formControlName="Password"
+              formControlName="password"
               id="password"
               class="form-control bg-light bg-opacity-50 border-light py-2"
               placeholder="Enter your password"
@@ -178,11 +170,11 @@
         Close
       </button>
       @if(haveAcc){
-        <button type="button" class="btn btn-primary save-btn" (click)="submitSignUpForm()">
+        <button type="button" class="btn btn-primary save-btn" (click)="submitRegisterForm()">
           Sign Up
         </button>
       } @else {
-        <button type="button" class="btn btn-primary save-btn" (click)="submitSignInForm(); modal.close()">
+        <button type="button" class="btn btn-primary save-btn" (click)="submitLogin(); modal.close()">
           Sign In
         </button>
       }

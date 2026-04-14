@@ -9,23 +9,23 @@ import { QRCodeComponent } from 'angularx-qrcode';
   templateUrl: './qrcode.component.html',
   styleUrl: './qrcode.component.scss'
 })
-export class QrcodeComponent implements OnInit {
-  private readonly _ActivatedRoute = inject(ActivatedRoute)
-  private readonly _EventService = inject(EventService)
+export class QrcodeComponent{
+  // private readonly _ActivatedRoute = inject(ActivatedRoute)
+  // private readonly _EventService = inject(EventService)
 
-  qrValue:string | null = '';
+  // qrValue:string | null = '';
 
-  ngOnInit(): void {
-    this.getIPTokent()
-  }
+  // ngOnInit(): void {
+  //   this.getIPTokent()
+  // }
 
-  getIPTokent():void{
-    this._ActivatedRoute.paramMap.subscribe({
-      next:(params)=>{
-        this.qrValue = params.get('ip')
-        console.log(this.qrValue);
-      }
-    })
-  }
+  // getIPTokent():void{
+  //   this._ActivatedRoute.paramMap.subscribe({
+  //     next:(params)=>{
+  //       this.qrValue = params.get('ip')
+  //       console.log(this.qrValue);
+  //     }
+  //   })
+  // }
 
 }

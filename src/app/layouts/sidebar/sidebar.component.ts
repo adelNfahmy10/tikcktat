@@ -57,7 +57,6 @@ export class SidebarComponent implements OnInit {
   }
 
   initMenu(): void {
-
     const adminOnlyKeys = ['add-event', 'all-view', 'add-new-owner', 'owners'];
     const ownerOnlyKeys = ['organizer-events'];
     const userOnlyKeys = ['my-bookings'];
@@ -71,7 +70,7 @@ export class SidebarComponent implements OnInit {
 
       // Event Owner only
       if (ownerOnlyKeys.includes(item.key)) {
-        return this.role === 'EventOwner';
+        return this.role === 'Owner';
       }
 
       // User only
