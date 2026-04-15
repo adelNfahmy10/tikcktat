@@ -18,13 +18,11 @@ export class EventService {
 
   // 🔥 Update Event Tickets (بعد الحجز)
   updateEventTickets(eventId: string, bookedTickets: number) {
-
     const eventRef = doc(this.firestore, `events/${eventId}`);
 
     return from(
       updateDoc(eventRef, {
         bookingCount: increment(bookedTickets),
-        ticketAvailable: increment(-bookedTickets)
       })
     );
   }

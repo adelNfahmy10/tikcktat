@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { collectionData, Firestore } from '@angular/fire/firestore';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { from, Observable } from 'rxjs';
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +15,24 @@ export class BookingService {
     return from(addDoc(bookingRef, data));
   }
 
+  updateBooking(bookingId: string, data: any) {
+    const bookingDoc = doc(this.firestore, `bookings/${bookingId}`);
+    return from(updateDoc(bookingDoc, data));
+  }
+
   // 🔥 Check User Booking
   checkUserBooking(eventId: string, userId: string) {
     const bookingRef = collection(this.firestore, 'bookings');
+
     const q = query(
       bookingRef,
       where('EventId', '==', eventId),
       where('userId', '==', userId)
     );
 
-    return getDocs(q);
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((bookings: any[]) => bookings.length ? bookings[0] : null)
+    );
   }
 
   getBookingsByEvent(eventId: string) {

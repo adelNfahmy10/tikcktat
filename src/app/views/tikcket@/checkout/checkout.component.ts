@@ -66,7 +66,10 @@ export class CheckoutComponent {
   checkoutData:any = {}
   subTotal:number = 0
   total:number = 0
-  tax:number = 20
+  tax:number = 0.20
+
+  isReturningUser:boolean = false
+  bookingData: any = null;
 
 
   ngOnInit(): void {
@@ -75,27 +78,43 @@ export class CheckoutComponent {
     // this.generateLayout();
   }
 
-  getEventId():void{
+  getEventId(): void {
     this._ActivatedRoute.paramMap.subscribe({
-      next:(params)=>{
-        this.eventId = params.get('id')!
-        this._EventService.getEventById(this.eventId).subscribe({
-          next:(res)=>{
-            this.eventData = res
-            console.log(this.eventData);
+      next: (params) => {
+        this.eventId = params.get('id')!;
 
+        this._EventService.getEventById(this.eventId).subscribe({
+          next: (res) => {
+            this.eventData = res;
+            console.log(this.eventData);
           }
-        })
+        });
+
+        // 🔥 check هنا مباشرة
+        this._BookingService.checkUserBooking(this.eventId, this.userId!)
+          .subscribe((booking) => {
+
+            if (booking) {
+              this.isReturningUser = true;
+              this.bookingData = booking;
+
+              console.log('🔥 Returning User:', booking);
+
+            } else {
+              this.isReturningUser = false;
+
+              console.log('🟢 First Time User');
+            }
+
+          });
       }
-    })
+    });
   }
 
   getUserById():void{
     this._UsersService.getUserById(this.userId!).subscribe({
       next:(res)=>{
         this.userData = res
-        console.log(this.userData);
-
       }
     })
   }
@@ -104,6 +123,7 @@ export class CheckoutComponent {
     EventId:[null, Validators.required],
     EventName:[null, Validators.required],
     OwnerId:[null, Validators.required],
+
     userId:[null, Validators.required],
     userName:[null, Validators.required],
     userPhone:[null, Validators.required],
@@ -111,9 +131,16 @@ export class CheckoutComponent {
     userImage:[null],
     defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
     VisitorCount:[null, [Validators.required, Validators.min(0)]],
+
+    payOneAmount:[null],
+    payOneImage:[null],
+    payOneRef:[null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]],
+
+    payTwoAmount:[null],
+    payTwoImage:[null],
+    payTwoRef:[null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]],
+
     totalAmount:[null, [Validators.required, Validators.min(0)]],
-    paymentImage:[null],
-    transactionRef: [null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]]
   })
 
   // Modal Check Data Logic
@@ -143,19 +170,7 @@ export class CheckoutComponent {
     }
 
     try {
-      // ✅ 2. Check duplicate booking
-      // const existingBooking = await this._BookingService.checkUserBooking(
-      //   this.eventId,
-      //   this.userId!
-      // );
-
-      // if (!existingBooking.empty) {
-      //   this._ToastrService.error('You already booked this event');
-      //   return;
-      // }
-
-
-      // 🔥 4. Upload image
+      // 🔥 2. Upload image
       const imageUrl = await this._EventService.uploadImage(this.selectedFile);
       const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
 
@@ -166,17 +181,27 @@ export class CheckoutComponent {
         EventId: this.eventId,
         EventName: this.eventData.EventName,
         OwnerId: this.eventData.OwnerId,
+
         userId: this.userId,
         userName: this.userData.fullName,
         userPhone: this.userData.phone,
         userEmail: this.userData.email,
-        defaultVisitorCount: 2,
-        transactionRef: this.transactionRef,
         userImage: imageUrl,
-        paymentImage: imagePaymentUrl,
+        defaultVisitorCount: 2,
+        VisitorCount: null,
+
+        payOneAmount: 0,
+        payOneImage: imagePaymentUrl,
+        payOneRef: this.transactionRef,
+
+        payTwoAmount: 0,
+        payTwoImage: '',
+        payTwoRef: '',
+
         totalAmount: 0,
-        createdAt: new Date(),
-        status: 'Pending'
+
+        status: 'Pending',
+        createdAt: new Date()
       };
 
       // 🔥 1. Save booking
@@ -194,12 +219,13 @@ export class CheckoutComponent {
           this.total = 0
           this.transactionRef = ''
           this.selectedFile = null
+          this.selectedPaymentFile = null
           this.photoPreview = ''
+          this.paymentImagePreview = ''
           this.checkoutData = {}
           this._ToastrService.success('Booking Created Successfully');
           this.modalService.dismissAll();
           this._Router.navigate(['/payment-success'])
-
         },
         error: () => {
           this._ToastrService.error('Booking Failed');
@@ -242,6 +268,65 @@ export class CheckoutComponent {
     };
 
     reader.readAsDataURL(this.selectedPaymentFile);
+  }
+
+
+  visitorCount:number = 0
+  paidTwo:number = 0
+
+  calculatePriceAfterFinalPaid(): void {
+    if (this.isReturningUser) {
+
+      this.paidTwo = this.eventData.VisitorPrice * this.visitorCount;
+
+      this.subTotal = (this.eventData.TicketPrice - this.bookingData.payOneAmount || 0) + this.paidTwo;
+
+      this.tax = this.subTotal * 0.02; // مثال 2%
+
+      this.total = this.subTotal + this.tax;
+    }
+  }
+
+
+  async continueBooking(){
+    if (this.isReturningUser) {
+      const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+
+      this._BookingService.updateBooking(this.bookingData.id, {
+        VisitorCount: this.visitorCount,
+
+        payTwoAmount: 0,
+        payTwoImage: imagePaymentUrl,
+        payTwoRef: this.transactionRef,
+
+        totalAmount: 0,
+
+      }).subscribe({
+        next: () => {
+          console.log('✅ Phase 2 Completed');
+          this._ToastrService.success('Booking Completed Successfully');
+
+          this.visitorCount = 0
+          this.paidTwo = 0
+          this.tax = 0
+          this.subTotal = 0
+          this.total = 0
+          this.transactionRef = ''
+          this.selectedFile = null
+          this.selectedPaymentFile = null
+          this.photoPreview = ''
+          this.paymentImagePreview = ''
+          this.checkoutData = {}
+          this.modalService.dismissAll();
+          this._Router.navigate(['/payment-success'])
+        },
+        error: (err) => {
+          console.error(err);
+          this._ToastrService.error('Update Failed');
+        }
+      });
+
+    }
   }
 
 

@@ -34,33 +34,33 @@
                 </div>
               </th>
 
-              <th (click)="sort('eventName')" class="sortable">
+              <th (click)="sort('EventName')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Event Name</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'eventName' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'EventName' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('totalVisitors')" class="sortable">
+              <th (click)="sort('VisitorCount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Visitors</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalVisitors' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'VisitorCount' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalVisitors' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'VisitorCount' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -130,8 +130,8 @@
                     <span>{{ $index + 1 }}</span>
                   </div>
                 </td>
-                <td>{{ book.eventName }}</td>
-                <td>{{ book.totalVisitors}}</td>
+                <td>{{ book.EventName }}</td>
+                <td>{{ book.VisitorCount + book.defaultVisitorCount}}</td>
                 <td>{{ book.totalAmount}} EGP</td>
                 <td>
                   <span

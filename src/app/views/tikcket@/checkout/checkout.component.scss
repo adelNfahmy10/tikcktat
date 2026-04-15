@@ -25,11 +25,7 @@
   align-items: center;
   margin-bottom: 10px;
 }
-@media (max-width:991px) {
-  .row-line {
-    justify-content: start;
-  }
-}
+
 
 .nav-tabs {
   border: none;
@@ -42,10 +38,59 @@
     }
   }
 }
-
 .tab-content {
   border-top: none;
+  .continue-booking{
+    .user-info, .payOne-info{
+      p{
+        margin: 0;
+      }
+      img{
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        filter: drop-shadow(0 0 10px #ccc);
+      }
+    }
+  }
 }
+
+
+
+@media (max-width:991px) {
+  .row-line {
+    justify-content: start;
+  }
+
+  .tab-content {
+    .continue-booking{
+      .user-info, .payOne-info{
+        img{
+          width: 100%;
+          object-fit: fill;
+        }
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .stage-wrapper {
   display: flex;
@@ -53,7 +98,6 @@
   margin-bottom: 30px;
   perspective: 800px; // Depth effect
 }
-
 .stage {
   background: linear-gradient(145deg, #0d6efd, #0a58ca);
   color: white;
@@ -98,7 +142,6 @@
     box-shadow: 0 0 20px rgba(255,255,255,0.15) inset;
   }
 }
-
 /* ===== MOBILE RESPONSIVE ===== */
 @media(max-width: 768px){
   .stage {
