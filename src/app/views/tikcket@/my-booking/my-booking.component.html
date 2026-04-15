@@ -131,28 +131,26 @@
                   </div>
                 </td>
                 <td>{{ book.EventName }}</td>
-                <td>{{ book.VisitorCount + book.defaultVisitorCount}}</td>
-                <td>{{ book.totalAmount}} EGP</td>
+                <td>{{ book.VisitorCount + book.defaultVisitorCount}} Visitor</td>
+                <td>{{ book.totalAmount | number}} EGP</td>
                 <td>
                   <span
-                    class="badge"
-                    [class.bg-success]="book.paymentStatus === 'Paid'"
-                    [class.bg-warning]="book.paymentStatus === 'Pending'"
+                    class="badge px-3 py-1 fs-6"
+                    [class.bg-success]="book.status == 'Paid'"
+                    [class.bg-warning]="book.status == 'Pending'"
                   >
-                    {{ book.paymentStatus }}
+                    {{ book.status }}
                   </span>
                 </td>
 
-                 <td>{{book.checkoutDate | date}}</td>
                  <td>
-                  @if(book.paymentStatus === 'Pending'){
-                    <button class="btn main-btn p-0 px-2">
-                      Pay Now
-                    </button>
-                  } @else {
-                    <span>-</span>
-                  }
-
+                  <span> Date One: {{book?.createdAtOne.toDate() | date}} </span> <br>
+                  <span> Date Two: {{book?.createdAtTwo.toDate() | date}} </span>
+                 </td>
+                 <td>
+                  <span>{{book.totalAmount | number}} EGP</span> <br>
+                  <span> Pay One: {{book?.payOneAmount | number}} EGP</span> <br>
+                  <span> Pay Two: {{book?.payTwoAmount | number}} EGP</span>
                  </td>
               </tr>
             }

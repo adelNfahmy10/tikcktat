@@ -193,15 +193,15 @@ export class CheckoutComponent {
         payOneAmount: 0,
         payOneImage: imagePaymentUrl,
         payOneRef: this.transactionRef,
+        createdAtOne: new Date(),
 
         payTwoAmount: 0,
         payTwoImage: '',
         payTwoRef: '',
+        createdAtTwo: '',
 
         totalAmount: 0,
-
-        status: 'Pending',
-        createdAt: new Date()
+        status: 'Pending'
       };
 
       // 🔥 1. Save booking
@@ -298,6 +298,7 @@ export class CheckoutComponent {
         payTwoAmount: 0,
         payTwoImage: imagePaymentUrl,
         payTwoRef: this.transactionRef,
+        createdAtTwo:new Date(),
 
         totalAmount: 0,
 
