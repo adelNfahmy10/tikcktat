@@ -1,4 +1,4 @@
-<!-- <section class="user-events" id="user-events">
+<section class="user-events" id="user-events">
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
       <h1 class="fw-bold">All Booking</h1>
@@ -146,7 +146,7 @@
                  <td>{{book.checkoutDate | date}}</td>
                  <td>
                   @if(book.paymentStatus === 'Pending'){
-                    <button class="btn main-btn p-0 px-2" (click)="completePayment(book.bookingId)" >
+                    <button class="btn main-btn p-0 px-2">
                       Pay Now
                     </button>
                   } @else {
@@ -178,4 +178,4 @@
     </div>
 
   </div>
-</section> -->
+</section>

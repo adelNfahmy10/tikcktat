@@ -16,57 +16,122 @@
                 Book Ticket
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
               <button class="nav-link" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
                 type="button" role="tab" aria-controls="extra-services" aria-selected="false">
                 Add Companions
               </button>
-            </li>
+            </li> -->
           </ul>
 
           <div class="tab-content py-0" id="ticketTabContent">
             <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
               <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
-                <h1 class="fw-bold m-0">Checkout Event</h1>
 
-                @if(eventData.type != 'FunDayEvent'){
-                  <div class="border-bottom pb-2 note">
-                    <p class="m-0 mb-1">- Each reservation includes (1 student) and (2 accompanying guests).</p>
-                    <p class="m-0 mb-1">- Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.</p>
-                  </div>
+                @if(eventData.Type == 'Graduation'){
+                  <div class="row g-4">
+                    <div class="col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <h1 class="fw-bold m-0">Checkout Event</h1>
+                        </div>
 
-                  <div class="photo">
-                    <label for="photo" class="form-label">Photo</label>
+                        <div class="col-12">
+                          <div class="border-bottom pb-2 note">
+                            <p class="m-0 mb-1">
+                              - Each reservation includes (1 student) and (2 accompanying guests).
+                            </p>
 
-                    <input
-                      class="form-control"
-                      type="file"
-                      id="Photo"
-                      accept="image/*"
-                      (change)="onImageChange($event)"
-                    >
+                            <p class="m-0 mb-1">
+                              - Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.
+                            </p>
 
-                    @if (photoPreview) {
-                      <div class="text-center text-md-start">
-                        <img
-                          loading="lazy"
-                          [src]="photoPreview"
-                          alt="preview"
-                          style="width:200px; margin-top:10px"
-                        />
+                            <p class="m-0 mb-1">
+                              - You can pay part of the total amount now and complete the remaining balance later through the installment system.
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - Please include your payment reference number when completing the installment payment via InstalPay.
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - If possible, kindly upload a screenshot or proof of payment to verify your transaction.
+                            </p>
+                          </div>
+
+                          <div class="border-bottom py-2 note" dir="rtl">
+                            <p class="m-0 mb-1">
+                              - يشمل كل حجز (طالب واحد) و(عدد 2 مرافقين).
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب رسوم إضافية عن كل مرافق إضافي.
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - يمكنك دفع جزء من إجمالي المبلغ الآن، وإكمال المبلغ المتبقي لاحقًا من خلال نظام التقسيط.
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - يرجى إدخال الرقم المرجعي (Reference) لعملية الدفع عند استكمال الدفع عبر InstalPay.
+                            </p>
+
+                            <p class="m-0 mb-1">
+                              - في حال توفر ذلك، يُفضل إرسال صورة أو إثبات عملية الدفع للتحقق من المعاملة.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-flex flex-wrap justify-content-center align-items-center">
+
+                              <div class="flex-grow-1">
+                                <label for="photo" class="form-label">Your Image In Event</label>
+
+                                <input
+                                  class="form-control w-100"
+                                  type="file"
+                                  id="Photo"
+                                  accept="image/*"
+                                  (change)="onImageChange($event)"
+                                >
+                              </div>
+
+                              @if (photoPreview) {
+                                <div class="text-center flex-grow-1">
+                                  <img
+                                    loading="lazy"
+                                    [src]="photoPreview"
+                                    alt="preview"
+                                    style="width:200px; margin-top:10px"
+                                  />
+                                </div>
+                              }
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-md-6">
+                          <div class="VisitorCount">
+                            <label for="VisitorCount" class="form-label">Visitor Count</label>
+                            <input class="form-control" type="number" formControlName="VisitorCount" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Visitors...">
+                          </div>
+                        </div> -->
+
+                        <div class="col-12">
+                          <div class="text-center">
+                            <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Book Now </button>
+                          </div>
+                        </div>
                       </div>
-                    }
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="reference-image text-center">
+                        <img src="assets/images/tikecktImages/RefImage.png" class="ref-image" alt="">
+                      </div>
+                    </div>
                   </div>
                 }
-
-                <div class="VisitorCount">
-                  <label for="VisitorCount" class="form-label">Visitor Count</label>
-                  <input class="form-control" type="number"  formControlName="VisitorCount" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Visitors...">
-                </div>
-
-                <div class="text-center">
-                  <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Checkout </button>
-                </div>
               </form>
             </div>
 
@@ -186,18 +251,29 @@
               <p class="text-center fs-3"><a href="https://ipn.eg/S/anfahmy2000/instapay/5fLUFC" target="_blank">Pay Now <i class="fa-solid fa-up-right-from-square"></i></a></p>
             </div>
 
-            <small>
-              Transaction reference must be exactly 12 digits
-            </small>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Enter Transaction Reference"
-              maxlength="12"
-              [(ngModel)]="transactionRef"
-              name="transactionRef"
-              inputmode="numeric"
-            />
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+              <div class="w-100">
+                <small>
+                  Reference Number 12 Digits
+                </small>
+                <input
+                  type="text"
+                  class="form-control w-100"
+                  placeholder="Enter Transaction Reference"
+                  maxlength="12"
+                  [(ngModel)]="transactionRef"
+                  name="transactionRef"
+                  inputmode="numeric"
+                />
+              </div>
+
+              <div class="w-100">
+                <small>
+                  Upload Image Transaction
+                </small>
+                <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+              </div>
+            </div>
           </div>
         </div>
             </div>

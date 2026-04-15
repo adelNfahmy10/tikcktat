@@ -61,6 +61,8 @@ export class CheckoutComponent {
 
   selectedFile!: File | null;
   photoPreview: string | ArrayBuffer | null = null;
+  selectedPaymentFile!: File | null;
+  paymentImagePreview: string | ArrayBuffer | null = null;
   checkoutData:any = {}
   subTotal:number = 0
   total:number = 0
@@ -80,6 +82,8 @@ export class CheckoutComponent {
         this._EventService.getEventById(this.eventId).subscribe({
           next:(res)=>{
             this.eventData = res
+            console.log(this.eventData);
+
           }
         })
       }
@@ -90,20 +94,27 @@ export class CheckoutComponent {
     this._UsersService.getUserById(this.userId!).subscribe({
       next:(res)=>{
         this.userData = res
+        console.log(this.userData);
+
       }
     })
   }
 
   checkoutForm:FormGroup = this._FormBuilder.group({
     EventId:[null, Validators.required],
-    userId:[null, Validators.required],
+    EventName:[null, Validators.required],
     OwnerId:[null, Validators.required],
-    Image:[null],
-    VisitorCount:[null, [Validators.required, Validators.min(0)]],
+    userId:[null, Validators.required],
+    userName:[null, Validators.required],
+    userPhone:[null, Validators.required],
+    userEmail:[null, Validators.required],
+    userImage:[null],
     defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
+    VisitorCount:[null, [Validators.required, Validators.min(0)]],
+    totalAmount:[null, [Validators.required, Validators.min(0)]],
+    paymentImage:[null],
     transactionRef: [null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]]
   })
-
 
   // Modal Check Data Logic
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
@@ -126,41 +137,44 @@ export class CheckoutComponent {
   // // Checkout Logic
   async submitCheckout(): Promise<void> {
     // ✅ 1. Validate
-  if (!this.eventId || !this.selectedFile || this.transactionRef?.length !== 12) {
-    this._ToastrService.error('Missing data');
-    return;
-  }
+    if (!this.eventId || !this.selectedFile || this.transactionRef?.length !== 12) {
+      this._ToastrService.error('Missing data');
+      return;
+    }
 
     try {
       // ✅ 2. Check duplicate booking
-      const existingBooking = await this._BookingService.checkUserBooking(
-        this.eventId,
-        this.userId!
-      );
+      // const existingBooking = await this._BookingService.checkUserBooking(
+      //   this.eventId,
+      //   this.userId!
+      // );
 
-      if (!existingBooking.empty) {
-        this._ToastrService.error('You already booked this event');
-        return;
-      }
+      // if (!existingBooking.empty) {
+      //   this._ToastrService.error('You already booked this event');
+      //   return;
+      // }
 
-
-      // ✅ 3. Fill form
-      this.checkoutForm.patchValue({
-        EventId: this.eventId,
-        userId: this.userId,
-        OwnerId: this.eventData.OwnerId,
-        defaultVisitorCount: 2,
-        transactionRef: this.transactionRef
-      });
 
       // 🔥 4. Upload image
       const imageUrl = await this._EventService.uploadImage(this.selectedFile);
+      const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
 
       const formValue = this.checkoutForm.value;
 
       const finalData = {
         ...formValue,
-        Image: imageUrl,
+        EventId: this.eventId,
+        EventName: this.eventData.EventName,
+        OwnerId: this.eventData.OwnerId,
+        userId: this.userId,
+        userName: this.userData.fullName,
+        userPhone: this.userData.phone,
+        userEmail: this.userData.email,
+        defaultVisitorCount: 2,
+        transactionRef: this.transactionRef,
+        userImage: imageUrl,
+        paymentImage: imagePaymentUrl,
+        totalAmount: 0,
         createdAt: new Date(),
         status: 'Pending'
       };
@@ -212,6 +226,22 @@ export class CheckoutComponent {
     };
 
     reader.readAsDataURL(this.selectedFile);
+  }
+
+  onPaymentImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) return;
+
+    this.selectedPaymentFile = input.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.paymentImagePreview = reader.result;
+    };
+
+    reader.readAsDataURL(this.selectedPaymentFile);
   }
 
 

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { switchMap } from 'rxjs';
 
@@ -12,94 +13,98 @@ import { switchMap } from 'rxjs';
   styleUrl: './my-booking.component.scss'
 })
 export class MyBookingComponent {
-  // private readonly _EventService = inject(EventService)
+  private readonly _BookingService = inject(BookingService)
+  private readonly _EventService = inject(EventService)
   // private readonly _ActivatedRoute = inject(ActivatedRoute)
 
-  // allBookings: any[] = [];
-  // searchText = '';
-  // sortColumn = '';
-  // sortDirection: 'asc' | 'desc' = 'asc';
+  allBookings: any[] = [];
+  userId: string | null = localStorage.getItem('userId')
+  searchText = '';
+  sortColumn = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
-  // page = 1;
-  // pageSize = 15;
-  // totalPages: number[] = [];
+  page = 1;
+  pageSize = 15;
+  totalPages: number[] = [];
 
-  // filteredData:any[] = [];
-  // paginatedData: any[] = [];
+  filteredData:any[] = [];
+  paginatedData: any[] = [];
 
 
-  // ngOnInit() {
-  //   this.getAllBooking()
-  // }
+  ngOnInit() {
+    this.getAllBooking()
+  }
 
-  // // Get All Booking
-  // getAllBooking(): void {
-  //   this._EventService.getUserCheckout().subscribe({
-  //     next: (res) => {
-  //       this.allBookings = res.data;
-  //       this.filteredData = res.data;
-  //       this.updatePagination();
-  //     }
-  //   })
-  // }
+  // Get All Booking
+  getAllBooking(): void {
+    this._BookingService.getUserBookings(this.userId!).subscribe({
+      next: (res) => {
+        this.allBookings = res;
+        console.log(this.allBookings);
 
-  // // 🔍 Search
-  // applySearch() {
-  //   this.filteredData = this.allBookings.filter(item =>
-  //     Object.values(item)
-  //       .join(' ')
-  //       .toLowerCase()
-  //       .includes(this.searchText.toLowerCase())
-  //   );
-  //   this.page = 1;
-  //   this.updatePagination();
-  // }
+        this.filteredData = res;
+        this.updatePagination();
+      }
+    })
+  }
 
-  // // 🔃 Sort (supports boolean active)
-  // sort(column: string) {
-  //   if (this.sortColumn === column) {
-  //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  //   } else {
-  //     this.sortColumn = column;
-  //     this.sortDirection = 'asc';
-  //   }
+  // 🔍 Search
+  applySearch() {
+    this.filteredData = this.allBookings.filter(item =>
+      Object.values(item)
+        .join(' ')
+        .toLowerCase()
+        .includes(this.searchText.toLowerCase())
+    );
+    this.page = 1;
+    this.updatePagination();
+  }
 
-  //   this.filteredData.sort((a: any, b: any) => {
-  //     let valueA = a[column];
-  //     let valueB = b[column];
+  // 🔃 Sort (supports boolean active)
+  sort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
 
-  //     if (typeof valueA === 'boolean') {
-  //       valueA = valueA ? 1 : 0;
-  //       valueB = valueB ? 1 : 0;
-  //     }
+    this.filteredData.sort((a: any, b: any) => {
+      let valueA = a[column];
+      let valueB = b[column];
 
-  //     if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-  //     if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-  //     return 0;
-  //   });
+      if (typeof valueA === 'boolean') {
+        valueA = valueA ? 1 : 0;
+        valueB = valueB ? 1 : 0;
+      }
 
-  //   this.updatePagination();
-  // }
+      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+      return 0;
+    });
 
-  // // 📄 Pagination
-  // updatePagination() {
-  //   const total = Math.ceil(this.filteredData.length / this.pageSize);
+    this.updatePagination();
+  }
 
-  //   this.totalPages = Array.from({ length: total }, (_, i) => i + 1);
+  // 📄 Pagination
+  updatePagination() {
+    const total = Math.ceil(this.filteredData.length / this.pageSize);
 
-  //   if (this.page > total) this.page = total || 1;
-  //   if (this.page < 1) this.page = 1;
+    this.totalPages = Array.from({ length: total }, (_, i) => i + 1);
 
-  //   const start = (this.page - 1) * this.pageSize;
-  //   this.paginatedData = this.filteredData.slice(start, start + this.pageSize);
-  // }
+    if (this.page > total) this.page = total || 1;
+    if (this.page < 1) this.page = 1;
 
-  // // 📄 Change Page
-  // changePage(p: number) {
-  //   if (p < 1 || p > this.totalPages.length) return;
-  //   this.page = p;
-  //   this.updatePagination();
-  // }
+    const start = (this.page - 1) * this.pageSize;
+    this.paginatedData = this.filteredData.slice(start, start + this.pageSize);
+  }
+
+  // 📄 Change Page
+  changePage(p: number) {
+    if (p < 1 || p > this.totalPages.length) return;
+    this.page = p;
+    this.updatePagination();
+  }
 
   // // Complete Payment
   // completePayment(id:any): void {
