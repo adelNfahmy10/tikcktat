@@ -66,57 +66,73 @@
                 </div>
               </th>
 
-              <th (click)="sort('totalAmount')" class="sortable">
+              <th (click)="sort('payTwoAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Amount</span>
+                  <span>Total Paid</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('paymentStatus')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Payment Status</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'paymentStatus' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'paymentStatus' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('checkoutDate')" class="sortable">
+              <th (click)="sort('createdAtTwo')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Checkout Date</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'checkoutDate' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'createdAtTwo' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'checkoutDate' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'createdAtTwo' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-              <th (click)="sort('checkoutDate')" class="sortable">
+              <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
-                  <span>Complete Payment</span>
+                  <span>Total Amount</span>
+                </div>
+              </th>
+
+              <th (click)="sort('status')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Status</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+               <th class="info">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Action</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
                 </div>
               </th>
             </tr>
@@ -131,8 +147,22 @@
                   </div>
                 </td>
                 <td>{{ book.EventName }}</td>
-                <td>{{ book.VisitorCount + book.defaultVisitorCount}} Visitor</td>
+                <td>
+                  <span> Default : {{book.defaultVisitorCount}} Visitors </span> <br>
+                  <span> Custom: {{book.VisitorCount}} Visitors </span>
+                </td>
+                <td>
+                  <span> Pay One: {{book?.payOneAmount | number}} EGP</span> <br>
+                  <span> Pay Two: {{book?.payTwoAmount | number}} EGP</span>
+                </td>
+
+                <td>
+                  <span> Date One: {{book?.createdAtOne.toDate() | date:"medium"}} </span> <br>
+                  <span> Date Two: {{book?.createdAtTwo.toDate() | date:"medium"}} </span>
+                </td>
+
                 <td>{{ book.totalAmount | number}} EGP</td>
+
                 <td>
                   <span
                     class="badge px-3 py-1 fs-6"
@@ -142,16 +172,6 @@
                     {{ book.status }}
                   </span>
                 </td>
-
-                 <td>
-                  <span> Date One: {{book?.createdAtOne.toDate() | date}} </span> <br>
-                  <span> Date Two: {{book?.createdAtTwo.toDate() | date}} </span>
-                 </td>
-                 <td>
-                  <span>{{book.totalAmount | number}} EGP</span> <br>
-                  <span> Pay One: {{book?.payOneAmount | number}} EGP</span> <br>
-                  <span> Pay Two: {{book?.payTwoAmount | number}} EGP</span>
-                 </td>
               </tr>
             }
           </tbody>

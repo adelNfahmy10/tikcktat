@@ -11,6 +11,7 @@ import { PaymentService } from '@core/services/payment/payment.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import Choices from 'choices.js';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -51,6 +52,7 @@ export class CheckoutComponent {
   private readonly _ToastrService = inject(ToastrService)
   private readonly _EventService = inject(EventService)
   private readonly _BookingService = inject(BookingService)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private modalService = inject(NgbModal)
 
   userId:string | null = localStorage.getItem('userId')
@@ -79,6 +81,8 @@ export class CheckoutComponent {
   }
 
   getEventId(): void {
+    this._NgxSpinnerService.show()
+
     this._ActivatedRoute.paramMap.subscribe({
       next: (params) => {
         this.eventId = params.get('id')!;
@@ -86,35 +90,37 @@ export class CheckoutComponent {
         this._EventService.getEventById(this.eventId).subscribe({
           next: (res) => {
             this.eventData = res;
-            console.log(this.eventData);
+            this._NgxSpinnerService.hide()
           }
         });
 
         // 🔥 check هنا مباشرة
-        this._BookingService.checkUserBooking(this.eventId, this.userId!)
-          .subscribe((booking) => {
+        this._BookingService.checkUserBooking(this.eventId, this.userId!).subscribe((booking) => {
+          this._NgxSpinnerService.hide()
 
-            if (booking) {
-              this.isReturningUser = true;
-              this.bookingData = booking;
+          if (booking) {
+            this.isReturningUser = true;
+            this.bookingData = booking;
 
-              console.log('🔥 Returning User:', booking);
+            console.log('🔥 Returning User:', booking);
 
-            } else {
-              this.isReturningUser = false;
+          } else {
+            this.isReturningUser = false;
+            console.log('🟢 First Time User');
+          }
 
-              console.log('🟢 First Time User');
-            }
-
-          });
+        });
       }
     });
   }
 
   getUserById():void{
+    this._NgxSpinnerService.show()
+
     this._UsersService.getUserById(this.userId!).subscribe({
       next:(res)=>{
         this.userData = res
+        this._NgxSpinnerService.hide()
       }
     })
   }
@@ -163,9 +169,12 @@ export class CheckoutComponent {
 
   // // Checkout Logic
   async submitCheckout(): Promise<void> {
+    this._NgxSpinnerService.show()
+
     // ✅ 1. Validate
     if (!this.eventId || !this.selectedFile || this.transactionRef?.length !== 12) {
       this._ToastrService.error('Missing data');
+      this._NgxSpinnerService.hide()
       return;
     }
 
@@ -207,6 +216,8 @@ export class CheckoutComponent {
       // 🔥 1. Save booking
       this._BookingService.createBooking(finalData).subscribe({
         next: () => {
+          this._NgxSpinnerService.hide()
+
           // 🔥 2. Update tickets
           this._EventService.updateEventTickets(
             this.eventId!,
@@ -228,12 +239,13 @@ export class CheckoutComponent {
           this._Router.navigate(['/payment-success'])
         },
         error: () => {
+          this._NgxSpinnerService.hide()
           this._ToastrService.error('Booking Failed');
         }
       });
 
     } catch (err) {
-      console.error(err);
+      this._NgxSpinnerService.hide()
       this._ToastrService.error('Checkout failed');
     }
   }
@@ -289,6 +301,8 @@ export class CheckoutComponent {
 
 
   async continueBooking(){
+    this._NgxSpinnerService.show()
+
     if (this.isReturningUser) {
       const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
 
@@ -304,6 +318,7 @@ export class CheckoutComponent {
 
       }).subscribe({
         next: () => {
+          this._NgxSpinnerService.hide()
           console.log('✅ Phase 2 Completed');
           this._ToastrService.success('Booking Completed Successfully');
 
@@ -322,7 +337,7 @@ export class CheckoutComponent {
           this._Router.navigate(['/payment-success'])
         },
         error: (err) => {
-          console.error(err);
+          this._NgxSpinnerService.hide()
           this._ToastrService.error('Update Failed');
         }
       });

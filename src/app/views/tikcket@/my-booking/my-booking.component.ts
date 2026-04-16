@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { switchMap } from 'rxjs';
 
 @Component({
@@ -15,6 +16,8 @@ import { switchMap } from 'rxjs';
 export class MyBookingComponent {
   private readonly _BookingService = inject(BookingService)
   private readonly _EventService = inject(EventService)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+
   // private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allBookings: any[] = [];
@@ -37,11 +40,11 @@ export class MyBookingComponent {
 
   // Get All Booking
   getAllBooking(): void {
+    this._NgxSpinnerService.show()
     this._BookingService.getUserBookings(this.userId!).subscribe({
       next: (res) => {
+        this._NgxSpinnerService.hide()
         this.allBookings = res;
-        console.log(this.allBookings);
-
         this.filteredData = res;
         this.updatePagination();
       }
@@ -56,6 +59,8 @@ export class MyBookingComponent {
         .toLowerCase()
         .includes(this.searchText.toLowerCase())
     );
+    console.log(this.filteredData);
+
     this.page = 1;
     this.updatePagination();
   }

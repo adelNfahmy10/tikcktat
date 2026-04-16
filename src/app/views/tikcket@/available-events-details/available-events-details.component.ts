@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import { NgbAccordionModule, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { switchMap } from 'rxjs';
 
@@ -21,6 +22,7 @@ export class AvailableEventsDetailsComponent {
   private readonly _AuthService = inject(AuthService)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _Router = inject(Router)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private modalService = inject(NgbModal)
 
   eventData:any
@@ -34,6 +36,8 @@ export class AvailableEventsDetailsComponent {
   }
 
   getEventById(): void {
+    this._NgxSpinnerService.show()
+
     this._ActivatedRoute.paramMap
       .pipe(
         switchMap(params => {
@@ -44,6 +48,7 @@ export class AvailableEventsDetailsComponent {
       .subscribe({
         next: (res) => {
           this.eventData = res;
+          this._NgxSpinnerService.hide()
         },
         error: (err) => {
           console.error(err);
@@ -84,8 +89,11 @@ export class AvailableEventsDetailsComponent {
   });
 
   submitRegisterForm(): void {
+    this._NgxSpinnerService.show()
+
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      this._NgxSpinnerService.hide()
       return;
     }
 
@@ -94,6 +102,7 @@ export class AvailableEventsDetailsComponent {
     this._AuthService.register(data).subscribe({
       next: (res) => {
         this._ToastrService.success('Account Created Successfully');
+        this._NgxSpinnerService.hide()
 
         localStorage.setItem('userId', res.uid);
         localStorage.setItem('fullName', res.fullName);
@@ -124,6 +133,7 @@ export class AvailableEventsDetailsComponent {
           default:
             this._ToastrService.error('Registration failed');
         }
+        this._NgxSpinnerService.hide()
       }
     });
   }
@@ -134,8 +144,11 @@ export class AvailableEventsDetailsComponent {
   });
 
   submitLogin(): void {
+    this._NgxSpinnerService.show()
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this._NgxSpinnerService.hide()
       return;
     }
 
@@ -144,6 +157,8 @@ export class AvailableEventsDetailsComponent {
     this._AuthService.login(email!, password!).subscribe({
       next: (res: any) => {
         this._ToastrService.success('Login Successfully');
+        this._NgxSpinnerService.hide()
+
         localStorage.setItem('userId', res.uid);
         localStorage.setItem('fullName', res.fullName);
         localStorage.setItem('email', res.email);
@@ -154,7 +169,7 @@ export class AvailableEventsDetailsComponent {
         });
       },
       error: (err) => {
-        console.error(err);
+        this._NgxSpinnerService.hide()
         if (err.code === 'auth/invalid-credential') {
           this._ToastrService.error('Invalid email or password');
         } else {

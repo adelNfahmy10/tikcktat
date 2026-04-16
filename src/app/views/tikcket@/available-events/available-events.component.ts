@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-available-events',
@@ -14,6 +15,7 @@ export class AvailableEventsComponent {
   private readonly _EventService = inject(EventService)
   private readonly _UsersService = inject(UsersService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
 
   allEvents:any[] = [];
   category:string = '';
@@ -23,17 +25,17 @@ export class AvailableEventsComponent {
   ngOnInit() {
     this.getAllOwners()
     this.getAllEvent()
-
   }
 
   getAllEvent(): void {
+    this._NgxSpinnerService.show()
     this._ActivatedRoute.params.subscribe(params => {
       this.category = params['type'];
       this._EventService.getAllEvents().subscribe({
         next: (res) => {
-
           this.allEvents = res.filter(e => e.Type === this.category);
           this.mergeData();
+          this._NgxSpinnerService.hide()
         }
       });
     })
