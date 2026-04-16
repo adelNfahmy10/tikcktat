@@ -103,49 +103,34 @@
                 </div>
               </th>
 
-              <th (click)="sort('transactionRef')" class="sortable">
+              <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Total Price</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'transactionRef' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'transactionRef' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
               </th>
 
-               <th (click)="sort('transactionRef')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Reference</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'transactionRef' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'transactionRef' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
 
-              <th (click)="sort('active')" class="sortable">
+              <th (click)="sort('status')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
                   <span class="sort-icons">
                     <i
                       class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'asc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
                     ></i>
                     <i
                       class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'active' && sortDirection === 'desc'"
+                      [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -169,36 +154,41 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <img [src]="user.Image" width="50" class="rounded" [alt]="user.userName" />
-                    <h6 class="m-0">{{ user.userName }}</h6>
+                    <img [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
+                    <h6 class="m-0">{{ user?.userName }}</h6>
                   </div>
                 </td>
-                <td>{{ user.userPhone }}</td>
-                <td>{{ user.userEmail }}</td>
-                <td>{{ user.VisitorCount + user.defaultVisitorCount }}</td>
+                <td>{{ user?.userPhone }}</td>
+                <td>{{ user?.userEmail }}</td>
+                <td>{{ user?.VisitorCount + user?.defaultVisitorCount }} Visitors</td>
                 <td>
-                  {{ getTotal(user).toFixed(0) | number}} EGP <br>
-                  {{taxAmount}} EGP
+                  <span>
+                    Total: {{ user?.totalAmount | number }} EGP
+                  </span>
+                  <br>
 
-                </td>
-                <td> {{ user.transactionRef }} </td>
-                <td>
-                  <span
-                    class="badge"
-                    [class.bg-success]="user.status === 'Active'"
-                    [class.bg-danger]="user.status !== 'Active'"
-                  >
-                    {{ user.status }}
+                  <span>
+                    Tax (2%):
+                    {{ getTax(user?.totalAmount) | number:'1.0-2' }} EGP
+                  </span>
+                  <br>
+
+                  <span class="fw-bold">
+                    Final:
+                    {{ getFinal(user?.totalAmount) | number }} EGP
                   </span>
                 </td>
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="user.status === 'Active'"
-                    [class.bg-danger]="user.status !== 'Active'"
+                    [class.bg-success]="user?.status === 'Paid'"
+                    [class.bg-danger]="user?.status !== 'Paid'"
                   >
-                    {{ user.status }}
+                    {{ user?.status }}
                   </span>
+                </td>
+                <td>
+                  <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>
                 </td>
               </tr>
             }
@@ -225,3 +215,106 @@
 
   </div>
 </section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">More Informations</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <span>Your Photo</span>
+            <div class="images">
+              <img [src]="bookDataById?.userImage" alt="User Image">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <span>First Transaction Image</span>
+            <div class="images">
+              <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <span>Second Transaction Image</span>
+            <div class="images">
+              <img [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                  <tr>
+                    <th (click)="sort('payOneAmount')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>First Paid</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'payOneAmount' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'payOneAmount' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+
+                    <th (click)="sort('payTwoAmount')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>Second Paid</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                      <td>
+                        <span>Pay: {{bookDataById?.payOneAmount | number}} EGP</span> <br>
+                        <span>Tax (2%): {{ getTax(bookDataById?.payOneAmount) | number:'1.0-2' }} EGP</span> <br>
+                        <span>Final: {{ getFinal(bookDataById?.payOneAmount) | number }} EGP</span> <br>
+                        <span> Reference: {{bookDataById?.payOneRef}} </span> <br>
+                        <span> Date: {{bookDataById?.createdAtOne.toDate() | date:"medium"}}</span>
+                      </td>
+
+                      <td>
+                        <span>Pay: {{bookDataById?.payTwoAmount | number}} EGP</span> <br>
+                        <span>Tax (2%): {{ getTax(bookDataById?.payTwoAmount) | number:'1.0-2' }} EGP</span> <br>
+                        <span>Final: {{ getFinal(bookDataById?.payTwoAmount) | number }} EGP</span> <br>
+                        <span> Reference: {{bookDataById?.payTwoRef}} </span> <br>
+                        <span> Date: {{bookDataById?.createdAtTwo.toDate() | date:"medium"}}</span>
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

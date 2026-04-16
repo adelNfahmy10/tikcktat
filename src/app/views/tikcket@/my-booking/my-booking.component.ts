@@ -21,6 +21,8 @@ export class MyBookingComponent {
   // private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allBookings: any[] = [];
+  bookDataById:any
+
   userId: string | null = localStorage.getItem('userId')
   searchText = '';
   sortColumn = '';
@@ -49,6 +51,20 @@ export class MyBookingComponent {
         this.updatePagination();
       }
     })
+  }
+
+  getBookById(id:any):void{
+    this._NgxSpinnerService.show()
+    this._BookingService.getBookingById(id).subscribe({
+      next:(res)=>{
+        this._NgxSpinnerService.hide()
+        this.bookDataById = res
+      },
+      error:(err)=>{
+        this._NgxSpinnerService.hide()
+        console.log(err);
+      }
+    });
   }
 
   // 🔍 Search

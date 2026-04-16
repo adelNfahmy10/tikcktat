@@ -66,38 +66,6 @@
                 </div>
               </th>
 
-              <th (click)="sort('payTwoAmount')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Total Paid</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
-              <th (click)="sort('createdAtTwo')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Checkout Date</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'createdAtTwo' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'createdAtTwo' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
-
               <th (click)="sort('totalAmount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Total Amount</span>
@@ -146,23 +114,16 @@
                     <span>{{ $index + 1 }}</span>
                   </div>
                 </td>
-                <td>{{ book.EventName }}</td>
-                <td>
+
+                <td style="width: 40%;">{{ book.EventName }}</td>
+
+                <td style="width: 25%;">
                   <span> Default : {{book.defaultVisitorCount}} Visitors </span> <br>
                   <span> Custom: {{book.VisitorCount}} Visitors </span>
                 </td>
-                <td>
-                  <span> Pay One: {{book?.payOneAmount | number}} EGP</span> <br>
-                  <span> Pay Two: {{book?.payTwoAmount | number}} EGP</span>
-                </td>
 
-                <td>
-                  <span> Date One: {{book?.createdAtOne.toDate() | date:"medium"}} </span> <br>
-                  <span> Date Two: {{book?.createdAtTwo.toDate() | date:"medium"}} </span>
-                </td>
 
                 <td>{{ book.totalAmount | number}} EGP</td>
-
                 <td>
                   <span
                     class="badge px-3 py-1 fs-6"
@@ -171,6 +132,9 @@
                   >
                     {{ book.status }}
                   </span>
+                </td>
+                <td>
+                  <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(book.id)"></i>
                 </td>
               </tr>
             }
@@ -197,3 +161,101 @@
 
   </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">More Informations</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <span>Your Photo</span>
+            <div class="images">
+              <img [src]="bookDataById?.userImage" alt="User Image">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <span>First Transaction Image</span>
+            <div class="images">
+              <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <span>Second Transaction Image</span>
+            <div class="images">
+              <img [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                  <tr>
+                    <th (click)="sort('payOneAmount')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>First Paid</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'payOneAmount' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'payOneAmount' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+
+                    <th (click)="sort('payTwoAmount')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>Second Paid</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'payTwoAmount' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                      <td>
+                        <span> Pay: {{bookDataById?.payOneAmount | number}} EGP</span> <br>
+                        <span> Date: {{bookDataById?.createdAtOne.toDate() | date:"medium"}}</span>
+                      </td>
+
+                      <td>
+                        <span> Pay: {{bookDataById?.payTwoAmount | number}} EGP</span> <br>
+                        <span> Date: {{bookDataById?.createdAtTwo.toDate() | date:"medium"}}</span>
+                      </td>
+
+
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

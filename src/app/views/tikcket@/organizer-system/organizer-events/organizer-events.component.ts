@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-organizer-events',
@@ -12,10 +13,13 @@ import { EventService } from '@core/services/event/event.service';
 })
 export class OrganizerEventsComponent {
   private readonly _EventService = inject(EventService)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
 
   userId:string | null = localStorage.getItem('userId')
   fullName:string | null = localStorage.getItem('fullName')
   ownerEvents:any[] = []
+
+  bookingCount:number = 0
 
   // table state
   searchText = '';
@@ -29,24 +33,24 @@ export class OrganizerEventsComponent {
   paginatedData: any[] = [];
 
 
-  ngOnInit() {
+  ngOnInit(){
     this.getOwnerEvents()
   }
 
-  getOwnerEvents(){
+  getOwnerEvents():void {
+    this._NgxSpinnerService.show()
     const userId = localStorage.getItem('userId');
     if (userId) {
       this._EventService.getEventsByOwner(userId).subscribe({
         next: (res) => {
+          this._NgxSpinnerService.hide()
           this.ownerEvents = res;
-          console.log(this.ownerEvents);
-
           this.filteredData = [...this.ownerEvents];
           this.updatePagination();
         },
         error: (err) => {
+          this._NgxSpinnerService.hide()
           console.error('Error fetching owner events:', err);
-
         }
       });
     }

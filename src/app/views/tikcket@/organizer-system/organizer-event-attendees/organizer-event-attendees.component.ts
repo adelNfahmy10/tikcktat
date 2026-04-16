@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { switchMap } from 'rxjs';
 
 @Component({
@@ -18,6 +19,7 @@ export class OrganizerEventAttendeesComponent {
   private readonly _UsersService = inject(UsersService);
   private readonly _BookingService = inject(BookingService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
 
   eventId:string | null = null
   eventData: any = {};
@@ -25,6 +27,7 @@ export class OrganizerEventAttendeesComponent {
   allUsers: any[] = [];
   allBooking: any[] = [];
   attendeesWithUsers: any[] = [];
+  bookDataById:any
 
   searchText = '';
   sortColumn = '';
@@ -37,7 +40,7 @@ export class OrganizerEventAttendeesComponent {
   filteredData:any[] = [];
   paginatedData: any[] = [];
 
-  tax:number = 0.02
+  taxAmount: number = 0.02; // 2%
 
   ngOnInit() {
     this.getAttendeesByEventId()
@@ -47,26 +50,34 @@ export class OrganizerEventAttendeesComponent {
   }
 
   getEventById(): void {
+    this._NgxSpinnerService.show()
     this._EventService.getEventById(this.eventId!).subscribe({
       next: (res) => {
+        this._NgxSpinnerService.hide()
         this.eventData = res;
+        console.log('Event', this.eventData);
       },
       error: (err) => {
+        this._NgxSpinnerService.hide()
         console.error(err);
       }
     });
   }
 
   getAllUsers(): void {
+    this._NgxSpinnerService.show()
     this._UsersService.getAllUsers().subscribe({
       next: (res) => {
+        this._NgxSpinnerService.hide()
         this.allUsers = res;
+        console.log('Users', this.allUsers);
         this.mergeData(); // 🔥 مهم
       }
     });
   }
 
   getAttendeesByEventId(): void {
+    this._NgxSpinnerService.show()
     this._ActivatedRoute.paramMap
       .pipe(
         switchMap(params => {
@@ -76,10 +87,26 @@ export class OrganizerEventAttendeesComponent {
       )
       .subscribe({
         next: (res) => {
+          this._NgxSpinnerService.hide()
           this.allBooking = res;
+          console.log("Booking", this.allBooking);
           this.mergeData(); // 🔥 مهم
         }
       });
+  }
+
+  getBookById(id:any):void{
+    this._NgxSpinnerService.show()
+    this._BookingService.getBookingById(id).subscribe({
+      next:(res)=>{
+        this._NgxSpinnerService.hide()
+        this.bookDataById = res
+      },
+      error:(err)=>{
+        this._NgxSpinnerService.hide()
+        console.log(err);
+      }
+    });
   }
 
   mergeData(): void {
@@ -142,16 +169,12 @@ export class OrganizerEventAttendeesComponent {
     this.updatePagination();
   }
 
+  getTax(amount: number): number {
+    return amount * this.taxAmount;
+  }
 
-  taxAmount:number = 0
-  getTotal(user: any): number {
-    const subtotal = (user.VisitorCount * this.eventData.VisitorPrice) + this.eventData.TicketPrice;
-
-    this.taxAmount = subtotal * this.tax;
-
-
-    // return subtotal + this.taxAmount;
-    return subtotal;
+  getFinal(amount: number): number {
+    return amount + this.getTax(amount);
   }
 
   // 🔍 Search

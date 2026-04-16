@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { collectionData, Firestore } from '@angular/fire/firestore';
+import { collectionData, docData, Firestore } from '@angular/fire/firestore';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { from, map, Observable } from 'rxjs';
 
@@ -8,6 +8,19 @@ import { from, map, Observable } from 'rxjs';
 })
 export class BookingService {
   private firestore = inject(Firestore);
+
+  // 🔥 Get All Booking
+  getAllBookings(): Observable<any[]> {
+    const bookingRef = collection(this.firestore, 'bookings');
+
+    return collectionData(bookingRef, { idField: 'id' });
+  }
+
+  getBookingById(bookingId: string): Observable<any> {
+    const bookingDoc = doc(this.firestore, `bookings/${bookingId}`);
+
+    return docData(bookingDoc, { idField: 'id' });
+  }
 
   // 🔥 Create Booking
   createBooking(data: any) {
