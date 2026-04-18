@@ -65,6 +65,14 @@
 
                             <div class="border-bottom py-2 note" dir="rtl">
                               <p class="m-0 mb-1">
+                                - يرجى إدخال الرقم المرجعي (Reference) لعملية الدفع عند استكمال الدفع عبر InstalPay.
+                              </p>
+
+                              <p class="m-0 mb-1">
+                                - في حال توفر ذلك، يُفضل إرسال صورة أو إثبات عملية الدفع للتحقق من المعاملة.
+                              </p>
+
+                              <p class="m-0 mb-1">
                                 - يشمل كل حجز (طالب واحد) و(عدد 2 مرافقين).
                               </p>
 
@@ -76,42 +84,64 @@
                                 - يمكنك دفع جزء من إجمالي المبلغ الآن، وإكمال المبلغ المتبقي لاحقًا من خلال نظام التقسيط.
                               </p>
 
-                              <p class="m-0 mb-1">
-                                - يرجى إدخال الرقم المرجعي (Reference) لعملية الدفع عند استكمال الدفع عبر InstalPay.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - في حال توفر ذلك، يُفضل إرسال صورة أو إثبات عملية الدفع للتحقق من المعاملة.
-                              </p>
                             </div>
                           </div>
 
                           <div class="col-12">
-                              <div class="d-flex flex-wrap justify-content-center align-items-center">
 
-                                <div class="flex-grow-1">
-                                  <label for="photo" class="form-label">Your Image In Event</label>
+                            <div>
+                              <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
 
-                                  <input
-                                    class="form-control w-100"
-                                    type="file"
-                                    id="Photo"
-                                    accept="image/*"
-                                    (change)="onImageChange($event)"
-                                  >
-                                </div>
+                              <input
+                                class="form-control w-100"
+                                type="text"
+                                id="GraduationScarfName"
+                                formControlName="GraduationScarfName"
+                                placeholder="أدخل الإسم على الوشاح"
+                              />
 
-                                @if (photoPreview) {
-                                  <div class="text-center flex-grow-1">
-                                    <img
-                                      loading="lazy"
-                                      [src]="photoPreview"
-                                      alt="preview"
-                                      style="width:200px; margin-top:10px"
-                                    />
-                                  </div>
+                              @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
+                                  <small class="text-danger">Name is required</small>
                                 }
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
+                                  <small class="text-danger">Minimum length is 3 characters</small>
+                                }
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['maxlength']) {
+                                  <small class="text-danger">Maximum length is 100 characters</small>
+                                }
+
+                              }
+                            </div>
+
+                            <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
+
+                              <div class="flex-grow-1">
+                                <label for="photo" class="form-label">صورتك في الحفلة</label>
+
+                                <input
+                                  class="form-control w-100"
+                                  type="file"
+                                  id="Photo"
+                                  accept="image/*"
+                                  (change)="onImageChange($event)"
+                                >
                               </div>
+
+                              @if (photoPreview) {
+                                <div class="text-center flex-grow-1">
+                                  <img
+                                    loading="lazy"
+                                    [src]="photoPreview"
+                                    alt="preview"
+                                    style="width:200px; margin-top:10px"
+                                  />
+                                </div>
+                              }
+                            </div>
                           </div>
 
                           <!-- <div class="col-md-6">
@@ -139,7 +169,12 @@
                 </form>
               </div>
             } @else {
-              <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+              <div class="text-center mt-3">
+                <h2>The organizers have not set a date for this stage yet.</h2>
+                <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>
+                <button class="btn main-btn" [routerLink]="'/available-event-details/' + eventData.id"><i class="fa-solid fa-arrow-left"></i> Back</button>
+              </div>
+              <!-- <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                 <h3 class="m-0 mb-2">Continue Booking</h3>
                 <div class="user-data row g-3 rounded-3">
                   <div class="col-md-3 col-sm-6 col-12">
@@ -243,7 +278,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             }
           </div>
 
@@ -339,7 +374,7 @@
               <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
               <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
               <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
-              <p class="text-center fs-3"><a href="https://ipn.eg/S/anfahmy2000/instapay/5fLUFC" target="_blank">Pay Now <i class="fa-solid fa-up-right-from-square"></i></a></p>
+              <p class="text-center fs-3"><a [href]="eventData.PaymentLink" target="_blank">Pay Now <i class="fa-solid fa-up-right-from-square"></i></a></p>
             </div>
 
             <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
@@ -356,6 +391,9 @@
                   name="transactionRef"
                   inputmode="numeric"
                 />
+                @if (transactionRef && transactionRef.length !== 12) {
+                  <small class="text-danger">Reference number must be exactly 12 digits</small>
+                }
               </div>
 
               <div class="w-100">

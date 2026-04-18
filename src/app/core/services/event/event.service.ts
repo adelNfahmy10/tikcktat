@@ -74,7 +74,7 @@ export class EventService {
     formData.append('upload_preset', 'ticketat_upload');
 
     return fetch(
-      'https://api.cloudinary.com/v1_1/dgaxqy6qf/image/upload',
+      'https://api.cloudinary.com/v1_1/ticketat/image/upload',
       {
         method: 'POST',
         body: formData

@@ -16,12 +16,12 @@
 
         <h4 class="fw-bold">Event Details :</h4>
         <ul>
-          @for (detail of eventDetailsList; track $index) {
-            <li>
-              {{ detail }}
-            </li>
-          }
-        </ul>
+            @for (item of features; track $index) {
+              <li>
+                {{ item }}
+              </li>
+            }
+          </ul>
 
         @if(eventData?.TermsOfEntries?.length > 0){
           <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
@@ -31,10 +31,10 @@
               </h2>
               <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body" ngbAccordionBody >
-                  <ul class="entry-rules">
-                    @for (term of termsList; track $index) {
+                  <ul class="entry-rules list-unstyled">
+                     @for (item of terms; track $index) {
                       <li>
-                        {{ term }}
+                        {{ item }}
                       </li>
                     }
                   </ul>
@@ -84,51 +84,131 @@
         <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
         <form [formGroup]="registerForm">
           <div class="mb-3">
-              <label class="form-label" for="name">Name</label>
-              <input
-                type="name"
-                formControlName="fullName"
-                id="name"
-                name="name"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
-                placeholder="Enter your full name"
-              />
-            </div>
+            <label class="form-label">Full Name (English)</label>
 
-            <div class="mb-3">
-              <label class="form-label" for="phone">Phone</label>
-              <input
-                type="tel"
-                formControlName="phone"
-                id="phone"
-                name="phone"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
-                placeholder="Enter your phone"
-              />
-            </div>
+            <input
+              type="text"
+              formControlName="fullName"
+              class="form-control"
+              placeholder="Enter your full name"
+            />
 
-            <div class="mb-3">
-              <label class="form-label" for="email">Email</label>
-              <input
-                type="email"
-                formControlName="email"
-                id="email"
-                name="email"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
-                placeholder="Enter your email"
-              />
-            </div>
+            @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
 
-            <div class="mb-3">
-              <label class="form-label" for="password">Password</label>
-              <input
-                type="password"
-                formControlName="password"
-                id="password"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
-                placeholder="Enter your password"
-              />
-            </div>
+              @if (registerForm.get('fullName')?.errors?.['required']) {
+                <small class="text-danger">Full name is required</small>
+              }
+
+              @if (registerForm.get('fullName')?.errors?.['minlength']) {
+                <small class="text-danger">Minimum 3 characters</small>
+              }
+
+              @if (registerForm.get('fullName')?.errors?.['maxlength']) {
+                <small class="text-danger">Maximum 100 characters</small>
+              }
+
+              @if (registerForm.get('fullName')?.errors?.['pattern']) {
+                <small class="text-danger">English letters only</small>
+              }
+
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Full Name (Arabic)</label>
+
+            <input
+              type="text"
+              formControlName="fullNameAr"
+              class="form-control"
+              placeholder="Enter your full name"
+            />
+
+            @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
+
+              @if (registerForm.get('fullNameAr')?.errors?.['required']) {
+                <small class="text-danger">Arabic name is required</small>
+              }
+
+              @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
+                <small class="text-danger">Arabic letters only</small>
+              }
+
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+
+            <input
+              type="tel"
+              formControlName="phone"
+              class="form-control"
+              placeholder="Enter your phone"
+            />
+
+            @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
+
+              @if (registerForm.get('phone')?.errors?.['required']) {
+                <small class="text-danger">Phone is required</small>
+              }
+
+              @if (registerForm.get('phone')?.errors?.['pattern']) {
+                <small class="text-danger">Invalid Egyptian phone number</small>
+              }
+
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              placeholder="Enter your email"
+            />
+
+            @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+
+              @if (registerForm.get('email')?.errors?.['required']) {
+                <small class="text-danger">Email is required</small>
+              }
+
+              @if (registerForm.get('email')?.errors?.['email']) {
+                <small class="text-danger">Invalid email format</small>
+              }
+
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Enter your password"
+            />
+
+            @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+
+              @if (registerForm.get('password')?.errors?.['required']) {
+                <small class="text-danger">Password is required</small>
+              }
+
+              @if (registerForm.get('password')?.errors?.['minlength']) {
+                <small class="text-danger">Minimum 6 characters</small>
+              }
+
+              @if (registerForm.get('password')?.errors?.['maxlength']) {
+                <small class="text-danger">Maximum 20 characters</small>
+              }
+
+            }
+          </div>
         </form>
       }
 
@@ -136,26 +216,49 @@
         <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
         <form [formGroup]="loginForm">
           <div class="mb-3">
-            <label class="form-label" for="email">Email</label>
+            <label class="form-label">Email</label>
+
             <input
               type="email"
               formControlName="email"
-              id="email"
-              name="email"
-              class="form-control bg-light bg-opacity-50 border-light py-2"
+              class="form-control"
               placeholder="Enter your email"
             />
+
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
+
+              @if (loginForm.get('email')?.errors?.['required']) {
+                <small class="text-danger">Email is required</small>
+              }
+
+              @if (loginForm.get('email')?.errors?.['email']) {
+                <small class="text-danger">Invalid email format</small>
+              }
+
+            }
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label">Password</label>
+
             <input
               type="password"
               formControlName="password"
-              id="password"
-              class="form-control bg-light bg-opacity-50 border-light py-2"
+              class="form-control"
               placeholder="Enter your password"
             />
+
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
+
+              @if (loginForm.get('password')?.errors?.['required']) {
+                <small class="text-danger">Password is required</small>
+              }
+
+              @if (loginForm.get('password')?.errors?.['minlength']) {
+                <small class="text-danger">Minimum 6 characters</small>
+              }
+
+            }
           </div>
         </form>
       }
@@ -170,11 +273,11 @@
         Close
       </button>
       @if(haveAcc){
-        <button type="button" class="btn btn-primary save-btn" (click)="submitRegisterForm()">
+        <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="submitRegisterForm()">
           Sign Up
         </button>
       } @else {
-        <button type="button" class="btn btn-primary save-btn" (click)="submitLogin(); modal.close()">
+        <button type="button" class="btn btn-primary save-btn" [disabled]="loginForm.invalid" (click)="submitLogin(); modal.close()">
           Sign In
         </button>
       }

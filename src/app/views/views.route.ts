@@ -131,7 +131,11 @@ export const VIEWS_ROUTES: Route[] = [
     data: { title: 'Terms and Conditions' },
   },
 
-
+  {
+    path: '**',
+    redirectTo:"home",
+    pathMatch:'full'
+  },
 
 
 

@@ -14,6 +14,7 @@ export class AuthService {
   // REGISTER
   register(data: {
     fullName: string;
+    fullNameAr: string;
     phone: string;
     role: string;
     email: string;
@@ -32,6 +33,7 @@ export class AuthService {
         const userData = {
           uid: user.uid,
           fullName: data.fullName,
+          fullNameAr: data.fullNameAr,
           phone: data.phone,
           role: data.role,
           email: data.email,
@@ -81,7 +83,7 @@ export class AuthService {
         })
       );
   }
-  
+
   // login(body:any):Observable<any>{
   //   return this._HttpClient.post(` Auth/login`, body)
   // }

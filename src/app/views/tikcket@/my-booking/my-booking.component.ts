@@ -17,7 +17,6 @@ export class MyBookingComponent {
   private readonly _BookingService = inject(BookingService)
   private readonly _EventService = inject(EventService)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
-
   // private readonly _ActivatedRoute = inject(ActivatedRoute)
 
   allBookings: any[] = [];

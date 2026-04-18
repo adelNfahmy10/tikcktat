@@ -22,6 +22,19 @@ export class BookingService {
     return docData(bookingDoc, { idField: 'id' });
   }
 
+  getBookingByQrId(qrId: string): Observable<any> {
+    return collectionData(
+      collection(this.firestore, 'bookings'),
+      { idField: 'id' }
+    ).pipe(
+      map((bookings: any[]) =>
+        bookings.filter(b =>
+          b.qrs?.some((q: any) => q.id === qrId)
+        )
+      )
+    );
+  }
+
   // 🔥 Create Booking
   createBooking(data: any) {
     const bookingRef = collection(this.firestore, 'bookings');

@@ -40,6 +40,8 @@ import { environment } from '@core/environment/environment'
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth'
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideFunctions } from '@angular/fire/functions'
+import { getFunctions } from 'firebase/functions'
 
 ToastrModule.forRoot({
   positionClass: 'toast-bottom-right'
@@ -65,6 +67,10 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     // provideStorage(() => getStorage()),
+
+    provideFunctions(() =>
+      getFunctions()
+    ),
 
     provideAnimations(),
     importProvidersFrom(NgxSpinnerModule, BrowserAnimationsModule),

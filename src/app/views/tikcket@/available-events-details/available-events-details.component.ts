@@ -30,6 +30,8 @@ export class AvailableEventsDetailsComponent {
   userId:string | null = localStorage.getItem('userId')
   token:string | null = localStorage.getItem('token')
   haveAcc: boolean = true;
+  features: string[] = [];
+  terms: string[] = [];
 
   ngOnInit(): void {
     this.getEventById()
@@ -48,6 +50,8 @@ export class AvailableEventsDetailsComponent {
       .subscribe({
         next: (res) => {
           this.eventData = res;
+          this.features = this.formatEventDetails(this.eventData?.EventDetails);
+          this.terms = this.formatEventDetails(this.eventData?.TermsOfEntries);
           this._NgxSpinnerService.hide()
         },
         error: (err) => {
@@ -56,20 +60,14 @@ export class AvailableEventsDetailsComponent {
       });
   }
 
-  get eventDetailsList(): string[] {
-    if (!this.eventData?.EventDetails) return [];
-    return this.eventData.EventDetails
-      .split('\r\n')          // نفصل كل سطر
-      .map((item:any) => item.trim()) // نشيل أي فراغات
-      .filter((item:any) => item);    // نشيل أي عناصر فاضية
-  }
+  // ✅ function تحويل الـ string لـ array نظيف
+  formatEventDetails(details: string): string[] {
+    if (!details) return [];
 
-  get termsList(): string[] {
-    if (!this.eventData?.TermsOfEntries) return [];
-    return this.eventData.TermsOfEntries
-      .split('\r\n')          // نفصل كل شرط على سطر
-      .map((item:any) => item.trim()) // نشيل أي فراغات
-      .filter((item:any) => item);    // نشيل أي عناصر فاضية
+    return details
+      .split(/\s*[-.]\s*/) // يقسم على - أو .
+      .map(item => item.trim())
+      .filter(item => item.length > 0);
   }
 
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions):void {
@@ -81,11 +79,58 @@ export class AvailableEventsDetailsComponent {
   }
 
   registerForm: FormGroup = this._FormBuilder.group({
-    fullName: [null, [Validators.required]],
-    email: [null, [Validators.required, Validators.email]],
-    phone: [null, [Validators.required]],
-    password: [null, [Validators.required, Validators.minLength(6)]],
-    role: ["User", [Validators.required]],
+    fullName: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+        Validators.pattern(/^[a-zA-Z\s]+$/) // English letters only
+      ]
+    ],
+
+    fullNameAr: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+        Validators.pattern(/^[\u0600-\u06FF\s]+$/) // Arabic letters only
+      ]
+    ],
+
+    email: [
+      null,
+      [
+        Validators.required,
+        Validators.email,
+        Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+      ]
+    ],
+
+    phone: [
+      null,
+      [
+        Validators.required,
+        Validators.pattern(/^01[0-2,5]{1}[0-9]{8}$/) // Egyptian numbers
+      ]
+    ],
+
+    password: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(20),
+      ]
+    ],
+
+    role: [
+      "User",
+      [
+        Validators.required
+      ]
+    ],
   });
 
   submitRegisterForm(): void {
@@ -139,8 +184,22 @@ export class AvailableEventsDetailsComponent {
   }
 
   loginForm: FormGroup = this._FormBuilder.group({
-    email: [null, [Validators.required, Validators.email]],
-    password: [null, [Validators.required, Validators.minLength(6)]],
+    email: [
+      null,
+      [
+        Validators.required,
+        Validators.email,
+        Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+      ]
+    ],
+    password: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(20),
+      ]
+    ],
   });
 
   submitLogin(): void {

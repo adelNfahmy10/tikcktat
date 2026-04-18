@@ -37,6 +37,8 @@ export class AddEventComponent{
     VisitorPrice:[null],
     EventDetails:[null],
     TermsOfEntries:[null],
+    PaymentLink:[null],
+    OriganizerName:[null],
     Type:[null],
     Image:[null],
   })

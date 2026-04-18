@@ -1,7 +1,7 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
 import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
 import { AuthService } from '@core/services/auth/auth.service';
@@ -40,7 +40,7 @@ export interface Category {
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, RouterLink],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -71,6 +71,8 @@ export class CheckoutComponent {
   tax:number = 0.20
 
   isReturningUser:boolean = false
+  visitorCount:number = 0
+  paidTwo:number = 0
   bookingData: any = null;
 
 
@@ -135,6 +137,14 @@ export class CheckoutComponent {
     userPhone:[null, Validators.required],
     userEmail:[null, Validators.required],
     userImage:[null],
+    GraduationScarfName:[
+      null,
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+      ]
+    ],
     defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
     VisitorCount:[null, [Validators.required, Validators.min(0)]],
 
@@ -147,6 +157,7 @@ export class CheckoutComponent {
     payTwoRef:[null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]],
 
     totalAmount:[null, [Validators.required, Validators.min(0)]],
+    qrs:[null, [Validators.required, Validators.min(0)]],
   })
 
   // Modal Check Data Logic
@@ -167,21 +178,53 @@ export class CheckoutComponent {
     }
   }
 
-  // // Checkout Logic
+  btnCheck:boolean = false
+
+  // Checkout Logic
   async submitCheckout(): Promise<void> {
     this._NgxSpinnerService.show()
 
     // ✅ 1. Validate
-    if (!this.eventId || !this.selectedFile || this.transactionRef?.length !== 12) {
-      this._ToastrService.error('Missing data');
+    if (!this.selectedFile) {
+      this._ToastrService.error('برجاء رفع صورتك الخاصة بالحفل');
       this._NgxSpinnerService.hide()
+
       return;
     }
 
+    if (!this.selectedPaymentFile) {
+      this._ToastrService.error('برجاء رفع صورة الدفع');
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    if (this.transactionRef?.length !== 12) {
+      this._ToastrService.error('برجاء إدخال الرقم المرجعي');
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    if (!this.eventId) {
+      this._ToastrService.error('الحفلة غير موجودة');
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+
     try {
+      this._NgxSpinnerService.show()
+
       // 🔥 2. Upload image
       const imageUrl = await this._EventService.uploadImage(this.selectedFile);
       const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+
+      if (!imageUrl || !imagePaymentUrl) {
+        this._ToastrService.error('Upload failed');
+        return;
+      }
 
       const formValue = this.checkoutForm.value;
 
@@ -212,6 +255,7 @@ export class CheckoutComponent {
         totalAmount: 0,
         status: 'Pending'
       };
+
 
       // 🔥 1. Save booking
       this._BookingService.createBooking(finalData).subscribe({
@@ -282,10 +326,6 @@ export class CheckoutComponent {
     reader.readAsDataURL(this.selectedPaymentFile);
   }
 
-
-  visitorCount:number = 0
-  paidTwo:number = 0
-
   calculatePriceAfterFinalPaid(): void {
     if (this.isReturningUser) {
 
@@ -299,12 +339,15 @@ export class CheckoutComponent {
     }
   }
 
-
-  async continueBooking(){
-    this._NgxSpinnerService.show()
+  async continueBooking() {
+    this._NgxSpinnerService.show();
 
     if (this.isReturningUser) {
       const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+
+      // 🔥 Generate QRs
+      const totalPersons = this.visitorCount + this.bookingData.defaultVisitorCount;
+      const qrs = this.generateQRs(totalPersons, this.bookingData.id);
 
       this._BookingService.updateBooking(this.bookingData.id, {
         VisitorCount: this.visitorCount,
@@ -312,39 +355,64 @@ export class CheckoutComponent {
         payTwoAmount: 0,
         payTwoImage: imagePaymentUrl,
         payTwoRef: this.transactionRef,
-        createdAtTwo:new Date(),
+        createdAtTwo: new Date(),
 
         totalAmount: 0,
 
+        // ✅ الجزء الجديد
+        qrs: qrs,
+        qrsGenerated: true
       }).subscribe({
         next: () => {
-          this._NgxSpinnerService.hide()
+          this._NgxSpinnerService.hide();
           console.log('✅ Phase 2 Completed');
           this._ToastrService.success('Booking Completed Successfully');
 
-          this.visitorCount = 0
-          this.paidTwo = 0
-          this.tax = 0
-          this.subTotal = 0
-          this.total = 0
-          this.transactionRef = ''
-          this.selectedFile = null
-          this.selectedPaymentFile = null
-          this.photoPreview = ''
-          this.paymentImagePreview = ''
-          this.checkoutData = {}
+          // reset
+          this.visitorCount = 0;
+          this.paidTwo = 0;
+          this.tax = 0;
+          this.subTotal = 0;
+          this.total = 0;
+          this.transactionRef = '';
+          this.selectedFile = null;
+          this.selectedPaymentFile = null;
+          this.photoPreview = '';
+          this.paymentImagePreview = '';
+          this.checkoutData = {};
+
           this.modalService.dismissAll();
-          this._Router.navigate(['/payment-success'])
+          this._Router.navigate(['/payment-success']);
         },
         error: (err) => {
-          this._NgxSpinnerService.hide()
+          this._NgxSpinnerService.hide();
           this._ToastrService.error('Update Failed');
         }
       });
-
     }
   }
 
+  generateQRs(totalPersons: number, bookingId: string) {
+    const qrs = [];
+
+    for (let i = 0; i < totalPersons; i++) {
+      qrs.push({
+        id: `${bookingId}_${this.generateUUID()}`,
+        isUsed: false,
+        type: i === 0 ? 'owner' : 'guest',
+        seatNumber: null,
+        createdAt: new Date()
+      });
+    }
+
+    return qrs;
+  }
+
+  generateUUID() {
+    return 'xxxxxxx'.replace(/[x]/g, () =>
+      ((Math.random() * 36) | 0).toString(36)
+    );
+  }
 
   // // Seating Layout Logic
   // categories: Category[] = [];
