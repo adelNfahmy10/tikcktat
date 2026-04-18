@@ -9,9 +9,17 @@
         <h1 class="fw-bold">{{eventData?.EventName}}</h1>
         <p>
           Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
-          Date : <span class="text-dark"> {{eventData?.Date | date:'dd/MM/yyyy'}}</span> <br>
+          Date : @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+                  <span class="text-dark"> {{eventData?.Date | date:'dd/MM/yyyy'}}</span> <br>
+                } @else {
+                  Visitor Price: <span> To be determined (TBD) </span> <br>
+                }
           Ticket Price: <span class="text-dark"> {{eventData?.TicketPrice | number}} EGP </span> <br>
-          Visitor Price: <span class="text-dark"> {{eventData?.VisitorPrice | number}} EGP </span>
+          @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+            Visitor Price: <span class="text-dark"> {{eventData?.VisitorPrice | number}} EGP </span>
+          } @else {
+            Visitor Price: <span class="text-dark"> To be determined (TBD) </span>
+          }
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>

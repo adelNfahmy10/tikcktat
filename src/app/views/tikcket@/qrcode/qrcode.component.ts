@@ -1,16 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
-import { Functions, httpsCallable } from '@angular/fire/functions';
-import { ToastrService } from 'ngx-toastr';
 import { BookingService } from '@core/services/booking/booking.service';
-import { map, Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-qrcode',
-  imports: [QRCodeComponent, AsyncPipe],
+  imports: [QRCodeComponent],
   templateUrl: './qrcode.component.html',
   styleUrl: './qrcode.component.scss'
 })

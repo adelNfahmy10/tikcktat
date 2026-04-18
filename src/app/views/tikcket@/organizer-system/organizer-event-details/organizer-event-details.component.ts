@@ -29,7 +29,7 @@ export class OrganizerEventDetailsComponent {
 
   allBooking:any[] = []
   totalTickets:number = 0
-  totalCompanions:number = 0
+  totalVisitors:number = 0
   totalRevenue:number = 0
 
   ngOnInit(): void {
@@ -68,8 +68,8 @@ export class OrganizerEventDetailsComponent {
         this.allBooking = res
         this.totalTickets = this.allBooking.length
 
-        // 👨‍👩‍👧 total companions
-        this.totalCompanions = this.allBooking.reduce((sum, b) => {
+        // 👨‍👩‍👧 total Vsisitos
+        this.totalVisitors = this.allBooking.reduce((sum, b) => {
           return sum + (b.VisitorCount + b.defaultVisitorCount || 0);
         }, 0);
 
@@ -78,8 +78,8 @@ export class OrganizerEventDetailsComponent {
         const visitorPrice = this.eventData?.VisitorPrice || 0;
 
         this.totalRevenue = this.allBooking.reduce((sum, b) => {
-          const companions = b.VisitorCount || 0;
-          const subtotal = ticketPrice + (companions * visitorPrice);
+          const visitors = b.VisitorCount || 0;
+          const subtotal = ticketPrice + (visitors * visitorPrice);
           return sum + subtotal;
         }, 0);
       },
