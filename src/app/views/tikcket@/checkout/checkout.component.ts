@@ -14,6 +14,7 @@ import Choices from 'choices.js';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import emailjs from '@emailjs/browser';
 
 export interface Seat {
   id: string;
@@ -150,11 +151,11 @@ export class CheckoutComponent {
 
     payOneAmount:[null],
     payOneImage:[null],
-    payOneRef:[null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]],
+    payOneRef:[null, [Validators.pattern(/^[0-9]{12}$/)]],
 
     payTwoAmount:[null],
     payTwoImage:[null],
-    payTwoRef:[null, [ Validators.required, Validators.pattern(/^[0-9]{12}$/)]],
+    payTwoRef:[null, [Validators.pattern(/^[0-9]{12}$/)]],
 
     totalAmount:[null, [Validators.required, Validators.min(0)]],
     qrs:[null, [Validators.required, Validators.min(0)]],
@@ -178,8 +179,6 @@ export class CheckoutComponent {
     }
   }
 
-  btnCheck:boolean = false
-
   // Checkout Logic
   async submitCheckout(): Promise<void> {
     this._NgxSpinnerService.show()
@@ -194,13 +193,6 @@ export class CheckoutComponent {
 
     if (!this.selectedPaymentFile) {
       this._ToastrService.error('برجاء رفع صورة الدفع');
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
-
-    if (this.transactionRef?.length !== 12) {
-      this._ToastrService.error('برجاء إدخال الرقم المرجعي');
       this._NgxSpinnerService.hide()
 
       return;
@@ -268,6 +260,8 @@ export class CheckoutComponent {
             1
           ).subscribe();
 
+          this.sendFirstEmail(this.userData.email)
+
           this.checkoutForm.reset();
           this.tax = 0
           this.subTotal = 0
@@ -291,6 +285,26 @@ export class CheckoutComponent {
     } catch (err) {
       this._NgxSpinnerService.hide()
       this._ToastrService.error('Checkout failed');
+    }
+  }
+
+  async sendFirstEmail(email:string) {
+    emailjs.init('yDyM7-toHXTAEsac-');
+    try {
+      const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
+        title: "Ticketateg",
+        name: "Ticketat.eg",
+        email: email,
+      });
+
+      console.log('EMAIL SENT:', send);
+      this._ToastrService.success('Email Sent');
+
+      return send;
+    } catch (err) {
+      console.error('EMAIL ERROR:', err);
+      this._ToastrService.warning('Email failed but booking is saved');
+      throw err;
     }
   }
 

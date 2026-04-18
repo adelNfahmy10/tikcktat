@@ -188,7 +188,11 @@
                   </span>
                 </td>
                 <td>
-                  <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>
+                  <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                    <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>
+
+                    <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                  </div>
                 </td>
               </tr>
             }
@@ -217,7 +221,7 @@
 </section>
 
 
-<!-- Modal -->
+<!-- Modal View -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -235,18 +239,23 @@
           </div>
 
           <div class="col-md-4">
-            <span>First Transaction Image</span>
-            <div class="images">
-              <img [src]="bookDataById?.payOneImage" alt="First Transaction">
-            </div>
+            @if(bookDataById?.payOneImage){
+              <span>First Transaction Image</span>
+              <div class="images">
+                <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+              </div>
+            }
           </div>
 
-          <div class="col-md-4">
-            <span>Second Transaction Image</span>
-            <div class="images">
-              <img [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+          @if(bookDataById?.payTwoImage){
+            <div class="col-md-4">
+              <span>Second Transaction Image</span>
+              <div class="images">
+                <img [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+              </div>
             </div>
-          </div>
+          }
+
 
           <div class="col-12">
             <div class="table-responsive">
@@ -289,21 +298,27 @@
 
                 <tbody>
                   <tr>
+                    @if(bookDataById?.createdAtOne){
                       <td>
                         <span>Pay: {{bookDataById?.payOneAmount | number}} EGP</span> <br>
                         <span>Tax (2%): {{ getTax(bookDataById?.payOneAmount) | number:'1.0-2' }} EGP</span> <br>
                         <span>Final: {{ getFinal(bookDataById?.payOneAmount) | number }} EGP</span> <br>
-                        <span> Reference: {{bookDataById?.payOneRef}} </span> <br>
+                        <span> Reference: {{bookDataById?.payOneRef || '-'}} </span> <br>
                         <span> Date: {{bookDataById?.createdAtOne.toDate() | date:"medium"}}</span>
                       </td>
+                    }
 
-                      <td>
-                        <span>Pay: {{bookDataById?.payTwoAmount | number}} EGP</span> <br>
-                        <span>Tax (2%): {{ getTax(bookDataById?.payTwoAmount) | number:'1.0-2' }} EGP</span> <br>
-                        <span>Final: {{ getFinal(bookDataById?.payTwoAmount) | number }} EGP</span> <br>
-                        <span> Reference: {{bookDataById?.payTwoRef}} </span> <br>
-                        <span> Date: {{bookDataById?.createdAtTwo.toDate() | date:"medium"}}</span>
-                      </td>
+
+                      @if(bookDataById?.createdAtTwo){
+                        <td>
+                          <span>Pay: {{bookDataById?.payTwoAmount | number}} EGP</span> <br>
+                          <span>Tax (2%): {{ getTax(bookDataById?.payTwoAmount) | number:'1.0-2' }} EGP</span> <br>
+                          <span>Final: {{ getFinal(bookDataById?.payTwoAmount) | number }} EGP</span> <br>
+                          <span> Reference: {{bookDataById?.payTwoRef}} </span> <br>
+                          <span> Date: {{bookDataById?.createdAtTwo.toDate() | date:"medium"}}</span>
+                        </td>
+                      }
+
                     </tr>
                 </tbody>
               </table>
@@ -311,6 +326,52 @@
           </div>
 
         </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal-Check-One" tabindex="-1" aria-labelledby="exampleModal-Check-OneLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal-Check-OneLabel">Check Pay One</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Modal Check One -->
+        @if(!bookDataById?.payOneAmount){
+          <div class="row">
+            <div class="col-8">
+              <span>First Transaction Image</span>
+              @if(bookDataById?.payOneImage){
+                <span>First Transaction Image</span>
+                <div class="images">
+                  <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+                </div>
+              }
+            </div>
+
+            <div class="col-4">
+                <div class="checkOne">
+                  <small>User Amount Paid</small>
+                  <input [(ngModel)]="firstPaidAmount" min="0" class="form-control" type="number" name="checkOne" id="checkOne" placeholder="Enter User Amount Paid EGP...">
+                </div>
+
+                <div class="text-center mt-2">
+                  <button class="btn main-btn w-100" (click)="firstPaidCheck()">
+                    Submit
+                  </button>
+                </div>
+            </div>
+          </div>
+        } @else {
+          <h2 class="text-center text-success fw-bold">Check One Paid Successfully</h2>
+        }
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

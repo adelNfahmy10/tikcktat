@@ -7,6 +7,9 @@ import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { switchMap } from 'rxjs';
+import emailjs from '@emailjs/browser';
+import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -20,6 +23,8 @@ export class OrganizerEventAttendeesComponent {
   private readonly _BookingService = inject(BookingService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+  private readonly _ToastrService = inject(ToastrService)
+  private modalService = inject(NgbModal)
 
   eventId:string | null = null
   eventData: any = {};
@@ -55,7 +60,6 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
-        console.log('Event', this.eventData);
       },
       error: (err) => {
         this._NgxSpinnerService.hide()
@@ -70,7 +74,6 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.allUsers = res;
-        console.log('Users', this.allUsers);
         this.mergeData(); // 🔥 مهم
       }
     });
@@ -89,22 +92,25 @@ export class OrganizerEventAttendeesComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.allBooking = res;
-          console.log("Booking", this.allBooking);
           this.mergeData(); // 🔥 مهم
         }
       });
   }
 
   getBookById(id:any):void{
+    console.log(id);
+
     this._NgxSpinnerService.show()
     this._BookingService.getBookingById(id).subscribe({
       next:(res)=>{
         this._NgxSpinnerService.hide()
         this.bookDataById = res
+        console.log(this.bookDataById);
+        console.log(this.bookDataById?.payOneImage);
+
       },
       error:(err)=>{
         this._NgxSpinnerService.hide()
-        console.log(err);
       }
     });
   }
@@ -174,7 +180,29 @@ export class OrganizerEventAttendeesComponent {
   }
 
   getFinal(amount: number): number {
-    return amount + this.getTax(amount);
+    return amount - this.getTax(amount);
+  }
+
+  firstPaidAmount:number = 0
+
+  async firstPaidCheck() {
+    this._NgxSpinnerService.show();
+
+    this._BookingService.updateBooking(this.bookDataById.id, {
+        payOneAmount: this.firstPaidAmount,
+        checkOneDateAt: new Date(),
+        totalAmount: this.firstPaidAmount,
+      }).subscribe({
+        next: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.success('✅ Paid One Check Successfully');
+          this.modalService.dismissAll();
+        },
+        error: (err) => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('Paid One Check Failed');
+        }
+      });
   }
 
   // 🔍 Search
@@ -236,5 +264,25 @@ export class OrganizerEventAttendeesComponent {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
     this.updatePagination();
+  }
+
+  // Email Send
+  async sendFirstEmail(email:string) {
+    emailjs.init('yDyM7-toHXTAEsac-');
+    try {
+      const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
+        title: "Ticketateg",
+        name: "Ticketat.eg",
+        email: email,
+      });
+
+      this._ToastrService.success('Email Sent');
+
+      return send;
+    } catch (err) {
+      console.error('EMAIL ERROR:', err);
+      this._ToastrService.warning('Email failed but booking is saved');
+      throw err;
+    }
   }
 }

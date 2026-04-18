@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ɵInternalForm
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
+import { UsersService } from '@core/services/users/users.service';
 import { NgbAccordionModule, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +19,7 @@ import { switchMap } from 'rxjs';
 export class AvailableEventsDetailsComponent {
   private readonly _EventService = inject(EventService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
+  private readonly _UsersService = inject(UsersService)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _AuthService = inject(AuthService)
   private readonly _ToastrService = inject(ToastrService)
@@ -26,6 +28,7 @@ export class AvailableEventsDetailsComponent {
   private modalService = inject(NgbModal)
 
   eventData:any
+  OwnerName:any
   eventId:string = ''
   userId:string | null = localStorage.getItem('userId')
   token:string | null = localStorage.getItem('token')
@@ -50,6 +53,8 @@ export class AvailableEventsDetailsComponent {
       .subscribe({
         next: (res) => {
           this.eventData = res;
+          console.log(this.eventData);
+          this.getUserById(this.eventData.OwnerId)
           this.features = this.formatEventDetails(this.eventData?.EventDetails);
           this.terms = this.formatEventDetails(this.eventData?.TermsOfEntries);
           this._NgxSpinnerService.hide()
@@ -59,6 +64,15 @@ export class AvailableEventsDetailsComponent {
         }
       });
   }
+
+  getUserById(id: string):void{
+    this._UsersService.getUserById(id).subscribe({
+      next:(res)=>{
+        this.OwnerName = res.fullName
+      }
+    })
+  }
+
 
   // ✅ function تحويل الـ string لـ array نظيف
   formatEventDetails(details: string): string[] {
