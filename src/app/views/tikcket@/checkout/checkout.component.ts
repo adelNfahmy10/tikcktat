@@ -260,7 +260,7 @@ export class CheckoutComponent {
             1
           ).subscribe();
 
-          this.sendFirstEmail(this.userData.email)
+          // this.sendFirstEmail(this.userData.email)
 
           this.checkoutForm.reset();
           this.tax = 0
@@ -288,25 +288,25 @@ export class CheckoutComponent {
     }
   }
 
-  async sendFirstEmail(email:string) {
-    emailjs.init('yDyM7-toHXTAEsac-');
-    try {
-      const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
-        title: "Ticketateg",
-        name: "Ticketat.eg",
-        email: email,
-      });
+  // async sendFirstEmail(email:string) {
+  //   emailjs.init('yDyM7-toHXTAEsac-');
+  //   try {
+  //     const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
+  //       title: "Ticketateg",
+  //       name: "Ticketat.eg",
+  //       email: email,
+  //     });
 
-      console.log('EMAIL SENT:', send);
-      this._ToastrService.success('Email Sent');
+  //     console.log('EMAIL SENT:', send);
+  //     this._ToastrService.success('Email Sent');
 
-      return send;
-    } catch (err) {
-      console.error('EMAIL ERROR:', err);
-      this._ToastrService.warning('Email failed but booking is saved');
-      throw err;
-    }
-  }
+  //     return send;
+  //   } catch (err) {
+  //     console.error('EMAIL ERROR:', err);
+  //     this._ToastrService.warning('Email failed but booking is saved');
+  //     throw err;
+  //   }
+  // }
 
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;

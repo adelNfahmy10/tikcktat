@@ -98,15 +98,12 @@ export class OrganizerEventAttendeesComponent {
   }
 
   getBookById(id:any):void{
-    console.log(id);
-
     this._NgxSpinnerService.show()
     this._BookingService.getBookingById(id).subscribe({
       next:(res)=>{
         this._NgxSpinnerService.hide()
         this.bookDataById = res
         console.log(this.bookDataById);
-        console.log(this.bookDataById?.payOneImage);
 
       },
       error:(err)=>{
@@ -188,13 +185,15 @@ export class OrganizerEventAttendeesComponent {
   async firstPaidCheck() {
     this._NgxSpinnerService.show();
 
-    this._BookingService.updateBooking(this.bookDataById.id, {
+    if(this.bookDataById?.userEmail){
+      this._BookingService.updateBooking(this.bookDataById.id, {
         payOneAmount: this.firstPaidAmount,
         checkOneDateAt: new Date(),
         totalAmount: this.firstPaidAmount,
       }).subscribe({
         next: () => {
           this._NgxSpinnerService.hide();
+          this.sendFirstEmail(this.bookDataById?.userEmail)
           this._ToastrService.success('✅ Paid One Check Successfully');
           this.modalService.dismissAll();
         },
@@ -203,6 +202,10 @@ export class OrganizerEventAttendeesComponent {
           this._ToastrService.error('Paid One Check Failed');
         }
       });
+    } else {
+      this._ToastrService.error('Not Fount User Email');
+    }
+
   }
 
   // 🔍 Search
