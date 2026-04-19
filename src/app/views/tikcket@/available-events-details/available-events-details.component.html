@@ -7,13 +7,13 @@
 
       <div class="event-details my-3">
         <h1 class="fw-bold mb-1">{{eventData?.EventName}}</h1>
-        <h4 class="fw-bold m-0 mb-2 main-color">{{ OwnerName || 'Unknown' }} Co.</h4>
+        <h4 class="fw-semibold mb-2 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
         <p>
           Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
           Date : @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
                   <span class="text-dark"> {{eventData?.Date | date:'dd/MM/yyyy'}}</span> <br>
                 } @else {
-                  Outcomer Price: <span> To be determined (TBD) </span> <br>
+                  <span> To be determined (TBD) </span> <br>
                 }
           Ticket Price: <span class="text-dark"> {{eventData?.TicketPrice | number}} EGP </span> <br>
           @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
