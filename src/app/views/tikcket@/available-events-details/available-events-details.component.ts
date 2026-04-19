@@ -169,7 +169,7 @@ export class AvailableEventsDetailsComponent {
         localStorage.setItem('phone', res.phone);
         localStorage.setItem('role', res.role);
 
-        this.registerForm.reset({ role: 'user' });
+        this.registerForm.reset({ role: 'User' });
 
         this._Router.navigate([`/checkout/${this.eventData?.id}`]).then(() => {
           window.location.reload();

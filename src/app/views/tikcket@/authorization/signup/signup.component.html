@@ -17,7 +17,7 @@
         </div>
 
         <div class="px-4">
-          <form class="authentication-form" [formGroup]="registerForm" (ngSubmit)="submitRegisterForm()" >
+          <form [formGroup]="registerForm">
             <!-- ROLE -->
             <div class="mb-3">
               <label class="form-label" for="role">Role</label>
@@ -30,63 +30,137 @@
               </select>
             </div>
 
-            <!-- FULL NAME -->
             <div class="mb-3">
-              <label class="form-label" for="name">Name</label>
+              <label class="form-label">Full Name (English)</label>
+
               <input
                 type="text"
-                id="name"
                 formControlName="fullName"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
+                class="form-control"
                 placeholder="Enter your full name"
               />
+
+              @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
+
+                @if (registerForm.get('fullName')?.errors?.['required']) {
+                  <small class="text-danger">Full name is required</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['minlength']) {
+                  <small class="text-danger">Minimum 3 characters</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['maxlength']) {
+                  <small class="text-danger">Maximum 100 characters</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['pattern']) {
+                  <small class="text-danger">English letters only</small>
+                }
+
+              }
             </div>
 
-            <!-- PHONE -->
             <div class="mb-3">
-              <label class="form-label" for="phone">Phone</label>
+              <label class="form-label">Full Name (Arabic)</label>
+
+              <input
+                type="text"
+                formControlName="fullNameAr"
+                class="form-control"
+                placeholder="Enter your full name"
+              />
+
+              @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
+
+                @if (registerForm.get('fullNameAr')?.errors?.['required']) {
+                  <small class="text-danger">Arabic name is required</small>
+                }
+
+                @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
+                  <small class="text-danger">Arabic letters only</small>
+                }
+
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+
               <input
                 type="tel"
-                id="phone"
                 formControlName="phone"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
+                class="form-control"
                 placeholder="Enter your phone"
               />
+
+              @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
+
+                @if (registerForm.get('phone')?.errors?.['required']) {
+                  <small class="text-danger">Phone is required</small>
+                }
+
+                @if (registerForm.get('phone')?.errors?.['pattern']) {
+                  <small class="text-danger">Invalid Egyptian phone number</small>
+                }
+
+              }
             </div>
 
-            <!-- EMAIL -->
             <div class="mb-3">
-              <label class="form-label" for="email">Email</label>
+              <label class="form-label">Email</label>
+
               <input
                 type="email"
-                id="email"
                 formControlName="email"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
+                class="form-control"
                 placeholder="Enter your email"
               />
+
+              @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+
+                @if (registerForm.get('email')?.errors?.['required']) {
+                  <small class="text-danger">Email is required</small>
+                }
+
+                @if (registerForm.get('email')?.errors?.['email']) {
+                  <small class="text-danger">Invalid email format</small>
+                }
+
+              }
             </div>
 
-            <!-- PASSWORD -->
             <div class="mb-3">
-              <label class="form-label" for="password">Password</label>
+              <label class="form-label">Password</label>
+
               <input
                 type="password"
-                id="password"
                 formControlName="password"
-                class="form-control bg-light bg-opacity-50 border-light py-2"
+                class="form-control"
                 placeholder="Enter your password"
               />
+
+              @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+
+                @if (registerForm.get('password')?.errors?.['required']) {
+                  <small class="text-danger">Password is required</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.['minlength']) {
+                  <small class="text-danger">Minimum 6 characters</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.['maxlength']) {
+                  <small class="text-danger">Maximum 20 characters</small>
+                }
+
+              }
             </div>
 
-            <!-- SUBMIT -->
-            <div class="mb-1 text-center d-grid">
-              <button class="btn main-btn py-2" type="submit">
-                Create Account
-              </button>
+            <div class="mb-3">
+              <button class="btn main-btn w-100" (click)="submitRegisterForm()">Submit</button>
             </div>
-
           </form>
-
           <!-- <p class="mb-0 mt-2 text-center">
             I already have an account ?
             <a

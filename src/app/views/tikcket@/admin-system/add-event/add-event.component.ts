@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 
@@ -17,6 +18,8 @@ export class AddEventComponent{
   private readonly _UsersService = inject(UsersService)
   private readonly _EventService = inject(EventService)
   private readonly _ToastrService = inject(ToastrService)
+  private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+
 
   allOwners:any[] = []
   selectedFile!: File | null;
@@ -44,18 +47,23 @@ export class AddEventComponent{
   })
 
   getAllOwners():void{
+    this._NgxSpinnerService.show()
+
     this._UsersService.getOwners().subscribe({
       next:(res)=>{
+        this._NgxSpinnerService.hide()
         this.allOwners = res
       }
     })
   }
 
   async submitCreateEvent(): Promise<void> {
+    this._NgxSpinnerService.show()
 
     if (this.eventForm.invalid || !this.selectedFile) {
       this.eventForm.markAllAsTouched();
       this._ToastrService.error('Please fill all fields and select image');
+      this._NgxSpinnerService.hide()
       return;
     }
 

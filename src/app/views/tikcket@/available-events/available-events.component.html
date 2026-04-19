@@ -8,23 +8,78 @@
       </div>
       <div class="event-items">
         <div class="row">
-          @for (event of eventsWithOwnerName; track $index) {
-            <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + event?.id">
+          @if(userRole !== 'Admin'){
+            @for (event of eventsWithOwnerName; track $index) {
+              @if($index !== 1){
+              <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + event?.id">
+                <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
+                  <div class="badge fw-bold" [ngClass]="{
+                    'bg-success': event?.status === 'Active' || event?.status === 'active',
+                    'bg-danger': event?.status === 'Inactive'
+                  }">
+                    {{ event?.status == 'Inactive' ? 'Sold Out' : 'Active' }}
+                  </div>
+                  <div class="row g-0 h-100">
+                    <div class="col-md-4">
+                      @if(event?.Image){
+                        <img
+                          loading="lazy"
+                          [src]="event?.Image"
+                          class="event-img img-fluid rounded"
+                          [alt]="event?.name "
+                        />
+                      } @else {
+                        <img loading="lazy" class="event-img w-100 h-100 object-fit-cover img-fluid rounded" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="graduation party">
+                      }
+                    </div>
+                    <div class="col-md-8">
+                      <div class="d-flex justify-content-center align-items-center h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">{{event?.EventName}}</h5>
+                          <h6 class="mb-2 mt-1 fw-bold m-0 main-color">{{ event?.ownerName || 'Unknown' }}</h6>
+                          <p class="card-text party-details">
+                            Location : <span><a class="cr" [href]="event?.Location" target="_blank">{{event?.LocationName}}</a></span> <br>
+                            Date :  @if(event?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+                                      <span> {{event?.Date | date:'dd/MM/YYYY'}} </span> <br>
+                                    } @else {
+                                      <span> To be determined (TBD) </span> <br>
+                                    }
+                            Ticket Price: <span> {{event?.TicketPrice | number}} EGP </span> <br>
+                          </p>
+                          <div class="card-text d-flex justify-content-between align-items-end">
+                            @if(event?.status == 'Inactive' ){
+                              <span class="border border-2 border-danger px-3 py-1 fw-bold rounded-3 text-danger">Sold Out</span>
+                            } @else {
+                              <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">More Details</button>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+            } @empty {
+              <h2 class="text-center border p-3 rounded-3">No events available.</h2>
+            }
+          } @else {
+            <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + eventsWithOwnerName[1]?.id">
               <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
                 <div class="badge fw-bold" [ngClass]="{
-                  'bg-success': event?.status === 'Active' || event?.status === 'active',
-                  'bg-danger': event?.status === 'Inactive'
+                  'bg-success': eventsWithOwnerName[1]?.status === 'Active' || eventsWithOwnerName[1]?.status === 'active',
+                  'bg-danger': eventsWithOwnerName[1]?.status === 'Inactive'
                 }">
-                  {{ event?.status == 'Inactive' ? 'Sold Out' : 'Active' }}
+                  {{ eventsWithOwnerName[1]?.status == 'Inactive' ? 'Sold Out' : 'Active' }}
                 </div>
                 <div class="row g-0 h-100">
                   <div class="col-md-4">
-                    @if(event?.Image){
+                    @if(eventsWithOwnerName[1]?.Image){
                       <img
                         loading="lazy"
-                        [src]="event?.Image"
+                        [src]="eventsWithOwnerName[1]?.Image"
                         class="event-img img-fluid rounded"
-                        [alt]="event?.name "
+                        [alt]="eventsWithOwnerName[1]?.name "
                       />
                     } @else {
                       <img loading="lazy" class="event-img w-100 h-100 object-fit-cover img-fluid rounded" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="graduation party">
@@ -33,22 +88,22 @@
                   <div class="col-md-8">
                     <div class="d-flex justify-content-center align-items-center h-100">
                       <div class="card-body">
-                        <h5 class="card-title">{{event?.EventName}}</h5>
-                        <h6 class="mb-2 mt-1 fw-bold m-0 main-color">{{ event?.ownerName || 'Unknown' }}</h6>
+                        <h5 class="card-title">{{eventsWithOwnerName[1]?.EventName}}</h5>
+                        <h6 class="mb-2 mt-1 fw-bold m-0 main-color">{{ eventsWithOwnerName[1]?.ownerName || 'Unknown' }}</h6>
                         <p class="card-text party-details">
-                          Location : <span><a class="cr" [href]="event?.Location" target="_blank">{{event?.LocationName}}</a></span> <br>
-                          Date :  @if(event?.id != 'AyIIGWFDQfpXKcWSvUpL'){
-                                    <span> {{event?.Date | date:'dd/MM/YYYY'}} </span> <br>
+                          Location : <span><a class="cr" [href]="eventsWithOwnerName[1]?.Location" target="_blank">{{eventsWithOwnerName[1]?.LocationName}}</a></span> <br>
+                          Date :  @if(eventsWithOwnerName[1]?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+                                    <span> {{eventsWithOwnerName[1]?.Date | date:'dd/MM/YYYY'}} </span> <br>
                                   } @else {
                                     <span> To be determined (TBD) </span> <br>
                                   }
-                          Ticket Price: <span> {{event?.TicketPrice | number}} EGP </span> <br>
+                          Ticket Price: <span> {{eventsWithOwnerName[1]?.TicketPrice | number}} EGP </span> <br>
                         </p>
                         <div class="card-text d-flex justify-content-between align-items-end">
-                          @if(event?.status == 'Inactive' ){
+                          @if(eventsWithOwnerName[1]?.status == 'Inactive' ){
                             <span class="border border-2 border-danger px-3 py-1 fw-bold rounded-3 text-danger">Sold Out</span>
                           } @else {
-                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">More Details</button>
+                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + eventsWithOwnerName[1]?.id">More Details</button>
                           }
                         </div>
                       </div>
@@ -57,9 +112,8 @@
                 </div>
               </div>
             </div>
-          } @empty {
-            <h2 class="text-center border p-3 rounded-3">No events available.</h2>
           }
+
         </div>
       </div>
     </div>
