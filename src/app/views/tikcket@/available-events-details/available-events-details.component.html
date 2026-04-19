@@ -10,13 +10,13 @@
         <h4 class="fw-semibold mb-2 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
         <p>
           Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
-          Date : @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+          Date : @if(eventData?.id != 'k2vYgk5ekOaZLp7y3x1U'){
                   <span class="text-dark"> {{eventData?.Date | date:'dd/MM/yyyy'}}</span> <br>
                 } @else {
                   <span> To be determined (TBD) </span> <br>
                 }
           Ticket Price: <span class="text-dark"> {{eventData?.TicketPrice | number}} EGP </span> <br>
-          @if(eventData?.id != 'AyIIGWFDQfpXKcWSvUpL'){
+          @if(eventData?.id != 'k2vYgk5ekOaZLp7y3x1U'){
             Outcomer Price: <span class="text-dark"> {{eventData?.VisitorPrice | number}} EGP </span>
           } @else {
             Outcomer Price: <span class="text-dark"> To be determined (TBD) </span>
