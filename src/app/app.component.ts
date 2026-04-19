@@ -15,6 +15,7 @@ import {
   type NgProgressRef,
 } from 'ngx-progressbar'
 import { NgxSpinnerComponent } from 'ngx-spinner'
+declare var gtag: Function;
 
 @Component({
     selector: 'app-root',
@@ -33,6 +34,14 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((event: Event) => {
       this.checkRouteChange(event)
     })
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        gtag('config', 'G-GVN1P4DPJ5', {
+          page_path: event.urlAfterRedirects,
+        });
+      }
+    });
   }
 
   ngOnInit(): void {
