@@ -15,7 +15,7 @@ import {
   type NgProgressRef,
 } from 'ngx-progressbar'
 import { NgxSpinnerComponent } from 'ngx-spinner'
-declare var gtag: Function;
+declare let gtag: Function;
 
 @Component({
     selector: 'app-root',
@@ -35,11 +35,15 @@ export class AppComponent implements OnInit {
       this.checkRouteChange(event)
     })
 
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event: Event) => {
+
       if (event instanceof NavigationEnd) {
+
+        // GA4 page tracking
         gtag('config', 'G-GVN1P4DPJ5', {
-          page_path: event.urlAfterRedirects,
+          page_path: event.urlAfterRedirects
         });
+
       }
     });
   }
