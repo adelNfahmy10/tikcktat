@@ -91,134 +91,158 @@
     <div class="modal-body">
       @if(haveAcc){
         <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
-        <form [formGroup]="registerForm">
-          <div class="mb-3">
-            <label class="form-label">Full Name (English)</label>
+        @if(!OTP){
+          <form class="mt-2" [formGroup]="registerForm">
+            <div class="mb-3">
+              <label class="form-label">Full Name (English)</label>
 
+              <input
+                type="text"
+                formControlName="fullName"
+                class="form-control"
+                placeholder="Enter your full name"
+              />
+
+              @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
+
+                @if (registerForm.get('fullName')?.errors?.['required']) {
+                  <small class="text-danger">Full name is required</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['minlength']) {
+                  <small class="text-danger">Minimum 3 characters</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['maxlength']) {
+                  <small class="text-danger">Maximum 100 characters</small>
+                }
+
+                @if (registerForm.get('fullName')?.errors?.['pattern']) {
+                  <small class="text-danger">English letters only</small>
+                }
+
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Full Name (Arabic)</label>
+
+              <input
+                type="text"
+                formControlName="fullNameAr"
+                class="form-control"
+                placeholder="Enter your full name"
+              />
+
+              @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
+
+                @if (registerForm.get('fullNameAr')?.errors?.['required']) {
+                  <small class="text-danger">Arabic name is required</small>
+                }
+
+                @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
+                  <small class="text-danger">Arabic letters only</small>
+                }
+
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+
+              <input
+                type="tel"
+                formControlName="phone"
+                class="form-control"
+                placeholder="Enter your phone"
+              />
+
+              @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
+
+                @if (registerForm.get('phone')?.errors?.['required']) {
+                  <small class="text-danger">Phone is required</small>
+                }
+
+                @if (registerForm.get('phone')?.errors?.['pattern']) {
+                  <small class="text-danger">Invalid Egyptian phone number</small>
+                }
+
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                placeholder="Enter your email"
+              />
+
+              @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+
+                @if (registerForm.get('email')?.errors?.['required']) {
+                  <small class="text-danger">Email is required</small>
+                }
+
+                @if (registerForm.get('email')?.errors?.['email']) {
+                  <small class="text-danger">Invalid email format</small>
+                }
+
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+
+              <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                placeholder="Enter your password"
+              />
+
+              @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+
+                @if (registerForm.get('password')?.errors?.['required']) {
+                  <small class="text-danger">Password is required</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.['minlength']) {
+                  <small class="text-danger">Minimum 6 characters</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.['maxlength']) {
+                  <small class="text-danger">Maximum 20 characters</small>
+                }
+
+              }
+            </div>
+          </form>
+        } @else {
+          <div class="mb-3 mt-2">
+            <h4 class="fw-bold">Please check your email. An OTP has been sent to you.</h4>
+            <label class="form-label">One-Time Password 6 Digits (OTP)</label>
             <input
-              type="text"
-              formControlName="fullName"
+              type="number"
+              [(ngModel)]="CheckOTP"
               class="form-control"
-              placeholder="Enter your full name"
+              min="0"
+              placeholder="Enter the OTP you received"
             />
 
-            @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
-
-              @if (registerForm.get('fullName')?.errors?.['required']) {
-                <small class="text-danger">Full name is required</small>
-              }
-
-              @if (registerForm.get('fullName')?.errors?.['minlength']) {
-                <small class="text-danger">Minimum 3 characters</small>
-              }
-
-              @if (registerForm.get('fullName')?.errors?.['maxlength']) {
-                <small class="text-danger">Maximum 100 characters</small>
-              }
-
-              @if (registerForm.get('fullName')?.errors?.['pattern']) {
-                <small class="text-danger">English letters only</small>
-              }
-
+            @if(otpMsg){
+              <small class="text-danger">{{otpMsg}}</small>
             }
+
+            <div class="cr mt-3 mb-1 d-flex align-items-center gap-1" (click)="resetOTP()">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Back</span>
+            </div>
+
           </div>
-
-          <div class="mb-3">
-            <label class="form-label">Full Name (Arabic)</label>
-
-            <input
-              type="text"
-              formControlName="fullNameAr"
-              class="form-control"
-              placeholder="Enter your full name"
-            />
-
-            @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
-
-              @if (registerForm.get('fullNameAr')?.errors?.['required']) {
-                <small class="text-danger">Arabic name is required</small>
-              }
-
-              @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
-                <small class="text-danger">Arabic letters only</small>
-              }
-
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Phone</label>
-
-            <input
-              type="tel"
-              formControlName="phone"
-              class="form-control"
-              placeholder="Enter your phone"
-            />
-
-            @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
-
-              @if (registerForm.get('phone')?.errors?.['required']) {
-                <small class="text-danger">Phone is required</small>
-              }
-
-              @if (registerForm.get('phone')?.errors?.['pattern']) {
-                <small class="text-danger">Invalid Egyptian phone number</small>
-              }
-
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-
-            <input
-              type="email"
-              formControlName="email"
-              class="form-control"
-              placeholder="Enter your email"
-            />
-
-            @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
-
-              @if (registerForm.get('email')?.errors?.['required']) {
-                <small class="text-danger">Email is required</small>
-              }
-
-              @if (registerForm.get('email')?.errors?.['email']) {
-                <small class="text-danger">Invalid email format</small>
-              }
-
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-
-            <input
-              type="password"
-              formControlName="password"
-              class="form-control"
-              placeholder="Enter your password"
-            />
-
-            @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
-
-              @if (registerForm.get('password')?.errors?.['required']) {
-                <small class="text-danger">Password is required</small>
-              }
-
-              @if (registerForm.get('password')?.errors?.['minlength']) {
-                <small class="text-danger">Minimum 6 characters</small>
-              }
-
-              @if (registerForm.get('password')?.errors?.['maxlength']) {
-                <small class="text-danger">Maximum 20 characters</small>
-              }
-
-            }
-          </div>
-        </form>
+        }
       }
 
       @if(!haveAcc){
@@ -282,9 +306,16 @@
         Close
       </button>
       @if(haveAcc){
-        <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="submitRegisterForm()">
-          Sign Up
-        </button>
+        @if(OTP){
+          <button type="button" class="btn btn-primary save-btn" [disabled]="!this.CheckOTP || this.CheckOTP.toString().length !== 6" (click)="submitRegisterForm()">
+            Sign Up
+          </button>
+        } @else {
+          <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="generateOTP()">
+            Send OTP
+          </button>
+        }
+
       } @else {
         <button type="button" class="btn btn-primary save-btn" [disabled]="loginForm.invalid" (click)="submitLogin(); modal.close()">
           Sign In

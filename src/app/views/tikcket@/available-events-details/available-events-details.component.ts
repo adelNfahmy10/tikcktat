@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
@@ -9,10 +9,11 @@ import { NgbAccordionModule, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { switchMap } from 'rxjs';
+import emailjs from '@emailjs/browser';
 
 @Component({
   selector: 'app-available-events-details',
-  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule],
+  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
   templateUrl: './available-events-details.component.html',
   styleUrl: './available-events-details.component.scss'
 })
@@ -35,6 +36,10 @@ export class AvailableEventsDetailsComponent {
   haveAcc: boolean = true;
   features: string[] = [];
   terms: string[] = [];
+  
+  OTP:number | string = ''
+  CheckOTP:number | string = ''
+  otpMsg:string = ''
 
   ngOnInit(): void {
     this.getEventById()
@@ -72,7 +77,6 @@ export class AvailableEventsDetailsComponent {
       }
     })
   }
-
 
   // ✅ function تحويل الـ string لـ array نظيف
   formatEventDetails(details: string): string[] {
@@ -147,11 +151,31 @@ export class AvailableEventsDetailsComponent {
     ],
   });
 
+
+  generateOTP():void{
+    this.OTP = Math.floor(100000 + Math.random() * 900000);
+    this.sendFirstEmail()
+  }
+
   submitRegisterForm(): void {
     this._NgxSpinnerService.show()
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      this._NgxSpinnerService.hide()
+      return;
+    }
+
+    if (!this.CheckOTP || this.CheckOTP.toString().length !== 6) {
+      this._ToastrService.error('Please enter a valid 6-digit OTP');
+      this.otpMsg = 'Please enter a valid 6-digit OTP'
+      this._NgxSpinnerService.hide()
+      return;
+    }
+
+    if (this.OTP != this.CheckOTP) {
+      this._ToastrService.error('Incorrect OTP. Please try again');
+      this.otpMsg = 'Incorrect OTP. Please try again'
       this._NgxSpinnerService.hide()
       return;
     }
@@ -165,6 +189,7 @@ export class AvailableEventsDetailsComponent {
 
         localStorage.setItem('userId', res.uid);
         localStorage.setItem('fullName', res.fullName);
+        localStorage.setItem('fullNameAr', res.fullNameAr);
         localStorage.setItem('email', res.email);
         localStorage.setItem('phone', res.phone);
         localStorage.setItem('role', res.role);
@@ -195,6 +220,31 @@ export class AvailableEventsDetailsComponent {
         this._NgxSpinnerService.hide()
       }
     });
+
+  }
+
+  resetOTP():void{
+    this.OTP = ''
+  }
+
+  // Email Send
+  async sendFirstEmail() {
+    emailjs.init('yDyM7-toHXTAEsac-');
+    try {
+      const send = await emailjs.send("service_r4d7bwe","template_6tblq3h",{
+        name: this.registerForm.value.fullName,
+        otp: this.OTP,
+        email: this.registerForm.value.email,
+      });
+
+      this._ToastrService.success('OTP Sent To Email');
+
+      return send;
+    } catch (err) {
+      console.error('EMAIL ERROR:', err);
+      this._ToastrService.warning('Email failed but booking is saved');
+      throw err;
+    }
   }
 
   loginForm: FormGroup = this._FormBuilder.group({
