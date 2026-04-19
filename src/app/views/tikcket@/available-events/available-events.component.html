@@ -9,7 +9,7 @@
       <div class="event-items">
         <div class="row">
           @for (event of eventsWithOwnerName; track $index) {
-            <div class="col-lg-6">
+            <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + event?.id">
               <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
                 <div class="badge fw-bold" [ngClass]="{
                   'bg-success': event?.status === 'Active' || event?.status === 'active',
@@ -48,7 +48,7 @@
                           @if(event?.status == 'Inactive' ){
                             <span class="border border-2 border-danger px-3 py-1 fw-bold rounded-3 text-danger">Sold Out</span>
                           } @else {
-                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">Book Now</button>
+                            <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">More Details</button>
                           }
                         </div>
                       </div>
