@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-organizer-events',
@@ -45,6 +46,8 @@ export class OrganizerEventsComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.ownerEvents = res;
+          console.log(this.ownerEvents);
+
           this.filteredData = [...this.ownerEvents];
           this.updatePagination();
         },
@@ -56,32 +59,61 @@ export class OrganizerEventsComponent {
     }
   }
 
-  // downloadOwnerEvent(): void {
-  //   this._EventService.downloadEventsByOwner(this.userId).subscribe({
-  //     next: (res: Blob) => {
-  //       const blob = new Blob([res], {
-  //         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  //       });
-  //       const url = window.URL.createObjectURL(blob);
+  downloadOwnerEvent(): void {
+    if (!this.ownerEvents || this.ownerEvents.length === 0) return;
 
-  //       const a = document.createElement('a');
-  //       a.href = url;
-  //       a.download = 'My Events.xlsx';
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       document.body.removeChild(a);
+    const exportData = this.ownerEvents.map((event: any) => ({
+      Event_Name: event.EventName,
+      Type: event.Type,
+      Organizer: event.OriganizerName,
+      Location_Name: event.LocationName,
+      Location_Link: event.Location,
+      Date: event.Date,
+      Status: event.status,
 
-  //       window.URL.revokeObjectURL(url);
-  //       console.log('Download started!');
-  //     },
-  //     error: (err) => {
-  //       console.error('Download failed', err);
-  //     }
-  //   });
-  // }
+      Ticket_Price: event.TicketPrice,
+      Visitor_Price: event.VisitorPrice,
+      Ticket_Count: event.TicketCount,
+
+      Payment_Link: event.PaymentLink,
+
+      Event_Details: event.EventDetails,
+      Terms_Of_Entries: event.TermsOfEntries,
+
+      Created_At: event.createdAt
+        ? new Date(event.createdAt.seconds * 1000).toLocaleString()
+        : '',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    // تحسين عرض الأعمدة (اختياري بس مهم)
+    worksheet['!cols'] = [
+      { wch: 40 }, // Event_Name
+      { wch: 15 }, // Type
+      { wch: 20 }, // Organizer
+      { wch: 25 }, // Location_Name
+      { wch: 40 }, // Location_Link
+      { wch: 15 }, // Date
+      { wch: 10 }, // Status
+      { wch: 12 }, // Ticket_Price
+      { wch: 12 }, // Visitor_Price
+      { wch: 12 }, // Ticket_Count
+      { wch: 40 }, // Payment_Link
+      { wch: 60 }, // Event_Details
+      { wch: 60 }, // Terms
+      { wch: 20 }, // Created_At
+    ];
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Owner Events': worksheet },
+      SheetNames: ['Owner Events'],
+    };
+
+    XLSX.writeFile(workbook, 'owner-events.xlsx');
+  }
 
   // 🔍 Search
-
   applySearch() {
     this.filteredData = this.ownerEvents.filter(item =>
       Object.values(item)

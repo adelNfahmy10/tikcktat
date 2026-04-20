@@ -10,6 +10,7 @@ import { switchMap } from 'rxjs';
 import emailjs from '@emailjs/browser';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -170,6 +171,39 @@ export class OrganizerEventAttendeesComponent {
 
     this.filteredData = [...this.attendeesWithUsers];
     this.updatePagination();
+  }
+
+  downloadOwnerEvent(): void {
+    if (!this.allBooking || this.allBooking.length === 0) return;
+
+    const exportData = this.allBooking
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    // تحسين عرض الأعمدة (اختياري بس مهم)
+    // worksheet['!cols'] = [
+    //   { wch: 40 }, // Event_Name
+    //   { wch: 15 }, // Type
+    //   { wch: 20 }, // Organizer
+    //   { wch: 25 }, // Location_Name
+    //   { wch: 40 }, // Location_Link
+    //   { wch: 15 }, // Date
+    //   { wch: 10 }, // Status
+    //   { wch: 12 }, // Ticket_Price
+    //   { wch: 12 }, // Visitor_Price
+    //   { wch: 12 }, // Ticket_Count
+    //   { wch: 40 }, // Payment_Link
+    //   { wch: 60 }, // Event_Details
+    //   { wch: 60 }, // Terms
+    //   { wch: 20 }, // Created_At
+    // ];
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Attendess': worksheet },
+      SheetNames: ['Attendess Event'],
+    };
+
+    XLSX.writeFile(workbook, 'Attendess-Event.xlsx');
   }
 
   getTax(amount: number): number {
