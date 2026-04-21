@@ -227,7 +227,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: () => {
             this._NgxSpinnerService.hide();
-            // this.sendFirstEmail(this.bookDataById?.userEmail)
+            this.sendFirstEmail(this.bookDataById?.userEmail)
             this._ToastrService.success('✅ Paid One Check Successfully');
             this.modalService.dismissAll();
             this.firstPaidAmount = 0
@@ -257,9 +257,9 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
+            // this.sendFirstEmail(this.bookDataById?.userEmail)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
-            console.log(res);
           },
           error: (err) => {
             this._NgxSpinnerService.hide();

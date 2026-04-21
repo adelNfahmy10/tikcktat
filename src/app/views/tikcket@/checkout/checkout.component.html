@@ -88,35 +88,50 @@
                           </div>
 
                           <div class="col-12">
+                            <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
 
-                            <div>
-                              <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
+                            <input
+                              class="form-control w-100"
+                              type="text"
+                              id="GraduationScarfName"
+                              formControlName="GraduationScarfName"
+                              placeholder="أدخل الإسم على الوشاح"
+                            />
 
-                              <input
-                                class="form-control w-100"
-                                type="text"
-                                id="GraduationScarfName"
-                                formControlName="GraduationScarfName"
-                                placeholder="أدخل الإسم على الوشاح"
-                              />
+                            @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
 
-                              @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
-
-                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
-                                  <small class="text-danger">Name is required</small>
-                                }
-
-                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
-                                  <small class="text-danger">Minimum length is 3 characters</small>
-                                }
-
-                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['maxlength']) {
-                                  <small class="text-danger">Maximum length is 100 characters</small>
-                                }
-
+                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
+                                <small class="text-danger">Name is required</small>
                               }
-                            </div>
 
+                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
+                                <small class="text-danger">Minimum length is 3 characters</small>
+                              }
+
+                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['maxlength']) {
+                                <small class="text-danger">Maximum length is 100 characters</small>
+                              }
+
+                            }
+                          </div>
+
+                          <div class="col-12">
+                            <label for="department" class="form-label">القســم</label>
+
+                            <select class="form-select" name="department" id="department" formControlName="department">
+                              <option value="English">English</option>
+                              <option value="French">French</option>
+                            </select>
+
+                            @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
+
+                              @if (checkoutForm.get('department')?.errors?.['required']) {
+                                <small class="text-danger">Name is required</small>
+                              }
+                            }
+                          </div>
+
+                          <div class="col-12">
                             <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
 
                               <div class="flex-grow-1">
@@ -374,7 +389,11 @@
               <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
               <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
               <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
-              <p class="text-center fs-3"><a [href]="eventData.PaymentLink" target="_blank">Pay Now <i class="fa-solid fa-up-right-from-square"></i></a></p>
+              <div class="text-center my-2">
+                <button class="btn main-btn fs-4">
+                  <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
+                </button>
+              </div>
             </div>
 
             <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
