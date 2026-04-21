@@ -1,8 +1,12 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
+
+    <!-- Main Table Attendess -->
     <div class="bg-white rounded-3 p-3 shadow-lg">
       <h1 class="fw-bold">All Attendess</h1>
       <h4 class="main-color fw-bold">{{ eventData?.EventName }}</h4>
+
+      <!-- Search and Download Table -->
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <div class="search">
           <input
@@ -19,6 +23,7 @@
         </div>
       </div>
 
+      <!-- Table All Attendess -->
       <div class="table-responsive">
         <table class="table table-hover align-middle text-center">
           <thead class="table-light">
@@ -82,6 +87,22 @@
                     <i
                       class="fa-solid fa-caret-down"
                       [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('department')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Department</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'department' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'department' && sortDirection === 'desc'"
                     ></i>
                   </span>
                 </div>
@@ -158,8 +179,15 @@
                     <h6 class="m-0">{{ user?.userName }}</h6>
                   </div>
                 </td>
-                <td>{{ user?.userPhone }}</td>
+                <td>
+                  <a
+                    [href]="'https://wa.me/20' + user?.userPhone?.substring(1)"
+                    target="_blank"
+                  >
+                    {{ user?.userPhone }}
+                  </a>
                 <td>{{ user?.userEmail }}</td>
+                <td>{{ user?.department }}</td>
                 <td>{{ user?.VisitorCount + user?.defaultVisitorCount }} Visitors</td>
                 <td>
                   <span>
@@ -181,8 +209,11 @@
                 <td>
                   <span
                     class="badge"
-                    [class.bg-success]="user?.status === 'Paid'"
-                    [class.bg-danger]="user?.status !== 'Paid'"
+                    [ngClass]="{
+                      'bg-success': user?.status === 'Paid',
+                      'bg-primary': user?.status === 'Par-Paid',
+                      'bg-danger': user?.status === 'Pending'
+                    }"
                   >
                     {{ user?.status }}
                   </span>
@@ -209,6 +240,8 @@
         </table>
       </div>
 
+
+      <!-- Paginations -->
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
@@ -226,6 +259,279 @@
       </ul>
     </div>
 
+
+    <!-- Tables Departments -->
+    <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
+      <div class="row g-3">
+         @if(groupedByDepartment['French']){
+          <!-- French Department -->
+          <div class="col-md-6">
+            <div class="french-table">
+              <h4>French Attendess</h4>
+
+              <div class="table-responsive">
+                <table class="table table-hover align-middle text-center">
+                  <thead class="table-light">
+                    <tr>
+                      <th (click)="sort('id')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>ID</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userName')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Name</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userName' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userName' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userPhone')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Phone</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userEmail')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Email</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('status')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Status</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    @for (user of groupedByDepartment['French']; track $index) {
+                      <tr>
+                        <td>
+                          <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span>{{ $index + 1 }}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
+                            <div class="text-start">
+                              <h6 class="m-0 text-start">{{ user?.userName }}</h6>
+                              <span class="fw-bold main-color">{{ user?.department }}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{{ user?.userPhone }}</td>
+                        <td>{{ user?.userEmail }}</td>
+                        <td>
+                          <span
+                            class="badge"
+                            [ngClass]="{
+                              'bg-success': user?.status === 'Paid',
+                              'bg-primary': user?.status === 'Par-Paid',
+                              'bg-danger': user?.status === 'Pending'
+                            }"
+                          >
+                            {{ user?.status }}
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <h3 class="text-center mt-3 mx-auto">No Users Attendees</h3>
+        }
+
+
+        @if(groupedByDepartment['English']){
+          <!-- English Department -->
+          <div class="col-md-6">
+            <div class="french-table">
+              <h4>English Attendess</h4>
+
+              <div class="table-responsive">
+                <table class="table table-hover align-middle text-center">
+                  <thead class="table-light">
+                    <tr>
+                      <th (click)="sort('id')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>ID</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userName')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Name</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userName' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userName' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userPhone')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Phone</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('userEmail')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Email</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+
+                      <th (click)="sort('status')" class="sortable">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span>Status</span>
+                          <span class="sort-icons">
+                            <i
+                              class="fa-solid fa-caret-up"
+                              [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
+                            ></i>
+                            <i
+                              class="fa-solid fa-caret-down"
+                              [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
+                            ></i>
+                          </span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    @for (user of groupedByDepartment['English']; track $index) {
+                      <tr>
+                        <td>
+                          <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span>{{ $index + 1 }}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
+                            <div class="text-start">
+                              <h6 class="m-0 text-start">{{ user?.userName }}</h6>
+                              <span class="fw-bold main-color">{{ user?.department }}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{{ user?.userPhone }}</td>
+                        <td>{{ user?.userEmail }}</td>
+                        <td></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="col-md-6">
+            <h4>English Attendess</h4>
+            <div class="text-center">
+              <h3 class="text-center mt-3 mx-auto">No Users Attendees</h3>
+            </div>
+          </div>
+        }
+
+
+
+      </div>
+    </div>
+
+
   </div>
 </section>
 
@@ -242,7 +548,7 @@
         <div class="row g-3">
           <div class="col-md-4">
             <span>Your Photo</span>
-            <div class="images">
+            <div class="images-view">
               <img loading="lazy" [src]="bookDataById?.userImage" alt="User Image">
             </div>
           </div>

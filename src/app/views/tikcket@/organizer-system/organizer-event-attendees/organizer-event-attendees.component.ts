@@ -80,6 +80,8 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+  groupedByDepartment:any = {}
+
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
     this._ActivatedRoute.paramMap
@@ -93,6 +95,26 @@ export class OrganizerEventAttendeesComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.allBooking = res;
+           // 🔥 1. sort هنا قبل أي processing
+          this.allBooking = res.sort((a: any, b: any) => {
+            const aDate = a?.createdAtOne?.seconds || a?.checkOneDateAt?.seconds || 0;
+            const bDate = b?.createdAtOne?.seconds || b?.checkOneDateAt?.seconds || 0;
+            return aDate - bDate; // 🔥 القديم فوق - الجديد تحت
+          });
+
+          // 🔥 تقسيم
+          this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {
+            const dept = item.department || 'Unknown';
+
+            if (!acc[dept]) {
+              acc[dept] = [];
+            }
+
+            acc[dept].push(item);
+            return acc;
+          }, {});
+          console.log(this.allBooking);
+
           this.mergeData(); // 🔥 مهم
         }
       });
@@ -104,8 +126,6 @@ export class OrganizerEventAttendeesComponent {
       next:(res)=>{
         this._NgxSpinnerService.hide()
         this.bookDataById = res
-        console.log(this.bookDataById);
-
       },
       error:(err)=>{
         this._NgxSpinnerService.hide()
@@ -224,6 +244,7 @@ export class OrganizerEventAttendeesComponent {
           payOneAmount: this.firstPaidAmount,
           checkOneDateAt: new Date(),
           totalAmount: this.firstPaidAmount,
+          status: 'Par-Paid',
         }).subscribe({
           next: () => {
             this._NgxSpinnerService.hide();
@@ -240,7 +261,7 @@ export class OrganizerEventAttendeesComponent {
       } else {
         const totalPaid = this.firstPaidAmount + this.bookDataById.payOneAmount;
         const eventPrice = this.eventData.TicketPrice; // أو السعر الفعلي
-        const status = totalPaid >= eventPrice ? 'Paid' : 'Pending';
+        const status = totalPaid >= eventPrice ? 'Paid' : 'Par-Paid';
 
         // ✅ validation
         if (totalPaid < eventPrice) {
@@ -257,7 +278,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            // this.sendFirstEmail(this.bookDataById?.userEmail)
+            this.sendFirstEmail(this.bookDataById?.userEmail)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
           },
@@ -353,5 +374,12 @@ export class OrganizerEventAttendeesComponent {
       this._ToastrService.warning('Email failed but booking is saved');
       throw err;
     }
+  }
+
+  getGreeting(userName: string): string {
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'صباح الخير' : 'مساء الخير';
+
+    return `${greeting} ${userName}`;
   }
 }

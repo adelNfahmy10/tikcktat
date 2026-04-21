@@ -146,7 +146,7 @@ export class CheckoutComponent {
         Validators.maxLength(100),
       ]
     ],
-    department:['English', Validators.required],
+    department:[null, Validators.required],
     defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
     VisitorCount:[null, [Validators.required, Validators.min(0)]],
 
