@@ -218,24 +218,56 @@ export class OrganizerEventAttendeesComponent {
 
   async firstPaidCheck() {
     this._NgxSpinnerService.show();
-
     if(this.bookDataById?.userEmail){
-      this._BookingService.updateBooking(this.bookDataById.id, {
-        payOneAmount: this.firstPaidAmount,
-        checkOneDateAt: new Date(),
-        totalAmount: this.firstPaidAmount,
-      }).subscribe({
-        next: () => {
-          this._NgxSpinnerService.hide();
-          this.sendFirstEmail(this.bookDataById?.userEmail)
-          this._ToastrService.success('✅ Paid One Check Successfully');
-          this.modalService.dismissAll();
-        },
-        error: (err) => {
-          this._NgxSpinnerService.hide();
-          this._ToastrService.error('Paid One Check Failed');
+      if(!this.bookDataById.payOneAmount){
+        this._BookingService.updateBooking(this.bookDataById.id, {
+          payOneAmount: this.firstPaidAmount,
+          checkOneDateAt: new Date(),
+          totalAmount: this.firstPaidAmount,
+        }).subscribe({
+          next: () => {
+            this._NgxSpinnerService.hide();
+            // this.sendFirstEmail(this.bookDataById?.userEmail)
+            this._ToastrService.success('✅ Paid One Check Successfully');
+            this.modalService.dismissAll();
+            this.firstPaidAmount = 0
+          },
+          error: (err) => {
+            this._NgxSpinnerService.hide();
+            this._ToastrService.error('Paid One Check Failed');
+          }
+        });
+      } else {
+        const totalPaid = this.firstPaidAmount + this.bookDataById.payOneAmount;
+        const eventPrice = this.eventData.TicketPrice; // أو السعر الفعلي
+        const status = totalPaid >= eventPrice ? 'Paid' : 'Pending';
+
+        // ✅ validation
+        if (totalPaid < eventPrice) {
+          this._ToastrService.error('❌ المبلغ المدفوع أقل من سعر الحفلة');
+          return;
         }
-      });
+
+        // ✅ API Call
+        this._BookingService.updateBooking(this.bookDataById.id, {
+          payTwoAmount: this.firstPaidAmount,
+          checkTwoDateAt: new Date(),
+          totalAmount: totalPaid,
+          status: status
+        }).subscribe({
+          next: (res) => {
+            this._NgxSpinnerService.hide();
+            this._ToastrService.success('✅ Paid Two Check Successfully');
+            this.modalService.dismissAll();
+            console.log(res);
+          },
+          error: (err) => {
+            this._NgxSpinnerService.hide();
+            this._ToastrService.error('❌ Paid Two Check Failed');
+          }
+        });
+      }
+
     } else {
       this._ToastrService.error('Not Fount User Email');
     }

@@ -154,7 +154,7 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <img [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
+                    <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
                     <h6 class="m-0">{{ user?.userName }}</h6>
                   </div>
                 </td>
@@ -188,10 +188,19 @@
                   </span>
                 </td>
                 <td>
-                  <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                  <div class="d-flex justify-content-center align-items-center gap-2">
                     <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>
+                    @if(!user?.payOneAmount){
+                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                    }
 
-                    <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                    @if(user?.payOneAmount && !user?.payTwoAmount){
+                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                    }
+
+                    @if(user?.payTwoAmount && user?.payOneAmount){
+                      <i class="fa-solid fa-check-double text-success"></i>
+                    }
                   </div>
                 </td>
               </tr>
@@ -234,7 +243,7 @@
           <div class="col-md-4">
             <span>Your Photo</span>
             <div class="images">
-              <img [src]="bookDataById?.userImage" alt="User Image">
+              <img loading="lazy" [src]="bookDataById?.userImage" alt="User Image">
             </div>
           </div>
 
@@ -242,7 +251,7 @@
             @if(bookDataById?.payOneImage){
               <span>First Transaction Image</span>
               <div class="images">
-                <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+                <img loading="lazy" [src]="bookDataById?.payOneImage" alt="First Transaction">
               </div>
             }
           </div>
@@ -251,7 +260,7 @@
             <div class="col-md-4">
               <span>Second Transaction Image</span>
               <div class="images">
-                <img [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+                <img loading="lazy" [src]="bookDataById?.payTwoImage" alt="Second Transaction">
               </div>
             </div>
           }
@@ -334,44 +343,73 @@
   </div>
 </div>
 
-
+<!-- Modal Pay One -->
 <div class="modal fade" id="exampleModal-Check-One" tabindex="-1" aria-labelledby="exampleModal-Check-OneLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModal-Check-OneLabel">Check Pay One</h1>
+        @if(!bookDataById?.payOneAmount){
+          <h1 class="modal-title fs-5" id="exampleModal-Check-OneLabel">Check Pay One</h1>
+        } @else if(!bookDataById?.payTwoAmount){
+          <h1 class="modal-title fs-5" id="exampleModal-Check-OneLabel">Check Pay Two</h1>
+        } @else{
+          <h1 class="modal-title fs-5" id="exampleModal-Check-OneLabel">Paid Check</h1>
+        }
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Modal Check One -->
         @if(!bookDataById?.payOneAmount){
-          <div class="row">
-            <div class="col-8">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="checkOne">
+                <small>User Amount Paid</small>
+                <input [(ngModel)]="firstPaidAmount" min="0" class="form-control" type="number" name="checkOne" id="checkOne" placeholder="Enter User Amount Paid EGP...">
+              </div>
+
+              <div class="text-center mt-2">
+                <button class="btn main-btn w-100" (click)="firstPaidCheck()">
+                  Submit
+                </button>
+              </div>
+          </div>
+            <div class="col-12">
               <span>First Transaction Image</span>
               @if(bookDataById?.payOneImage){
-                <span>First Transaction Image</span>
                 <div class="images">
-                  <img [src]="bookDataById?.payOneImage" alt="First Transaction">
+                  <img loading="lazy" [src]="bookDataById?.payOneImage" alt="First Transaction">
                 </div>
               }
             </div>
+          </div>
+        } @else if(!bookDataById?.payTwoAmount){
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="checkOne">
+                <small>User Amount Paid</small>
+                <input [(ngModel)]="firstPaidAmount" min="0" class="form-control" type="number" name="checkOne" id="checkOne" placeholder="Enter User Amount Paid EGP...">
+              </div>
 
-            <div class="col-4">
-                <div class="checkOne">
-                  <small>User Amount Paid</small>
-                  <input [(ngModel)]="firstPaidAmount" min="0" class="form-control" type="number" name="checkOne" id="checkOne" placeholder="Enter User Amount Paid EGP...">
+              <div class="text-center mt-2">
+                <button class="btn main-btn w-100" (click)="firstPaidCheck()">
+                  Submit
+                </button>
+              </div>
+          </div>
+            <div class="col-12">
+              <span>Second Transaction Image</span>
+              @if(bookDataById?.payTwoImage){
+                <div class="images">
+                  <img loading="lazy" [src]="bookDataById?.payOneImage" alt="First Transaction">
                 </div>
-
-                <div class="text-center mt-2">
-                  <button class="btn main-btn w-100" (click)="firstPaidCheck()">
-                    Submit
-                  </button>
-                </div>
+              }
             </div>
           </div>
-        } @else {
-          <h2 class="text-center text-success fw-bold">Check One Paid Successfully</h2>
+        } @else{
+          <h2 class="text-center text-success fw-bold">Paid Successfully</h2>
         }
+
+
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
