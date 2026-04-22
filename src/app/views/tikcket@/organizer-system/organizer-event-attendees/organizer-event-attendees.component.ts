@@ -6,7 +6,7 @@ import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { switchMap } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 import emailjs from '@emailjs/browser';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -48,6 +48,8 @@ export class OrganizerEventAttendeesComponent {
 
   taxAmount: number = 0.02; // 2%
 
+  groupedByDepartment:any = {}
+
   ngOnInit() {
     this.getAttendeesByEventId()
     this.getEventById()
@@ -80,8 +82,6 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
-  groupedByDepartment:any = {}
-
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
     this._ActivatedRoute.paramMap
@@ -113,7 +113,6 @@ export class OrganizerEventAttendeesComponent {
             acc[dept].push(item);
             return acc;
           }, {});
-          console.log(this.allBooking);
 
           this.mergeData(); // 🔥 مهم
         }
@@ -191,39 +190,6 @@ export class OrganizerEventAttendeesComponent {
 
     this.filteredData = [...this.attendeesWithUsers];
     this.updatePagination();
-  }
-
-  downloadOwnerEvent(): void {
-    if (!this.allBooking || this.allBooking.length === 0) return;
-
-    const exportData = this.allBooking
-
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-
-    // تحسين عرض الأعمدة (اختياري بس مهم)
-    // worksheet['!cols'] = [
-    //   { wch: 40 }, // Event_Name
-    //   { wch: 15 }, // Type
-    //   { wch: 20 }, // Organizer
-    //   { wch: 25 }, // Location_Name
-    //   { wch: 40 }, // Location_Link
-    //   { wch: 15 }, // Date
-    //   { wch: 10 }, // Status
-    //   { wch: 12 }, // Ticket_Price
-    //   { wch: 12 }, // Visitor_Price
-    //   { wch: 12 }, // Ticket_Count
-    //   { wch: 40 }, // Payment_Link
-    //   { wch: 60 }, // Event_Details
-    //   { wch: 60 }, // Terms
-    //   { wch: 20 }, // Created_At
-    // ];
-
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Attendess': worksheet },
-      SheetNames: ['Attendess Event'],
-    };
-
-    XLSX.writeFile(workbook, 'Attendess-Event.xlsx');
   }
 
   getTax(amount: number): number {
@@ -376,10 +342,152 @@ export class OrganizerEventAttendeesComponent {
     }
   }
 
-  getGreeting(userName: string): string {
-    const hour = new Date().getHours();
-    const greeting = hour < 12 ? 'صباح الخير' : 'مساء الخير';
+  // Download Excels
+  allDataInExcel() {
 
-    return `${greeting} ${userName}`;
+    let frenchCount = 1;
+    let englishCount = 1;
+
+    const sheetData = this.allBooking.map((item: any) => {
+
+      let seatNumber = '';
+
+      if (item?.department === 'French') {
+        seatNumber = `A${frenchCount++}`;
+      }
+
+      else if (item?.department === 'English') {
+        seatNumber = `B${englishCount++}`;
+      }
+
+      return {
+        UserId: item?.userId,
+        SeatNumber: seatNumber,
+        UserName: item?.userName,
+        Department: item?.department,
+        Email: item?.userEmail,
+        Phone: item?.userPhone,
+        Status: item?.status,
+        TotalAmount: item?.totalAmount,
+        PayOneAmount: item?.payOneAmount,
+        checkOneDateAt: item?.checkOneDateAt?.seconds
+          ? new Date(item.checkOneDateAt.seconds * 1000)
+          : '',
+        PayTwoAmount: item?.payTwoAmount,
+        checkTwoDateAt: item?.checkTwoDateAt?.seconds
+          ? new Date(item.checkTwoDateAt.seconds * 1000)
+          : ''
+      };
+    });
+
+    const sheet = XLSX.utils.json_to_sheet(sheetData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, sheet, 'All Bookings');
+
+    XLSX.writeFile(workbook, 'all-bookings.xlsx');
+  }
+
+  // Excel Seat No.
+  seatNumberByDepartmentExcel(dept: string) {
+
+    const deptData = this.groupedByDepartment[dept] || [];
+
+    let count = 1;
+
+    const prefixMap: any = {
+      'French': 'A',
+      'English': 'B'
+    };
+
+    const prefix = prefixMap[dept] || '';
+
+    const sheetData = deptData.map((item: any) => ({
+      SeatNumber: prefix ? `${prefix}${count++}` : '',
+      UserName: item.userName,
+      Department: dept,
+    }));
+
+    const sheet = XLSX.utils.json_to_sheet(sheetData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, sheet, dept);
+
+    XLSX.writeFile(workbook, `${dept}-seat-number.xlsx`);
+  }
+
+  // Excel Number A-Z Or أ-ي
+  sortNamesByDepartmentExcel(type: 'arabic' | 'english') {
+
+    Object.keys(this.groupedByDepartment).forEach((dept: string) => {
+
+      const deptData = this.groupedByDepartment[dept];
+
+      let usersData: any[] = [];
+      let completed = 0;
+
+      const total = deptData.length;
+
+      deptData.forEach((item: any, index: number) => {
+
+        this._UsersService.getUserById(item.userId)
+          .subscribe(user => {
+
+            const name =
+              type === 'arabic'
+                ? user?.fullNameAr || item.userName
+                : user?.fullName || item.userName;
+
+            usersData[index] = {
+              name: name
+            };
+
+            completed++;
+
+            // ✅ لما يخلصوا كلهم
+            if (completed === total) {
+
+              // 🔤 Sort
+              usersData.sort((a, b) =>
+                (a.name || '').localeCompare(
+                  b.name || '',
+                  type === 'arabic' ? 'ar' : 'en'
+                )
+              );
+
+              // 📄 تجهيز الشيت
+              const sheetData = usersData.map(x => ({
+                [type === 'arabic'
+                  ? 'الأسماء_بالعربي_أبجدي'
+                  : 'English_Names_Sorted']: x.name
+              }));
+
+              const sheet = XLSX.utils.json_to_sheet(sheetData);
+              const workbook = XLSX.utils.book_new();
+
+              XLSX.utils.book_append_sheet(workbook, sheet, dept);
+
+              XLSX.writeFile(workbook, `${dept}-${type}.xlsx`);
+            }
+
+          });
+
+      });
+
+    });
+  }
+
+  downloadScarfExcel() {
+    const sheetData = this.allBooking.map(item => ({
+      GraduationScarfName: item.GraduationScarfName || item.userName
+    }));
+
+    const sheet = XLSX.utils.json_to_sheet(sheetData);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, sheet, 'Scarf Names');
+
+    XLSX.writeFile(workbook, 'scarf-names.xlsx');
   }
 }

@@ -18,8 +18,11 @@
           />
         </div>
 
-        <div class="download">
-          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+        <div class="download d-flex flex-wrap align-items-center gap-2">
+          <button class="btn btn-outline-primary" (click)="allDataInExcel()">All <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="seatNumberByDepartmentExcel('English'); seatNumberByDepartmentExcel('French')">Seat No. <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="sortNamesByDepartmentExcel('arabic'); sortNamesByDepartmentExcel('english')">Speaker <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadScarfExcel()">Scarf Name <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 
@@ -239,7 +242,6 @@
           </tbody>
         </table>
       </div>
-
 
       <!-- Paginations -->
       <ul class="pagination justify-content-center">
@@ -525,13 +527,8 @@
             </div>
           </div>
         }
-
-
-
       </div>
     </div>
-
-
   </div>
 </section>
 
