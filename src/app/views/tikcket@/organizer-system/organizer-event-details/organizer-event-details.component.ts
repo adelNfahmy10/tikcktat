@@ -29,7 +29,9 @@ export class OrganizerEventDetailsComponent {
 
   allBooking:any[] = []
   totalTickets:number = 0
-  totalVisitors:number = 0
+  totalOutComerCount:number = 0
+  totalVisitorCount:number = 0
+  totalDefaultVisitorCount:number = 0
   totalRevenue:number = 0
 
   ngOnInit(): void {
@@ -69,19 +71,22 @@ export class OrganizerEventDetailsComponent {
         this.totalTickets = this.allBooking.length
 
         // 👨‍👩‍👧 total Vsisitos
-        this.totalVisitors = this.allBooking.reduce((sum, b) => {
+        this.totalOutComerCount= this.allBooking.reduce((sum, b) => {
           return sum + (b.VisitorCount + b.defaultVisitorCount || 0);
         }, 0);
 
-        // 💰 total revenue
-        const ticketPrice = this.eventData?.TicketPrice || 0;
-        const visitorPrice = this.eventData?.VisitorPrice || 0;
-
-        this.totalRevenue = this.allBooking.reduce((sum, b) => {
-          const visitors = b.VisitorCount || 0;
-          const subtotal = ticketPrice + (visitors * visitorPrice);
-          return sum + subtotal;
+        this.totalVisitorCount = this.allBooking.reduce((sum, b) => {
+          return sum + (b.VisitorCount || 0);
         }, 0);
+
+        // 👨‍👩‍👧 defaultVisitorCount لوحده
+        this.totalDefaultVisitorCount = this.allBooking.reduce((sum, b) => {
+          return sum + (b.defaultVisitorCount || 0);
+        }, 0);
+
+        // 💰 total revenue
+        this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
+
       },
       error:(err)=>[
         this._NgxSpinnerService.hide()

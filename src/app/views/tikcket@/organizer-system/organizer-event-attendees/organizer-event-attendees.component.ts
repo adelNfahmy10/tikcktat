@@ -63,6 +63,7 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
+
       },
       error: (err) => {
         this._NgxSpinnerService.hide()
@@ -82,6 +83,11 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+  totalOutComerCount:number = 0
+  totalVisitorCount:number = 0
+  totalDefaultVisitorCount:number = 0
+  totalRevenue:number = 0
+
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
     this._ActivatedRoute.paramMap
@@ -95,12 +101,30 @@ export class OrganizerEventAttendeesComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.allBooking = res;
+
            // 🔥 1. sort هنا قبل أي processing
           this.allBooking = res.sort((a: any, b: any) => {
             const aDate = a?.createdAtOne?.seconds || a?.checkOneDateAt?.seconds || 0;
             const bDate = b?.createdAtOne?.seconds || b?.checkOneDateAt?.seconds || 0;
             return aDate - bDate; // 🔥 القديم فوق - الجديد تحت
           });
+
+          // 👨‍👩‍👧 total Vsisitos
+          this.totalOutComerCount= this.allBooking.reduce((sum, b) => {
+            return sum + (b.VisitorCount + b.defaultVisitorCount || 0);
+          }, 0);
+
+          this.totalVisitorCount = this.allBooking.reduce((sum, b) => {
+            return sum + (b.VisitorCount || 0);
+          }, 0);
+
+          // 👨‍👩‍👧 defaultVisitorCount لوحده
+          this.totalDefaultVisitorCount = this.allBooking.reduce((sum, b) => {
+            return sum + (b.defaultVisitorCount || 0);
+          }, 0);
+
+          // 💰 total revenue
+          this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
 
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {
@@ -301,7 +325,7 @@ export class OrganizerEventAttendeesComponent {
     this.updatePagination();
   }
 
-  // 📄 Pagination
+  // 📄 All Pagination
   updatePagination() {
 
     const total = Math.ceil(this.filteredData.length / this.pageSize);
@@ -320,6 +344,29 @@ export class OrganizerEventAttendeesComponent {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
     this.updatePagination();
+  }
+
+  // 📄 Custom Pagination
+  departmentPages: { [key: string]: number } = {};
+  itemsPerPage = 5;
+
+  getPaginatedDepartment(dept: string) {
+    const page = this.departmentPages[dept] || 1;
+    const start = (page - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+
+    return this.groupedByDepartment[dept]?.slice(start, end) || [];
+  }
+
+  getTotalPages(dept: string): number[] {
+    const total = this.groupedByDepartment[dept]?.length || 0;
+    const pages = Math.ceil(total / this.itemsPerPage);
+
+    return Array.from({ length: pages }, (_, i) => i + 1);
+  }
+
+  changeDepartmentPage(dept: string, page: number) {
+    this.departmentPages[dept] = page;
   }
 
   // Email Send

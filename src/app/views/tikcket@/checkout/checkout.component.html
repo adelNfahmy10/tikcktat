@@ -184,12 +184,12 @@
                 </form>
               </div>
             } @else {
-              <!-- <div class="text-center mt-3">
+              <div class="text-center mt-3">
                 <h2>The organizers have not set a date for this stage yet.</h2>
                 <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>
                 <button class="btn main-btn" [routerLink]="'/available-event-details/' + eventData.id"><i class="fa-solid fa-arrow-left"></i> Back</button>
-              </div> -->
-              @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
+              </div>
+              <!-- @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
                 <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                   <h3 class="m-0 mb-2">Continue Booking</h3>
                   <div class="user-data row g-3 rounded-3">
@@ -372,9 +372,7 @@
                     </div>
                   </div>
                 </div>
-              }
-
-
+              } -->
             }
           </div>
 

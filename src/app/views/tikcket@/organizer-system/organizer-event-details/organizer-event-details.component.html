@@ -24,10 +24,17 @@
         <div class="col-md-4">
           <div class="card cr">
             <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center justify-content-between gap-5">
                 <div>
                   <h4 class="card-title mb-2">Total Visitors</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalVisitors }} Visitors</p>
+                  <div class="d-flex flex-wrap justify-content-between align-items-center w-100">
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount | number }} Outcomers</p>
+                    <sub class="mt-sm-3 mt-1 mx-sm-2 mx-0">
+                      <span class="fw-bold main-color">{{totalDefaultVisitorCount | number }} Defualt</span>
+                      <span class="fw-bold main-color"> - </span>
+                      <span class="fw-bold main-color">{{totalVisitorCount | number }} New</span>
+                    </sub>
+                  </div>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -45,7 +52,7 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Amount</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue }} EGP</p>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue | number }} EGP</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
