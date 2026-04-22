@@ -101,7 +101,7 @@
                             @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
 
                               @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
-                                <small class="text-danger">Name is required</small>
+                                <small class="text-danger">Graduation Scarf Name is required</small>
                               }
 
                               @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
@@ -126,7 +126,7 @@
                             @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
 
                               @if (checkoutForm.get('department')?.errors?.['required']) {
-                                <small class="text-danger">Name is required</small>
+                                <small class="text-danger">Department is required</small>
                               }
                             }
                           </div>
@@ -184,77 +184,157 @@
                 </form>
               </div>
             } @else {
-              <div class="text-center mt-3">
+              <!-- <div class="text-center mt-3">
                 <h2>The organizers have not set a date for this stage yet.</h2>
                 <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>
                 <button class="btn main-btn" [routerLink]="'/available-event-details/' + eventData.id"><i class="fa-solid fa-arrow-left"></i> Back</button>
-              </div>
-              <!-- <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
-                <h3 class="m-0 mb-2">Continue Booking</h3>
-                <div class="user-data row g-3 rounded-3">
-                  <div class="col-md-3 col-sm-6 col-12">
-                      <div class="user-info shadow-sm text-center border border-1 p-2">
+              </div> -->
+              @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
+                <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                  <h3 class="m-0 mb-2">Continue Booking</h3>
+                  <div class="user-data row g-3 rounded-3">
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="user-info shadow-sm text-center border border-1 p-2">
+                          @if(bookingData.userImage){
+                            <div class="user-image">
+                              <img [src]="bookingData.userImage" [alt]="bookingData.userName">
+                            </div>
+                          }
+                          <div class="info-body my-2">
+                            <p>{{bookingData.userName}}</p>
+                            <p>{{bookingData.userEmail}}</p>
+                            <p>{{bookingData.userPhone}}</p>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 col-12">
+                      <div class="payOne-info shadow-sm text-center border border-1 p-2">
                         @if(bookingData.userImage){
-                          <div class="user-image">
-                            <img [src]="bookingData.userImage" [alt]="bookingData.userName">
+                          <div class="payOne-image">
+                            <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
                           </div>
                         }
-                        <div class="info-body my-2">
-                          <p>{{bookingData.userName}}</p>
-                          <p>{{bookingData.userEmail}}</p>
-                          <p>{{bookingData.userPhone}}</p>
+                        <div class="payOne-body my-2">
+                          <p>Reference: {{bookingData.payOneRef}}</p>
+                          <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
+                          <p>Date: {{ bookingData.createdAt?.toDate() | date:'medium' }}</p>
                         </div>
                       </div>
-                  </div>
+                    </div>
 
-                  <div class="col-md-3 col-sm-6 col-12">
-                    <div class="payOne-info shadow-sm text-center border border-1 p-2">
-                      @if(bookingData.userImage){
-                        <div class="payOne-image">
-                          <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
+                    <div class="col-md-6 h-100">
+                      <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
+                        <div class="col-12">
+                          <h3>Checkout</h3>
                         </div>
-                      }
-                      <div class="payOne-body my-2">
-                        <p>Reference: {{bookingData.payOneRef}}</p>
-                        <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
-                        <p>Date: {{ bookingData.createdAt?.toDate() | date:'medium' }}</p>
+                        <div class="col-md-6">
+                          <div class="payOne-body my-2">
+                            <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
+                            <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p>
+                            <p>Your Paid: <span class="fw-bold">{{bookingData.payOneAmount | number}} EGP</span></p>
+                            <div class="mt-2">
+                            <small> Visitor Count </small>
+                              <input
+                                type="number"
+                                class="form-control"
+                                [(ngModel)]="visitorCount"
+                                name="visitorCount"
+                                (ngModelChange)="calculatePriceAfterFinalPaid()"
+                                placeholder="Enter Visitor Count..."
+                              >
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="payOne-body my-2">
+                            <p> Visitors Price : <span class="fw-bold">{{ paidTwo | number }} EGP</span> </p>
+                            <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
+                            <p> Tax : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
+                            <p> Total : <span class="fw-bold">{{ total | number }} EGP</span> </p>
+                          </div>
+
+                          <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                            <div class="w-100">
+                              <small>
+                                Reference Number 12 Digits
+                              </small>
+                              <input
+                                type="text"
+                                class="form-control w-100"
+                                placeholder="Enter Transaction Reference"
+                                maxlength="12"
+                                [(ngModel)]="transactionRef"
+                                name="transactionRef"
+                                inputmode="numeric"
+                              />
+                            </div>
+
+                            <div class="w-100">
+                              <small>
+                                Upload Image Transaction
+                              </small>
+                              <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="col-12 text-center">
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            [disabled]="transactionRef.length !== 12"
+                            (click)="continueBooking()"
+                          >
+                            Confirm
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <div class="col-md-6 h-100">
+                </div>
+              } @else {
+                <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                  <h3 class="m-0 mb-2">Booking Outcomer</h3>
+                  <div class="user-data rounded-3">
                     <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
                       <div class="col-12">
-                        <h3>Checkout</h3>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="payOne-body my-2">
-                          <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
-                          <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p>
-                          <p>Your Paid: <span class="fw-bold">{{bookingData.payOneAmount | number}} EGP</span></p>
+                        <div class="payOne-body">
+                          <h4>Outcomer Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></h4>
                           <div class="mt-2">
-                           <small> Visitor Count </small>
+                          <small> Outcomer Count </small>
                             <input
                               type="number"
                               class="form-control"
-                              [(ngModel)]="visitorCount"
-                              name="visitorCount"
-                              (ngModelChange)="calculatePriceAfterFinalPaid()"
-                              placeholder="Enter Visitor Count..."
+                              [(ngModel)]="newOutComerCount"
+                              name="newOutComer"
+                              placeholder="Enter New Outcomer..."
                             >
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-md-6">
-                        <div class="payOne-body my-2">
-                          <p> Visitors Price : <span class="fw-bold">{{ paidTwo | number }} EGP</span> </p>
-                          <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
-                          <p> Tax : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
-                          <p> Total : <span class="fw-bold">{{ total | number }} EGP</span> </p>
+                      <div class="col-12">
+                        <div class="payOne-body">
+                          <p>
+                            Outcomer Price :
+                            <span class="fw-bold">{{ newOutComerCount * eventData.VisitorPrice | number }} EGP</span>
+                          </p>
+
+                          <p>
+                            Tax :
+                            <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice * tax) | number }} EGP</span>
+                          </p>
+
+                          <p>
+                            Total :
+                            <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) + ((newOutComerCount * eventData.VisitorPrice) * tax) | number }} EGP</span>
+                          </p>
                         </div>
 
-                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-1 mt-2">
                           <div class="w-100">
                             <small>
                               Reference Number 12 Digits
@@ -284,16 +364,17 @@
                         <button
                           type="button"
                           class="btn btn-primary"
-                          [disabled]="transactionRef.length !== 12"
-                          (click)="continueBooking()"
+                          (click)="addOutComer()"
                         >
-                          Confirm
+                          Add Outcomer
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div> -->
+              }
+
+
             }
           </div>
 

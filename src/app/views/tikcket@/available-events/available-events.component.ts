@@ -22,6 +22,7 @@ export class AvailableEventsComponent {
   allOwners: any[] = [];
   eventsWithOwnerName: any[] = [];
   userRole:string | null = localStorage.getItem('role')
+  userId:string | null = localStorage.getItem('userId')
 
   ngOnInit() {
     this.getAllOwners()

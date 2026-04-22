@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
@@ -30,19 +30,20 @@ export class AddEventComponent{
   }
 
   eventForm:FormGroup = this._FormBuilder.group({
-    OwnerId:[null],
-    EventName:[null],
-    Location:[null],
-    LocationName:[null],
-    Date:[null],
-    TicketCount:[null],
-    TicketPrice:[null],
-    VisitorPrice:[null],
-    EventDetails:[null],
-    TermsOfEntries:[null],
-    PaymentLink:[null],
-    OriganizerName:[null],
-    Type:[null],
+    OwnerId:[null, [Validators.required]],
+    EventName:[null, [Validators.required]],
+    Location:[null, [Validators.required]],
+    LocationName:[null, [Validators.required]],
+    Date:[null, [Validators.required]],
+    TicketCount:[null, [Validators.required]],
+    TicketPrice:[null, [Validators.required]],
+    VisitorPrice:[null, [Validators.required]],
+    EventDetails:[null, [Validators.required]],
+    TermsOfEntries:[null, [Validators.required]],
+    PaymentLink:[null, [Validators.required]],
+    OriganizerName:[null, [Validators.required]],
+    Type:[null, [Validators.required]],
+    PaidPhases:[null, [Validators.required]],
     Image:[null],
   })
 
@@ -59,7 +60,6 @@ export class AddEventComponent{
 
   async submitCreateEvent(): Promise<void> {
     this._NgxSpinnerService.show()
-
     if (this.eventForm.invalid || !this.selectedFile) {
       this.eventForm.markAllAsTouched();
       this._ToastrService.error('Please fill all fields and select image');
@@ -68,6 +68,7 @@ export class AddEventComponent{
     }
 
     try {
+
 
       // 🔥 1. Upload image to Cloudinary
       const imageUrl = await this._EventService.uploadImage(this.selectedFile);
@@ -85,6 +86,7 @@ export class AddEventComponent{
         createdAt: new Date(),
         status: 'Active'
       };
+
 
       // 🔥 3. Save to Firebase
       this._EventService.createEvent(eventData).subscribe({

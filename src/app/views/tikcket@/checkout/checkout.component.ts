@@ -15,6 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
+import { arrayUnion } from 'firebase/firestore';
 
 export interface Seat {
   id: string;
@@ -69,7 +70,7 @@ export class CheckoutComponent {
   checkoutData:any = {}
   subTotal:number = 0
   total:number = 0
-  tax:number = 0.20
+  tax:number = 0.02
 
   isReturningUser:boolean = false
   visitorCount:number = 0
@@ -199,6 +200,20 @@ export class CheckoutComponent {
       return;
     }
 
+    if (!this.checkoutForm.get('GraduationScarfName')?.value) {
+      this._ToastrService.error('برجاء إدخال الإسم على الوشاح');
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    if (!this.checkoutForm.get('department')?.value) {
+      this._ToastrService.error('برجاء أدخل القسم');
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
     if (!this.eventId) {
       this._ToastrService.error('الحفلة غير موجودة');
       this._NgxSpinnerService.hide()
@@ -261,8 +276,6 @@ export class CheckoutComponent {
             1
           ).subscribe();
 
-          // this.sendFirstEmail(this.userData.email)
-
           this.checkoutForm.reset();
           this.tax = 0
           this.subTotal = 0
@@ -288,27 +301,6 @@ export class CheckoutComponent {
       this._ToastrService.error('Checkout failed');
     }
   }
-
-  // async sendFirstEmail(email:string) {
-  //   emailjs.init('yDyM7-toHXTAEsac-');
-  //   try {
-  //     const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
-  //       title: "Ticketateg",
-  //       name: "Ticketat.eg",
-  //       email: email,
-  //     });
-
-  //     console.log('EMAIL SENT:', send);
-  //     this._ToastrService.success('Email Sent');
-
-  //     return send;
-  //   } catch (err) {
-  //     console.error('EMAIL ERROR:', err);
-  //     this._ToastrService.warning('Email failed but booking is saved');
-  //     throw err;
-  //   }
-  // }
-
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -366,13 +358,11 @@ export class CheckoutComponent {
 
       this._BookingService.updateBooking(this.bookingData.id, {
         VisitorCount: this.visitorCount,
-
+        totalVisitors: this.visitorCount + this.bookingData.defaultVisitorCount,
         payTwoAmount: 0,
         payTwoImage: imagePaymentUrl,
         payTwoRef: this.transactionRef,
         createdAtTwo: new Date(),
-
-        totalAmount: 0,
 
         // ✅ الجزء الجديد
         qrs: qrs,
@@ -407,6 +397,46 @@ export class CheckoutComponent {
     }
   }
 
+
+  newOutComerCount:number = 0
+  async addOutComer() {
+    this._NgxSpinnerService.show();
+
+    const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+    const newVisitor = {
+      type: 'outcomer',
+      count: this.newOutComerCount,
+      price: 0,
+      payRef: this.transactionRef,
+      payImage: imagePaymentUrl,
+      createdAt: new Date()
+    };
+
+    let totalPersons = this.newOutComerCount + this.bookingData.VisitorCount;
+    const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
+
+    this._BookingService.updateBooking(this.bookingData.id, {
+      VisitorCount: totalPersons,
+      newOutcomers: arrayUnion(newVisitor),
+      totalVisitors: totalPersons + this.bookingData.defaultVisitorCount,
+
+      // ✅ الجزء الجديد
+      qrs: arrayUnion(...newQRs),
+      qrsGenerated: true
+    }).subscribe({
+      next: () => {
+        this._NgxSpinnerService.hide();
+        this._ToastrService.success('✅ Add Outcomer Successfully');
+        this.modalService.dismissAll();
+        this._Router.navigate(['/payment-success']);
+      },
+      error: () => {
+        this._NgxSpinnerService.hide();
+        this._ToastrService.error('Update Failed');
+      }
+    });
+  }
+
   generateQRs(totalPersons: number, bookingId: string) {
     const qrs = [];
 
@@ -415,6 +445,22 @@ export class CheckoutComponent {
         id: `${bookingId}_${this.generateUUID()}`,
         isUsed: false,
         type: i === 0 ? 'owner' : 'guest',
+        seatNumber: null,
+        createdAt: new Date()
+      });
+    }
+
+    return qrs;
+  }
+
+  generateGuestQRs(totalPersons: number, bookingId: string) {
+    const qrs = [];
+
+    for (let i = 0; i < totalPersons; i++) {
+      qrs.push({
+        id: `${bookingId}_${this.generateUUID()}`,
+        isUsed: false,
+        type: 'guest',
         seatNumber: null,
         createdAt: new Date()
       });

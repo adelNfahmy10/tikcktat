@@ -34,7 +34,7 @@
         <div class="col-md-6">
 
           <div class="row g-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="Owner">
                 <label for="Owner" class="form-label">Event Owner</label>
                 <select class="form-select" name="Owner" id="Owner" formControlName="OwnerId">
@@ -46,7 +46,7 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                <div class="Type">
                 <label for="Type" class="form-label">Event Type</label>
                 <select class="form-select" name="Type" id="Type" formControlName="Type">
@@ -54,6 +54,16 @@
                   <option value="Graduation">Graduation</option>
                   <option value="Funday">Funday</option>
                   <option value="Conferences">Conference</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+               <div class="PaidPhases">
+                <label for="PaidPhases" class="form-label">Paid Phases</label>
+                <select class="form-select" name="PaidPhases" id="PaidPhases" formControlName="PaidPhases">
+                  <option value="1 Phase">1 Phase</option>
+                  <option value="2 Phases">2 Phases</option>
                 </select>
               </div>
             </div>

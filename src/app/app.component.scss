@@ -1,17 +1,21 @@
+.logo-spinner-container{
+  position: relative;
+  top: -50px;
+}
 .logo-spinner{
   width: 400px;
-  animation: bounce 1s ease-in-out infinite;
+  // animation: bounce 1s ease-in-out infinite;
 }
 
 // حركة دائرية
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(10px);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-  }
-}
+// @keyframes bounce {
+//   0%, 100% {
+//     transform: translateY(10px);
+//   }
+//   50% {
+//     transform: translateY(-20px) scale(1.05);
+//   }
+// }
 
 @media (max-width:450px) {
   .logo-spinner{
