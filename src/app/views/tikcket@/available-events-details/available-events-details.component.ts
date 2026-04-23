@@ -36,7 +36,7 @@ export class AvailableEventsDetailsComponent {
   haveAcc: boolean = true;
   features: string[] = [];
   terms: string[] = [];
-  
+
   OTP:number | string = ''
   CheckOTP:number | string = ''
   otpMsg:string = ''
@@ -154,7 +154,7 @@ export class AvailableEventsDetailsComponent {
 
   generateOTP():void{
     this.OTP = Math.floor(100000 + Math.random() * 900000);
-    this.sendFirstEmail()
+    this.sendOTP()
   }
 
   submitRegisterForm(): void {
@@ -228,7 +228,7 @@ export class AvailableEventsDetailsComponent {
   }
 
   // Email Send
-  async sendFirstEmail() {
+  async sendOTP() {
     emailjs.init('yDyM7-toHXTAEsac-');
     try {
       const send = await emailjs.send("service_r4d7bwe","template_6tblq3h",{

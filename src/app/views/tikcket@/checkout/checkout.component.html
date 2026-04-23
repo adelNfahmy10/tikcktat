@@ -119,8 +119,9 @@
                             <label for="department" class="form-label">القســم</label>
 
                             <select class="form-select" name="department" id="department" formControlName="department">
-                              <option value="English">English</option>
-                              <option value="French">French</option>
+                              @for (item of eventData?.departments; track $index) {
+                                <option [value]="item">{{item}}</option>
+                              }
                             </select>
 
                             @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
@@ -158,13 +159,6 @@
                               }
                             </div>
                           </div>
-
-                          <!-- <div class="col-md-6">
-                            <div class="VisitorCount">
-                              <label for="VisitorCount" class="form-label">Visitor Count</label>
-                              <input class="form-control" type="number" formControlName="VisitorCount" name="VisitorCount" id="VisitorCount" placeholder="Enter Number of Visitors...">
-                            </div>
-                          </div> -->
 
                           <div class="col-12">
                             <div class="text-center">
@@ -251,7 +245,7 @@
                           <div class="payOne-body my-2">
                             <p> Visitors Price : <span class="fw-bold">{{ paidTwo | number }} EGP</span> </p>
                             <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
-                            <p> Tax : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
+                            <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
                             <p> Total : <span class="fw-bold">{{ total | number }} EGP</span> </p>
                           </div>
 
@@ -324,7 +318,7 @@
                           </p>
 
                           <p>
-                            Tax :
+                            Service Fee :
                             <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice * tax) | number }} EGP</span>
                           </p>
 
@@ -459,15 +453,16 @@
                 2 Companion(s)
               </span>
             </p>
-            <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.TicketPrice | number}} EGP</span></p>
+            <!-- <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.TicketPrice | number}} EGP</span></p> -->
             @if(checkoutData?.VisitorCount && checkoutData.VisitorCount > 0){
               <p> Visitor Price : <span class="main-color fw-medium">{{ eventData?.VisitorPrice | number}} EGP</span> </p>
             }
 
             <div class="w-100 pt-2 text-start rounded-3 border-top">
+              <h4>Deposit</h4>
               <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-              <p class="m-0 my-2"> Tax: <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
-              <p class="m-0 pt-2 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+              <p class="m-0 my-2"> Service Fee : <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+              <p class="m-0 pt-1 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
               <div class="text-center my-2">
                 <button class="btn main-btn fs-4">
                   <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>

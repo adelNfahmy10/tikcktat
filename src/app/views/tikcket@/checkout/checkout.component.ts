@@ -170,7 +170,8 @@ export class CheckoutComponent {
       this.checkoutData = this.checkoutForm.value
       let price  = this.eventData?.TicketPrice
       let companionPrice  = this.checkoutData?.VisitorCount * this.eventData?.VisitorPrice
-      this.subTotal = price + companionPrice
+      // this.subTotal = price + companionPrice
+      this.subTotal = this.eventData?.deposit
 
       // الضريبة 2.7% من الإجمالي + 23 ثابت
       this.tax = Math.ceil((this.subTotal * 0.020)) ;

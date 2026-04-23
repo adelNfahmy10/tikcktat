@@ -48,7 +48,6 @@ export class OrganizerEventAttendeesComponent {
 
   taxAmount: number = 0.02; // 2%
 
-  groupedByDepartment:any = {}
 
   ngOnInit() {
     this.getAttendeesByEventId()
@@ -63,6 +62,8 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
+        console.log(this.eventData.departments);
+
 
       },
       error: (err) => {
@@ -238,7 +239,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: () => {
             this._NgxSpinnerService.hide();
-            this.sendFirstEmail(this.bookDataById?.userEmail)
+            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid One Check Successfully');
             this.modalService.dismissAll();
             this.firstPaidAmount = 0
@@ -268,7 +269,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            this.sendFirstEmail(this.bookDataById?.userEmail)
+            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
           },
@@ -347,36 +348,67 @@ export class OrganizerEventAttendeesComponent {
   }
 
   // 📄 Custom Pagination
-  departmentPages: { [key: string]: number } = {};
+  groupedByDepartment: Record<string, any[]> = {};
+  departmentPages: Record<string, number> = {};
   itemsPerPage = 5;
 
-  getPaginatedDepartment(dept: string) {
-    const page = this.departmentPages[dept] || 1;
-    const start = (page - 1) * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
+  // 🔹 تجميع الداتا حسب القسم
+  groupUsersByDepartment() {
+    this.groupedByDepartment = this.allUsers.reduce((acc: Record<string, any[]>, user: any) => {
+      const dept = user?.department || 'Unknown';
 
-    return this.groupedByDepartment[dept]?.slice(start, end) || [];
+      if (!acc[dept]) {
+        acc[dept] = [];
+      }
+
+      acc[dept].push(user);
+      return acc;
+    }, {});
+
+    // 🔥 مهم: نعمل init للصفحات هنا
+    Object.keys(this.groupedByDepartment).forEach((dept) => {
+      this.departmentPages[dept] = 1;
+    });
   }
 
+  // 🔹 pagination data
+  getPaginatedDepartment(dept: string) {
+    const users = this.groupedByDepartment[dept] || [];
+
+    const page = this.departmentPages[dept] ?? 1;
+
+    const start = (page - 1) * this.itemsPerPage;
+
+    return users.slice(start, start + this.itemsPerPage);
+  }
+
+  // 🔹 total pages
   getTotalPages(dept: string): number[] {
-    const total = this.groupedByDepartment[dept]?.length || 0;
+    const total = this.groupedByDepartment[dept]?.length ?? 0;
+
     const pages = Math.ceil(total / this.itemsPerPage);
 
     return Array.from({ length: pages }, (_, i) => i + 1);
   }
 
+  // 🔹 تغيير الصفحة (بـ validation)
   changeDepartmentPage(dept: string, page: number) {
+    const totalPages = this.getTotalPages(dept).length;
+
+    if (page < 1 || page > totalPages) return; // 🔥 حماية
+
     this.departmentPages[dept] = page;
   }
 
   // Email Send
-  async sendFirstEmail(email:string) {
-    emailjs.init('yDyM7-toHXTAEsac-');
+  async sendEmailToUser(email:string, eventName:string, userName:string) {
+    emailjs.init('1FX7lfc7iRKkWW7r1');
     try {
-      const send = await emailjs.send("service_r4d7bwe","template_846q1h5",{
-        title: "Ticketateg",
-        name: "Ticketat.eg",
+      const send = await emailjs.send("service_k3ieexg","template_2wo6cnq",{
+        title: "Ticketateg Check Your Ticket",
         email: email,
+        eventName: eventName,
+        userName: userName,
       });
 
       this._ToastrService.success('Email Sent');

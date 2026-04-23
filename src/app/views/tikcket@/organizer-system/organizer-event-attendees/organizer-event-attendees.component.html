@@ -281,7 +281,7 @@
                   <br>
 
                   <span>
-                    Tax (2%):
+                    Tax : (2%):
                     {{ getTax(user?.totalAmount) | number:'1.0-2' }} EGP
                   </span>
                   <br>
@@ -343,310 +343,115 @@
       </ul>
     </div>
 
-
     <!-- Tables Departments -->
     <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
       <div class="row g-3">
-         @if(groupedByDepartment['French']){
-          <!-- French Department -->
-          <div class="col-md-6">
-            <div class="french-table">
-              <h4>French Attendess</h4>
+          @for (dept of eventData.departments; track $index) {
+            <div class="col-md-6">
+              @if (groupedByDepartment[dept]?.length) {
 
-              <!-- Table -->
-              <div class="table-responsive">
-                <table class="table table-hover align-middle text-center">
-                  <thead class="table-light">
-                    <tr>
-                      <th (click)="sort('id')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>ID</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
+                <div class="department-table">
+                  <h4>{{ dept }} Attendees</h4>
 
-                      <th (click)="sort('userName')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Name</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userName' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userName' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
+                  <!-- Table -->
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center">
 
-                      <th (click)="sort('userPhone')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Phone</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
+                      <thead class="table-light">
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Phone</th>
+                          <th>Email</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
 
-                      <th (click)="sort('userEmail')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Email</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
+                      <tbody>
+                        @for (user of getPaginatedDepartment(dept); track $index) {
+                          <tr>
 
-                      <th (click)="sort('status')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Status</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
+                            <!-- index -->
+                            <td>
+                              {{ ($index + 1) + ((departmentPages[dept] - 1) * itemsPerPage) }}
+                            </td>
 
-                  <tbody>
-                    @for (user of getPaginatedDepartment('French'); track $index) {
-                      <tr>
-                        <td>
-                          <div class="d-flex flex-column justify-content-center align-items-center">
-                            <span>{{ $index + 1 }}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex align-items-center gap-2">
-                            <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
-                            <div class="text-start">
-                              <h6 class="m-0 text-start">{{ user?.userName }}</h6>
-                              <span class="fw-bold main-color">{{ user?.department }}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{{ user?.userPhone }}</td>
-                        <td>{{ user?.userEmail }}</td>
-                        <td>
-                          <span
-                            class="badge"
-                            [ngClass]="{
-                              'bg-success': user?.status === 'Paid',
-                              'bg-primary': user?.status === 'Par-Paid',
-                              'bg-danger': user?.status === 'Pending'
-                            }"
-                          >
-                            {{ user?.status }}
-                          </span>
-                        </td>
-                      </tr>
+                            <!-- user -->
+                            <td>
+                              <div class="d-flex align-items-center gap-2">
+                                <img [src]="user?.userImage" width="50" class="rounded" />
+                                <div class="text-start">
+                                  <h6 class="m-0">{{ user?.userName }}</h6>
+                                  <span class="fw-bold main-color">{{ user?.department }}</span>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td>{{ user?.userPhone }}</td>
+                            <td>{{ user?.userEmail }}</td>
+
+                            <td>
+                              <span
+                                class="badge"
+                                [ngClass]="{
+                                  'bg-success': user?.status === 'Paid',
+                                  'bg-primary': user?.status === 'Par-Paid',
+                                  'bg-danger': user?.status === 'Pending'
+                                }"
+                              >
+                                {{ user?.status }}
+                              </span>
+                            </td>
+
+                          </tr>
+                        }
+                      </tbody>
+
+                    </table>
+                  </div>
+
+                  <!-- Pagination -->
+                  <ul class="pagination justify-content-center">
+
+                    <!-- Prev -->
+                    <li class="page-item"
+                        [class.disabled]="(departmentPages[dept] || 1) === 1">
+                      <a class="page-link"
+                        (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) - 1)">
+                        Prev
+                      </a>
+                    </li>
+
+                    <!-- Pages -->
+                    @for (p of getTotalPages(dept); track $index) {
+                      <li class="page-item"
+                          [class.active]="p === (departmentPages[dept] || 1)">
+                        <a class="page-link"
+                          (click)="changeDepartmentPage(dept, p)">
+                          {{ p }}
+                        </a>
+                      </li>
                     }
-                  </tbody>
-                </table>
-              </div>
 
-              <!-- Paginations -->
-              <ul class="pagination justify-content-center">
-                <li class="page-item cr" [class.disabled]="(departmentPages['French'] || 1) === 1">
-                  <a class="page-link" (click)="changeDepartmentPage('French', (departmentPages['French'] || 1) - 1)">Prev</a>
-                </li>
+                    <!-- Next -->
+                    <li class="page-item"
+                        [class.disabled]="(departmentPages[dept] || 1) === getTotalPages(dept).length">
+                      <a class="page-link"
+                        (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) + 1)">
+                        Next
+                      </a>
+                    </li>
 
-                @for (p of getTotalPages('French'); track $index) {
-                  <li class="page-item cr" [class.active]="p === (departmentPages['French'] || 1)">
-                    <a class="page-link" (click)="changeDepartmentPage('French', p)">{{ p }}</a>
-                  </li>
-                }
+                  </ul>
 
-                <li class="page-item cr"
-                    [class.disabled]="(departmentPages['French'] || 1) === getTotalPages('French').length">
-                  <a class="page-link" (click)="changeDepartmentPage('French', (departmentPages['French'] || 1) + 1)">Next</a>
-                </li>
-              </ul>
+                </div>
+
+              } @else {
+                <h3>No Users Attendess</h3>
+              }
             </div>
-          </div>
-        } @else {
-          <h3 class="text-center mt-3 mx-auto">No Users Attendees</h3>
-        }
+          }
 
-
-        @if(groupedByDepartment['English']){
-          <!-- English Department -->
-          <div class="col-md-6">
-            <div class="french-table">
-              <h4>English Attendess</h4>
-
-              <!-- Table -->
-              <div class="table-responsive">
-                <table class="table table-hover align-middle text-center">
-                  <thead class="table-light">
-                    <tr>
-                      <th (click)="sort('id')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>ID</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-
-                      <th (click)="sort('userName')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Name</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userName' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userName' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-
-                      <th (click)="sort('userPhone')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Phone</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userPhone' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-
-                      <th (click)="sort('userEmail')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Email</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-
-                      <th (click)="sort('status')" class="sortable">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <span>Status</span>
-                          <span class="sort-icons">
-                            <i
-                              class="fa-solid fa-caret-up"
-                              [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
-                            ></i>
-                            <i
-                              class="fa-solid fa-caret-down"
-                              [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
-                            ></i>
-                          </span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    @for (user of getPaginatedDepartment('English'); track $index) {
-                      <tr>
-                        <td>
-                          <div class="d-flex flex-column justify-content-center align-items-center">
-                            <span>{{ $index + 1 }}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex align-items-center gap-2">
-                            <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
-                            <div class="text-start">
-                              <h6 class="m-0 text-start">{{ user?.userName }}</h6>
-                              <span class="fw-bold main-color">{{ user?.department }}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{{ user?.userPhone }}</td>
-                        <td>{{ user?.userEmail }}</td>
-                        <td></td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Paginations -->
-              <ul class="pagination justify-content-center">
-                <li class="page-item cr" [class.disabled]="(departmentPages['Enghlish'] || 1) === 1">
-                  <a class="page-link" (click)="changeDepartmentPage('Enghlish', (departmentPages['Enghlish'] || 1) - 1)">Prev</a>
-                </li>
-
-                @for (p of getTotalPages('Enghlish'); track $index) {
-                  <li class="page-item cr" [class.active]="p === (departmentPages['Enghlish'] || 1)">
-                    <a class="page-link" (click)="changeDepartmentPage('Enghlish', p)">{{ p }}</a>
-                  </li>
-                }
-
-                <li class="page-item cr"
-                    [class.disabled]="(departmentPages['Enghlish'] || 1) === getTotalPages('Enghlish').length">
-                  <a class="page-link" (click)="changeDepartmentPage('Enghlish', (departmentPages['Enghlish'] || 1) + 1)">Next</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        } @else {
-          <div class="col-md-6">
-            <h4>English Attendess</h4>
-            <div class="text-center">
-              <h3 class="text-center mt-3 mx-auto">No Users Attendees</h3>
-            </div>
-          </div>
-        }
       </div>
     </div>
   </div>
