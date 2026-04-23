@@ -85,6 +85,7 @@ export class OrganizerEventAttendeesComponent {
   totalVisitorCount:number = 0
   totalDefaultVisitorCount:number = 0
   totalRevenue:number = 0
+  totalTaxes:number = 0
 
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
@@ -123,6 +124,8 @@ export class OrganizerEventAttendeesComponent {
 
           // 💰 total revenue
           this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
+
+          this.totalTaxes = this.totalRevenue * 0.02;
 
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {

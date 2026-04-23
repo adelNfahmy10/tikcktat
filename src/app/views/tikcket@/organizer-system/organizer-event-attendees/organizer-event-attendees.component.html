@@ -1,82 +1,21 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
-
-    <!-- Main Table Attendess -->
     <div class="bg-white rounded-3 p-3 shadow-lg">
+
+      <!-- ===================== STATS ===================== -->
       <div class="row g-2">
-          <div class="col-lg-3 col-md-6 col-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <h4 class="card-title mb-2">Total Graduates</h4>
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ eventData?.bookingCount || 0 | number }} Graduates</p>
-                  </div>
-                  <div>
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                      <i class="fs-32 main-color avatar-title ri-graduation-cap-line"></i>
-                    </div>
-                  </div>
+        <!-- Total Graduates -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Graduates</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ eventData?.bookingCount || 0 | number }} Graduates</p>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 col-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between gap-5">
-                  <div class="flex-grow-1">
-                    <h4 class="card-title mb-2">Total Visitors</h4>
-                    <div class="w-100">
-                      <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount || 0 | number }} Outcomers</p>
-                      <div>
-                        <span class="fw-bold main-color">{{totalDefaultVisitorCount || 0 | number }} Defualt</span>
-                        <span class="fw-bold main-color"> - </span>
-                        <span class="fw-bold main-color">{{totalVisitorCount || 0 | number }} New</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                      <i class="fs-32 main-color avatar-title ri-user-line"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 col-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <h4 class="card-title mb-2">Total Amount</h4>
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue || 0 | number }} EGP</p>
-                  </div>
-                  <div>
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                      <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 col-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <h4 class="card-title mb-2">Total Taxes</h4>
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue * 0.02 || 0 | number }} EGP</p>
-                  </div>
-                  <div>
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                      <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
-                    </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-graduation-cap-line"></i>
                   </div>
                 </div>
               </div>
@@ -84,11 +23,78 @@
           </div>
         </div>
 
+        <!-- Total Visitors -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between gap-5">
+                <div class="flex-grow-1">
+                  <h4 class="card-title mb-2">Total Visitors</h4>
+                  <div class="w-100">
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount || 0 | number }} Outcomers</p>
+                    <div>
+                      <span class="fw-bold main-color">{{totalDefaultVisitorCount || 0 | number }} Defualt</span>
+                      <span class="fw-bold main-color"> - </span>
+                      <span class="fw-bold main-color">{{totalVisitorCount || 0 | number }} New</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-user-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <h1 class="fw-bold">All Attendess</h1>
-      <h4 class="main-color fw-bold">{{ eventData?.EventName }}</h4>
+        <!-- Total Amount -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue || 0 | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Search and Download Table -->
+        <!-- Total Tax -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Taxes</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalTaxes || 0 | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== HEADER ===================== -->
+      <div>
+        <h1 class="fw-bold">All Attendess</h1>
+        <h4 class="main-color fw-bold">{{ eventData?.EventName }}</h4>
+      </div>
+
+      <!-- ===================== SEARCH + EXPORT ===================== -->
       <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
         <div class="search">
           <input
@@ -108,7 +114,7 @@
         </div>
       </div>
 
-      <!-- Table All Attendess -->
+      <!-- ===================== TABLE All Attendess ===================== -->
       <div class="table-responsive">
         <table class="table table-hover align-middle text-center">
           <thead class="table-light">
@@ -325,7 +331,7 @@
         </table>
       </div>
 
-      <!-- Paginations -->
+      <!-- ===================== MAIN PAGINATION ===================== -->
       <ul class="pagination justify-content-center">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
@@ -343,17 +349,17 @@
       </ul>
     </div>
 
-    <!-- Tables Departments -->
+    <!-- ===================== TABLE DPARTMENTS ===================== -->
     <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
       <div class="row g-3">
           @for (dept of eventData.departments; track $index) {
             <div class="col-md-6">
               @if (groupedByDepartment[dept]?.length) {
 
+                <!-- ===================== TABLES ===================== -->
                 <div class="department-table">
                   <h4>{{ dept }} Attendees</h4>
 
-                  <!-- Table -->
                   <div class="table-responsive">
                     <table class="table table-hover align-middle text-center">
 
@@ -410,10 +416,10 @@
                     </table>
                   </div>
 
-                  <!-- Pagination -->
+                  <!-- ===================== Pagination ===================== -->
                   <ul class="pagination justify-content-center">
 
-                    <!-- Prev -->
+                    <!-- ===================== Prev ===================== -->
                     <li class="page-item"
                         [class.disabled]="(departmentPages[dept] || 1) === 1">
                       <a class="page-link"
@@ -422,7 +428,7 @@
                       </a>
                     </li>
 
-                    <!-- Pages -->
+                    <!-- ===================== Pages ===================== -->
                     @for (p of getTotalPages(dept); track $index) {
                       <li class="page-item"
                           [class.active]="p === (departmentPages[dept] || 1)">
