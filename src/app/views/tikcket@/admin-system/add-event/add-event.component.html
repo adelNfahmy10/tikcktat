@@ -8,7 +8,7 @@
 
         <div class="col-md-5">
           <div class="Image">
-            <label for="Image" class="form-label">Event Image</label>
+            <label for="Image" class="form-label">Event Image <sup class="text-danger fw-bold">*</sup></label>
             <input
               class="form-control"
               type="file"
@@ -36,7 +36,7 @@
           <div class="row g-2">
             <div class="col-md-4">
               <div class="Owner">
-                <label for="Owner" class="form-label">Event Owner</label>
+                <label for="Owner" class="form-label">Event Owner <sup class="text-danger fw-bold">*</sup></label>
                 <select class="form-select" name="Owner" id="Owner" formControlName="OwnerId">
                   <option value="" selected disabled>Choose Event Owner</option>
                   @for (owner of allOwners; track $index) {
@@ -48,7 +48,7 @@
 
             <div class="col-md-4">
                <div class="Type">
-                <label for="Type" class="form-label">Event Type</label>
+                <label for="Type" class="form-label">Event Type <sup class="text-danger fw-bold">*</sup></label>
                 <select class="form-select" name="Type" id="Type" formControlName="Type">
                   <option value="" selected disabled>Choose Event Type</option>
                   <option value="Graduation">Graduation</option>
@@ -60,7 +60,7 @@
 
             <div class="col-md-4">
                <div class="PaidPhases">
-                <label for="PaidPhases" class="form-label">Paid Phases</label>
+                <label for="PaidPhases" class="form-label">Paid Phases <sup class="text-danger fw-bold">*</sup></label>
                 <select class="form-select" name="PaidPhases" id="PaidPhases" formControlName="PaidPhases">
                   <option value="1 Phase">1 Phase</option>
                   <option value="2 Phases">2 Phases</option>
@@ -70,14 +70,14 @@
 
             <div class="col-md-6">
               <div class="OriganizerName">
-                <label for="OriganizerName" class="form-label">Origanizer Name</label>
+                <label for="OriganizerName" class="form-label">Origanizer Name <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="OriganizerName" name="OriganizerName" id="OriganizerName" placeholder="Origanizer Name...">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="PaymentLink">
-                <label for="PaymentLink" class="form-label">Payment Link</label>
+                <label for="PaymentLink" class="form-label">Payment Link <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="PaymentLink" name="PaymentLink" id="PaymentLink" placeholder="Origanizer Name...">
               </div>
             </div>
@@ -85,28 +85,60 @@
 
             <div class="col-12">
               <div class="EventName">
-                <label for="EventName" class="form-label">Event Name</label>
+                <label for="EventName" class="form-label">Event Name <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="EventName" name="EventName" id="EventName">
               </div>
             </div>
 
+            <div class="col-12">
+              <div formArrayName="departments">
+                <label for="departments" class="form-label">Departments <sub>(Otp)</sub></label>
+                @for (dep of departments.controls; track dep; let i = $index) {
+                  <div class="d-flex align-items-center gap-1 mb-1">
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      [formControlName]="i"
+                      placeholder="Enter Department"
+                    />
+
+                    @if(i != 0 ){
+                      <span
+                        class="d-flex justify-content-center align-items-center border border-danger rounded-3 p-1 cr"
+                        (click)="removeDepartment(i)"
+                      >
+                        <i class="fa-solid fa-minus text-danger"></i>
+                      </span>
+                    }
+
+
+                  </div>
+                }
+              </div>
+
+              <span class="d-inline-block border border-success rounded-3 p-1 mt-1 cr" (click)="addDepartment()">
+                <i class="fa-solid fa-plus"></i>
+              </span>
+            </div>
+
             <div class="col-md-6">
               <div class="Location">
-                <label for="Location" class="form-label">Location Link</label>
+                <label for="Location" class="form-label">Location Link <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="Location" type="text" name="Location" id="Location" placeholder="Enter Event Location Link...">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="LocationNName">
-                <label for="LocationName" class="form-label">Location Name</label>
+                <label for="LocationName" class="form-label">Location Name <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="LocationName" type="text" name="LocationName" id="LocationName" placeholder="Enter Event Location Name...">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="Date">
-                <label for="Date" class="form-label">Date</label>
+                <label for="Date" class="form-label">Date <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="Date" type="date" name="Date" id="Date" placeholder="Enter Event Date...">
               </div>
             </div>
@@ -114,35 +146,35 @@
 
             <div class="col-md-6">
               <div class="TicketCount">
-                <label for="TicketCount" class="form-label">Tickets Limit</label>
+                <label for="TicketCount" class="form-label">Tickets Limit <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="TicketCount" type="number" name="TicketCount" id="TicketCount" placeholder="Enter Your Ticket Count...">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="TicketPrice">
-                <label for="TicketPrice" class="form-label">Ticket Price</label>
+                <label for="TicketPrice" class="form-label">Ticket Price <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="TicketPrice" type="number" name="TicketPrice" id="TicketPrice" placeholder="Enter Event Ticket Price...">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="VisitorPrice">
-                <label for="VisitorPrice" class="form-label">Companion Price</label>
+                <label for="VisitorPrice" class="form-label">Companion Price <sup class="text-danger fw-bold">*</sup></label>
                 <input class="form-control" formControlName="VisitorPrice" type="number" name="VisitorPrice" id="VisitorPrice" placeholder="Enter Event Price...">
               </div>
             </div>
 
             <div class="col-12">
               <div class="EventDetails">
-                <label for="EventDetails" class="form-label">Event Details</label>
+                <label for="EventDetails" class="form-label">Event Details <sup class="text-danger fw-bold">*</sup></label>
                 <textarea name="EventDetails" id="EventDetails" class="form-control" formControlName="EventDetails" placeholder="Enter Event EventDetails..."></textarea>
               </div>
             </div>
 
             <div class="col-12">
               <div class="TermsOfEntries">
-                <label for="TermsOfEntries" class="form-label">Event Terms</label>
+                <label for="TermsOfEntries" class="form-label">Event Terms <sup class="text-danger fw-bold">*</sup></label>
                 <textarea name="TermsOfEntries" id="TermsOfEntries" class="form-control" formControlName="TermsOfEntries" placeholder="Enter Event TermsOfEntries..."></textarea>
               </div>
             </div>

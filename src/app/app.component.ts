@@ -15,6 +15,7 @@ import {
   type NgProgressRef,
 } from 'ngx-progressbar'
 import { NgxSpinnerComponent } from 'ngx-spinner'
+import { ToastrService } from 'ngx-toastr'
 declare let gtag: Function;
 
 @Component({
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
 
   private titleService = inject(TitleService)
   private router = inject(Router)
+  private _ToastrService = inject(ToastrService)
 
   constructor() {
     this.router.events.subscribe((event: Event) => {
@@ -50,6 +52,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.init()
+    // snapshot أول ما الأبليكيشن يفتح
+    this.initialStorage = JSON.stringify(localStorage);
+
+    // listen لأي تغيير من tabs تانية
+    window.addEventListener('storage', this.detectStorageTampering.bind(this));
+
+    // polling لأي تغيير من نفس الصفحة
+    this.startStorageWatcher();
   }
 
   checkRouteChange(routerEvent: Event) {
@@ -64,6 +74,50 @@ export class AppComponent implements OnInit {
       setTimeout(() => {
         this.progressBar.complete()
       }, 200)
+    }
+  }
+
+  initialStorage: string = '';
+  intervalId: any;
+
+  detectStorageTampering() {
+    const current = JSON.stringify(localStorage);
+
+    if (current !== this.initialStorage) {
+      this.forceLogout();
+    }
+  }
+
+  startStorageWatcher() {
+    this.intervalId = setInterval(() => {
+      const current = JSON.stringify(localStorage);
+
+      if (current !== this.initialStorage) {
+        this.forceLogout();
+      }
+    }, 1000);
+  }
+
+  forceLogout() {
+    clearInterval(this.intervalId);
+
+    localStorage.clear();
+
+    // مهم: نحدث snapshot عشان مايحصلش loop
+    this.initialStorage = JSON.stringify(localStorage);
+
+    // optional toast
+    this._ToastrService.error('You have been logged out due to unauthorized data changes');
+
+    // redirect
+    this.router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
   }
 }

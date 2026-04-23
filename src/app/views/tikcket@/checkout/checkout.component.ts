@@ -117,10 +117,30 @@ export class CheckoutComponent {
   getUserById():void{
     this._NgxSpinnerService.show()
 
+    if (!this.userId) {
+      this._NgxSpinnerService.hide();
+      this._ToastrService.error('User not found');
+      this._Router.navigate(['/']);
+      return;
+    }
+
     this._UsersService.getUserById(this.userId!).subscribe({
       next:(res)=>{
         this.userData = res
+
+        if (!this.userData) {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('User not found');
+          this._Router.navigate(['/']);
+          return;
+        }
+
         this._NgxSpinnerService.hide()
+      },
+      error: () => {
+        this._NgxSpinnerService.hide();
+        this._ToastrService.error('User not found');
+        this._Router.navigate(['/']);
       }
     })
   }
@@ -130,6 +150,7 @@ export class CheckoutComponent {
     EventName:[null, Validators.required],
     OwnerId:[null, Validators.required],
 
+    studentsIDs:[null],
     userId:[null, Validators.required],
     userName:[null, Validators.required],
     userPhone:[null, Validators.required],
@@ -211,13 +232,21 @@ export class CheckoutComponent {
       return;
     }
 
+    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy'){
+      if (!this.checkoutForm.get('studentsIDs')?.value) {
+        this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
+        this._NgxSpinnerService.hide()
+
+        return;
+      }
+    }
+
     if (!this.eventId) {
       this._ToastrService.error('الحفلة غير موجودة');
       this._NgxSpinnerService.hide()
 
       return;
     }
-
 
     try {
       this._NgxSpinnerService.show()
@@ -256,7 +285,6 @@ export class CheckoutComponent {
         payTwoImage: '',
         payTwoRef: '',
         createdAtTwo: '',
-
         totalAmount: 0,
         status: 'Pending'
       };
@@ -298,6 +326,7 @@ export class CheckoutComponent {
       this._ToastrService.error('Checkout failed');
     }
   }
+
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -392,7 +421,6 @@ export class CheckoutComponent {
       });
     }
   }
-
 
   newOutComerCount:number = 0
   async addOutComer() {

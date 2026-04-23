@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth/auth.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
@@ -27,6 +27,7 @@ export class AddEventComponent{
 
   ngOnInit(): void {
     this.getAllOwners()
+    this.addDepartment()
   }
 
   eventForm:FormGroup = this._FormBuilder.group({
@@ -44,8 +45,21 @@ export class AddEventComponent{
     OriganizerName:[null, [Validators.required]],
     Type:[null, [Validators.required]],
     PaidPhases:[null, [Validators.required]],
+    departments: this._FormBuilder.array([]),
     Image:[null],
   })
+
+  get departments(): FormArray {
+    return this.eventForm.get('departments') as FormArray;
+  }
+
+  addDepartment() {
+    this.departments.push(this._FormBuilder.control('', Validators.required));
+  }
+
+  removeDepartment(index: number) {
+    this.departments.removeAt(index);
+  }
 
   getAllOwners():void{
     this._NgxSpinnerService.show()
