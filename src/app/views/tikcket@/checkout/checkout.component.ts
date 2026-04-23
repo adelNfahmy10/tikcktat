@@ -476,6 +476,17 @@ export class CheckoutComponent {
     );
   }
 
+  scrollToBookNow() {
+    const el = document.getElementById('bookNowSection');
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }
+
   // // Seating Layout Logic
   // categories: Category[] = [];
   // selectedSeats: Seat[] = [];

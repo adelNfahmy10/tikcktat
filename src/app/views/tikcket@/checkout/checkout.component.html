@@ -13,7 +13,7 @@
             @if(!isReturningUser){
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
-                  type="button" role="tab" aria-controls="full-ticket" aria-selected="true">
+                  type="button" role="tab" aria-controls="full-ticket" aria-selected="true" (click)="scrollToBookNow()">
                   Book Ticket
                 </button>
               </li>
@@ -161,7 +161,7 @@
                           </div>
 
                           <div class="col-12">
-                            <div class="text-center">
+                            <div class="text-center" id="bookNowSection">
                               <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Book Now </button>
                             </div>
                           </div>
