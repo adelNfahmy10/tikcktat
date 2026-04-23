@@ -58,7 +58,6 @@ export class AvailableEventsDetailsComponent {
       .subscribe({
         next: (res) => {
           this.eventData = res;
-          console.log(this.eventData);
           this.getUserById(this.eventData.OwnerId)
           this.features = this.formatEventDetails(this.eventData?.EventDetails);
           this.terms = this.formatEventDetails(this.eventData?.TermsOfEntries);

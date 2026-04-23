@@ -74,8 +74,6 @@ export class MyBookingComponent {
         .toLowerCase()
         .includes(this.searchText.toLowerCase())
     );
-    console.log(this.filteredData);
-
     this.page = 1;
     this.updatePagination();
   }

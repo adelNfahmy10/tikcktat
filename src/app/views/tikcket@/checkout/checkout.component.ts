@@ -105,12 +105,8 @@ export class CheckoutComponent {
           if (booking) {
             this.isReturningUser = true;
             this.bookingData = booking;
-
-            console.log('🔥 Returning User:', booking);
-
           } else {
             this.isReturningUser = false;
-            console.log('🟢 First Time User');
           }
 
         });
@@ -371,7 +367,6 @@ export class CheckoutComponent {
       }).subscribe({
         next: () => {
           this._NgxSpinnerService.hide();
-          console.log('✅ Phase 2 Completed');
           this._ToastrService.success('Booking Completed Successfully');
 
           // reset

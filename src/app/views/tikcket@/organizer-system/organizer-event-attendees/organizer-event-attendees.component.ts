@@ -62,9 +62,6 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
-        console.log(this.eventData.departments);
-
-
       },
       error: (err) => {
         this._NgxSpinnerService.hide()
@@ -225,16 +222,16 @@ export class OrganizerEventAttendeesComponent {
     return amount - this.getTax(amount);
   }
 
-  firstPaidAmount:number = 0
+  paidAmount:number = 0
 
-  async firstPaidCheck() {
+  async paidCheck() {
     this._NgxSpinnerService.show();
     if(this.bookDataById?.userEmail){
       if(!this.bookDataById.payOneAmount){
         this._BookingService.updateBooking(this.bookDataById.id, {
-          payOneAmount: this.firstPaidAmount,
+          payOneAmount: this.paidAmount,
           checkOneDateAt: new Date(),
-          totalAmount: this.firstPaidAmount,
+          totalAmount: this.paidAmount,
           status: 'Par-Paid',
         }).subscribe({
           next: () => {
@@ -242,7 +239,7 @@ export class OrganizerEventAttendeesComponent {
             this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid One Check Successfully');
             this.modalService.dismissAll();
-            this.firstPaidAmount = 0
+            this.paidAmount = 0
           },
           error: (err) => {
             this._NgxSpinnerService.hide();
@@ -250,7 +247,7 @@ export class OrganizerEventAttendeesComponent {
           }
         });
       } else {
-        const totalPaid = this.firstPaidAmount + this.bookDataById.payOneAmount;
+        const totalPaid = this.paidAmount + this.bookDataById.payOneAmount;
         const eventPrice = this.eventData.TicketPrice; // أو السعر الفعلي
         const status = totalPaid >= eventPrice ? 'Paid' : 'Par-Paid';
 
@@ -262,7 +259,7 @@ export class OrganizerEventAttendeesComponent {
 
         // ✅ API Call
         this._BookingService.updateBooking(this.bookDataById.id, {
-          payTwoAmount: this.firstPaidAmount,
+          payTwoAmount: this.paidAmount,
           checkTwoDateAt: new Date(),
           totalAmount: totalPaid,
           status: status

@@ -46,8 +46,6 @@ export class OrganizerEventsComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.ownerEvents = res;
-          console.log(this.ownerEvents);
-
           this.filteredData = [...this.ownerEvents];
           this.updatePagination();
         },

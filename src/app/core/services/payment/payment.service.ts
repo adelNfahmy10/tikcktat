@@ -12,8 +12,6 @@ export class PaymentService {
     const scanFn = httpsCallable(this._Functions, 'scanQR');
 
     scanFn({ qrId }).then((res: any) => {
-      console.log(res.data);
-
       if (res.data.success) {
         alert("✅ Entry allowed");
       } else {
