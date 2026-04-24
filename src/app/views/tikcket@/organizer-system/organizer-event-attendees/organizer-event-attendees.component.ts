@@ -356,9 +356,9 @@ export class OrganizerEventAttendeesComponent {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
     // 🔥 scroll to top
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+   document.getElementById('head-table')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
     this.updatePagination();
   }
