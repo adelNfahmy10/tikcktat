@@ -183,21 +183,24 @@
                 </div>
               </th>
 
-              <th (click)="sort('department')" class="sortable">
-                <div class="d-flex justify-content-center align-items-center">
-                  <span>Department</span>
-                  <span class="sort-icons">
-                    <i
-                      class="fa-solid fa-caret-up"
-                      [class.active]="sortColumn === 'department' && sortDirection === 'asc'"
-                    ></i>
-                    <i
-                      class="fa-solid fa-caret-down"
-                      [class.active]="sortColumn === 'department' && sortDirection === 'desc'"
-                    ></i>
-                  </span>
-                </div>
-              </th>
+              @if(hasDepartmentColumn){
+                <th (click)="sort('department')" class="sortable">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <span>Department</span>
+                    <span class="sort-icons">
+                      <i
+                        class="fa-solid fa-caret-up"
+                        [class.active]="sortColumn === 'department' && sortDirection === 'asc'"
+                      ></i>
+                      <i
+                        class="fa-solid fa-caret-down"
+                        [class.active]="sortColumn === 'department' && sortDirection === 'desc'"
+                      ></i>
+                    </span>
+                  </div>
+                </th>
+
+              }
 
               @if(hasStudentsColumn){
                 <th (click)="sort('studentsIDs')" class="sortable">
@@ -293,15 +296,17 @@
                   </div>
                 </td>
                 <td>
-                  <a
-                    [href]="'https://wa.me/20' + user?.userPhone?.substring(1)"
-                    target="_blank"
-                  >
+                  <a [href]="'https://wa.me/20' + user?.userPhone?.substring(1)" target="_blank" >
                     {{ user?.userPhone }}
                   </a>
-                <td>{{ user?.userEmail }}</td>
+                </td>
+                <td>
+                  {{ user?.userEmail }}
+                </td>
 
-                <td>{{ user?.department }}</td>
+                @if(hasDepartmentColumn){
+                  <td>{{ user?.department }}</td>
+                }
 
                 @if(hasStudentsColumn){
                   <td>{{ user?.studentsIDs }}</td>
@@ -378,126 +383,129 @@
     </div>
 
     <!-- ===================== TABLE DPARTMENTS ===================== -->
-    <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
-      <div class="row g-3">
-          @for (dept of eventData.departments; track $index) {
-            <div class="col-md-6">
-              @if (groupedByDepartment[dept]?.length) {
+    @if(hasDepartmentColumn){
+      <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
+        <div class="row g-3">
+            @for (dept of eventData.departments; track $index) {
+              <div class="col-md-6">
+                @if (groupedByDepartment[dept]?.length) {
 
-                <!-- ===================== TABLES ===================== -->
-                <div class="department-table">
-                  <h4>{{ dept }} Attendees</h4>
+                  <!-- ===================== TABLES ===================== -->
+                  <div class="department-table">
+                    <h4>{{ dept }} Attendees</h4>
 
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle text-center">
+                    <div class="table-responsive">
+                      <table class="table table-hover align-middle text-center">
 
-                      <thead class="table-light">
-                        <tr>
-                          <th>#</th>
-                          <th>Name</th>
-                          @if(hasStudentsColumn){
-                            <th>Students ID</th>
-                          }
-                          <th>Phone</th>
-                          <th>Email</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        @for (user of getPaginatedDepartment(dept); track $index) {
+                        <thead class="table-light">
                           <tr>
-
-                            <!-- index -->
-                           <td>
-                            {{
-                              ($index + 1) +
-                              (((departmentPages[dept] || 1) - 1) * itemsPerPage)
-                            }}
-                          </td>
-
-                            <!-- user -->
-                            <td>
-                              <div class="d-flex align-items-center gap-2">
-                                <img [src]="user?.userImage" width="50" class="rounded" />
-                                <div class="text-start">
-                                  <h6 class="m-0">{{ user?.userName }}</h6>
-                                  <span class="fw-bold main-color">{{ user?.department }}</span>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td>{{ user?.userPhone }}</td>
-                            <td>{{ user?.userEmail }}</td>
-
+                            <th>#</th>
+                            <th>Name</th>
                             @if(hasStudentsColumn){
-                              <td>{{ user?.studentsIDs }}</td>
+                              <th>Students ID</th>
                             }
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
 
+                        <tbody>
+                          @for (user of getPaginatedDepartment(dept); track $index) {
+                            <tr>
+
+                              <!-- index -->
                             <td>
-                              <span
-                                class="badge"
-                                [ngClass]="{
-                                  'bg-success': user?.status === 'Paid',
-                                  'bg-primary': user?.status === 'Par-Paid',
-                                  'bg-danger': user?.status === 'Pending'
-                                }"
-                              >
-                                {{ user?.status }}
-                              </span>
+                              {{
+                                ($index + 1) +
+                                (((departmentPages[dept] || 1) - 1) * itemsPerPage)
+                              }}
                             </td>
 
-                          </tr>
-                        }
-                      </tbody>
+                              <!-- user -->
+                              <td>
+                                <div class="d-flex align-items-center gap-2">
+                                  <img [src]="user?.userImage" width="50" class="rounded" />
+                                  <div class="text-start">
+                                    <h6 class="m-0">{{ user?.userName }}</h6>
+                                    <span class="fw-bold main-color">{{ user?.department }}</span>
+                                  </div>
+                                </div>
+                              </td>
 
-                    </table>
-                  </div>
+                              <td>{{ user?.userPhone }}</td>
+                              <td>{{ user?.userEmail }}</td>
 
-                  <!-- ===================== Pagination ===================== -->
-                  <ul class="pagination justify-content-center">
+                              @if(hasStudentsColumn){
+                                <td>{{ user?.studentsIDs }}</td>
+                              }
 
-                    <!-- ===================== Prev ===================== -->
-                    <li class="page-item cr"
-                        [class.disabled]="(departmentPages[dept] || 1) === 1">
-                      <a class="page-link"
-                        (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) - 1)">
-                        Prev
-                      </a>
-                    </li>
+                              <td>
+                                <span
+                                  class="badge"
+                                  [ngClass]="{
+                                    'bg-success': user?.status === 'Paid',
+                                    'bg-primary': user?.status === 'Par-Paid',
+                                    'bg-danger': user?.status === 'Pending'
+                                  }"
+                                >
+                                  {{ user?.status }}
+                                </span>
+                              </td>
 
-                    <!-- ===================== Pages ===================== -->
-                    @for (p of getTotalPages(dept); track $index) {
+                            </tr>
+                          }
+                        </tbody>
+
+                      </table>
+                    </div>
+
+                    <!-- ===================== Pagination ===================== -->
+                    <ul class="pagination justify-content-center">
+
+                      <!-- ===================== Prev ===================== -->
                       <li class="page-item cr"
-                          [class.active]="p === (departmentPages[dept] || 1)">
+                          [class.disabled]="(departmentPages[dept] || 1) === 1">
                         <a class="page-link"
-                          (click)="changeDepartmentPage(dept, p)">
-                          {{ p }}
+                          (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) - 1)">
+                          Prev
                         </a>
                       </li>
-                    }
 
-                    <!-- Next -->
-                    <li class="page-item cr"
-                        [class.disabled]="(departmentPages[dept] || 1) === getTotalPages(dept).length">
-                      <a class="page-link"
-                        (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) + 1)">
-                        Next
-                      </a>
-                    </li>
+                      <!-- ===================== Pages ===================== -->
+                      @for (p of getTotalPages(dept); track $index) {
+                        <li class="page-item cr"
+                            [class.active]="p === (departmentPages[dept] || 1)">
+                          <a class="page-link"
+                            (click)="changeDepartmentPage(dept, p)">
+                            {{ p }}
+                          </a>
+                        </li>
+                      }
 
-                  </ul>
+                      <!-- Next -->
+                      <li class="page-item cr"
+                          [class.disabled]="(departmentPages[dept] || 1) === getTotalPages(dept).length">
+                        <a class="page-link"
+                          (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) + 1)">
+                          Next
+                        </a>
+                      </li>
 
-                </div>
+                    </ul>
 
-              } @else {
-                <h3>({{ dept }}) - No Attendess</h3>
-              }
-            </div>
-          }
+                  </div>
 
+                } @else {
+                  <h3>({{ dept }}) - No Attendess</h3>
+                }
+              </div>
+            }
+
+        </div>
       </div>
-    </div>
+    }
+
   </div>
 </section>
 

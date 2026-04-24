@@ -87,6 +87,7 @@ export class OrganizerEventAttendeesComponent {
   totalRevenue:number = 0
   totalTaxes:number = 0
   hasStudentsColumn: boolean = false;
+  hasDepartmentColumn: boolean = false;
 
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
@@ -180,6 +181,10 @@ export class OrganizerEventAttendeesComponent {
     // ✅ هنا نحدد هل العمود يظهر ولا لا
     this.hasStudentsColumn = this.attendeesWithUsers.some(
       a => a.studentsIDs != null
+    );
+
+    this.hasDepartmentColumn = this.attendeesWithUsers.some(
+      a => a.department != null
     );
 
     this.filteredData = [...this.attendeesWithUsers];

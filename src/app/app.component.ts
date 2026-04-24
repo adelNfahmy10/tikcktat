@@ -52,10 +52,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.init()
-    // ⏳ استنى شوية عشان login أو تحميل الداتا
-    setTimeout(() => {
-      this.initStorageWatcher();
-    }, 1500);
+    // // ⏳ استنى شوية عشان login أو تحميل الداتا
+    // setTimeout(() => {
+    //   this.initStorageWatcher();
+    // }, 1500);
   }
 
   checkRouteChange(routerEvent: Event) {
@@ -73,45 +73,45 @@ export class AppComponent implements OnInit {
     }
   }
 
-  initialUserId: string | null = null;
-  initialRole: string | null = null;
-  intervalId: any;
-  isWatching = false;
+  // initialUserId: string | null = null;
+  // initialRole: string | null = null;
+  // intervalId: any;
+  // isWatching = false;
 
-  initStorageWatcher(): void {
-    if (this.isWatching) return;
+  // initStorageWatcher(): void {
+  //   if (this.isWatching) return;
 
-    this.initialUserId = localStorage.getItem('userId');
-    this.initialRole = localStorage.getItem('role');
+  //   this.initialUserId = localStorage.getItem('userId');
+  //   this.initialRole = localStorage.getItem('role');
 
-    this.isWatching = true;
+  //   this.isWatching = true;
 
-    this.intervalId = setInterval(() => {
-      const currentUserId = localStorage.getItem('userId');
-      const currentRole = localStorage.getItem('role');
+  //   this.intervalId = setInterval(() => {
+  //     const currentUserId = localStorage.getItem('userId');
+  //     const currentRole = localStorage.getItem('role');
 
-      if (
-        currentUserId !== this.initialUserId ||
-        currentRole !== this.initialRole
-      ) {
-        this.forceLogout();
-      }
-    }, 1000);
-  }
+  //     if (
+  //       currentUserId !== this.initialUserId ||
+  //       currentRole !== this.initialRole
+  //     ) {
+  //       this.forceLogout();
+  //     }
+  //   }, 1000);
+  // }
 
-  forceLogout(): void {
-    clearInterval(this.intervalId);
+  // forceLogout(): void {
+  //   clearInterval(this.intervalId);
 
-    localStorage.clear();
+  //   localStorage.clear();
 
-    this._ToastrService.error(
-      'You have been logged out due to unauthorized changes'
-    );
+  //   this._ToastrService.error(
+  //     'You have been logged out due to unauthorized changes'
+  //   );
 
-   this.router.navigate(['/']).then(() => {
-      window.location.reload();
-    });
+  //  this.router.navigate(['/']).then(() => {
+  //     window.location.reload();
+  //   });
 
-  }
+  // }
 
 }

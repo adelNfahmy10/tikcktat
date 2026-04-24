@@ -237,7 +237,7 @@ export class CheckoutComponent {
       return;
     }
 
-    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'a18QdHE5qUa51OL3uvkR'){
+    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'uvoo0zHQzwK1efCTBynh'){
       if (!this.checkoutForm.get('studentsIDs')?.value) {
         this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
         this._NgxSpinnerService.hide()
