@@ -55,7 +55,7 @@ export class AddEventComponent{
   }
 
   addDepartment() {
-    this.departments.push(this._FormBuilder.control('', Validators.required));
+    this.departments.push(this._FormBuilder.control(null, Validators.required));
   }
 
   removeDepartment(index: number) {
