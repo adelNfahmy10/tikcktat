@@ -86,6 +86,7 @@ export class OrganizerEventAttendeesComponent {
   totalDefaultVisitorCount:number = 0
   totalRevenue:number = 0
   totalTaxes:number = 0
+  hasStudentsColumn: boolean = false;
 
   getAttendeesByEventId(): void {
     this._NgxSpinnerService.show()
@@ -175,6 +176,11 @@ export class OrganizerEventAttendeesComponent {
         userPhone: user?.phone || ''
       };
     });
+
+    // ✅ هنا نحدد هل العمود يظهر ولا لا
+    this.hasStudentsColumn = this.attendeesWithUsers.some(
+      a => a.studentsIDs != null
+    );
 
     this.filteredData = [...this.attendeesWithUsers];
 
@@ -344,6 +350,11 @@ export class OrganizerEventAttendeesComponent {
   changePage(p: number) {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
+    // 🔥 scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
     this.updatePagination();
   }
 

@@ -199,6 +199,24 @@
                 </div>
               </th>
 
+              @if(hasStudentsColumn){
+                <th (click)="sort('studentsIDs')" class="sortable">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <span>Students ID</span>
+                    <span class="sort-icons">
+                      <i
+                        class="fa-solid fa-caret-up"
+                        [class.active]="sortColumn === 'studentsIDs' && sortDirection === 'asc'"
+                      ></i>
+                      <i
+                        class="fa-solid fa-caret-down"
+                        [class.active]="sortColumn === 'studentsIDs' && sortDirection === 'desc'"
+                      ></i>
+                    </span>
+                  </div>
+                </th>
+              }
+
               <th (click)="sort('VisitorCount')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Visitors</span>
@@ -261,7 +279,11 @@
               <tr>
                 <td>
                   <div class="d-flex flex-column justify-content-center align-items-center">
-                    <span>{{ $index + 1 }}</span>
+                    <span>
+                      {{
+                        $index + 1 + ((page - 1) * pageSize)
+                      }}
+                    </span>
                   </div>
                 </td>
                 <td>
@@ -278,7 +300,13 @@
                     {{ user?.userPhone }}
                   </a>
                 <td>{{ user?.userEmail }}</td>
+
                 <td>{{ user?.department }}</td>
+
+                @if(hasStudentsColumn){
+                  <td>{{ user?.studentsIDs }}</td>
+                }
+
                 <td>{{ user?.VisitorCount + user?.defaultVisitorCount }} Visitors</td>
                 <td>
                   <span>
@@ -333,17 +361,17 @@
 
       <!-- ===================== MAIN PAGINATION ===================== -->
       <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="page === 1">
+        <li class="page-item cr" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
         </li>
 
         @for (p of totalPages; track $index) {
-          <li class="page-item" [class.active]="p === page">
+          <li class="page-item cr" [class.active]="p === page">
             <a class="page-link" (click)="changePage(p)">{{ p }}</a>
           </li>
         }
 
-        <li class="page-item" [class.disabled]="page === totalPages.length">
+        <li class="page-item cr" [class.disabled]="page === totalPages.length">
           <a class="page-link" (click)="changePage(page + 1)">Next</a>
         </li>
       </ul>
@@ -367,6 +395,9 @@
                         <tr>
                           <th>#</th>
                           <th>Name</th>
+                          @if(hasStudentsColumn){
+                            <th>Students ID</th>
+                          }
                           <th>Phone</th>
                           <th>Email</th>
                           <th>Status</th>
@@ -378,9 +409,12 @@
                           <tr>
 
                             <!-- index -->
-                            <td>
-                              {{ ($index + 1) + ((departmentPages[dept] - 1) * itemsPerPage) }}
-                            </td>
+                           <td>
+                            {{
+                              ($index + 1) +
+                              (((departmentPages[dept] || 1) - 1) * itemsPerPage)
+                            }}
+                          </td>
 
                             <!-- user -->
                             <td>
@@ -395,6 +429,10 @@
 
                             <td>{{ user?.userPhone }}</td>
                             <td>{{ user?.userEmail }}</td>
+
+                            @if(hasStudentsColumn){
+                              <td>{{ user?.studentsIDs }}</td>
+                            }
 
                             <td>
                               <span
@@ -420,7 +458,7 @@
                   <ul class="pagination justify-content-center">
 
                     <!-- ===================== Prev ===================== -->
-                    <li class="page-item"
+                    <li class="page-item cr"
                         [class.disabled]="(departmentPages[dept] || 1) === 1">
                       <a class="page-link"
                         (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) - 1)">
@@ -430,7 +468,7 @@
 
                     <!-- ===================== Pages ===================== -->
                     @for (p of getTotalPages(dept); track $index) {
-                      <li class="page-item"
+                      <li class="page-item cr"
                           [class.active]="p === (departmentPages[dept] || 1)">
                         <a class="page-link"
                           (click)="changeDepartmentPage(dept, p)">
@@ -440,7 +478,7 @@
                     }
 
                     <!-- Next -->
-                    <li class="page-item"
+                    <li class="page-item cr"
                         [class.disabled]="(departmentPages[dept] || 1) === getTotalPages(dept).length">
                       <a class="page-link"
                         (click)="changeDepartmentPage(dept, (departmentPages[dept] || 1) + 1)">
@@ -453,7 +491,7 @@
                 </div>
 
               } @else {
-                <h3>No Users Attendess</h3>
+                <h3>({{ dept }}) - No Attendess</h3>
               }
             </div>
           }

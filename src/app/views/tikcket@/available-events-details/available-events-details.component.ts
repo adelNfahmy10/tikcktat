@@ -283,6 +283,7 @@ export class AvailableEventsDetailsComponent {
 
         localStorage.setItem('userId', res.uid);
         localStorage.setItem('fullName', res.fullName);
+        localStorage.setItem('fullNameAr', res.fullNameAr);
         localStorage.setItem('email', res.email);
         localStorage.setItem('phone', res.phone);
         localStorage.setItem('role', res.role);

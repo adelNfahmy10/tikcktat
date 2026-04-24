@@ -52,14 +52,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.init()
-    // snapshot أول ما الأبليكيشن يفتح
-    this.initialStorage = JSON.stringify(localStorage);
-
-    // listen لأي تغيير من tabs تانية
-    window.addEventListener('storage', this.detectStorageTampering.bind(this));
-
-    // polling لأي تغيير من نفس الصفحة
-    this.startStorageWatcher();
+    // ⏳ استنى شوية عشان login أو تحميل الداتا
+    setTimeout(() => {
+      this.initStorageWatcher();
+    }, 1500);
   }
 
   checkRouteChange(routerEvent: Event) {
@@ -77,47 +73,45 @@ export class AppComponent implements OnInit {
     }
   }
 
-  initialStorage: string = '';
+  initialUserId: string | null = null;
+  initialRole: string | null = null;
   intervalId: any;
+  isWatching = false;
 
-  detectStorageTampering() {
-    const current = JSON.stringify(localStorage);
+  initStorageWatcher(): void {
+    if (this.isWatching) return;
 
-    if (current !== this.initialStorage) {
-      this.forceLogout();
-    }
-  }
+    this.initialUserId = localStorage.getItem('userId');
+    this.initialRole = localStorage.getItem('role');
 
-  startStorageWatcher() {
+    this.isWatching = true;
+
     this.intervalId = setInterval(() => {
-      const current = JSON.stringify(localStorage);
+      const currentUserId = localStorage.getItem('userId');
+      const currentRole = localStorage.getItem('role');
 
-      if (current !== this.initialStorage) {
+      if (
+        currentUserId !== this.initialUserId ||
+        currentRole !== this.initialRole
+      ) {
         this.forceLogout();
       }
     }, 1000);
   }
 
-  forceLogout() {
+  forceLogout(): void {
     clearInterval(this.intervalId);
 
     localStorage.clear();
 
-    // مهم: نحدث snapshot عشان مايحصلش loop
-    this.initialStorage = JSON.stringify(localStorage);
+    this._ToastrService.error(
+      'You have been logged out due to unauthorized changes'
+    );
 
-    // optional toast
-    this._ToastrService.error('You have been logged out due to unauthorized data changes');
-
-    // redirect
-    this.router.navigate(['/']).then(() => {
+   this.router.navigate(['/']).then(() => {
       window.location.reload();
     });
+
   }
 
-  ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
 }

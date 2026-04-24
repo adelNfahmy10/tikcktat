@@ -116,6 +116,7 @@ export class CheckoutComponent {
 
   getUserById():void{
     this._NgxSpinnerService.show()
+    this.userId = localStorage.getItem('userId')
 
     if (!this.userId) {
       this._NgxSpinnerService.hide();
@@ -153,6 +154,7 @@ export class CheckoutComponent {
     studentsIDs:[null],
     userId:[null, Validators.required],
     userName:[null, Validators.required],
+    userNameAr:[null, Validators.required],
     userPhone:[null, Validators.required],
     userEmail:[null, Validators.required],
     userImage:[null],
@@ -248,6 +250,8 @@ export class CheckoutComponent {
       return;
     }
 
+    this.getUserById();
+
     try {
       this._NgxSpinnerService.show()
 
@@ -270,6 +274,7 @@ export class CheckoutComponent {
 
         userId: this.userId,
         userName: this.userData.fullName,
+        userNameAr: this.userData.fullNameAr,
         userPhone: this.userData.phone,
         userEmail: this.userData.email,
         userImage: imageUrl,
@@ -288,7 +293,6 @@ export class CheckoutComponent {
         totalAmount: 0,
         status: 'Pending'
       };
-
 
       // 🔥 1. Save booking
       this._BookingService.createBooking(finalData).subscribe({
