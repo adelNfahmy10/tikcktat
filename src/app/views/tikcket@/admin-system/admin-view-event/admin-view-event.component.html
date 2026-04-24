@@ -196,7 +196,7 @@
                 <td>{{ event?.TicketPrice | number }} EGP</td>
                 <td>{{ event?.VisitorPrice | number }} EGP</td>
                 <td>{{ event?.TicketCount }} Tickets</td>
-                <td>{{ event?.TicketCount - event?.bookingCount }} Tickets</td>
+                <td>{{ event?.TicketCount - event?.bookingCount || event?.TicketCount }} Tickets</td>
                 <td>
                     {{ event?.Date | date:'dd/MM/yyyy' }}
                 </td>

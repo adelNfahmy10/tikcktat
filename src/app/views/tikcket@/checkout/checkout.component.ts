@@ -94,6 +94,9 @@ export class CheckoutComponent {
         this._EventService.getEventById(this.eventId).subscribe({
           next: (res) => {
             this.eventData = res;
+            this.eventData.departments = (this.eventData.departments || []).filter((d:any) => d && d.trim().length > 0);
+            console.log(this.eventData);
+
             this._NgxSpinnerService.hide()
           }
         });
@@ -166,7 +169,7 @@ export class CheckoutComponent {
         Validators.maxLength(100),
       ]
     ],
-    department:[null, Validators.required],
+    department:[null],
     defaultVisitorCount:[null, [Validators.required, Validators.min(0)]],
     VisitorCount:[null, [Validators.required, Validators.min(0)]],
 
@@ -227,14 +230,14 @@ export class CheckoutComponent {
       return;
     }
 
-    if (!this.checkoutForm.get('department')?.value) {
+    const hasDepartments = this.eventData?.departments?.length > 0;
+    if (hasDepartments && !this.checkoutForm.get('department')?.value) {
       this._ToastrService.error('برجاء أدخل القسم');
-      this._NgxSpinnerService.hide()
-
+      this._NgxSpinnerService.hide();
       return;
     }
 
-    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy'){
+    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'a18QdHE5qUa51OL3uvkR'){
       if (!this.checkoutForm.get('studentsIDs')?.value) {
         this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
         this._NgxSpinnerService.hide()
@@ -249,8 +252,6 @@ export class CheckoutComponent {
 
       return;
     }
-
-    this.getUserById();
 
     try {
       this._NgxSpinnerService.show()
@@ -274,7 +275,7 @@ export class CheckoutComponent {
 
         userId: this.userId,
         userName: this.userData.fullName,
-        userNameAr: this.userData.fullNameAr,
+        userNameAr: this.userData.fullNameAr || this.userData.fullName,
         userPhone: this.userData.phone,
         userEmail: this.userData.email,
         userImage: imageUrl,
@@ -293,6 +294,9 @@ export class CheckoutComponent {
         totalAmount: 0,
         status: 'Pending'
       };
+
+      console.log(finalData);
+
 
       // 🔥 1. Save booking
       this._BookingService.createBooking(finalData).subscribe({
@@ -322,11 +326,15 @@ export class CheckoutComponent {
         error: () => {
           this._NgxSpinnerService.hide()
           this._ToastrService.error('Booking Failed');
+          console.log('Booking Failed');
+
         }
       });
 
     } catch (err) {
       this._NgxSpinnerService.hide()
+      console.log(err);
+
       this._ToastrService.error('Checkout failed');
     }
   }

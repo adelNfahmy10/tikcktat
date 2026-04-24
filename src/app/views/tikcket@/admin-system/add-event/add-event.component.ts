@@ -83,8 +83,6 @@ export class AddEventComponent{
     }
 
     try {
-
-
       // 🔥 1. Upload image to Cloudinary
       const imageUrl = await this._EventService.uploadImage(this.selectedFile);
 
@@ -106,6 +104,7 @@ export class AddEventComponent{
       // 🔥 3. Save to Firebase
       this._EventService.createEvent(eventData).subscribe({
         next: () => {
+          this._NgxSpinnerService.hide()
           this._ToastrService.success('Event Created Successfully');
 
           // reset form
@@ -114,6 +113,7 @@ export class AddEventComponent{
           this.selectedFile = null;
         },
         error: (err) => {
+          this._NgxSpinnerService.hide()
           console.error(err);
           this._ToastrService.error('Failed to create event');
         }

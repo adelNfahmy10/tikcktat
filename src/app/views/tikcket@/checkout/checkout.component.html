@@ -87,21 +87,19 @@
                             </div>
                           </div>
 
-                          @if(eventId == 'HLz7HiRkpk33TSvFDNGy'){
+                          @if(eventId == 'HLz7HiRkpk33TSvFDNGy' || eventId == 'a18QdHE5qUa51OL3uvkR'){
                             <div class="col-12">
                               <label for="studentsIDs" class="form-label">Student ID</label>
 
                               <input
                                 class="form-control w-100"
-                                type="number"
+                                type="text"
                                 id="studentsIDs"
                                 formControlName="studentsIDs"
                                 placeholder="ID Faculty"
                               />
                             </div>
                           }
-
-
 
                           <div class="col-12">
                             <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
@@ -131,22 +129,25 @@
                             }
                           </div>
 
-                          <div class="col-12">
-                            <label for="department" class="form-label">القســم</label>
+                          @if(eventData?.departments?.length > 0){
+                            <div class="col-12">
+                              <label for="department" class="form-label">القســم</label>
 
-                            <select class="form-select" name="department" id="department" formControlName="department">
-                              @for (item of eventData?.departments; track $index) {
-                                <option [value]="item">{{item}}</option>
+                              <select class="form-select" name="department" id="department" formControlName="department">
+                                @for (item of eventData?.departments; track $index) {
+                                  <option [value]="item">{{item}}</option>
+                                }
+                              </select>
+
+                              @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
+
+                                @if (checkoutForm.get('department')?.errors?.['required']) {
+                                  <small class="text-danger">Department is required</small>
+                                }
                               }
-                            </select>
+                            </div>
+                          }
 
-                            @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
-
-                              @if (checkoutForm.get('department')?.errors?.['required']) {
-                                <small class="text-danger">Department is required</small>
-                              }
-                            }
-                          </div>
 
                           <div class="col-12">
                             <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
