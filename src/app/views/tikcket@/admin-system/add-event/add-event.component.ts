@@ -45,6 +45,7 @@ export class AddEventComponent{
     OriganizerName:[null, [Validators.required]],
     Type:[null, [Validators.required]],
     PaidPhases:[null, [Validators.required]],
+    deposit:[null, [Validators.required]],
     departments: this._FormBuilder.array([]),
     Image:[null],
   })
@@ -73,19 +74,19 @@ export class AddEventComponent{
   }
 
   async submitCreateEvent(): Promise<void> {
-    this._NgxSpinnerService.show()
-    if (this.eventForm.invalid || !this.selectedFile) {
+    this._NgxSpinnerService.show();
+
+    if (this.eventForm.invalid) {
       this.eventForm.markAllAsTouched();
-      this._ToastrService.error('Please fill all fields and select image');
+      this._ToastrService.error('Invalid Event Data');
       this._NgxSpinnerService.hide()
       return;
     }
 
     try {
 
-
       // 🔥 1. Upload image to Cloudinary
-      const imageUrl = await this._EventService.uploadImage(this.selectedFile);
+      const imageUrl = await this._EventService.uploadImage(this.selectedFile!);
 
       // 🔥 2. Get form data
       const formValue = this.eventForm.value;
