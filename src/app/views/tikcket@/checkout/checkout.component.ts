@@ -77,10 +77,33 @@ export class CheckoutComponent {
   paidTwo:number = 0
   bookingData: any = null;
 
+  allBookings:any[] = []
+  validStudentIds:number[] = [
+    6000100,6000101,6000102,6000103,6000104,6000105,6000106,6000107,6000108,6000109,
+    6000110,6000111,6000112,6000113,6000114,6000115,6000116,6000117,6000118,6000119,
+    6000120,6000121,6000122,6000123,6000124,6000125,6000126,6000127,6000128,6000129,
+    6000130,6000131,6000132,6000133,6000134,6000135,6000136,6000137,6000138,6000139,
+    6000140,
+
+    7000200,7000201,7000202,7000203,7000204,7000205,7000206,7000207,7000208,7000209,
+    7000210,7000211,7000212,7000213,7000214,7000215,7000216,7000217,7000218,7000219,
+    7000220,7000221,7000222,7000223,7000224,7000225,7000226,7000227,7000228,7000229,
+    7000230,7000231,7000232,7000233,7000234,7000235,7000236,7000237,7000238,7000239,
+    7000240,
+
+    8000300,8000301,8000302,8000303,8000304,8000305,8000306,8000307,8000308,8000309,
+    8000310,8000311,8000312,8000313,8000314,8000315,8000316,8000317,8000318,8000319,
+    8000320,8000321,8000322,8000323,8000324,8000325,8000326,8000327,8000328,8000329,
+    8000330,8000331,8000332,8000333,8000334,8000335,8000336,8000337,8000338,8000339,
+    8000340,8000341,8000342,8000343,8000344,8000345,8000346
+  ];
+  bookedStudentIds:number[] = []
+
 
   ngOnInit(): void {
     this.getEventId()
     this.getUserById()
+    this.getAllBookings()
     // this.generateLayout();
   }
 
@@ -95,8 +118,6 @@ export class CheckoutComponent {
           next: (res) => {
             this.eventData = res;
             this.eventData.departments = (this.eventData.departments || []).filter((d:any) => d && d.trim().length > 0);
-            console.log(this.eventData);
-
             this._NgxSpinnerService.hide()
           }
         });
@@ -146,6 +167,19 @@ export class CheckoutComponent {
         this._ToastrService.error('User not found');
         this._Router.navigate(['/']);
       }
+    })
+  }
+
+  getAllBookings():void{
+    this._BookingService.getAllBookings().subscribe({
+      next:(res)=>{
+        this.allBookings = res;
+        // فلترة على نفس الـ event + استخراج IDs
+        this.bookedStudentIds = this.allBookings
+          .filter(b => b.EventId === this.eventId)
+          .map(b => Number(b.studentsIDs))
+          .filter(id => !isNaN(id));
+        }
     })
   }
 
@@ -207,6 +241,25 @@ export class CheckoutComponent {
   // Checkout Logic
   async submitCheckout(): Promise<void> {
     this._NgxSpinnerService.show()
+    const studentId = Number(this.checkoutForm.get('studentsIDs')?.value);
+
+    if (this.eventId === 'uvoo0zHQzwK1efCTBynh') {
+
+      // ✅ موجود في الليستة الأساسية
+      if (!this.validStudentIds.includes(studentId)) {
+        this._ToastrService.error('الـ ID غير صحيح');
+        this._NgxSpinnerService.hide();
+        return;
+      }
+
+      // ✅ متحجز قبل كدا
+      if (this.bookedStudentIds.includes(studentId)) {
+        this._ToastrService.error('تم استخدام هذا الـ ID من قبل');
+        this._NgxSpinnerService.hide();
+        return;
+      }
+
+    }
 
     // ✅ 1. Validate
     if (!this.selectedFile) {
@@ -295,9 +348,6 @@ export class CheckoutComponent {
         status: 'Pending'
       };
 
-      console.log(finalData);
-
-
       // 🔥 1. Save booking
       this._BookingService.createBooking(finalData).subscribe({
         next: () => {
@@ -326,15 +376,11 @@ export class CheckoutComponent {
         error: () => {
           this._NgxSpinnerService.hide()
           this._ToastrService.error('Booking Failed');
-          console.log('Booking Failed');
-
         }
       });
 
     } catch (err) {
       this._NgxSpinnerService.hide()
-      console.log(err);
-
       this._ToastrService.error('Checkout failed');
     }
   }
