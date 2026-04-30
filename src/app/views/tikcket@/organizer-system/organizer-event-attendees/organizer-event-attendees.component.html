@@ -107,10 +107,13 @@
         </div>
 
         <div class="download d-flex flex-wrap align-items-center gap-2">
-          <button class="btn btn-outline-primary" (click)="allDataInExcel()">All <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="seatNumberByDepartmentExcel('English'); seatNumberByDepartmentExcel('French')">Seat No. <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="sortNamesByDepartmentExcel('arabic'); sortNamesByDepartmentExcel('english')">Speaker <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadScarfExcel()">Scarf Name <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAll()">All <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllDepartments()">Departments <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadDepartmentsWithSeatNumber()">Seat No. <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadShieldSheet()">Shield & Intro<i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadScarfNames()">Scarf Name <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('arabic')">Sort AR <i class="fa-solid fa-file-csv"></i></button>
+          <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('english')">Sort EN <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
 

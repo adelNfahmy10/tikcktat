@@ -6,11 +6,13 @@ import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin, from, map, mergeMap, switchMap, take, toArray } from 'rxjs';
 import emailjs from '@emailjs/browser';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import { DownloadExcelService } from '@core/services/excel/download-excel.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -25,6 +27,7 @@ export class OrganizerEventAttendeesComponent {
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private readonly _ToastrService = inject(ToastrService)
+  private readonly _DownloadExcelService = inject(DownloadExcelService)
   private modalService = inject(NgbModal)
 
   eventId:string | null = null
@@ -368,25 +371,6 @@ export class OrganizerEventAttendeesComponent {
   departmentPages: Record<string, number> = {};
   itemsPerPage = 5;
 
-  // 🔹 تجميع الداتا حسب القسم
-  groupUsersByDepartment() {
-    this.groupedByDepartment = this.allUsers.reduce((acc: Record<string, any[]>, user: any) => {
-      const dept = user?.department || 'Unknown';
-
-      if (!acc[dept]) {
-        acc[dept] = [];
-      }
-
-      acc[dept].push(user);
-      return acc;
-    }, {});
-
-    // 🔥 مهم: نعمل init للصفحات هنا
-    Object.keys(this.groupedByDepartment).forEach((dept) => {
-      this.departmentPages[dept] = 1;
-    });
-  }
-
   // 🔹 pagination data
   getPaginatedDepartment(dept: string) {
     const users = this.groupedByDepartment[dept] || [];
@@ -437,50 +421,356 @@ export class OrganizerEventAttendeesComponent {
     }
   }
 
-  // Download Excels
-  allDataInExcel() {
+  // ########################## Download Excels ##########################
+  // Formate Date in Excel
+  private formatDate(timestamp: any): string {
+    if (!timestamp) return '';
 
-    let frenchCount = 1;
-    let englishCount = 1;
+    // Firestore Timestamp
+    if (timestamp?.seconds) {
+      return new Date(timestamp.seconds * 1000).toLocaleString();
+    }
 
-    const sheetData = this.allBooking.map((item: any) => {
+    // لو Date جاهز
+    if (timestamp instanceof Date) {
+      return timestamp.toLocaleString();
+    }
 
-      let seatNumber = '';
+    return '';
+  }
 
-      if (item?.department === 'French') {
-        seatNumber = `A${frenchCount++}`;
-      }
+  // Download All Bookings
+  downloadAll(): void {
+    from(this.allBooking).pipe(
+      mergeMap(b =>
+        this._UsersService.getUserById(b.userId).pipe(
+          take(1),
+          map(user => ({
+            ...b,
+            userNameAr: user?.fullNameAr || ''
+          }))
+        )
+      ),
+      toArray()
+    ).subscribe({
+      next: (data) => {
 
-      else if (item?.department === 'English') {
-        seatNumber = `B${englishCount++}`;
-      }
+        // 👇 ترتيب الأعمدة (كل الداتا + ترتيب ثابت)
+        const orderedData = data.map(item => ({
+          id: item.id,
+          userId: item.userId,
+          userImage: item.userImage,
 
-      return {
-        UserId: item?.userId,
-        SeatNumber: seatNumber,
-        UserName: item?.userName,
-        Department: item?.department,
-        Email: item?.userEmail,
-        Phone: item?.userPhone,
-        Status: item?.status,
-        TotalAmount: item?.totalAmount,
-        PayOneAmount: item?.payOneAmount,
-        checkOneDateAt: item?.checkOneDateAt?.seconds
-          ? new Date(item.checkOneDateAt.seconds * 1000)
-          : '',
-        PayTwoAmount: item?.payTwoAmount,
-        checkTwoDateAt: item?.checkTwoDateAt?.seconds
-          ? new Date(item.checkTwoDateAt.seconds * 1000)
-          : ''
-      };
+          userName: item.userName,
+          userNameAr: item.userNameAr,
+          userPhone: item.userPhone,
+          userEmail: item.userEmail,
+
+          GraduationScarfName: item.GraduationScarfName,
+          EventName: item.EventName,
+          department: item.department,
+
+          totalAmount: item.totalAmount,
+
+          createdAtOne: this.formatDate(item.createdAtOne),
+          payOneAmount: item.payOneAmount,
+          payOneRef: item.payOneRef,
+          payOneImage: item.payOneImage,
+          checkOneDateAt: this.formatDate(item.checkOneDateAt),
+
+          createdAtTwo: this.formatDate(item.createdAtTwo),
+          payTwoAmount: item.payTwoAmount,
+          payTwoRef: item.payTwoRef,
+          payTwoImage: item.payTwoImage,
+          checkTwoDateAt:this.formatDate(item.checkTwoDateAt),
+
+          defaultVisitorCount: item.defaultVisitorCount,
+          VisitorCount: item.VisitorCount,
+
+          qrs: item.qrs,
+          status: item.status,
+
+          OwnerId: item.OwnerId,
+          EventId: item.EventId,
+        }));
+
+        this._DownloadExcelService.exportExcel(
+          orderedData,
+          'All Bookings'
+        );
+      },
+      error: () => {}
+    });
+  }
+
+  // Download Departments Data
+  downloadAllDepartments(): void {
+
+    (this.eventData?.departments || []).forEach((dept: string) => {
+
+      const deptClean = dept.trim().toLowerCase();
+
+      const deptData = this.allBooking.filter(b =>
+        (b.department || '').trim().toLowerCase() === deptClean
+      );
+
+      if (!deptData.length) return;
+
+      from(deptData).pipe(
+        mergeMap(item =>
+          this._UsersService.getUserById(item.userId).pipe(
+            take(1),
+            map(user => ({
+              id: item.id,
+              department: item.department,
+              userImage: item.userImage || '',
+              userName: item.userName,
+              userNameAr: user?.fullNameAr || '',
+              userPhone: item.userPhone,
+              userEmail: item.userEmail,
+              ScarfName: item.GraduationScarfName,
+              status: item.status,
+            }))
+          )
+        ),
+        toArray()
+      ).subscribe(finalData => {
+
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(finalData);
+
+        const workbook: XLSX.WorkBook = {
+          Sheets: { data: worksheet },
+          SheetNames: ['data']
+        };
+
+        const excelBuffer: any = XLSX.write(workbook, {
+          bookType: 'xlsx',
+          type: 'array'
+        });
+
+        const blob: Blob = new Blob([excelBuffer], {
+          type: 'application/octet-stream'
+        });
+
+        saveAs(blob, `${dept}.xlsx`);
+      });
+
     });
 
-    const sheet = XLSX.utils.json_to_sheet(sheetData);
-    const workbook = XLSX.utils.book_new();
+  }
 
-    XLSX.utils.book_append_sheet(workbook, sheet, 'All Bookings');
+  // Download Shield Sheet
+  downloadShieldSheet(): void {
+    from(this.allBooking).pipe(
+      mergeMap(b =>
+        this._UsersService.getUserById(b.userId).pipe(
+          take(1),
+          map(user => ({
+            ...b,
+            userNameAr: user?.fullNameAr || '',
+            userNameEn: user?.fullName || '',
+          }))
+        )
+      ),
+      toArray()
+    ).subscribe({
+      next: (data) => {
 
-    XLSX.writeFile(workbook, 'all-bookings.xlsx');
+        const orderedData = data.map(item => ({
+          userNameEn: item.userNameEn || 'Unknown',
+          userNameAr: item.userNameAr || item.userNameEn || 'Unknown',
+          department: item.department || 'Unknown',
+          userImage: item.userImage || '',
+        }));
+
+        this._DownloadExcelService.exportExcel(
+          orderedData,
+          'Shield-Sheet'
+        );
+      },
+      error: () => {}
+    });
+  }
+
+  // Download Scraf Name Sheet
+  downloadScarfNames(): void {
+    from(this.allBooking).pipe(
+      map(b => ({
+        userName: b.userName || '',
+        ScarfName: b.GraduationScarfName || '',
+        department: b.department || '',
+      })),
+      toArray()
+    ).subscribe({
+      next: (data) => {
+
+        const orderedData = data.map(item => ({
+          ScarfName: item.ScarfName || item.userName || 'Unknown',
+          department: item.department,
+        }));
+
+        this._DownloadExcelService.exportExcel(
+          orderedData,
+          'Scarf Names'
+        );
+      }
+    });
+  }
+
+  // Download Sort Name Sheet By Departments
+  downloadAllDepartmentsSorted(type: 'arabic' | 'english'): void {
+
+    const departments = this.eventData?.departments || [];
+
+    departments.forEach((dept: string) => {
+
+      const deptClean = dept.trim().toLowerCase();
+
+      const deptData = this.allBooking.filter(b =>
+        (b.department || '').trim().toLowerCase() === deptClean
+      );
+
+      if (!deptData.length) return;
+
+      from(deptData).pipe(
+
+        mergeMap(item =>
+          this._UsersService.getUserById(item.userId).pipe(
+            take(1),
+            map(user => ({
+              userNameAr: user?.fullNameAr || item.userName,
+              userName: item.userName,
+              department: item.department,
+            }))
+          )
+        ),
+
+        toArray(),
+
+        map(list => {
+
+          return list.sort((a, b) => {
+
+            const nameA = type === 'arabic' ? a.userNameAr : a.userName;
+            const nameB = type === 'arabic' ? b.userNameAr : b.userName;
+
+            return (nameA || '').localeCompare(
+              nameB || '',
+              type === 'arabic' ? 'ar' : 'en'
+            );
+          });
+
+        })
+
+      ).subscribe(sorted => {
+
+        const sheetData = sorted.map(item => ({
+          userNameAr: item.userNameAr,
+          userName: item.userName,
+          department: item.department,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(sheetData);
+
+        const workbook: XLSX.WorkBook = {
+          Sheets: { data: worksheet },
+          SheetNames: ['data']
+        };
+
+        const buffer = XLSX.write(workbook, {
+          bookType: 'xlsx',
+          type: 'array'
+        });
+
+        const blob = new Blob([buffer], {
+          type: 'application/octet-stream'
+        });
+
+        saveAs(blob, `${dept}-sorted-${type}.xlsx`);
+      });
+
+    });
+  }
+
+
+  // Download Seat No. Sheet
+  downloadDepartmentsWithSeatNumber(): void {
+
+    const departments = this.eventData?.departments || [];
+
+    const prefixMap: { [key: string]: string } = {};
+    let charCode = 65;
+
+    departments.forEach((dept: string) => {
+      prefixMap[dept.trim().toLowerCase()] = String.fromCharCode(charCode++);
+    });
+
+    departments.forEach((dept: string) => {
+
+      const deptClean = dept.trim().toLowerCase();
+      const prefix = prefixMap[deptClean] || '';
+
+      const deptData = this.allBooking.filter(b =>
+        (b.department || '').trim().toLowerCase() === deptClean
+      );
+
+      if (!deptData.length) return;
+
+      from(deptData).pipe(
+
+        mergeMap(item =>
+          this._UsersService.getUserById(item.userId).pipe(
+            take(1),
+            map(user => {
+
+              const outComers =
+                (item?.defaultVisitorCount || 0) +
+                (item?.VisitorCount || 0);
+
+              return {
+                id: item.id,
+                userName: user?.fullName || item.userName,
+                outComers: outComers
+              };
+            })
+          )
+        ),
+
+        toArray(),
+
+        map(list => {
+
+          let counter = 1;
+
+          return list.map(item => ({
+            'Seat No.': `${prefix}${counter++}`,
+            userName: item.userName,
+            OutComers: item.outComers,
+          }));
+        })
+
+      ).subscribe(finalData => {
+
+        const worksheet = XLSX.utils.json_to_sheet(finalData);
+
+        const workbook: XLSX.WorkBook = {
+          Sheets: { data: worksheet },
+          SheetNames: ['data']
+        };
+
+        const buffer = XLSX.write(workbook, {
+          bookType: 'xlsx',
+          type: 'array'
+        });
+
+        const blob = new Blob([buffer], {
+          type: 'application/octet-stream'
+        });
+
+        saveAs(blob, `${dept}-seat-order.xlsx`);
+      });
+
+    });
   }
 
   // Excel Seat No.
@@ -511,78 +801,4 @@ export class OrganizerEventAttendeesComponent {
     XLSX.writeFile(workbook, `${dept}-seat-number.xlsx`);
   }
 
-  // Excel Number A-Z Or أ-ي
-  sortNamesByDepartmentExcel(type: 'arabic' | 'english') {
-
-    Object.keys(this.groupedByDepartment).forEach((dept: string) => {
-
-      const deptData = this.groupedByDepartment[dept];
-
-      let usersData: any[] = [];
-      let completed = 0;
-
-      const total = deptData.length;
-
-      deptData.forEach((item: any, index: number) => {
-
-        this._UsersService.getUserById(item.userId)
-          .subscribe(user => {
-
-            const name =
-              type === 'arabic'
-                ? user?.fullNameAr || item.userName
-                : user?.fullName || item.userName;
-
-            usersData[index] = {
-              name: name
-            };
-
-            completed++;
-
-            // ✅ لما يخلصوا كلهم
-            if (completed === total) {
-
-              // 🔤 Sort
-              usersData.sort((a, b) =>
-                (a.name || '').localeCompare(
-                  b.name || '',
-                  type === 'arabic' ? 'ar' : 'en'
-                )
-              );
-
-              // 📄 تجهيز الشيت
-              const sheetData = usersData.map(x => ({
-                [type === 'arabic'
-                  ? 'الأسماء_بالعربي_أبجدي'
-                  : 'English_Names_Sorted']: x.name
-              }));
-
-              const sheet = XLSX.utils.json_to_sheet(sheetData);
-              const workbook = XLSX.utils.book_new();
-
-              XLSX.utils.book_append_sheet(workbook, sheet, dept);
-
-              XLSX.writeFile(workbook, `${dept}-${type}.xlsx`);
-            }
-
-          });
-
-      });
-
-    });
-  }
-
-  downloadScarfExcel() {
-    const sheetData = this.allBooking.map(item => ({
-      GraduationScarfName: item.GraduationScarfName || item.userName
-    }));
-
-    const sheet = XLSX.utils.json_to_sheet(sheetData);
-
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, sheet, 'Scarf Names');
-
-    XLSX.writeFile(workbook, 'scarf-names.xlsx');
-  }
 }
