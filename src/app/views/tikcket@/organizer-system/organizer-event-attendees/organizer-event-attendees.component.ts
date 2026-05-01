@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { DownloadExcelService } from '@core/services/excel/download-excel.service';
 import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -773,32 +774,38 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
-  // Excel Seat No.
-  seatNumberByDepartmentExcel(dept: string) {
+  // Download All Images
+  async downloadAllImages(): Promise<void> {
+    const zip = new JSZip();
+    const folder = zip.folder('event-images');
 
-    const deptData = this.groupedByDepartment[dept] || [];
+    for (let i = 0; i < this.allBooking.length; i++) {
+      const user = this.allBooking[i];
 
-    let count = 1;
+      if (!user.userImage) continue;
 
-    const prefixMap: any = {
-      'French': 'A',
-      'English': 'B'
-    };
+      try {
+        const response = await fetch(user.userImage);
+        const blob = await response.blob();
 
-    const prefix = prefixMap[dept] || '';
+        const ext =
+          user.userImage.split('.').pop()?.split('?')[0] || 'jpg';
 
-    const sheetData = deptData.map((item: any) => ({
-      SeatNumber: prefix ? `${prefix}${count++}` : '',
-      UserName: item.userName,
-      Department: dept,
-    }));
+        // 🔥 تنظيف الاسم عشان ما يكسرش filename
+        const safeName = (user.userName || `user-${i + 1}`)
+          .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '')
+          .trim()
+          .replace(/\s+/g, '_');
 
-    const sheet = XLSX.utils.json_to_sheet(sheetData);
-    const workbook = XLSX.utils.book_new();
+        folder?.file(`${safeName}.${ext}`, blob);
 
-    XLSX.utils.book_append_sheet(workbook, sheet, dept);
+      } catch (err) {
+        console.log('failed:', user.userName);
+      }
+    }
 
-    XLSX.writeFile(workbook, `${dept}-seat-number.xlsx`);
+    const content = await zip.generateAsync({ type: 'blob' });
+
+    saveAs(content, 'event-images.zip');
   }
-
 }

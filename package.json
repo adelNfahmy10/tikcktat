@@ -48,6 +48,7 @@
     "gumshoejs": "^5.1.2",
     "iconify-icon": "^2.1.0",
     "jsvectormap": "1.3.3",
+    "jszip": "^3.10.1",
     "moment": "^2.30.1",
     "ng-apexcharts": "^1.11.0",
     "ng2-nouislider": "^2.0.0",
