@@ -460,6 +460,7 @@ export class OrganizerEventAttendeesComponent {
         const orderedData = data.map(item => ({
           id: item.id,
           userId: item.userId,
+          StudendId: item?.studentsIDs || '-',
           userImage: item.userImage,
 
           userName: item.userName,
@@ -498,6 +499,38 @@ export class OrganizerEventAttendeesComponent {
         this._DownloadExcelService.exportExcel(
           orderedData,
           'All Bookings'
+        );
+      },
+      error: () => {}
+    });
+  }
+
+   // Download All StudentIDs
+  downloadStudentIDs(): void {
+    from(this.allBooking).pipe(
+      mergeMap(b =>
+        this._UsersService.getUserById(b.userId).pipe(
+          take(1),
+          map(user => ({
+            ...b,
+            userNameAr: user?.fullNameAr || ''
+          }))
+        )
+      ),
+      toArray()
+    ).subscribe({
+      next: (data) => {
+
+        // 👇 ترتيب الأعمدة (كل الداتا + ترتيب ثابت)
+        const orderedData = data.map(item => ({
+          StudendId: item?.studentsIDs || '-',
+          userName: item.userName,
+          userNameAr: item.userNameAr,
+        }));
+
+        this._DownloadExcelService.exportExcel(
+          orderedData,
+          'All Students IDs'
         );
       },
       error: () => {}

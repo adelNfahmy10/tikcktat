@@ -108,6 +108,9 @@
 
         <div class="download d-flex flex-wrap align-items-center gap-2">
           <button class="btn btn-outline-primary" (click)="downloadAll()">All <i class="fa-solid fa-file-csv"></i></button>
+          @if(eventData?.id == 'uvoo0zHQzwK1efCTBynh'){
+            <button class="btn btn-outline-primary" (click)="downloadStudentIDs()">Students IDs <i class="fa-solid fa-file-csv"></i></button>
+          }
           <button class="btn btn-outline-primary" (click)="downloadAllDepartments()">Departments <i class="fa-solid fa-file-csv"></i></button>
           <button class="btn btn-outline-primary" (click)="downloadDepartmentsWithSeatNumber()">Seat No. <i class="fa-solid fa-file-csv"></i></button>
           <button class="btn btn-outline-primary" (click)="downloadShieldSheet()">Shield & Intro<i class="fa-solid fa-file-csv"></i></button>
