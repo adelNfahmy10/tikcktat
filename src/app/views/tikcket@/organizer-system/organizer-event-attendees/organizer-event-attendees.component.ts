@@ -591,7 +591,7 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
-   // Download All StudentIDs
+  // Download All StudentIDs
   downloadStudentIDs(): void {
     from(this.allBooking).pipe(
       mergeMap(b =>
@@ -606,12 +606,16 @@ export class OrganizerEventAttendeesComponent {
       toArray()
     ).subscribe({
       next: (data) => {
+        const orderedData = data.sort((a, b) => {
+          const idA = a?.studentsIDs || '';
+          const idB = b?.studentsIDs || '';
 
-        // 👇 ترتيب الأعمدة (كل الداتا + ترتيب ثابت)
-        const orderedData = data.map(item => ({
+          return idA.localeCompare(idB, undefined, { numeric: true });
+        })
+        .map(item => ({
           StudendId: item?.studentsIDs || '-',
-          userName: item.userName,
           userNameAr: item.userNameAr,
+          userName: item.userName,
         }));
 
         this._DownloadExcelService.exportExcel(
@@ -811,7 +815,6 @@ export class OrganizerEventAttendeesComponent {
 
     });
   }
-
 
   // Download Seat No. Sheet
   downloadDepartmentsWithSeatNumber(): void {
