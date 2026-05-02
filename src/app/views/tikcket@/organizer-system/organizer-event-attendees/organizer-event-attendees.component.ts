@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
@@ -29,6 +29,7 @@ export class OrganizerEventAttendeesComponent {
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _DownloadExcelService = inject(DownloadExcelService)
+  private readonly _Router = inject(Router)
   private modalService = inject(NgbModal)
 
   eventId:string | null = null
@@ -52,20 +53,79 @@ export class OrganizerEventAttendeesComponent {
 
   taxAmount: number = 0.02; // 2%
 
-
   ngOnInit() {
     this.getAttendeesByEventId()
     this.getEventById()
     this.getAllUsers()
     this.buildAttendees()
+    setTimeout(() => {
+      this.initStorageWatcher();
+    }, 1500);
   }
 
+  // #################### Check Change Any Data in LocalStorage ####################
+  initialUserId: string | null = null;
+  initialRole: string | null = null;
+  intervalId: any;
+  isWatching = false;
+
+  initStorageWatcher(): void {
+    if (this.isWatching) return;
+
+    this.initialUserId = localStorage.getItem('userId');
+    this.initialRole = localStorage.getItem('role');
+
+    this.isWatching = true;
+
+    this.intervalId = setInterval(() => {
+      const currentUserId = localStorage.getItem('userId');
+      const currentRole = localStorage.getItem('role');
+
+      if (
+        currentUserId !== this.initialUserId ||
+        currentRole !== this.initialRole
+      ) {
+        this.forceLogout();
+      }
+    }, 1000);
+  }
+
+  forceLogout(): void {
+    clearInterval(this.intervalId);
+
+    localStorage.clear();
+
+    this._ToastrService.error(
+      'You have been logged out due to unauthorized changes'
+    );
+
+   this._Router.navigate(['/']).then(() => {
+      window.location.reload();
+    });
+
+  }
+
+  checkEventOwner(): void {
+    this.initialUserId = localStorage.getItem('userId');
+    const eventOwnerId = this.eventData?.OwnerId;
+
+    if (!this.initialUserId || this.initialUserId !== eventOwnerId) {
+      this._Router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
+    }
+  }
+  // #################### Check Change Any Data in LocalStorage ####################
+
+
+  // #################### Start Get Event By ID ####################
   getEventById(): void {
     this._NgxSpinnerService.show()
     this._EventService.getEventById(this.eventId!).subscribe({
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
+        this.checkEventOwner()
       },
       error: (err) => {
         this._NgxSpinnerService.hide()
@@ -74,9 +134,22 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+
+  // #################### Start Get All Users ####################
   getAllUsers(): void {
     this._NgxSpinnerService.show()
     this._UsersService.getAllUsers().subscribe({
+      next: (res) => {
+        this._NgxSpinnerService.hide()
+        this.allUsers = res;
+        this.mergeData(); // 🔥 مهم
+      }
+    });
+  }
+
+  // #################### Start Get Owner By Id ####################
+  getUserById():void{
+    this._UsersService.getOwners().subscribe({
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.allUsers = res;
@@ -131,7 +204,7 @@ export class OrganizerEventAttendeesComponent {
           // 💰 total revenue
           this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
 
-          this.totalTaxes = this.totalRevenue * 0.02;
+          this.totalTaxes = Math.ceil(this.totalRevenue * 0.02);
 
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {
@@ -233,17 +306,19 @@ export class OrganizerEventAttendeesComponent {
   }
 
   getTax(amount: number): number {
-    return amount * this.taxAmount;
+    return Math.floor(amount * this.taxAmount);
   }
 
   getFinal(amount: number): number {
     return amount - this.getTax(amount);
   }
 
-  paidAmount:number = 0
+  paidAmount:number | null = null
+  MsgErr:string = ''
 
   async paidCheck() {
     this._NgxSpinnerService.show();
+
     if(this.bookDataById?.userEmail){
       if(!this.bookDataById.payOneAmount){
         this._BookingService.updateBooking(this.bookDataById.id, {
@@ -254,7 +329,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: () => {
             this._NgxSpinnerService.hide();
-            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
+            // this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid One Check Successfully');
             this.modalService.dismissAll();
             this.paidAmount = 0
@@ -271,7 +346,16 @@ export class OrganizerEventAttendeesComponent {
 
         // ✅ validation
         if (totalPaid < eventPrice) {
+          this._NgxSpinnerService.hide();
           this._ToastrService.error('❌ المبلغ المدفوع أقل من سعر الحفلة');
+          this.MsgErr = '❌ المبلغ المدفوع أقل من سعر الحفلة'
+          return;
+        }
+
+        if (this.paidAmount != this.bookDataById?.totalReq) {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('❌ المبلغ غير مطابق للمطلوب دفعه');
+          this.MsgErr = '❌ المبلغ غير مطابق للمطلوب دفعه'
           return;
         }
 
@@ -284,19 +368,21 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
+            // this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
           },
           error: (err) => {
             this._NgxSpinnerService.hide();
             this._ToastrService.error('❌ Paid Two Check Failed');
+            this.MsgErr = '❌ Paid Two Check Failed'
           }
         });
       }
 
     } else {
       this._ToastrService.error('Not Fount User Email');
+      this.MsgErr = 'Not Fount User Email'
     }
 
   }

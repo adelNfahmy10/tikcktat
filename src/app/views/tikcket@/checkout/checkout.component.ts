@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
 import { arrayUnion } from 'firebase/firestore';
+import { calculateTimeToEvent } from '../../../core/helper/utils';
 
 export interface Seat {
   id: string;
@@ -129,6 +130,7 @@ export class CheckoutComponent {
           if (booking) {
             this.isReturningUser = true;
             this.bookingData = booking;
+            this.calculateFinalPaid()
           } else {
             this.isReturningUser = false;
           }
@@ -219,6 +221,8 @@ export class CheckoutComponent {
     qrs:[null, [Validators.required, Validators.min(0)]],
   })
 
+  MsgErr:string = ''
+
   // Modal Check Data Logic
   openModal(content: TemplateRef<HTMLElement>, options: NgbModalOptions) {
     if(this.userData.fullName && this.userData.phone && this.userData.email){
@@ -243,11 +247,57 @@ export class CheckoutComponent {
     this._NgxSpinnerService.show()
     const studentId = Number(this.checkoutForm.get('studentsIDs')?.value);
 
+    // ✅ Validate Event ID
+    if (!this.eventId) {
+      this._ToastrService.error('الحفلة غير موجودة');
+      this.MsgErr = 'الحفلة غير موجودة'
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    // ✅ Validate Scarf Name
+    if (!this.checkoutForm.get('GraduationScarfName')?.value) {
+      this._ToastrService.error('برجاء إدخال الإسم على الوشاح');
+      this.MsgErr = 'برجاء إدخال الإسم على الوشاح'
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    // ✅ Validate Department
+    const hasDepartments = this.eventData?.departments?.length > 0;
+    if (hasDepartments && !this.checkoutForm.get('department')?.value) {
+      this._ToastrService.error('برجاء أدخل القسم');
+      this.MsgErr = 'برجاء أدخل القسم'
+      this._NgxSpinnerService.hide();
+      return;
+    }
+
+    // ✅ Validate Your Photo
+    if (!this.selectedFile) {
+      this._ToastrService.error('برجاء رفع صورتك الخاصة بالحفل');
+      this.MsgErr = 'برجاء رفع صورتك الخاصة بالحفل'
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
+
+    // ✅ Validate Payment Image
+    if (!this.selectedPaymentFile) {
+      this._ToastrService.error('برجاء رفع صورة الدفع');
+      this.MsgErr ='برجاء رفع صورة الدفع'
+      this._NgxSpinnerService.hide()
+      return;
+    }
+
+    // ✅ Validate Student ID In List
     if (this.eventId === 'uvoo0zHQzwK1efCTBynh') {
 
       // ✅ موجود في الليستة الأساسية
       if (!this.validStudentIds.includes(studentId)) {
         this._ToastrService.error('الـ ID غير صحيح');
+        this.MsgErr = 'الـ ID غير صحيح'
         this._NgxSpinnerService.hide();
         return;
       }
@@ -255,56 +305,24 @@ export class CheckoutComponent {
       // ✅ متحجز قبل كدا
       if (this.bookedStudentIds.includes(studentId)) {
         this._ToastrService.error('تم استخدام هذا الـ ID من قبل');
+        this.MsgErr = 'تم استخدام هذا الـ ID من قبل'
         this._NgxSpinnerService.hide();
         return;
       }
 
     }
 
-    // ✅ 1. Validate
-    if (!this.selectedFile) {
-      this._ToastrService.error('برجاء رفع صورتك الخاصة بالحفل');
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
-
-    if (!this.selectedPaymentFile) {
-      this._ToastrService.error('برجاء رفع صورة الدفع');
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
-
-    if (!this.checkoutForm.get('GraduationScarfName')?.value) {
-      this._ToastrService.error('برجاء إدخال الإسم على الوشاح');
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
-
-    const hasDepartments = this.eventData?.departments?.length > 0;
-    if (hasDepartments && !this.checkoutForm.get('department')?.value) {
-      this._ToastrService.error('برجاء أدخل القسم');
-      this._NgxSpinnerService.hide();
-      return;
-    }
-
+    // ✅ Validate Student IDs
     if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'uvoo0zHQzwK1efCTBynh'){
       if (!this.checkoutForm.get('studentsIDs')?.value) {
         this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
+        this.MsgErr = 'برجاء أدخل (ID) الخاص بك'
         this._NgxSpinnerService.hide()
 
         return;
       }
     }
 
-    if (!this.eventId) {
-      this._ToastrService.error('الحفلة غير موجودة');
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
 
     try {
       this._NgxSpinnerService.show()
@@ -417,36 +435,82 @@ export class CheckoutComponent {
     reader.readAsDataURL(this.selectedPaymentFile);
   }
 
-  calculatePriceAfterFinalPaid(): void {
-    if (this.isReturningUser) {
+  payOneNetForView:number = 0
+  // View Final Payment Checkout
+  calculateFinalPaid():void{
+    if (!this.isReturningUser) return;
 
-      this.paidTwo = this.eventData.VisitorPrice * this.visitorCount;
+      // 1. اللي اتدفع قبل كده (gross → net)
+      const payOneGross = this.bookingData?.payOneAmount || 0;
+      const payOneNet = Math.floor(payOneGross / 1.02);
+      this.payOneNetForView = Math.floor(payOneNet);
 
-      this.subTotal = (this.eventData.TicketPrice - this.bookingData.payOneAmount || 0) + this.paidTwo;
+      // 2. حساب التذكرة المتبقية
+      const ticketRemaining = this.eventData.TicketPrice - payOneNet;
 
-      this.tax = this.subTotal * 0.02; // مثال 2%
+      // 4. subtotal الحقيقي
+      this.subTotal = ticketRemaining;
 
+      // 5. fees على اللي هيتدفع دلوقتي بس
+      this.tax = this.subTotal * 0.02;
+
+      // 6. الإجمالي
       this.total = this.subTotal + this.tax;
-    }
+
+      // optional rounding في الآخر
+      this.subTotal = Math.floor(this.subTotal);
+      this.tax = Math.floor(this.tax);
+      this.total = Math.floor(this.total);
+  }
+
+  // View Visitors Count Price
+  calculateVisitorsPrice(): void {
+    if (!this.isReturningUser) return;
+
+    // 3. حساب المرافق (Net كامل مش fees)
+    const visitorsNet = this.eventData.VisitorPrice * this.visitorCount;
+
+    this.subTotal = visitorsNet
+
+    // 5. fees على اللي هيتدفع دلوقتي بس
+    this.tax = this.subTotal * 0.02;
+
+    // 6. الإجمالي
+    this.total = this.subTotal + this.tax;
+
+    // optional rounding في الآخر
+    this.subTotal = Math.floor(this.subTotal);
+    this.tax = Math.floor(this.tax);
+    this.total = Math.floor(this.total);
   }
 
   async continueBooking() {
     this._NgxSpinnerService.show();
 
+    if (!this.selectedPaymentFile) {
+      this._ToastrService.error('برجاء رفع صورة الدفع');
+      this.MsgErr = 'برجاء رفع صورة الدفع'
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
     if (this.isReturningUser) {
+      this.MsgErr = ''
       const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
 
       // 🔥 Generate QRs
-      const totalPersons = this.visitorCount + this.bookingData.defaultVisitorCount;
+      const totalPersons = this.bookingData.defaultVisitorCount + 1;
       const qrs = this.generateQRs(totalPersons, this.bookingData.id);
 
       this._BookingService.updateBooking(this.bookingData.id, {
-        VisitorCount: this.visitorCount,
-        totalVisitors: this.visitorCount + this.bookingData.defaultVisitorCount,
+        // VisitorCount: this.visitorCount,
+        // totalVisitors: this.visitorCount + this.bookingData.defaultVisitorCount,
         payTwoAmount: 0,
         payTwoImage: imagePaymentUrl,
         payTwoRef: this.transactionRef,
         createdAtTwo: new Date(),
+
+        totalReq: this.total,
 
         // ✅ الجزء الجديد
         qrs: qrs,
@@ -457,11 +521,6 @@ export class CheckoutComponent {
           this._ToastrService.success('Booking Completed Successfully');
 
           // reset
-          this.visitorCount = 0;
-          this.paidTwo = 0;
-          this.tax = 0;
-          this.subTotal = 0;
-          this.total = 0;
           this.transactionRef = '';
           this.selectedFile = null;
           this.selectedPaymentFile = null;

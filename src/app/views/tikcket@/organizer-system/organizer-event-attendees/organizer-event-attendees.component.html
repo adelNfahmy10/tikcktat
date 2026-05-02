@@ -24,13 +24,13 @@
         </div>
 
         <!-- Total Visitors -->
-        <div class="col-lg-3 col-md-6 col-12">
+        <div class="col-lg-4 col-md-6 col-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between gap-5">
                 <div class="flex-grow-1">
                   <h4 class="card-title mb-2">Total Visitors</h4>
-                  <div class="w-100">
+                  <div class="w-100 d-flex justify-content-between align-items-center flex-wrap">
                     <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount || 0 | number }} Outcomers</p>
                     <div>
                       <span class="fw-bold main-color">{{totalDefaultVisitorCount || 0 | number }} Defualt</span>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Total Tax -->
-        <div class="col-lg-3 col-md-6 col-12">
+        <div class="col-lg-2 col-md-6 col-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
@@ -327,7 +327,7 @@
                   <br>
 
                   <span>
-                    Tax : (2%):
+                    Tax (2%):
                     {{ getTax(user?.totalAmount) | number:'1.0-2' }} EGP
                   </span>
                   <br>
@@ -672,13 +672,19 @@
         } @else if(!bookDataById?.payTwoAmount){
           <div class="row g-3">
             <div class="col-12">
+              <h3 class="main-color text-center">Remaining Amount : <br> <span class="fw-bold">{{bookDataById?.totalReq}} EGP</span> </h3>
+
               <div class="checkOne">
                 <small>User Amount Paid</small>
                 <input [(ngModel)]="paidAmount" min="0" class="form-control" type="number" name="checkOne" id="checkOne" placeholder="Enter User Amount Paid EGP...">
               </div>
 
               <div class="text-center mt-2">
-                <button class="btn main-btn w-100" (click)="paidCheck()">
+                <span class="text-danger fw-bold">{{MsgErr}}</span>
+              </div>
+
+              <div class="text-center mt-2">
+                <button class="btn main-btn w-100" [disabled]='paidAmount != bookDataById?.totalReq' (click)="paidCheck()">
                   Submit
                 </button>
               </div>
@@ -687,7 +693,7 @@
               <span>Second Transaction Image</span>
               @if(bookDataById?.payTwoImage){
                 <div class="images">
-                  <img loading="lazy" [src]="bookDataById?.payOneImage" alt="First Transaction">
+                  <img loading="lazy" [src]="bookDataById?.payTwoImage" alt="First Transaction">
                 </div>
               }
             </div>
