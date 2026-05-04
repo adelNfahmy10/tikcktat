@@ -228,9 +228,9 @@ export class AvailableEventsDetailsComponent {
 
   // Email Send
   async sendOTP() {
-    emailjs.init('grpqR9ujg1Mc1BIbe');
+    emailjs.init('1FX7lfc7iRKkWW7r1');
     try {
-      const send = await emailjs.send("service_zle7bi3","template_zh7ow2a",{
+      const send = await emailjs.send("service_k3ieexg","template_igvplap",{
         name: this.registerForm.value.fullName,
         otp: this.OTP,
         email: this.registerForm.value.email,
