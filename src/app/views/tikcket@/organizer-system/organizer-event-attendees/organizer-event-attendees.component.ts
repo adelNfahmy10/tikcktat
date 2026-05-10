@@ -108,8 +108,9 @@ export class OrganizerEventAttendeesComponent {
   checkEventOwner(): void {
     this.initialUserId = localStorage.getItem('userId');
     const eventOwnerId = this.eventData?.OwnerId;
+    const TicketatAdmin = 'jDVUo3eEtlWOMBAvlacWLlQ8odN2';
 
-    if (!this.initialUserId || this.initialUserId !== eventOwnerId) {
+    if (!this.initialUserId || ( this.initialUserId !== eventOwnerId && this.initialUserId !== TicketatAdmin)) {
       this._Router.navigate(['/']).then(() => {
         window.location.reload();
       });
