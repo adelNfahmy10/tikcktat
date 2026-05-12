@@ -1,0 +1,47 @@
+.social-media {
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-size: 16px;
+
+    &:hover {
+      transform: translateY(-3px);
+      opacity: 0.9;
+    }
+  }
+
+  .facebook {
+    background: #1877f2;
+  }
+
+  .instagram {
+    background: linear-gradient(
+      45deg,
+      #f09433,
+      #e6683c,
+      #dc2743,
+      #cc2366,
+      #bc1888
+    );
+  }
+
+  .whatsapp {
+    background: #25d366;
+  }
+}
+
+.contact-link {
+  text-decoration: none;
+  color: #6b7280;
+
+  &:hover {
+    color: #111827;
+  }
+}

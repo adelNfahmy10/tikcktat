@@ -23,6 +23,7 @@ import { AvailableEventsDetailsComponent } from './tikcket@/available-events-det
 import { TermsAndConditionsComponent } from './tikcket@/terms-and-conditions/terms-and-conditions.component'
 import { OrderSuccessComponent } from './tikcket@/order-success/order-success.component'
 import { MyBookingComponent } from './tikcket@/my-booking/my-booking.component'
+import { ContactUsComponent } from './tikcket@/contact-us/contact-us.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -129,6 +130,11 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'terms-condition',
     component: TermsAndConditionsComponent,
     data: { title: 'Terms and Conditions' },
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent,
+    data: { title: 'Contact Us' },
   },
 
   {

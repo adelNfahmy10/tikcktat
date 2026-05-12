@@ -74,6 +74,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     label: 'Ticketat Terms & Conditions',
     url: '/terms-condition',
   },
+  {
+    key: 'contact-us',
+    label: 'Contact Us',
+    url: '/contact-us',
+  },
 
 
 
