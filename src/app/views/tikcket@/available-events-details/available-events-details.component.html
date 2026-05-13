@@ -11,24 +11,13 @@
         <p>
           Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
           Date : <span> To be determined (TBD) </span> <br>
-          <!-- Date :  @if(event?.id != 'k2vYgk5ekOaZLp7y3x1U'){
-                    <span> {{event?.Date | date:'dd/MM/YYYY'}} </span> <br>
-                  } @else {
-                    <span> To be determined (TBD) </span> <br>
-                  } -->
-          <!-- Ticket Price: <span class="text-dark"> {{eventData?.TicketPrice | number}} EGP </span> <br> -->
-          <!-- @if(eventData?.id != 'k2vYgk5ekOaZLp7y3x1U'){
-            Outcomer Price: <span class="text-dark"> {{eventData?.VisitorPrice | number}} EGP </span>
-          } @else {
-            Outcomer Price: <span class="text-dark"> To be determined (TBD) </span>
-          } -->
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>
-        <ul>
+        <ul class="list-unstyled">
             @for (item of features; track $index) {
               <li>
-                {{ item }}
+                - {{ item }}
               </li>
             }
           </ul>
@@ -41,7 +30,7 @@
               </h2>
               <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body" ngbAccordionBody >
-                  <ul class="entry-rules list-unstyled">
+                  <ul class="list-unstyled">
                      @for (item of terms; track $index) {
                       <li>
                         {{ item }}
