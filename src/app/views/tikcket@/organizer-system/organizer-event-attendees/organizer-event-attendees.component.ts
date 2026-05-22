@@ -32,6 +32,7 @@ export class OrganizerEventAttendeesComponent {
   private readonly _Router = inject(Router)
   private modalService = inject(NgbModal)
 
+  role:string | null = localStorage.getItem('role')
   eventId:string | null = null
   eventData: any = {};
 
@@ -227,6 +228,7 @@ export class OrganizerEventAttendeesComponent {
       });
   }
 
+  eventName:string = ''
   getBookById(id:any):void{
     this._NgxSpinnerService.show()
     this._BookingService.getBookingById(id).subscribe({

@@ -150,6 +150,22 @@
                 </div>
               </th>
 
+              <th (click)="sort('ownerPayment')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Owner Payment</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'ownerPayment' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'ownerPayment' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('status')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
@@ -199,6 +215,7 @@
                 <td>
                     {{ event?.Date | date:'dd/MM/yyyy' }}
                 </td>
+                <td>{{ event?.ownerPayment || 0 | number}} EGP</td>
                 <td>
                   <span
                     class="badge"

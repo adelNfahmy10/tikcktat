@@ -46,7 +46,7 @@ export const MENU_ITEMS: MenuItemType[] = [
   },
   {
     key: 'add-event',
-    label: 'Add New Eevents',
+    label: 'Add New Events',
     url: '/add-event',
   },
   {
@@ -56,7 +56,7 @@ export const MENU_ITEMS: MenuItemType[] = [
   },
   {
     key: 'all-view',
-    label: 'View Eevents',
+    label: 'View Events',
     url: '/all-events',
   },
   {
@@ -64,11 +64,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     label: 'View Owners',
     url: '/owners',
   },
-  {
-    key: 'all-users',
-    label: 'View Users',
-    url: '/users',
-  },
+  // {
+  //   key: 'all-users',
+  //   label: 'View Users',
+  //   url: '/users',
+  // },
   {
     key: 'my-bookings',
     label: 'My Bookings',
