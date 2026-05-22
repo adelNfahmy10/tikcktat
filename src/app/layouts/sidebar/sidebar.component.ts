@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit {
   }
 
   initMenu(): void {
-    const adminOnlyKeys = ['add-event', 'all-view', 'add-new-owner', 'owners'];
+    const adminOnlyKeys = ['add-event', 'all-view', 'add-new-owner', 'owners', 'all-users'];
     const ownerOnlyKeys = ['organizer-events'];
     // const userOnlyKeys = ['my-bookings'];
 

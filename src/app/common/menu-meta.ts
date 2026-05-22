@@ -40,14 +40,19 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/home',
   },
   {
-    key: 'organizer-events',
-    label: 'My Events',
-    url: '/organizer-events',
+    key: 'add-new-owner',
+    label: 'Add New Owner',
+    url: '/register',
   },
   {
     key: 'add-event',
-    label: 'Add Eevents',
+    label: 'Add New Eevents',
     url: '/add-event',
+  },
+  {
+    key: 'organizer-events',
+    label: 'My Events',
+    url: '/organizer-events',
   },
   {
     key: 'all-view',
@@ -55,14 +60,14 @@ export const MENU_ITEMS: MenuItemType[] = [
     url: '/all-events',
   },
   {
-    key: 'add-new-owner',
-    label: 'Add New Owner',
-    url: '/register',
+    key: 'owners',
+    label: 'View Owners',
+    url: '/owners',
   },
   {
-    key: 'owners',
-    label: 'Owners',
-    url: '/owners',
+    key: 'all-users',
+    label: 'View Users',
+    url: '/users',
   },
   {
     key: 'my-bookings',
