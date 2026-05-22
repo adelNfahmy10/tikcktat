@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
+import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -15,6 +17,7 @@ import * as XLSX from 'xlsx';
 export class AdminViewEventComponent{
   private readonly _EventService = inject(EventService)
   private readonly _UsersService = inject(UsersService)
+  private readonly _ToastrService = inject(ToastrService)
 
   allEvents:any[] = []
   allOwners: any[] = [];
@@ -73,6 +76,41 @@ export class AdminViewEventComponent{
         ownerName: owner?.fullName || 'Unknown'
       };
     });
+  }
+
+
+  ownerPaymentInEvent:any = {}
+  amountPayment:number = 0
+  eventId:string = ''
+
+  getEventById(id:string):void{
+    this.eventId = id
+    this._EventService.getEventById(id)
+    .pipe(
+      map((res: any) => {
+        return {
+          eventName: res.EventName,
+          ownerPayment: res.ownerPayment
+        };
+      })
+    )
+    .subscribe({
+      next: (res) => {
+        this.ownerPaymentInEvent = res
+        console.log(this.ownerPaymentInEvent);
+      }
+    });
+  }
+
+  updateOwnerPayment():void{
+    this._EventService.updateOwnerPaymentInEvent(this.eventId, this.amountPayment).subscribe({
+      next:(res)=>{
+        this._ToastrService.success('Payment has been added successfully');
+        this.ownerPaymentInEvent = {}
+        this.amountPayment = 0
+        this.eventId = ''
+      }
+    })
   }
 
   // 🔍 Search

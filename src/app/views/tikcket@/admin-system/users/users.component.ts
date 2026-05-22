@@ -78,37 +78,9 @@ export class UsersComponent {
       .map((b: any) => b?.checkOneDateAt?.toDate())
     }));
 
-    console.log(this.allUsers);
-
 
     this.filteredData = [...this.allUsers];
     this.updatePagination();
-  }
-
-
-  sendConfirmEmail(email:string, eventName:string, userName:string):void{
-    this.sendEmailToUser(email, eventName, userName)
-  }
-
-  // Email Send
-  async sendEmailToUser(email:string, eventName:string, userName:string) {
-    emailjs.init('1FX7lfc7iRKkWW7r1');
-    try {
-      const send = await emailjs.send("service_k3ieexg","template_2wo6cnq",{
-        title: "Ticketateg Check Your Ticket",
-        email: email,
-        eventName: eventName,
-        userName: userName,
-      });
-
-      this._ToastrService.success('Email Sent');
-
-      return send;
-    } catch (err) {
-      console.error('EMAIL ERROR:', err);
-      this._ToastrService.warning('Email failed but booking is saved');
-      throw err;
-    }
   }
 
   applySearch() {
@@ -164,5 +136,30 @@ export class UsersComponent {
     if (p < 1 || p > this.totalPages.length) return;
     this.page = p;
     this.updatePagination();
+  }
+
+  // Email Send
+  sendConfirmEmail(email:string, eventName:string, userName:string):void{
+    this.sendEmailToUser(email, eventName, userName)
+  }
+
+  async sendEmailToUser(email:string, eventName:string, userName:string) {
+    emailjs.init('1FX7lfc7iRKkWW7r1');
+    try {
+      const send = await emailjs.send("service_k3ieexg","template_2wo6cnq",{
+        title: "Ticketateg Check Your Ticket",
+        email: email,
+        eventName: eventName,
+        userName: userName,
+      });
+
+      this._ToastrService.success('Email Sent');
+
+      return send;
+    } catch (err) {
+      console.error('EMAIL ERROR:', err);
+      this._ToastrService.warning('Email failed but booking is saved');
+      throw err;
+    }
   }
 }

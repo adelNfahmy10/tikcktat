@@ -169,7 +169,7 @@
         </table>
       </div>
 
-      <ul class="pagination justify-content-center">
+      <ul class="pagination justify-content-center flex-wrap">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
         </li>
@@ -184,6 +184,16 @@
           <a class="page-link" (click)="changePage(page + 1)">Next</a>
         </li>
       </ul>
+
+      <div class="d-flex align-items-center gap-1">
+        <label for="pagesize">Change Page Size :</label>
+        <select class="form-control w-25" id="pagesize" [(ngModel)]="pageSize" (change)="updatePagination()">
+          <option [value]="10">10</option>
+          <option [value]="15">15</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
     </div>
 
   </div>

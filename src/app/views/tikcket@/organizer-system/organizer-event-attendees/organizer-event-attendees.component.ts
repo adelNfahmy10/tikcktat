@@ -126,6 +126,9 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
+        console.log(this.eventData);
+
+        this.totalTaxes = (this.eventData?.TicketPrice * this.eventData?.bookingCount) * 0.02
         this.checkEventOwner()
       },
       error: (err) => {

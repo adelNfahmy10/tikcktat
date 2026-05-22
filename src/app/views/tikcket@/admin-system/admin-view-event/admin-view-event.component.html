@@ -14,7 +14,6 @@
         </div>
 
         <div class="download d-flex align-items-center gap-2">
-          <!-- <button class="btn btn-outline-primary" (click)="open(content)">Assign Owner</button> -->
           <button class="btn btn-outline-primary" (click)="downloadAllEvents()">Download <i class="fa-solid fa-file-csv"></i></button>
         </div>
       </div>
@@ -151,6 +150,22 @@
                 </div>
               </th>
 
+              <th (click)="sort('ownerPayment')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Owner Payment</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'ownerPayment' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'ownerPayment' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
               <th (click)="sort('status')" class="sortable">
                 <div class="d-flex justify-content-center align-items-center">
                   <span>Status</span>
@@ -193,13 +208,14 @@
                     {{ event?.LocationName }}
                   </a>
                 </td>
-                <td>{{ event?.TicketPrice | number }} EGP</td>
-                <td>{{ event?.VisitorPrice | number }} EGP</td>
-                <td>{{ event?.TicketCount }} Tickets</td>
-                <td>{{ event?.TicketCount - event?.bookingCount || event?.TicketCount }} Tickets</td>
+                <td>{{ event?.TicketPrice || 0 | number }} EGP</td>
+                <td>{{ event?.VisitorPrice || 0 | number }} EGP</td>
+                <td>{{ event?.TicketCount || 0 }} Tickets</td>
+                <td>{{ event?.TicketCount - event?.bookingCount || event?.TicketCount || 0 }} Tickets</td>
                 <td>
                     {{ event?.Date | date:'dd/MM/yyyy' }}
                 </td>
+                <td>{{ event?.ownerPayment || 0 | number}} EGP</td>
                 <td>
                   <span
                     class="badge"
@@ -211,6 +227,7 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
+                    <i class="fa-solid fa-money-bill-transfer cr fs-4 second-color" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getEventById(event?.id)"></i>
                     <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.Type + '/' + event?.id"></i>
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>
                   </div>
@@ -221,7 +238,7 @@
         </table>
       </div>
 
-      <ul class="pagination justify-content-center">
+      <ul class="pagination justify-content-center flex-wrap">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="changePage(page - 1)">Prev</a>
         </li>
@@ -236,67 +253,40 @@
           <a class="page-link" (click)="changePage(page + 1)">Next</a>
         </li>
       </ul>
+
+      <div class="d-flex align-items-center gap-1">
+        <label for="pagesize">Change Page Size :</label>
+        <select class="form-control w-25" id="pagesize" [(ngModel)]="pageSize" (change)="updatePagination()">
+          <option [value]="10">10</option>
+          <option [value]="15">15</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
     </div>
 
   </div>
 </section>
 
-<!--
-<ng-template
-  #content
-  let-modal
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">Assign Owner To Event</h5>
-      <button
-        (click)="modal.close('click')"
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <form class="row g-3" [formGroup]="assignForm">
-        <div class="Owner col-md-6">
-          <label for="Owner" class="form-label">Owner</label>
-          <select class="form-select" formControlName="userId" name="Owner" id="Owner">
-            <option value="" selected disabled>Choose Event Owner</option>
-            @for (user of allUsers; track $index) {
-              <option [value]="user.id">{{user.fullName}}</option>
-            }
-          </select>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Owner Payment</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="payment">
+          <h6 class="main-color text-center fw-bold">Amount Payment : {{ownerPaymentInEvent.eventName || 0}} EGP</h6>
+          <h4 class="second-color text-center fw-bold">Amount Payment : {{ownerPaymentInEvent.ownerPayment || 0}} EGP</h4>
+          <label for="paid">Amount Payment</label>
+          <input [(ngModel)]="amountPayment" type="text" name="paid" id="paid" class="form-control" placeholder="Amount Payment">
         </div>
-
-        <div class="Events col-md-6">
-          <label for="Events" class="form-label">Events</label>
-          <select class="form-select" formControlName="eventId" name="Events" id="Events">
-            <option value="" selected disabled>Choose Event</option>
-            @for (event of allEvents; track $index) {
-              <option [value]="event?.id">{{event?.name}}</option>
-            }
-          </select>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button
-        (click)="modal.close('click')"
-        type="button"
-        class="btn btn-secondary"
-        data-bs-dismiss="modal"
-      >
-        Close
-      </button>
-      <button type="button" class="btn btn-primary" (click)="submitAssignOwnerToEvent()">
-        Save changes
-      </button>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" [disabled]="!amountPayment" (click)="updateOwnerPayment()" data-bs-dismiss="modal" aria-label="Close">Save</button>
+      </div>
     </div>
   </div>
-</ng-template> -->
+</div>

@@ -16,6 +16,16 @@ export class EventService {
     return from(addDoc(eventsRef, event));
   }
 
+  updateOwnerPaymentInEvent(eventId: string, amount: number) {
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+
+    return from(
+      updateDoc(eventRef, {
+        ownerPayment: increment(amount)
+      })
+    );
+  }
+
   // 🔥 Update Event Tickets (بعد الحجز)
   updateEventTickets(eventId: string, bookedTickets: number) {
     const eventRef = doc(this.firestore, `events/${eventId}`);
@@ -83,7 +93,6 @@ export class EventService {
       .then(res => res.json())
       .then(data => data.secure_url);
   }
-
 
 
   // private readonly _HttpClient = inject(HttpClient)
