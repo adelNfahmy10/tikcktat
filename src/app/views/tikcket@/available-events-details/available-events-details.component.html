@@ -6,15 +6,15 @@
       </div>
 
       <div class="event-details my-3">
-        <h1 class="fw-bold mb-1">{{eventData?.EventName}}</h1>
-        <h4 class="fw-semibold mb-2 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
-        <p>
+        <h1 class="fw-bold">{{eventData?.EventName}}</h1>
+        <h4 class="fw-semibold my-3 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
+        <p class="mb-3">
           Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
           Date : <span> To be determined (TBD) </span> <br>
         </p>
 
         <h4 class="fw-bold">Event Details :</h4>
-        <ul class="list-unstyled">
+        <ul class="list-unstyled my-2">
             @for (item of features; track $index) {
               <li>
                 - {{ item }}
@@ -70,18 +70,20 @@
       <h5 class="modal-title" id="exampleModalCenterTitle">
         Please Register To Book Your Ticket
       </h5>
-      <button
-        type="button"
-        class="btn-close"
-        (click)="modal.close()"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      ></button>
+      @if(!OTP){
+        <button
+          type="button"
+          class="btn-close"
+          (click)="modal.close()"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      }
     </div>
     <div class="modal-body">
       @if(haveAcc){
-        <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
         @if(!OTP){
+          <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
           <form class="mt-2" [formGroup]="registerForm">
             <div class="mb-3">
               <label class="form-label">Full Name (English)</label>
@@ -209,10 +211,12 @@
 
               }
             </div>
+
+            <p class="text-danger fw-bold text-center m-0">{{emailExistsMsg}}</p>
           </form>
         } @else {
           <div class="mb-3 mt-2">
-            <h4 class="fw-bold">Please check your email. An OTP has been sent to you.</h4>
+            <h4 class="fw-bold">Please check your email <br> ( <span class="main-color">{{registerForm.get('email')?.value}}</span> ). An OTP has been sent to you.</h4>
             <label class="form-label">One-Time Password 6 Digits (OTP)</label>
             <input
               type="number"
@@ -226,11 +230,27 @@
               <small class="text-danger">{{otpMsg}}</small>
             }
 
-            <div class="cr mt-3 mb-1 d-flex align-items-center gap-1" (click)="resetOTP()">
-              <i class="fa-solid fa-arrow-left"></i>
-              <span>Back</span>
-            </div>
+            @if(haveAcc){
+              @if(OTP){
+                <div class="d-flex flex-column gap-1">
+                  <div class="d-flex align-items-center gap-1">
+                    <span>Resend OTP in</span>
 
+                    <span
+                      class="m-2 d-inline-block"
+                      [class.main-color]="timer !== '00:00'"
+                      [class.text-danger]="timer === '00:00'"
+                    >
+                      {{ timer }}
+                    </span>
+
+                    @if(timer === '00:00'){
+                      <span class="fw-bold main-color" (click)="resetOTP()">Resend OTP</span>
+                    }
+                  </div>
+                </div>
+              }
+            }
           </div>
         }
       }
@@ -287,26 +307,33 @@
       }
     </div>
     <div class="modal-footer justify-content-center align-items-center">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        (click)="modal.close()"
-        data-bs-dismiss="modal"
-      >
-        Close
-      </button>
       @if(haveAcc){
         @if(OTP){
           <button type="button" class="btn btn-primary save-btn" [disabled]="!this.CheckOTP || this.CheckOTP.toString().length !== 6" (click)="submitRegisterForm()">
             Sign Up
           </button>
         } @else {
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.close()"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
           <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="generateOTP()">
             Send OTP
           </button>
         }
-
       } @else {
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="modal.close()"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
         <button type="button" class="btn btn-primary save-btn" [disabled]="loginForm.invalid" (click)="submitLogin(); modal.close()">
           Sign In
         </button>

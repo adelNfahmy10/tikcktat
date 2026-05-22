@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, inject, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -8,12 +8,12 @@ import { UsersService } from '@core/services/users/users.service';
 import { NgbAccordionModule, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import emailjs from '@emailjs/browser';
 
 @Component({
   selector: 'app-available-events-details',
-  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule, NgClass],
   templateUrl: './available-events-details.component.html',
   styleUrl: './available-events-details.component.scss'
 })
@@ -41,8 +41,12 @@ export class AvailableEventsDetailsComponent {
   CheckOTP:number | string = ''
   otpMsg:string = ''
 
+  allUsersEmail:any[] = []
+  emailExistsMsg:string = ''
+
   ngOnInit(): void {
     this.getEventById()
+    this.getAllUsersEmail()
   }
 
   getEventById(): void {
@@ -75,6 +79,19 @@ export class AvailableEventsDetailsComponent {
         this.OwnerName = res.fullName
       }
     })
+  }
+
+
+  getAllUsersEmail(): void {
+    this._UsersService.getAllUsers()
+      .pipe(
+        map((res: any) => res.map((user: any) => user.email))
+      )
+      .subscribe({
+        next: (res) => {
+          this.allUsersEmail = res
+        }
+    });
   }
 
   // ✅ function تحويل الـ string لـ array نظيف
@@ -150,12 +167,6 @@ export class AvailableEventsDetailsComponent {
     ],
   });
 
-
-  generateOTP():void{
-    this.OTP = Math.floor(100000 + Math.random() * 900000);
-    this.sendOTP()
-  }
-
   submitRegisterForm(): void {
     this._NgxSpinnerService.show()
 
@@ -222,8 +233,56 @@ export class AvailableEventsDetailsComponent {
 
   }
 
+  timer: string = '1:30';
+  timeLeft = 90;
+  interval: any;
+
+  generateOTP(): void {
+    const userEmail = this.registerForm.get('email')?.value?.trim().toLowerCase();
+
+    const isExist = this.allUsersEmail.some(
+      email => email.toLowerCase() === userEmail
+    );
+
+    if (isExist) {
+      this._ToastrService.warning('Email already exists');
+      this.emailExistsMsg = 'Email already exists'
+      return;
+    }
+
+    this.OTP = Math.floor(100000 + Math.random() * 900000);
+
+    this.startCountdown();
+
+    this.sendOTP();
+  }
+
   resetOTP():void{
     this.OTP = ''
+    if(this.timer === '00:00'){
+      this.generateOTP()
+    }
+  }
+
+  startCountdown(): void {
+    this.timer= '1:30';
+    this.timeLeft = 90;
+
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+
+        const minutes = Math.floor(this.timeLeft / 60);
+        const seconds = this.timeLeft % 60;
+
+        this.timer =
+          `${minutes.toString().padStart(2, '0')}:${seconds
+            .toString()
+            .padStart(2, '0')}`;
+      } else {
+        clearInterval(this.interval);
+      }
+    }, 1000);
   }
 
   // Email Send
@@ -300,5 +359,10 @@ export class AvailableEventsDetailsComponent {
         }
       }
     });
+  }
+
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
   }
 }
