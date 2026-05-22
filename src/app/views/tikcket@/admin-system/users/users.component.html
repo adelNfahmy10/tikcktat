@@ -1,0 +1,190 @@
+<section class="owners" id="owners">
+  <div class="container-fluid py-3">
+    <div class="bg-white rounded-3 p-3 shadow-lg">
+      <h1 class="fw-bold">All Users</h1>
+      <div class="head-table d-flex gap-2 flex-wrap justify-content-between align-items-center mb-3">
+        <div class="search">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search events..."
+            [(ngModel)]="searchText"
+            (input)="applySearch()"
+          />
+        </div>
+
+        <div class="download">
+          <button class="btn btn-outline-primary">Download   <i class="fa-solid fa-file-csv"></i></button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th (click)="sort('id')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>ID</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('fullName')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Full Name</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'fullName' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('email')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Email</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'email' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('phoneNumber')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Phone No.</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'phoneNumber' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'phoneNumber' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('checkOneDateAt')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Depoist Checked</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'checkOneDateAt' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'checkOneDateAt' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('bookingsCount')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Bookings Count</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'bookingsCount' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'bookingsCount' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+
+              <th (click)="sort('bookings')" class="sortable">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span>Events</span>
+                  <span class="sort-icons">
+                    <i
+                      class="fa-solid fa-caret-up"
+                      [class.active]="sortColumn === 'bookings' && sortDirection === 'asc'"
+                    ></i>
+                    <i
+                      class="fa-solid fa-caret-down"
+                      [class.active]="sortColumn === 'bookings' && sortDirection === 'desc'"
+                    ></i>
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (user of paginatedData; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ user.fullName }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone}}</td>
+                <td>{{ user.bookingsCount}}</td>
+                <td>{{ user.checkOneDateAt | date:'medium'}}</td>
+                <td>
+                  <ul class="list-unstyled m-0 p-0">
+                    @for (book of user.bookings; track $index) {
+                      <li>
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                          <div>{{book.EventName}}</div>
+                          <div class="d-flex flex-column gap-2 mt-2">
+                            <span class="badge badge-outline-dark py-1 cr" (click)="sendConfirmEmail(user.email, book.EventName, user.fullName)">Confirm Booking</span>
+                            <span class="badge badge-outline-success py-1 cr">Complete Booking</span>
+                          </div>
+                        </div>
+                        @if ($index < user.bookings.length - 1) {
+                          <hr>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="changePage(page - 1)">Prev</a>
+        </li>
+
+        @for (p of totalPages; track $index) {
+          <li class="page-item" [class.active]="p === page">
+            <a class="page-link" (click)="changePage(p)">{{ p }}</a>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="page === totalPages.length">
+          <a class="page-link" (click)="changePage(page + 1)">Next</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

@@ -24,6 +24,7 @@ import { TermsAndConditionsComponent } from './tikcket@/terms-and-conditions/ter
 import { OrderSuccessComponent } from './tikcket@/order-success/order-success.component'
 import { MyBookingComponent } from './tikcket@/my-booking/my-booking.component'
 import { ContactUsComponent } from './tikcket@/contact-us/contact-us.component'
+import { UsersComponent } from './tikcket@/admin-system/users/users.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -89,6 +90,11 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'owners',
     component: OwnersComponent,
     data: { title: 'All Owners' },
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+    data: { title: 'All Users' },
   },
 
   // Organizer Components

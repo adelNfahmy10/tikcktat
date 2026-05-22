@@ -13,7 +13,7 @@ import emailjs from '@emailjs/browser';
 
 @Component({
   selector: 'app-available-events-details',
-  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule, NgClass],
+  imports: [CommonModule, NgbAccordionModule, RouterLink, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
   templateUrl: './available-events-details.component.html',
   styleUrl: './available-events-details.component.scss'
 })
