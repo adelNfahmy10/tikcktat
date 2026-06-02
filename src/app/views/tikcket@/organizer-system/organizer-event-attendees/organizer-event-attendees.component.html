@@ -352,7 +352,7 @@
                 <td>
                   <div class="d-flex justify-content-center align-items-center gap-2">
                     @if(role == 'Admin'){
-                      <i class="fa-solid fa-envelope cr" (click)="sendEmailToUser(user?.userEmail, eventData?.EventName, user?.userName)"></i>
+                      <i class="fa-solid fa-envelope cr" (click)="sendConfirmEmail(user?.userEmail, eventData?.EventName, user?.userName)"></i>
                     }
 
                     <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>

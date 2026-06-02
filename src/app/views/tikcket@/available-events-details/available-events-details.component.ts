@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { map, switchMap } from 'rxjs';
 import emailjs from '@emailjs/browser';
+import { SendmailService } from '@core/services/send-email/sendmail.service';
 
 @Component({
   selector: 'app-available-events-details',
@@ -23,6 +24,7 @@ export class AvailableEventsDetailsComponent {
   private readonly _UsersService = inject(UsersService)
   private readonly _FormBuilder = inject(FormBuilder)
   private readonly _AuthService = inject(AuthService)
+  private readonly _SendmailService = inject(SendmailService)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _Router = inject(Router)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
@@ -254,7 +256,7 @@ export class AvailableEventsDetailsComponent {
 
     this.startCountdown();
 
-    this.sendOTP();
+    this.OTPSender();
   }
 
   resetOTP():void{
@@ -286,6 +288,24 @@ export class AvailableEventsDetailsComponent {
   }
 
   // Email Send
+  // SMTP Bravo
+  OTPSender():void{
+    let data = {
+      to: this.registerForm.value.email,
+      name: this.registerForm.value.fullName,
+      otp: this.OTP
+    }
+
+    this._SendmailService.sendOTP(data).subscribe({
+      next: (res) => {
+        this._ToastrService.success('OTP Sent To Email');
+      },
+      error: (err) => {
+        this._ToastrService.warning('OTP Email failed');
+      }
+    });
+  }
+
   async sendOTP() {
     emailjs.init('1FX7lfc7iRKkWW7r1');
     try {
@@ -300,7 +320,7 @@ export class AvailableEventsDetailsComponent {
       return send;
     } catch (err) {
       console.error('EMAIL ERROR:', err);
-      this._ToastrService.warning('Email failed but booking is saved');
+      this._ToastrService.warning('OTP Email failed');
       throw err;
     }
   }
@@ -360,7 +380,6 @@ export class AvailableEventsDetailsComponent {
       }
     });
   }
-
 
   ngOnDestroy(): void {
     clearInterval(this.interval);

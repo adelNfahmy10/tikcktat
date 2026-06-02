@@ -1,167 +1,264 @@
-<section class="event py-3" id="event">
-  <div class="container-fluid">
-    <div class="border border-2 rounded-3 p-3 shadow-lg">
-      <div class="event-banner overflow-hidden rounded-4">
-        <img loading="lazy" class="rounded-2 w-100 h-100" [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" [alt]="eventData?.EventName">
-      </div>
+@if(eventData?.status == 'Active'){
+  <section class="event py-3" id="event">
+    <div class="container-fluid">
+      <div class="border border-2 rounded-3 p-3 shadow-lg">
+        <div class="event-banner overflow-hidden rounded-4">
+          <img loading="lazy" class="rounded-2 w-100 h-100" [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" [alt]="eventData?.EventName">
+        </div>
 
-      <div class="event-details my-3">
-        <h1 class="fw-bold">{{eventData?.EventName}}</h1>
-        <h4 class="fw-semibold my-3 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
-        <p class="mb-3">
-          Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
-          Date : <span> To be determined (TBD) </span> <br>
-        </p>
+        <div class="event-details my-3">
+          <h1 class="fw-bold">{{eventData?.EventName}}</h1>
+          <h4 class="fw-semibold my-3 main-color">Powered By <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ OwnerName || 'Unknown' }}</a></h4>
+          <p class="mb-3">
+            Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
+            Date : <span> To be determined (TBD) </span> <br>
+          </p>
 
-        <h4 class="fw-bold">Event Details :</h4>
-        <ul class="list-unstyled my-2">
-            @for (item of features; track $index) {
-              <li>
-                - {{ item }}
-              </li>
-            }
-          </ul>
+          <h4 class="fw-bold">Event Details :</h4>
+          <ul class="list-unstyled my-2">
+              @for (item of features; track $index) {
+                <li>
+                  - {{ item }}
+                </li>
+              }
+            </ul>
 
-        @if(eventData?.TermsOfEntries?.length > 0){
-          <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
-            <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
-              <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
-                <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Terms of entry </button>
-              </h2>
-              <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                <div class="accordion-body" ngbAccordionBody >
-                  <ul class="list-unstyled">
-                     @for (item of terms; track $index) {
-                      <li>
-                        {{ item }}
-                      </li>
-                    }
-                  </ul>
+          @if(eventData?.TermsOfEntries?.length > 0){
+            <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
+              <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
+                <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
+                  <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Terms of entry </button>
+                </h2>
+                <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body" ngbAccordionBody >
+                    <ul class="list-unstyled">
+                      @for (item of terms; track $index) {
+                        <li>
+                          {{ item }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        }
-
-
-        <div class="text-center">
-          @if(userId){
-            <button class="btn main-btn p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
-          } @else {
-            <button class="btn main-btn p-0 px-4 py-1 mt-2" data-bs-target="#exampleModalCenter" (click)="openModal(centered, { centered: true })">Book Now</button>
           }
+
+
+          <div class="text-center">
+            @if(userId){
+              <button class="btn main-btn p-0 px-4 py-1 mt-2" [routerLink]="'/checkout/' + eventData?.id" >Book Now</button>
+            } @else {
+              <button class="btn main-btn p-0 px-4 py-1 mt-2" data-bs-target="#exampleModalCenter" (click)="openModal(centered, { centered: true })">Book Now</button>
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<ng-template
-  #centered
-  let-modal
-  class="modal fade"
-  id="exampleModalCenter"
-  tabindex="-1"
-  aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true"
->
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalCenterTitle">
-        Please Register To Book Your Ticket
-      </h5>
-      @if(!OTP){
-        <button
-          type="button"
-          class="btn-close"
-          (click)="modal.close()"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      }
-    </div>
-    <div class="modal-body">
-      @if(haveAcc){
+  <ng-template
+    #centered
+    let-modal
+    class="modal fade"
+    id="exampleModalCenter"
+    tabindex="-1"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">
+          Please Register To Book Your Ticket
+        </h5>
         @if(!OTP){
-          <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
-          <form class="mt-2" [formGroup]="registerForm">
-            <div class="mb-3">
-              <label class="form-label">Full Name (English)</label>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="modal.close()"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        }
+      </div>
+      <div class="modal-body">
+        @if(haveAcc){
+          @if(!OTP){
+            <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
+            <form class="mt-2" [formGroup]="registerForm">
+              <div class="mb-3">
+                <label class="form-label">Full Name (English)</label>
 
+                <input
+                  type="text"
+                  formControlName="fullName"
+                  class="form-control"
+                  placeholder="Enter your full name"
+                />
+
+                @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
+
+                  @if (registerForm.get('fullName')?.errors?.['required']) {
+                    <small class="text-danger">Full name is required</small>
+                  }
+
+                  @if (registerForm.get('fullName')?.errors?.['minlength']) {
+                    <small class="text-danger">Minimum 3 characters</small>
+                  }
+
+                  @if (registerForm.get('fullName')?.errors?.['maxlength']) {
+                    <small class="text-danger">Maximum 100 characters</small>
+                  }
+
+                  @if (registerForm.get('fullName')?.errors?.['pattern']) {
+                    <small class="text-danger">English letters only</small>
+                  }
+
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Full Name (Arabic)</label>
+
+                <input
+                  type="text"
+                  formControlName="fullNameAr"
+                  class="form-control"
+                  placeholder="Enter your full name"
+                />
+
+                @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
+
+                  @if (registerForm.get('fullNameAr')?.errors?.['required']) {
+                    <small class="text-danger">Arabic name is required</small>
+                  }
+
+                  @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
+                    <small class="text-danger">Arabic letters only</small>
+                  }
+
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  class="form-control"
+                  placeholder="Enter your phone"
+                />
+
+                @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
+
+                  @if (registerForm.get('phone')?.errors?.['required']) {
+                    <small class="text-danger">Phone is required</small>
+                  }
+
+                  @if (registerForm.get('phone')?.errors?.['pattern']) {
+                    <small class="text-danger">Invalid Egyptian phone number</small>
+                  }
+
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                />
+
+                @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+
+                  @if (registerForm.get('email')?.errors?.['required']) {
+                    <small class="text-danger">Email is required</small>
+                  }
+
+                  @if (registerForm.get('email')?.errors?.['email']) {
+                    <small class="text-danger">Invalid email format</small>
+                  }
+
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+
+                <input
+                  type="password"
+                  formControlName="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                />
+
+                @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+
+                  @if (registerForm.get('password')?.errors?.['required']) {
+                    <small class="text-danger">Password is required</small>
+                  }
+
+                  @if (registerForm.get('password')?.errors?.['minlength']) {
+                    <small class="text-danger">Minimum 6 characters</small>
+                  }
+
+                  @if (registerForm.get('password')?.errors?.['maxlength']) {
+                    <small class="text-danger">Maximum 20 characters</small>
+                  }
+
+                }
+              </div>
+
+              <p class="text-danger fw-bold text-center m-0">{{emailExistsMsg}}</p>
+            </form>
+          } @else {
+            <div class="mb-3 mt-2">
+              <h4 class="fw-bold">Please check your email <br> ( <span class="main-color">{{registerForm.get('email')?.value}}</span> ). An OTP has been sent to you.</h4>
+              <label class="form-label">One-Time Password 6 Digits (OTP)</label>
               <input
-                type="text"
-                formControlName="fullName"
+                type="number"
+                [(ngModel)]="CheckOTP"
                 class="form-control"
-                placeholder="Enter your full name"
+                min="0"
+                placeholder="Enter the OTP you received"
               />
 
-              @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.errors) {
+              @if(otpMsg){
+                <small class="text-danger">{{otpMsg}}</small>
+              }
 
-                @if (registerForm.get('fullName')?.errors?.['required']) {
-                  <small class="text-danger">Full name is required</small>
+              @if(haveAcc){
+                @if(OTP){
+                  <div class="d-flex flex-column gap-1">
+                    <div class="d-flex align-items-center gap-1">
+                      <span>Resend OTP in</span>
+
+                      <span
+                        class="m-2 d-inline-block"
+                        [class.main-color]="timer !== '00:00'"
+                        [class.text-danger]="timer === '00:00'"
+                      >
+                        {{ timer }}
+                      </span>
+
+                      @if(timer === '00:00'){
+                        <span class="fw-bold main-color" (click)="resetOTP()">Resend OTP</span>
+                      }
+                    </div>
+                  </div>
                 }
-
-                @if (registerForm.get('fullName')?.errors?.['minlength']) {
-                  <small class="text-danger">Minimum 3 characters</small>
-                }
-
-                @if (registerForm.get('fullName')?.errors?.['maxlength']) {
-                  <small class="text-danger">Maximum 100 characters</small>
-                }
-
-                @if (registerForm.get('fullName')?.errors?.['pattern']) {
-                  <small class="text-danger">English letters only</small>
-                }
-
               }
             </div>
+          }
+        }
 
-            <div class="mb-3">
-              <label class="form-label">Full Name (Arabic)</label>
-
-              <input
-                type="text"
-                formControlName="fullNameAr"
-                class="form-control"
-                placeholder="Enter your full name"
-              />
-
-              @if (registerForm.get('fullNameAr')?.touched && registerForm.get('fullNameAr')?.errors) {
-
-                @if (registerForm.get('fullNameAr')?.errors?.['required']) {
-                  <small class="text-danger">Arabic name is required</small>
-                }
-
-                @if (registerForm.get('fullNameAr')?.errors?.['pattern']) {
-                  <small class="text-danger">Arabic letters only</small>
-                }
-
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Phone</label>
-
-              <input
-                type="tel"
-                formControlName="phone"
-                class="form-control"
-                placeholder="Enter your phone"
-              />
-
-              @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
-
-                @if (registerForm.get('phone')?.errors?.['required']) {
-                  <small class="text-danger">Phone is required</small>
-                }
-
-                @if (registerForm.get('phone')?.errors?.['pattern']) {
-                  <small class="text-danger">Invalid Egyptian phone number</small>
-                }
-
-              }
-            </div>
-
+        @if(!haveAcc){
+          <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
+          <form [formGroup]="loginForm">
             <div class="mb-3">
               <label class="form-label">Email</label>
 
@@ -172,13 +269,13 @@
                 placeholder="Enter your email"
               />
 
-              @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+              @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
 
-                @if (registerForm.get('email')?.errors?.['required']) {
+                @if (loginForm.get('email')?.errors?.['required']) {
                   <small class="text-danger">Email is required</small>
                 }
 
-                @if (registerForm.get('email')?.errors?.['email']) {
+                @if (loginForm.get('email')?.errors?.['email']) {
                   <small class="text-danger">Invalid email format</small>
                 }
 
@@ -195,123 +292,40 @@
                 placeholder="Enter your password"
               />
 
-              @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+              @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
 
-                @if (registerForm.get('password')?.errors?.['required']) {
+                @if (loginForm.get('password')?.errors?.['required']) {
                   <small class="text-danger">Password is required</small>
                 }
 
-                @if (registerForm.get('password')?.errors?.['minlength']) {
+                @if (loginForm.get('password')?.errors?.['minlength']) {
                   <small class="text-danger">Minimum 6 characters</small>
-                }
-
-                @if (registerForm.get('password')?.errors?.['maxlength']) {
-                  <small class="text-danger">Maximum 20 characters</small>
                 }
 
               }
             </div>
-
-            <p class="text-danger fw-bold text-center m-0">{{emailExistsMsg}}</p>
           </form>
-        } @else {
-          <div class="mb-3 mt-2">
-            <h4 class="fw-bold">Please check your email <br> ( <span class="main-color">{{registerForm.get('email')?.value}}</span> ). An OTP has been sent to you.</h4>
-            <label class="form-label">One-Time Password 6 Digits (OTP)</label>
-            <input
-              type="number"
-              [(ngModel)]="CheckOTP"
-              class="form-control"
-              min="0"
-              placeholder="Enter the OTP you received"
-            />
-
-            @if(otpMsg){
-              <small class="text-danger">{{otpMsg}}</small>
-            }
-
-            @if(haveAcc){
-              @if(OTP){
-                <div class="d-flex flex-column gap-1">
-                  <div class="d-flex align-items-center gap-1">
-                    <span>Resend OTP in</span>
-
-                    <span
-                      class="m-2 d-inline-block"
-                      [class.main-color]="timer !== '00:00'"
-                      [class.text-danger]="timer === '00:00'"
-                    >
-                      {{ timer }}
-                    </span>
-
-                    @if(timer === '00:00'){
-                      <span class="fw-bold main-color" (click)="resetOTP()">Resend OTP</span>
-                    }
-                  </div>
-                </div>
-              }
-            }
-          </div>
         }
-      }
-
-      @if(!haveAcc){
-        <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
-        <form [formGroup]="loginForm">
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-
-            <input
-              type="email"
-              formControlName="email"
-              class="form-control"
-              placeholder="Enter your email"
-            />
-
-            @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
-
-              @if (loginForm.get('email')?.errors?.['required']) {
-                <small class="text-danger">Email is required</small>
-              }
-
-              @if (loginForm.get('email')?.errors?.['email']) {
-                <small class="text-danger">Invalid email format</small>
-              }
-
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-
-            <input
-              type="password"
-              formControlName="password"
-              class="form-control"
-              placeholder="Enter your password"
-            />
-
-            @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
-
-              @if (loginForm.get('password')?.errors?.['required']) {
-                <small class="text-danger">Password is required</small>
-              }
-
-              @if (loginForm.get('password')?.errors?.['minlength']) {
-                <small class="text-danger">Minimum 6 characters</small>
-              }
-
-            }
-          </div>
-        </form>
-      }
-    </div>
-    <div class="modal-footer justify-content-center align-items-center">
-      @if(haveAcc){
-        @if(OTP){
-          <button type="button" class="btn btn-primary save-btn" [disabled]="!this.CheckOTP || this.CheckOTP.toString().length !== 6" (click)="submitRegisterForm()">
-            Sign Up
-          </button>
+      </div>
+      <div class="modal-footer justify-content-center align-items-center">
+        @if(haveAcc){
+          @if(OTP){
+            <button type="button" class="btn btn-primary save-btn" [disabled]="!this.CheckOTP || this.CheckOTP.toString().length !== 6" (click)="submitRegisterForm()">
+              Sign Up
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.close()"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="generateOTP()">
+              Send OTP
+            </button>
+          }
         } @else {
           <button
             type="button"
@@ -321,23 +335,21 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary save-btn" [disabled]="registerForm.invalid" (click)="generateOTP()">
-            Send OTP
+          <button type="button" class="btn btn-primary save-btn" [disabled]="loginForm.invalid" (click)="submitLogin(); modal.close()">
+            Sign In
           </button>
         }
-      } @else {
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="modal.close()"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button type="button" class="btn btn-primary save-btn" [disabled]="loginForm.invalid" (click)="submitLogin(); modal.close()">
-          Sign In
-        </button>
-      }
+      </div>
     </div>
+  </ng-template>
+
+} @else {
+  <div class="vh-100 text-center p-2 pt-5">
+    <div class="close-img">
+      <img src="assets/images/tikecktImages/close-event.png" alt="close event">
+    </div>
+    <h3 class="text-danger">Event Closed <i class="fa-solid fa-rectangle-xmark"></i></h3>
+    <p>This event has ended and registration is now closed.</p>
+    <button class="btn main-btn main-color" routerLink="/">Home</button>
   </div>
-</ng-template>
+}

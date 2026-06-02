@@ -1,285 +1,367 @@
-<section class="checkout" id="checkout">
-  <div class="container-fluid">
-    <div class="rounded-3 p-3 shadow-lg">
-      <div class="row g-2">
-        <div class="col-12">
-          <div class="image-event">
-            <img loading="lazy" [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" class="rounded-3" [alt]="eventData?.EventName">
+@if(eventData?.status == 'Active'){
+  <section class="checkout" id="checkout">
+    <div class="container-fluid">
+      <div class="rounded-3 p-3 shadow-lg">
+        <div class="row g-2">
+          <div class="col-12">
+            <div class="image-event">
+              <img loading="lazy" [src]="eventData?.Image || 'assets/images/tikecktImages/event-image/Graduation-Tickets.jpg'" class="rounded-3" [alt]="eventData?.EventName">
+            </div>
           </div>
-        </div>
 
-        <div class="col-12">
-          <ul class="nav nav-tabs justify-content-center align-items-center" id="ticketTab" role="tablist">
-            @if(!isReturningUser){
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
-                  type="button" role="tab" aria-controls="full-ticket" aria-selected="true" (click)="scrollToBookNow()">
-                  Book Ticket
-                </button>
-              </li>
-            } @else {
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
-                  type="button" role="tab" aria-controls="extra-services" aria-selected="false" (click)="scrollToBookNow()">
-                  Continue Booking
-                </button>
-              </li>
-            }
-          </ul>
+          <div class="col-12">
+            <ul class="nav nav-tabs justify-content-center align-items-center" id="ticketTab" role="tablist">
+              @if(!isReturningUser){
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="full-ticket-tab" data-bs-toggle="tab" data-bs-target="#full-ticket"
+                    type="button" role="tab" aria-controls="full-ticket" aria-selected="true" (click)="scrollToBookNow()">
+                    Book Ticket
+                  </button>
+                </li>
+              } @else {
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
+                    type="button" role="tab" aria-controls="extra-services" aria-selected="false" (click)="scrollToBookNow()">
+                    Continue Booking
+                  </button>
+                </li>
+              }
+            </ul>
 
-          <div class="tab-content py-0" id="ticketTabContent">
-            @if(!isReturningUser){
-              <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
-                <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
+            <div class="tab-content py-0" id="ticketTabContent">
+              @if(!isReturningUser){
+                <div class="tab-pane fade show active" id="full-ticket" role="tabpanel" aria-labelledby="full-ticket-tab">
+                  <form class="d-flex flex-column gap-2 p-3 shadow border rounded-3" [formGroup]="checkoutForm">
 
-                  @if(eventData.Type == 'Graduation'){
-                    <div class="row g-4">
-                      <div class="col-md-8">
-                        <div class="row g-2">
-                          <div class="col-12">
-                            <h1 class="fw-bold m-0">Checkout Event</h1>
-                          </div>
-
-                          <div class="col-12">
-                            <div class="border-bottom pb-2 note">
-                              <p class="m-0 mb-1">
-                                - Each reservation includes (1 student) and (2 accompanying guests).
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - You can pay part of the total amount now and complete the remaining balance later through the installment system.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - Please include your payment reference number when completing the installment payment via InstalPay.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - If possible, kindly upload a screenshot or proof of payment to verify your transaction.
-                              </p>
-                            </div>
-
-                            <div class="border-bottom py-2 note" dir="rtl">
-                              <p class="m-0 mb-1">
-                                - يرجى إدخال الرقم المرجعي (Reference) لعملية الدفع عند استكمال الدفع عبر InstalPay.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - في حال توفر ذلك، يُفضل إرسال صورة أو إثبات عملية الدفع للتحقق من المعاملة.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - يشمل كل حجز (طالب واحد) و(عدد 2 مرافقين).
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب رسوم إضافية عن كل مرافق إضافي.
-                              </p>
-
-                              <p class="m-0 mb-1">
-                                - يمكنك دفع جزء من إجمالي المبلغ الآن، وإكمال المبلغ المتبقي لاحقًا من خلال نظام التقسيط.
-                              </p>
-
-                            </div>
-                          </div>
-
-                          @if(eventId == 'HLz7HiRkpk33TSvFDNGy' || eventId == 'uvoo0zHQzwK1efCTBynh'){
+                    @if(eventData.Type == 'Graduation'){
+                      <div class="row g-4">
+                        <div class="col-md-8">
+                          <div class="row g-2">
                             <div class="col-12">
-                              <label for="studentsIDs" class="form-label">Student ID</label>
+                              <h1 class="fw-bold m-0">Checkout Event</h1>
+                            </div>
+
+                            <div class="col-12">
+                              <div class="border-bottom pb-2 note">
+                                <p class="m-0 mb-1">
+                                  - Each reservation includes (1 student) and (2 accompanying guests).
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - Additional guests can be added if needed, noting that an extra fee will be charged for each additional guest.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - You can pay part of the total amount now and complete the remaining balance later through the installment system.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - Please include your payment reference number when completing the installment payment via InstalPay.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - If possible, kindly upload a screenshot or proof of payment to verify your transaction.
+                                </p>
+                              </div>
+
+                              <div class="border-bottom py-2 note" dir="rtl">
+                                <p class="m-0 mb-1">
+                                  - يرجى إدخال الرقم المرجعي (Reference) لعملية الدفع عند استكمال الدفع عبر InstalPay.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - في حال توفر ذلك، يُفضل إرسال صورة أو إثبات عملية الدفع للتحقق من المعاملة.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - يشمل كل حجز (طالب واحد) و(عدد 2 مرافقين).
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - يمكن إضافة مرافقين إضافيين عند الحاجة، مع العلم أنه يتم احتساب رسوم إضافية عن كل مرافق إضافي.
+                                </p>
+
+                                <p class="m-0 mb-1">
+                                  - يمكنك دفع جزء من إجمالي المبلغ الآن، وإكمال المبلغ المتبقي لاحقًا من خلال نظام التقسيط.
+                                </p>
+
+                              </div>
+                            </div>
+
+                            @if(eventId == 'HLz7HiRkpk33TSvFDNGy' || eventId == 'uvoo0zHQzwK1efCTBynh'){
+                              <div class="col-12">
+                                <label for="studentsIDs" class="form-label">Student ID</label>
+
+                                <input
+                                  class="form-control w-100"
+                                  type="text"
+                                  id="studentsIDs"
+                                  formControlName="studentsIDs"
+                                  placeholder="ID Faculty"
+                                />
+                              </div>
+                            }
+
+                            <div class="col-12">
+                              <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
 
                               <input
                                 class="form-control w-100"
                                 type="text"
-                                id="studentsIDs"
-                                formControlName="studentsIDs"
-                                placeholder="ID Faculty"
+                                id="GraduationScarfName"
+                                formControlName="GraduationScarfName"
+                                placeholder="أدخل الإسم على الوشاح"
                               />
+
+                              @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
+                                  <small class="text-danger">Graduation Scarf Name is required</small>
+                                }
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
+                                  <small class="text-danger">Minimum length is 3 characters</small>
+                                }
+
+                                @if (checkoutForm.get('GraduationScarfName')?.errors?.['maxlength']) {
+                                  <small class="text-danger">Maximum length is 100 characters</small>
+                                }
+
+                              }
+                            </div>
+
+                            @if(eventData?.departments?.length > 0){
+                              <div class="col-12">
+                                <label for="department" class="form-label">القســم</label>
+
+                                <select class="form-select" name="department" id="department" formControlName="department">
+                                  @for (item of eventData?.departments; track $index) {
+                                    <option [value]="item">{{item}}</option>
+                                  }
+                                </select>
+
+                                @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
+
+                                  @if (checkoutForm.get('department')?.errors?.['required']) {
+                                    <small class="text-danger">Department is required</small>
+                                  }
+                                }
+                              </div>
+                            }
+
+
+                            <div class="col-12">
+                              <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
+
+                                <div class="flex-grow-1">
+                                  <label for="photo" class="form-label">صورتك في الحفلة</label>
+
+                                  <input
+                                    class="form-control w-100"
+                                    type="file"
+                                    id="Photo"
+                                    accept="image/*"
+                                    (change)="onImageChange($event)"
+                                  >
+                                </div>
+
+                                @if (photoPreview) {
+                                  <div class="text-center flex-grow-1">
+                                    <img
+                                      loading="lazy"
+                                      [src]="photoPreview"
+                                      alt="preview"
+                                      style="width:200px; margin-top:10px"
+                                    />
+                                  </div>
+                                }
+                              </div>
+                            </div>
+
+                            <div class="col-12">
+                              <div class="text-center" id="bookNowSection">
+                                <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Book Now </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="reference-image text-center">
+                            <img loading="lazy" src="assets/images/tikecktImages/RefImage.png" class="ref-image" alt="">
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </form>
+                </div>
+              } @else {
+                <!-- <div class="text-center mt-3">
+                  <h2>The organizers have not set a date for this stage yet.</h2>
+                  <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>
+                  <button class="btn main-btn" [routerLink]="'/available-event-details/' + eventData.id"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div> -->
+                @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
+                  <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                    <h3 class="m-0 mb-2">Continue Booking</h3>
+
+                    <div class="user-data row g-3 rounded-3">
+                      <!-- User Info -->
+                      <div class="col-md-3 col-sm-6 col-12">
+                          <div class="user-info shadow-sm text-center border border-1 p-2">
+                            @if(bookingData.userImage){
+                              <div class="user-image">
+                                <img [src]="bookingData.userImage" [alt]="bookingData.userName">
+                              </div>
+                            }
+                            <div class="info-body my-2">
+                              <p>{{bookingData.userName}}</p>
+                              <p>{{bookingData.userEmail}}</p>
+                              <p>{{bookingData.userPhone}}</p>
+                            </div>
+                          </div>
+                      </div>
+
+                      <!-- Paid One Info -->
+                      <div class="col-md-3 col-sm-6 col-12">
+                        <div class="payOne-info shadow-sm text-center border border-1 p-2">
+                          @if(bookingData.userImage){
+                            <div class="payOne-image">
+                              <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
                             </div>
                           }
+                          <div class="payOne-body my-2">
+                            <p>Reference: {{bookingData.payOneRef}}</p>
+                            <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
+                            <p>Date: {{ bookingData.createdAtOne?.toDate() | date:'medium' }}</p>
+                          </div>
+                        </div>
+                      </div>
 
+                      <!-- Phase Two -->
+                      <div class="col-md-6 h-100" id="bookNowSection">
+                        <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
                           <div class="col-12">
-                            <label for="GraduationScarfName" class="form-label">الإسم على الوشاح</label>
-
-                            <input
-                              class="form-control w-100"
-                              type="text"
-                              id="GraduationScarfName"
-                              formControlName="GraduationScarfName"
-                              placeholder="أدخل الإسم على الوشاح"
-                            />
-
-                            @if (checkoutForm.get('GraduationScarfName')?.touched && checkoutForm.get('GraduationScarfName')?.errors) {
-
-                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['required']) {
-                                <small class="text-danger">Graduation Scarf Name is required</small>
-                              }
-
-                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['minlength']) {
-                                <small class="text-danger">Minimum length is 3 characters</small>
-                              }
-
-                              @if (checkoutForm.get('GraduationScarfName')?.errors?.['maxlength']) {
-                                <small class="text-danger">Maximum length is 100 characters</small>
-                              }
-
-                            }
+                            <h3 class="text-center fww-bold">Checkout</h3>
                           </div>
 
-                          @if(eventData?.departments?.length > 0){
-                            <div class="col-12">
-                              <label for="department" class="form-label">القســم</label>
+                          <!-- Previous Payment -->
+                          <div class="col-md-6">
+                            <h4>Previous Payment : </h4>
 
-                              <select class="form-select" name="department" id="department" formControlName="department">
-                                @for (item of eventData?.departments; track $index) {
-                                  <option [value]="item">{{item}}</option>
-                                }
-                              </select>
-
-                              @if (checkoutForm.get('department')?.touched && checkoutForm.get('department')?.errors) {
-
-                                @if (checkoutForm.get('department')?.errors?.['required']) {
-                                  <small class="text-danger">Department is required</small>
-                                }
-                              }
+                            <div class="payOne-body my-2">
+                              <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
+                              <!-- <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p> -->
+                              <p>Your Paid: <span class="fw-bold">{{payOneNetForView | number}} EGP</span></p>
+                              <!-- <div class="mt-2">
+                                <small> Visitor Count </small>
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  [(ngModel)]="visitorCount"
+                                  name="visitorCount"
+                                  (ngModelChange)="calculatePriceAfterFinalPaid()"
+                                  placeholder="Enter Visitor Count..."
+                                >
+                              </div> -->
                             </div>
-                          }
+                          </div>
 
+                          <hr class="d-block d-md-none">
+
+                          <!-- Final Payment -->
+                          <div class="col-md-6">
+                            <h4>Final Payment : </h4>
+                            <div class="payOne-body my-2">
+                              <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
+                              <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
+                              <h4 class="main-color fw-bold my-2 text-center text-md-start"> Total : <span class="fw-bold">{{ total | number }} EGP</span> </h4>
+                            </div>
+                          </div>
 
                           <div class="col-12">
-                            <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
-
-                              <div class="flex-grow-1">
-                                <label for="photo" class="form-label">صورتك في الحفلة</label>
-
+                            <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                              <div class="w-100">
+                                <small>
+                                  Reference Number 12 Digits
+                                </small>
                                 <input
+                                  type="text"
                                   class="form-control w-100"
-                                  type="file"
-                                  id="Photo"
-                                  accept="image/*"
-                                  (change)="onImageChange($event)"
-                                >
+                                  placeholder="Enter Transaction Reference"
+                                  maxlength="12"
+                                  [(ngModel)]="transactionRef"
+                                  name="transactionRef"
+                                  inputmode="numeric"
+                                />
                               </div>
 
-                              @if (photoPreview) {
-                                <div class="text-center flex-grow-1">
-                                  <img
-                                    loading="lazy"
-                                    [src]="photoPreview"
-                                    alt="preview"
-                                    style="width:200px; margin-top:10px"
-                                  />
-                                </div>
-                              }
+                              <div class="w-100">
+                                <small>
+                                  Upload Image Transaction
+                                </small>
+                                <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+                              </div>
+
+                              <div class="w-100 text-center">
+                                <span class="text-danger fw-bold">{{MsgErr}}</span>
+                              </div>
                             </div>
                           </div>
 
-                          <div class="col-12">
-                            <div class="text-center" id="bookNowSection">
-                              <button class="btn main-btn" type="button" (click)="openModal(centerScroll, { scrollable: true, centered: true })"> Book Now </button>
-                            </div>
+                          <div class="col-12 text-center">
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="continueBooking()"
+                            >
+                              Confirm
+                            </button>
                           </div>
                         </div>
                       </div>
-
-                      <div class="col-md-4">
-                        <div class="reference-image text-center">
-                          <img loading="lazy" src="assets/images/tikecktImages/RefImage.png" class="ref-image" alt="">
-                        </div>
-                      </div>
                     </div>
-                  }
-                </form>
-              </div>
-            } @else {
-              <!-- <div class="text-center mt-3">
-                <h2>The organizers have not set a date for this stage yet.</h2>
-                <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>
-                <button class="btn main-btn" [routerLink]="'/available-event-details/' + eventData.id"><i class="fa-solid fa-arrow-left"></i> Back</button>
-              </div> -->
-              @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
-                <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
-                  <h3 class="m-0 mb-2">Continue Booking</h3>
-
-                  <div class="user-data row g-3 rounded-3">
-                    <!-- User Info -->
-                    <div class="col-md-3 col-sm-6 col-12">
-                        <div class="user-info shadow-sm text-center border border-1 p-2">
-                          @if(bookingData.userImage){
-                            <div class="user-image">
-                              <img [src]="bookingData.userImage" [alt]="bookingData.userName">
-                            </div>
-                          }
-                          <div class="info-body my-2">
-                            <p>{{bookingData.userName}}</p>
-                            <p>{{bookingData.userEmail}}</p>
-                            <p>{{bookingData.userPhone}}</p>
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- Paid One Info -->
-                    <div class="col-md-3 col-sm-6 col-12">
-                      <div class="payOne-info shadow-sm text-center border border-1 p-2">
-                        @if(bookingData.userImage){
-                          <div class="payOne-image">
-                            <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
-                          </div>
-                        }
-                        <div class="payOne-body my-2">
-                          <p>Reference: {{bookingData.payOneRef}}</p>
-                          <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
-                          <p>Date: {{ bookingData.createdAtOne?.toDate() | date:'medium' }}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Phase Two -->
-                    <div class="col-md-6 h-100" id="bookNowSection">
+                  </div>
+                } @else {
+                  <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                    <h3 class="m-0 mb-2">Booking Outcomer</h3>
+                    <div class="user-data rounded-3">
                       <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
                         <div class="col-12">
-                          <h3 class="text-center fww-bold">Checkout</h3>
-                        </div>
-
-                        <!-- Previous Payment -->
-                        <div class="col-md-6">
-                          <h4>Previous Payment : </h4>
-
-                          <div class="payOne-body my-2">
-                            <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
-                            <!-- <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p> -->
-                            <p>Your Paid: <span class="fw-bold">{{payOneNetForView | number}} EGP</span></p>
-                            <!-- <div class="mt-2">
-                              <small> Visitor Count </small>
+                          <div class="payOne-body">
+                            <h4>Outcomer Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></h4>
+                            <div class="mt-2">
+                            <small> Outcomer Count </small>
                               <input
                                 type="number"
                                 class="form-control"
-                                [(ngModel)]="visitorCount"
-                                name="visitorCount"
-                                (ngModelChange)="calculatePriceAfterFinalPaid()"
-                                placeholder="Enter Visitor Count..."
+                                [(ngModel)]="newOutComerCount"
+                                name="newOutComer"
+                                placeholder="Enter New Outcomer..."
                               >
-                            </div> -->
-                          </div>
-                        </div>
-
-                        <hr class="d-block d-md-none">
-
-                        <!-- Final Payment -->
-                        <div class="col-md-6">
-                          <h4>Final Payment : </h4>
-                          <div class="payOne-body my-2">
-                            <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
-                            <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
-                            <h4 class="main-color fw-bold my-2 text-center text-md-start"> Total : <span class="fw-bold">{{ total | number }} EGP</span> </h4>
+                            </div>
                           </div>
                         </div>
 
                         <div class="col-12">
-                          <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                          <div class="payOne-body">
+                            <p>
+                              Outcomer Price :
+                              <span class="fw-bold">{{ newOutComerCount * eventData.VisitorPrice | number }} EGP</span>
+                            </p>
+
+                            <p>
+                              Service Fee :
+                              <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice * tax) | number }} EGP</span>
+                            </p>
+
+                            <p>
+                              Total :
+                              <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) + ((newOutComerCount * eventData.VisitorPrice) * tax) | number }} EGP</span>
+                            </p>
+                          </div>
+
+                          <div class="d-flex flex-wrap justify-content-center align-items-center gap-1 mt-2">
                             <div class="w-100">
                               <small>
                                 Reference Number 12 Digits
@@ -301,263 +383,192 @@
                               </small>
                               <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
                             </div>
-
-                            <div class="w-100 text-center">
-                              <span class="text-danger fw-bold">{{MsgErr}}</span>
-                            </div>
                           </div>
+
                         </div>
 
                         <div class="col-12 text-center">
                           <button
                             type="button"
                             class="btn btn-primary"
-                            (click)="continueBooking()"
+                            (click)="addOutComer()"
                           >
-                            Confirm
+                            Add Outcomer
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
+                }
+
+              }
+            </div>
+
+            <!-- @if(eventType == 'GraduationParty'){
+              <div class="seat-numbers py-4 overflow-auto shadow-lg border rounded-3 p-3 my-3">
+              <div class="stage-wrapper text-center mb-4">
+                <div class="stage">
+                  🎭 Stage
                 </div>
-              } @else {
-                <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
-                  <h3 class="m-0 mb-2">Booking Outcomer</h3>
-                  <div class="user-data rounded-3">
-                    <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
-                      <div class="col-12">
-                        <div class="payOne-body">
-                          <h4>Outcomer Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></h4>
-                          <div class="mt-2">
-                          <small> Outcomer Count </small>
-                            <input
-                              type="number"
-                              class="form-control"
-                              [(ngModel)]="newOutComerCount"
-                              name="newOutComer"
-                              placeholder="Enter New Outcomer..."
-                            >
+              </div>
+              @for (cat of categories; track $index) {
+                <div class="my-4">
+                  @for (row of cat.rows; track $index) {
+                    <div class="row-line">
+
+                      <div class="blocks">
+                        @for (block of row.blocks; track $index) {
+                          <div class="block">
+                            @for (seat of block.seats; track $index) {
+                              <div
+                                class="seat"
+                                [ngClass]="seat.status"
+                                (click)="toggleSeat(seat)"
+                              >
+                                {{row.name}}{{seat.number}}
+                              </div>
+                            }
                           </div>
-                        </div>
-                      </div>
+                        }
 
-                      <div class="col-12">
-                        <div class="payOne-body">
-                          <p>
-                            Outcomer Price :
-                            <span class="fw-bold">{{ newOutComerCount * eventData.VisitorPrice | number }} EGP</span>
-                          </p>
-
-                          <p>
-                            Service Fee :
-                            <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice * tax) | number }} EGP</span>
-                          </p>
-
-                          <p>
-                            Total :
-                            <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) + ((newOutComerCount * eventData.VisitorPrice) * tax) | number }} EGP</span>
-                          </p>
-                        </div>
-
-                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-1 mt-2">
-                          <div class="w-100">
-                            <small>
-                              Reference Number 12 Digits
-                            </small>
-                            <input
-                              type="text"
-                              class="form-control w-100"
-                              placeholder="Enter Transaction Reference"
-                              maxlength="12"
-                              [(ngModel)]="transactionRef"
-                              name="transactionRef"
-                              inputmode="numeric"
-                            />
-                          </div>
-
-                          <div class="w-100">
-                            <small>
-                              Upload Image Transaction
-                            </small>
-                            <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
-                          </div>
-                        </div>
 
                       </div>
 
-                      <div class="col-12 text-center">
-                        <button
-                          type="button"
-                          class="btn btn-primary"
-                          (click)="addOutComer()"
-                        >
-                          Add Outcomer
+                    </div>
+                  }
+                </div>
+              }
+              </div>
+            } -->
+
+          </div>
+
+          <ng-template
+            #centerScroll
+            let-modal
+            class="modal fade"
+            id="exampleModalCenteredScrollable"
+            tabindex="-1"
+            aria-labelledby="exampleModalCenteredScrollableTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5
+                  class="modal-title"
+                  id="exampleModalCenteredScrollableTitle"
+                >
+                  Checkout
+                </h5>
+                <button
+                  type="button"
+                  (click)="modal.close()"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div class="summary rounded-3 h-100">
+
+                  <div class="text-center">
+                    <img loading="lazy" src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo" alt="ticketat">
+                  </div>
+
+                  <div class="d-flex flex-column align-items-start gap-0 mt-3 justify-content-between">
+                    <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
+                    <p> Phone : <span class="main-color fw-medium">{{ userData?.phone}}</span></p>
+                    <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
+                    <p> Visitors :
+                      <span class="main-color fw-medium">
+                        @if(checkoutData?.VisitorCount){
+                          {{checkoutData?.VisitorCount}} +
+                        }
+                        2 Companion(s)
+                      </span>
+                    </p>
+                    <!-- <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.TicketPrice | number}} EGP</span></p> -->
+                    @if(checkoutData?.VisitorCount && checkoutData.VisitorCount > 0){
+                      <p> Visitor Price : <span class="main-color fw-medium">{{ eventData?.VisitorPrice | number}} EGP</span> </p>
+                    }
+
+                    <div class="w-100 pt-2 text-start rounded-3 border-top">
+                      <h4>Deposit</h4>
+                      <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
+                      <p class="m-0 my-2"> Service Fee : <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
+                      <p class="m-0 pt-1 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
+                      <div class="text-center my-2">
+                        <button class="btn main-btn fs-4">
+                          <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
                         </button>
                       </div>
                     </div>
+
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                      <div class="w-100">
+                        <small>
+                          Reference Number 12 Digits
+                        </small>
+                        <input
+                          type="text"
+                          class="form-control w-100"
+                          placeholder="Enter Transaction Reference"
+                          maxlength="12"
+                          [(ngModel)]="transactionRef"
+                          name="transactionRef"
+                          inputmode="numeric"
+                        />
+                        @if (transactionRef && transactionRef.length !== 12) {
+                          <small class="text-danger">Reference number must be exactly 12 digits</small>
+                        }
+                      </div>
+
+                      <div class="w-100">
+                        <small>
+                          Upload Image Transaction
+                        </small>
+                        <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+                      </div>
+
+                      <div>
+                        <span class="text-danger fw-bold">{{MsgErr}}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              }
-
-            }
-          </div>
-
-          <!-- @if(eventType == 'GraduationParty'){
-            <div class="seat-numbers py-4 overflow-auto shadow-lg border rounded-3 p-3 my-3">
-            <div class="stage-wrapper text-center mb-4">
-              <div class="stage">
-                🎭 Stage
               </div>
             </div>
-            @for (cat of categories; track $index) {
-              <div class="my-4">
-                @for (row of cat.rows; track $index) {
-                  <div class="row-line">
-
-                    <div class="blocks">
-                      @for (block of row.blocks; track $index) {
-                        <div class="block">
-                          @for (seat of block.seats; track $index) {
-                            <div
-                              class="seat"
-                              [ngClass]="seat.status"
-                              (click)="toggleSeat(seat)"
-                            >
-                              {{row.name}}{{seat.number}}
-                            </div>
-                          }
-                        </div>
-                      }
-
-
-                    </div>
-
-                  </div>
-                }
-              </div>
-            }
-            </div>
-          } -->
-
-        </div>
-
-        <ng-template
-          #centerScroll
-          let-modal
-          class="modal fade"
-          id="exampleModalCenteredScrollable"
-          tabindex="-1"
-          aria-labelledby="exampleModalCenteredScrollableTitle"
-          aria-hidden="true"
-        >
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5
-                class="modal-title"
-                id="exampleModalCenteredScrollableTitle"
-              >
-                Checkout
-              </h5>
+            <div class="modal-footer justify-content-center">
               <button
                 type="button"
                 (click)="modal.close()"
-                class="btn-close"
+                class="btn btn-secondary"
                 data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              >
+                Close
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="submitCheckout()"
+              >
+                Confirm
+              </button>
             </div>
-            <div class="modal-body">
-              <div class="summary rounded-3 h-100">
+          </ng-template>
 
-                <div class="text-center">
-                  <img loading="lazy" src="assets/images/tikecktImages/logos/app-icon.png" class="ticketat-logo" alt="ticketat">
-                </div>
-
-                <div class="d-flex flex-column align-items-start gap-0 mt-3 justify-content-between">
-                  <p> Name : <span class="main-color fw-medium">{{ userData?.fullName}}</span></p>
-                  <p> Phone : <span class="main-color fw-medium">{{ userData?.phone}}</span></p>
-                  <p> Email : <span class="main-color fw-medium">{{ userData?.email}}</span></p>
-                  <p> Visitors :
-                    <span class="main-color fw-medium">
-                      @if(checkoutData?.VisitorCount){
-                        {{checkoutData?.VisitorCount}} +
-                      }
-                      2 Companion(s)
-                    </span>
-                  </p>
-                  <!-- <p> Ticket Price : <span class="main-color fw-medium">{{ eventData?.TicketPrice | number}} EGP</span></p> -->
-                  @if(checkoutData?.VisitorCount && checkoutData.VisitorCount > 0){
-                    <p> Visitor Price : <span class="main-color fw-medium">{{ eventData?.VisitorPrice | number}} EGP</span> </p>
-                  }
-
-                  <div class="w-100 pt-2 text-start rounded-3 border-top">
-                    <h4>Deposit</h4>
-                    <p class="m-0"> SubTotal: <span class="main-color fw-bold">{{ subTotal | number }} EGP</span> </p>
-                    <p class="m-0 my-2"> Service Fee : <span class="main-color fw-bold"> {{ tax }} EGP </span></p>
-                    <p class="m-0 pt-1 text-center fs-3 border-top"> Total: <span class="main-color fw-bold">{{ total | number }} EGP</span> </p>
-                    <div class="text-center my-2">
-                      <button class="btn main-btn fs-4">
-                        <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
-                    <div class="w-100">
-                      <small>
-                        Reference Number 12 Digits
-                      </small>
-                      <input
-                        type="text"
-                        class="form-control w-100"
-                        placeholder="Enter Transaction Reference"
-                        maxlength="12"
-                        [(ngModel)]="transactionRef"
-                        name="transactionRef"
-                        inputmode="numeric"
-                      />
-                      @if (transactionRef && transactionRef.length !== 12) {
-                        <small class="text-danger">Reference number must be exactly 12 digits</small>
-                      }
-                    </div>
-
-                    <div class="w-100">
-                      <small>
-                        Upload Image Transaction
-                      </small>
-                      <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
-                    </div>
-
-                    <div>
-                      <span class="text-danger fw-bold">{{MsgErr}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer justify-content-center">
-            <button
-              type="button"
-              (click)="modal.close()"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-
-             <button
-              type="button"
-              class="btn btn-primary"
-              (click)="submitCheckout()"
-            >
-              Confirm
-            </button>
-          </div>
-        </ng-template>
-
+        </div>
       </div>
     </div>
+  </section>
+} @else {
+  <div class="vh-100 text-center p-2 pt-5">
+    <div class="close-img">
+      <img src="assets/images/tikecktImages/close-event.png" alt="close event">
+    </div>
+    <h3 class="text-danger">Event Closed <i class="fa-solid fa-rectangle-xmark"></i></h3>
+    <p>This event has ended and registration is now closed.</p>
+    <button class="btn main-btn main-color" routerLink="/">Home</button>
   </div>
-</section>
+}

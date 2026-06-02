@@ -1,22 +1,14 @@
-import { CommonModule, NgClass } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { UIExamplesListComponent } from '@component/ui-examples-list/ui-examples-list.component';
-import { SelectFormInputDirective } from '@core/directive/select-form-input.directive';
-import { AuthService } from '@core/services/auth/auth.service';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
-import { PaymentService } from '@core/services/payment/payment.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import Choices from 'choices.js';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import Swal from 'sweetalert2';
-import emailjs from '@emailjs/browser';
 import { arrayUnion } from 'firebase/firestore';
-import { calculateTimeToEvent } from '../../../core/helper/utils';
 
 export interface Seat {
   id: string;
@@ -58,7 +50,7 @@ export class CheckoutComponent {
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private modalService = inject(NgbModal)
 
-  userId:string | null = localStorage.getItem('userId')
+  userId:string | null = localStorage.getItem('userId') || null
   userData:any = {}
   eventData:any = {}
   eventId:string | null = null
@@ -147,7 +139,10 @@ export class CheckoutComponent {
     if (!this.userId) {
       this._NgxSpinnerService.hide();
       this._ToastrService.error('User not found');
-      this._Router.navigate(['/']);
+      localStorage.clear()
+      this._Router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
       return;
     }
 
@@ -158,7 +153,10 @@ export class CheckoutComponent {
         if (!this.userData) {
           this._NgxSpinnerService.hide();
           this._ToastrService.error('User not found');
-          this._Router.navigate(['/']);
+          localStorage.clear();
+          this._Router.navigate(['/']).then(() => {
+            window.location.reload();
+          });
           return;
         }
 
@@ -166,8 +164,11 @@ export class CheckoutComponent {
       },
       error: () => {
         this._NgxSpinnerService.hide();
+        localStorage.clear()
         this._ToastrService.error('User not found');
-        this._Router.navigate(['/']);
+        this._Router.navigate(['/']).then(() => {
+          window.location.reload();
+        });
       }
     })
   }

@@ -23,49 +23,51 @@
                 event.id !== 'seXCdBgEahwpuXnnU0gX'
               )
             ){
-              <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + event?.id">
-                <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
-                  <div class="badge fw-bold" [ngClass]="{
-                    'bg-success': event?.status === 'Active' || event?.status === 'active',
-                    'bg-danger': event?.status === 'Inactive'
-                  }">
-                    {{ event?.status == 'Inactive' ? 'Sold Out' : 'Active' }}
-                  </div>
-                  <div class="row g-0 h-100">
-                    <div class="col-md-4">
-                      @if(event?.Image){
-                        <img
-                          loading="lazy"
-                          [src]="event?.Image"
-                          class="event-img img-fluid rounded"
-                          [alt]="event?.name "
-                        />
-                      } @else {
-                        <img loading="lazy" class="event-img w-100 h-100 object-fit-cover img-fluid rounded" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="graduation party">
-                      }
+
+              @if(event?.status === 'Active'){
+                <div class="col-lg-6 cr" [routerLink]="'/available-event-details/' + event?.id">
+                  <div class="card shadow-lg rounded-3 overflow-hidden position-relative">
+                    <div class="badge fw-bold" [ngClass]="{
+                      'bg-success': event?.status === 'Active' || event?.status === 'active',
+                      'bg-danger': event?.status === 'Inactive'
+                    }">
+                      {{ event?.status == 'Inactive' ? 'InActive' : 'Active' }}
                     </div>
-                    <div class="col-md-8">
-                      <div class="d-flex justify-content-center align-items-center h-100">
-                        <div class="card-body">
-                          <h5 class="card-title">{{event?.EventName}}</h5>
-                          <h6 class="mb-2 mt-1 fw-bold m-0 main-color">{{ event?.ownerName || 'Unknown' }}</h6>
-                          <p class="card-text party-details">
-                            Location : <span><a class="cr" [href]="event?.Location" target="_blank">{{event?.LocationName}}</a></span> <br>
-                            Date : <span> To be determined (TBD) </span> <br>
-                          </p>
-                          <div class="card-text d-flex justify-content-between align-items-end">
-                            @if(event?.status == 'Inactive' ){
-                              <span class="border border-2 border-danger px-3 py-1 fw-bold rounded-3 text-danger">Sold Out</span>
-                            } @else {
-                              <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">More Details</button>
-                            }
+                    <div class="row g-0 h-100">
+                      <div class="col-md-4">
+                        @if(event?.Image){
+                          <img
+                            loading="lazy"
+                            [src]="event?.Image"
+                            class="event-img img-fluid rounded"
+                            [alt]="event?.name "
+                          />
+                        } @else {
+                          <img loading="lazy" class="event-img w-100 h-100 object-fit-cover img-fluid rounded" src="assets/images/tikecktImages/event-image/gard-party-cover.png" alt="graduation party">
+                        }
+                      </div>
+                      <div class="col-md-8">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                          <div class="card-body">
+                            <h5 class="card-title">{{event?.EventName}}</h5>
+                            <h6 class="mb-2 mt-1 fw-bold m-0 main-color">{{ event?.ownerName || 'Unknown' }}</h6>
+                            <p class="card-text party-details">
+                              Location : <span><a class="cr" [href]="event?.Location" target="_blank">{{event?.LocationName}}</a></span> <br>
+                              Date : <span> To be determined (TBD) </span> <br>
+                            </p>
+                            <div class="card-text d-flex justify-content-between align-items-end">
+                              @if(event?.status == 'Active' ){
+                                <button class="btn main-btn p-0 px-2 py-1" [routerLink]="'/available-event-details/' + event?.id">More Details</button>
+                              }
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              }
+
             }
           } @empty {
             <h2 class="text-center border p-3 rounded-3">No events available.</h2>

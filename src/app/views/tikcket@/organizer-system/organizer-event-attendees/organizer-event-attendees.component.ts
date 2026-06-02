@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { DownloadExcelService } from '@core/services/excel/download-excel.service';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { SendmailService } from '@core/services/send-email/sendmail.service';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -27,6 +28,7 @@ export class OrganizerEventAttendeesComponent {
   private readonly _BookingService = inject(BookingService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+  private readonly _SendmailService = inject(SendmailService)
   private readonly _ToastrService = inject(ToastrService)
   private readonly _DownloadExcelService = inject(DownloadExcelService)
   private readonly _Router = inject(Router)
@@ -335,7 +337,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: () => {
             this._NgxSpinnerService.hide();
-            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
+            this.sendConfirmEmail(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid One Check Successfully');
             this.modalService.dismissAll();
             this.paidAmount = 0
@@ -374,7 +376,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            this.sendEmailToUser(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
+            this.sendConfirmEmail(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
           },
@@ -493,7 +495,26 @@ export class OrganizerEventAttendeesComponent {
     this.departmentPages[dept] = page;
   }
 
-  // Email Send
+  // Email Send Templates
+  // SMTP Bravo
+  sendConfirmEmail(email:string, eventName:string, userName:string):void{
+    let data = {
+      to: email,
+      userName: userName,
+      eventName: eventName
+    }
+
+    this._SendmailService.sendMail(data).subscribe({
+      next: (res) => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        this._ToastrService.warning('Email failed !');
+      }
+    });
+  }
+
+  // EmailJS
   async sendEmailToUser(email:string, eventName:string, userName:string) {
     emailjs.init('1FX7lfc7iRKkWW7r1');
     try {
