@@ -113,6 +113,19 @@ export class AdminViewEventComponent{
     })
   }
 
+  updateLastPhase(eventId: string, currentStatus: boolean): void {
+    const status = !currentStatus;
+
+    this._EventService.updateLastPhase(eventId, status).subscribe({
+      next: () => {
+        this._ToastrService.success('Last Phase Updated Successfully - ' + `'${status}'`);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   // 🔍 Search
   applySearch() {
     this.filteredData = this.eventsWithOwnerName.filter(item =>

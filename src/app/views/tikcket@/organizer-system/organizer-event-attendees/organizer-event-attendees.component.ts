@@ -119,8 +119,6 @@ export class OrganizerEventAttendeesComponent {
       });
     }
   }
-  // #################### Check Change Any Data in LocalStorage ####################
-
 
   // #################### Start Get Event By ID ####################
   getEventById(): void {
@@ -129,7 +127,6 @@ export class OrganizerEventAttendeesComponent {
       next: (res) => {
         this._NgxSpinnerService.hide()
         this.eventData = res;
-        console.log(this.eventData);
 
         this.totalTaxes = (this.eventData?.TicketPrice * this.eventData?.bookingCount) * 0.02
         this.checkEventOwner()
@@ -310,6 +307,7 @@ export class OrganizerEventAttendeesComponent {
     });
 
     this.filteredData = [...this.attendeesWithUsers];
+
     this.updatePagination();
   }
 
@@ -493,6 +491,40 @@ export class OrganizerEventAttendeesComponent {
     if (page < 1 || page > totalPages) return; // 🔥 حماية
 
     this.departmentPages[dept] = page;
+  }
+
+  // ########################## Set QRs SeatNumber ##########################
+  complateSeatNumber(): void {
+
+    if (!this.filteredData || this.filteredData.length === 0) {
+      this._ToastrService.warning('No bookings found');
+      return;
+    }
+
+    const specialEventId = 'uvoo0zHQzwK1efCTBynh';
+
+    let bookingsToUpdate = [...this.filteredData];
+
+    if (this.eventData?.id === specialEventId) {
+      bookingsToUpdate.sort((a, b) => {
+        const aTime = a.createdAtTwo?.seconds || 0;
+        const bTime = b.createdAtTwo?.seconds || 0;
+
+        return aTime - bTime;
+      });
+    }
+
+
+    this._EventService.updateAllBookingsQrsWithSeats(bookingsToUpdate).subscribe({
+      next: () => {
+        this._ToastrService.success('Seats Updated Successfully');
+      },
+      error: (err) => {
+        console.log(err);
+        this._ToastrService.error('Seats Updated Wrong!');
+      }
+    });
+
   }
 
   // Email Send Templates

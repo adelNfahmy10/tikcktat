@@ -105,20 +105,23 @@
             (input)="applySearch()"
           />
         </div>
+        @if(eventData?.ownerPayment || role == 'Admin'){
+          <div class="download d-flex flex-wrap align-items-center gap-2">
+            <button class="btn btn-outline-primary" (click)="downloadAll()">All <i class="fa-solid fa-file-csv"></i></button>
+            @if(eventData?.id == 'uvoo0zHQzwK1efCTBynh'){
+              <button class="btn btn-outline-primary" (click)="downloadStudentIDs()">Students IDs <i class="fa-solid fa-file-csv"></i></button>
+            }
+            <button class="btn btn-outline-primary" (click)="downloadAllDepartments()">Departments <i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadDepartmentsWithSeatNumber()">Seat No. <i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadShieldSheet()">Shield & Intro<i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadScarfNames()">Scarf Name <i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('arabic')">Sort AR <i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('english')">Sort EN <i class="fa-solid fa-file-csv"></i></button>
+            <button class="btn btn-outline-primary" (click)="downloadAllImages()">All Images <i class="fa-solid fa-file-csv"></i></button>
+            <!-- <button class="btn btn-outline-primary" (click)="complateSeatNumber()">Send Seat Numbers <i class="fa-solid fa-chair"></i></button> -->
 
-        <div class="download d-flex flex-wrap align-items-center gap-2">
-          <button class="btn btn-outline-primary" (click)="downloadAll()">All <i class="fa-solid fa-file-csv"></i></button>
-          @if(eventData?.id == 'uvoo0zHQzwK1efCTBynh'){
-            <button class="btn btn-outline-primary" (click)="downloadStudentIDs()">Students IDs <i class="fa-solid fa-file-csv"></i></button>
-          }
-          <button class="btn btn-outline-primary" (click)="downloadAllDepartments()">Departments <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadDepartmentsWithSeatNumber()">Seat No. <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadShieldSheet()">Shield & Intro<i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadScarfNames()">Scarf Name <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('arabic')">Sort AR <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadAllDepartmentsSorted('english')">Sort EN <i class="fa-solid fa-file-csv"></i></button>
-          <button class="btn btn-outline-primary" (click)="downloadAllImages()">All Images <i class="fa-solid fa-file-csv"></i></button>
-        </div>
+          </div>
+        }
       </div>
 
       <!-- ===================== TABLE All Attendess ===================== -->

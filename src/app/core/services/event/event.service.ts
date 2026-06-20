@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, addDoc, collectionData, query, where, docData } from '@angular/fire/firestore';
-import { doc, increment, updateDoc } from 'firebase/firestore';
+import { doc, increment, updateDoc, writeBatch } from 'firebase/firestore';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -16,12 +16,24 @@ export class EventService {
     return from(addDoc(eventsRef, event));
   }
 
+  // update OwnerPayment
   updateOwnerPaymentInEvent(eventId: string, amount: number) {
     const eventRef = doc(this.firestore, `events/${eventId}`);
 
     return from(
       updateDoc(eventRef, {
         ownerPayment: increment(amount)
+      })
+    );
+  }
+
+  // update lastPhase
+  updateLastPhase(eventId: string, status: boolean) {
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+
+    return from(
+      updateDoc(eventRef, {
+        lastPhase: status
       })
     );
   }
@@ -35,6 +47,57 @@ export class EventService {
         bookingCount: increment(bookedTickets),
       })
     );
+  }
+
+  // Update QRs SeatNubmer
+  updateAllBookingsQrsWithSeats(bookings: any[]) {
+    const batch = writeBatch(this.firestore);
+
+    bookings.forEach((booking) => {
+
+      if (!booking.qrs || booking.qrs.length === 0) return;
+
+      const bookingRef = doc(this.firestore, `bookings/${booking.id}`);
+
+      const departments = [...new Set(booking.qrs.map((q: any) => q.department))].sort();
+
+      const deptMap = new Map<string, string>();
+
+      departments.forEach((dep:any, index) => {
+        deptMap.set(dep, String.fromCharCode(65 + index));
+      });
+
+      const deptCounters = new Map<string, number>();
+
+      let currentSeat = '';
+
+      const updatedQrs = booking.qrs.map((qr: any) => {
+
+        const dept = qr.department || booking.department;
+
+        const deptLetter = deptMap.get(dept) || 'A';
+
+        // 👉 لو owner: نطلع رقم جديد
+        if (qr.type === 'owner') {
+          const nextIndex = (deptCounters.get(dept) || 0) + 1;
+          deptCounters.set(dept, nextIndex);
+
+          currentSeat = `${deptLetter}${nextIndex}`;
+        }
+
+        return {
+          ...qr,
+          seatNumber: qr.type === 'owner' ? currentSeat : `+${currentSeat}`
+        };
+      });
+
+      batch.update(bookingRef, {
+        qrs: updatedQrs,
+        qrsGenerated: true
+      });
+    });
+
+    return from(batch.commit());
   }
 
   // 🔥 Get all events

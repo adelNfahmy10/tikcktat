@@ -227,6 +227,7 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
+                    <i class="fa-solid fa-code-compare cr fs-4" [class.text-danger] = '!event.lastPhase' [class.second-color] = 'event.lastPhase' (click)="updateLastPhase(event.id, event.lastPhase)"></i>
                     <i class="fa-solid fa-money-bill-transfer cr fs-4 second-color" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getEventById(event?.id)"></i>
                     <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.Type + '/' + event?.id"></i>
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>

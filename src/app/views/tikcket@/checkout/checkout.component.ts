@@ -9,6 +9,9 @@ import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { arrayUnion } from 'firebase/firestore';
+import { DropzoneModule } from "ngx-dropzone-wrapper";
+import { generate } from 'rxjs';
+import { SendmailService } from '@core/services/send-email/sendmail.service';
 
 export interface Seat {
   id: string;
@@ -35,7 +38,7 @@ export interface Category {
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, RouterLink, DropzoneModule],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -48,6 +51,7 @@ export class CheckoutComponent {
   private readonly _EventService = inject(EventService)
   private readonly _BookingService = inject(BookingService)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+  private readonly _SendmailService = inject(SendmailService)
   private modalService = inject(NgbModal)
 
   userId:string | null = localStorage.getItem('userId') || null
@@ -94,10 +98,35 @@ export class CheckoutComponent {
 
 
   ngOnInit(): void {
-    this.getEventId()
-    this.getUserById()
-    this.getAllBookings()
+    this.getEventId();
+    this.getUserById();
+    this.getAllBookings();
     // this.generateLayout();
+
+
+    // Confirance / Exhibitions Section
+    this.conferenceForm.get('industry')?.valueChanges.subscribe(value => {
+
+      if (value === 'Other') {
+
+        this.industry = true;
+
+        this.conferenceForm.get('otherIndustry')?.setValidators([
+          Validators.required,
+          Validators.minLength(2)
+        ]);
+
+      } else {
+
+        this.industry = false;
+
+        this.conferenceForm.get('otherIndustry')?.clearValidators();
+        this.conferenceForm.get('otherIndustry')?.reset();
+
+      }
+
+      this.conferenceForm.get('otherIndustry')?.updateValueAndValidity();
+    });
   }
 
   getEventId(): void {
@@ -520,6 +549,7 @@ export class CheckoutComponent {
         next: () => {
           this._NgxSpinnerService.hide();
           this._ToastrService.success('Booking Completed Successfully');
+          this._ToastrService.success('Booking Completed Successfully');
 
           // reset
           this.transactionRef = '';
@@ -543,7 +573,6 @@ export class CheckoutComponent {
   newOutComerCount:number = 0
   async addOutComer() {
     this._NgxSpinnerService.show();
-
     const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
     const newVisitor = {
       type: 'outcomer',
@@ -627,6 +656,145 @@ export class CheckoutComponent {
       });
     }
   }
+
+
+
+  // Conference Login
+
+  industryOptions:string[] = [
+    'Technology',
+    'Software Development',
+    'Artificial Intelligence',
+    'Cyber Security',
+    'Finance',
+    'Banking',
+    'Healthcare',
+    'Education',
+    'Marketing',
+    'Real Estate',
+    'Manufacturing',
+    'Telecommunications',
+    'Government',
+    'Other'
+  ]
+
+  industry:boolean = false
+
+  conferenceForm: FormGroup = this._FormBuilder.group({
+    jobTitle: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    companyName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    industry: [null, [Validators.required, Validators.pattern(new RegExp(`^(${this.industryOptions.join('|')})$`))]],
+    otherIndustry: [null, [Validators.minLength(3), Validators.maxLength(100)]],
+    linkedInUrl: [null, [Validators.pattern(/^(https?:\/\/)?(www\.)?linkedin\.com\/.*$/)]],
+  })
+
+  async conferenceSubmit(): Promise<void> {
+    let data = this.conferenceForm.value;
+    const imageUrl = await this._EventService.uploadImage(this.selectedFile!);
+
+    const finalData = {
+      ...data,
+      EventId: this.eventId,
+      EventName: this.eventData.EventName,
+      OwnerId: this.eventData.OwnerId,
+
+      userId: this.userId,
+      userName: this.userData.fullName,
+      userNameAr: this.userData.fullNameAr || this.userData.fullName,
+      userPhone: this.userData.phone,
+      userEmail: this.userData.email,
+      userImage: imageUrl,
+      createdAt: new Date(),
+    };
+
+    this._BookingService.createBooking(finalData).subscribe({
+      next: (res) => {
+        let qrCode = this.generateQRs(1, res.id) // Generate QR for conference booking
+
+        this._BookingService.updateBooking(this.bookingData.id, {
+          qrs: qrCode,
+          qrsGenerated: true
+        }).subscribe({
+          next: () => {
+            this._NgxSpinnerService.hide();
+            this._ToastrService.success('Booking Completed Successfully');
+            this.conferenceForm.reset()
+            this.selectedFile = null
+            this.photoPreview = null
+            this.sendConfirmEmail(finalData?.userEmail, finalData?.EventName,finalData?.userName, qrCode[0].id)
+
+
+
+            this.modalService.dismissAll();
+            this._Router.navigate(['/payment-success']);
+          },
+          error: (err) => {
+            this._NgxSpinnerService.hide();
+            this._ToastrService.error('Booking Failed');
+          }
+        });
+      },
+      error: (err) => {
+        this._ToastrService.error('Submission Failed');
+      }
+    });
+
+  }
+
+  // SMTP Bravo
+  sendConfirmEmail(email:string, eventName:string, userName:string, qrId:string):void{
+    let data = {
+      to: email,
+      userName: userName,
+      eventName: eventName,
+      qrLink: `https://www.ticketateg.com/#/qrcode/${qrId}`
+    }
+
+    this._SendmailService.sendConfiranceEmail(data).subscribe({
+      next: (res) => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        this._ToastrService.warning('Email failed !');
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // // Seating Layout Logic
   // categories: Category[] = [];

@@ -31,4 +31,16 @@ export class SendmailService {
       }
     );
   }
+
+  sendConfiranceEmail(body:any): Observable<any> {
+    return this._HttpClient.post(
+      'https://ticketat-send-email.vercel.app/api/send-confirance-email',
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
 }
