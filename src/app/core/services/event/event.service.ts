@@ -49,6 +49,18 @@ export class EventService {
     );
   }
 
+
+  // 🔥 Decrease Event Tickets (بعد إلغاء الحجز)
+  decreaseEventTickets(eventId: string, canceledTickets: any): Observable<void> {
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+
+    return from(
+      updateDoc(eventRef, {
+        bookingCount: increment(-canceledTickets),
+      })
+    );
+  }
+
   // Update QRs SeatNubmer
   updateAllBookingsQrsWithSeats(bookings: any[]) {
     const batch = writeBatch(this.firestore);

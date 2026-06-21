@@ -15,6 +15,7 @@ import { DownloadExcelService } from '@core/services/excel/download-excel.servic
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { SendmailService } from '@core/services/send-email/sendmail.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -567,6 +568,45 @@ export class OrganizerEventAttendeesComponent {
     }
   }
 
+
+  // Delete Booking
+  deleteBooking(booking: any): void {
+    console.log(booking);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This booking will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        // 1️⃣ Delete booking
+        this._BookingService.deleteBooking(booking.id).subscribe({
+          next: () => {
+
+            // 2️⃣ Decrease event tickets
+            this._EventService.decreaseEventTickets(
+              booking.EventId,
+              booking.ticketsCount || 1
+            ).subscribe();
+
+            // 3️⃣ UI update
+            this.mergeData()
+
+            Swal.fire('Deleted!', 'Booking has been deleted.', 'success');
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error!', 'Something went wrong.', 'error');
+          }
+        });
+      }
+    });
+
+  }
   // ########################## Download Excels ##########################
   // Formate Date in Excel
   private formatDate(timestamp: any): string {
