@@ -20,9 +20,34 @@ export class SendmailService {
     );
   }
 
+  sendConfirmBooking(body:any): Observable<any> {
+    return this._HttpClient.post(
+      'https://ticketat-send-email.vercel.app/api/send-confirm-booking.js',
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
   sendOTP(body:any): Observable<any> {
     return this._HttpClient.post(
       'https://ticketat-send-email.vercel.app/api/send-otp',
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
+
+  sendQrs(body:any): Observable<any> {
+    return this._HttpClient.post(
+      'https://ticketat-send-email.vercel.app/api/send-final-qrs',
       body,
       {
         headers: {

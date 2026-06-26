@@ -25,6 +25,7 @@ import { OrderSuccessComponent } from './tikcket@/order-success/order-success.co
 import { MyBookingComponent } from './tikcket@/my-booking/my-booking.component'
 import { ContactUsComponent } from './tikcket@/contact-us/contact-us.component'
 import { UsersComponent } from './tikcket@/admin-system/users/users.component'
+import { AttendeesDetailsComponent } from './tikcket@/organizer-system/attendees-details/attendees-details.component'
 
 export const VIEWS_ROUTES: Route[] = [
   {
@@ -112,6 +113,11 @@ export const VIEWS_ROUTES: Route[] = [
     path: 'event-attendees/:type/:eventId',
     component: OrganizerEventAttendeesComponent,
     data: { title: 'Grad Details' },
+  },
+  {
+    path: 'attendees-details/:id',
+    component: AttendeesDetailsComponent,
+    data: { title: 'Attendee Details' },
   },
 
   // Auth Components

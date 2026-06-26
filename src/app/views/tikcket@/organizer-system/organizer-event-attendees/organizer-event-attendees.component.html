@@ -371,6 +371,7 @@
 
                     @if(user?.payTwoAmount && user?.payOneAmount){
                       <i class="fa-solid fa-check-double text-success"></i>
+                      <i class="fa-solid fa-arrows-down-to-people" (click)="goToAttendeesDetails(user.id)"></i>
                     }
                   </div>
                 </td>

@@ -21,12 +21,14 @@
                   </button>
                 </li>
               } @else {
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
-                    type="button" role="tab" aria-controls="extra-services" aria-selected="false" (click)="scrollToBookNow()">
-                    Continue Booking
-                  </button>
-                </li>
+                @if(bookingData.VisitorCount < 3){
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
+                      type="button" role="tab" aria-controls="extra-services" aria-selected="false" (click)="scrollToBookNow()">
+                      Continue Booking
+                    </button>
+                  </li>
+                }
               }
             </ul>
 
@@ -628,23 +630,30 @@
                           </div>
                         </div>
                       </div>
-                    } @else if(!bookingData.newOutcomers){
+                    } @else if(bookingData.VisitorCount < 3){
                       <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                         <h3 class="m-0 mb-2">Booking Outcomer</h3>
-                        <div class="user-data rounded-3">
+                        <h5>You can add <span class="fw-bold main-color">{{ fixedOutcomerCount - this.bookingData?.VisitorCount }}</span> more outcomer(s).</h5>
+                        <div class="user-data rounded-3 my-3">
                           <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
                             <div class="col-12">
                               <div class="payOne-body">
                                 <h4>Outcomer Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></h4>
                                 <div class="mt-2">
-                                <small> Outcomer Count </small>
+                                  <small> Outcomer Count </small>
                                   <input
                                     type="number"
+                                    min="1"
+                                    [max]="fixedOutcomerCount - this.bookingData?.VisitorCount"
                                     class="form-control"
                                     [(ngModel)]="newOutComerCount"
                                     name="newOutComer"
                                     placeholder="Enter New Outcomer..."
                                   >
+
+                                  @if(newOutComerCount > (fixedOutcomerCount - this.bookingData?.VisitorCount)){
+                                    <small class="text-danger">You can add {{ fixedOutcomerCount - this.bookingData?.VisitorCount }} outcomer(s) only</small>
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -693,19 +702,25 @@
 
                             </div>
 
-                            <div class="col-12 text-center">
-                              <button
-                                type="button"
-                                class="btn btn-primary"
-                                (click)="addOutComer()"
-                              >
-                                Add Outcomer
-                              </button>
+                            <div class="col-12">
+                              <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                                <small class="text-danger fw-bold">{{MsgErr}}</small>
+
+                                <button
+                                  type="button"
+                                  [disabled]="!newOutComerCount || newOutComerCount > (fixedOutcomerCount - this.bookingData?.VisitorCount)"
+                                  class="btn btn-primary"
+                                  (click)="addOutComer()"
+                                >
+                                  Add Outcomer
+                                </button>
+
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    } @else{
+                    } @else if (bookingData.VisitorCount == 3){
                       <div class="text-center my-4">
                         <h4 dir="rtl">لقد وصلت إلى الحد الأقصى المسموح به من المرافقين لهذا الحجز.</h4>
                         <h4>You have reached the maximum number of companions allowed for this booking.</h4>
@@ -718,7 +733,6 @@
                         </button>
                       </div>
                     }
-
                   } @else {
 
                     <div class="text-center mt-3">

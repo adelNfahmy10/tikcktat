@@ -576,8 +576,22 @@ export class CheckoutComponent {
   }
 
   newOutComerCount:number = 0
+  fixedOutcomerCount:number = 3
+
   async addOutComer() {
     this._NgxSpinnerService.show();
+
+    if (this.bookingData?.VisitorCount && this.newOutComerCount > this.bookingData?.VisitorCount) {
+      this._ToastrService.error(
+        `You can only add ${this.fixedOutcomerCount - this.bookingData?.VisitorCount } outcomers(s).`
+      );
+
+      this.MsgErr = `You can only add ${this.fixedOutcomerCount - this.bookingData?.VisitorCount } outcomers(s).`
+
+      this._NgxSpinnerService.hide();
+      return;
+    }
+
     const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
     const newVisitor = {
       type: 'outcomer',
@@ -587,6 +601,15 @@ export class CheckoutComponent {
       payImage: imagePaymentUrl,
       createdAt: new Date()
     };
+
+
+    if (!this.selectedPaymentFile) {
+      this._ToastrService.error('برجاء رفع صورة الدفع');
+      this.MsgErr = 'برجاء رفع صورة الدفع'
+      this._NgxSpinnerService.hide()
+
+      return;
+    }
 
     let totalPersons = this.newOutComerCount + this.bookingData.VisitorCount;
     const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
@@ -603,6 +626,7 @@ export class CheckoutComponent {
       next: () => {
         this._NgxSpinnerService.hide();
         this._ToastrService.success('✅ Add Outcomer Successfully');
+
         this.modalService.dismissAll();
         this._Router.navigate(['/payment-success']);
       },

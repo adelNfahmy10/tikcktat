@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-organizer-event-attendees',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './organizer-event-attendees.component.html',
   styleUrl: './organizer-event-attendees.component.scss'
 })
@@ -163,6 +163,13 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+  // #################### Router To Attendees Details ####################
+  goToAttendeesDetails(id: any): void {
+    this.getBookById(id, () => {
+      this._Router.navigate(['/attendees-details/', this.bookingId]);
+    });
+  }
+
   totalOutComerCount:number = 0
   totalVisitorCount:number = 0
   totalDefaultVisitorCount:number = 0
@@ -229,19 +236,24 @@ export class OrganizerEventAttendeesComponent {
   }
 
   eventName:string = ''
-  getBookById(id:any):void{
-    this._NgxSpinnerService.show()
+  bookingId:any = ''
+  getBookById(id: any, callback?: () => void): void {
+    this._NgxSpinnerService.show();
+
     this._BookingService.getBookingById(id).subscribe({
-      next:(res)=>{
-        this._NgxSpinnerService.hide()
-        this.bookDataById = res
+      next: (res) => {
+        this._NgxSpinnerService.hide();
+        this.bookDataById = res;
+        this.bookingId = res.id;
+
+        callback?.();
       },
-      error:(err)=>{
-        this._NgxSpinnerService.hide()
+      error: (err) => {
+        this._NgxSpinnerService.hide();
+        console.error(err);
       }
     });
   }
-
   mergeData(): void {
     if (!this.allBooking.length || !this.allUsers.length) return;
 
@@ -375,7 +387,7 @@ export class OrganizerEventAttendeesComponent {
         }).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            this.sendConfirmEmail(this.bookDataById?.userEmail, this.bookDataById?.EventName,this.bookDataById?.userName)
+            this.sendFinalConfirmEmail(this.bookDataById?.userEmail, this.bookDataById?.EventName, this.bookDataById?.userName)
             this._ToastrService.success('✅ Paid Two Check Successfully');
             this.modalService.dismissAll();
           },
@@ -547,6 +559,43 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+  sendFinalConfirmEmail(email:string, eventName:string, userName:string):void{
+    let data = {
+      to: email,
+      userName: eventName,
+      eventName: userName
+    }
+
+    this._SendmailService.sendConfirmBooking(data).subscribe({
+      next: (res) => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        this._ToastrService.warning('Email failed !');
+      }
+    });
+  }
+
+  // STMP QRS Bravo
+  sendFinalQrs(email:string, eventName:string, userName:string, qrs: any[]):void{
+    const data = {
+      to: email,
+      name: userName,
+      eventName: eventName,
+      qrs: qrs
+    };
+
+    this._SendmailService.sendQrs(data).subscribe({
+      next: () => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error('Email failed!');
+      }
+    });
+  }
+
   // EmailJS
   async sendEmailToUser(email:string, eventName:string, userName:string) {
     emailjs.init('1FX7lfc7iRKkWW7r1');
@@ -567,7 +616,6 @@ export class OrganizerEventAttendeesComponent {
       throw err;
     }
   }
-
 
   // Delete Booking
   deleteBooking(booking: any): void {
