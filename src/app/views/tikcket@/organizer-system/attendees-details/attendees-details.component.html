@@ -1,6 +1,6 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
-    <div class="row g-2">
+    <div class="row g-3">
       <div class="col-12">
         <h1>{{bookingDate?.EventName}}</h1>
       </div>
@@ -65,6 +65,24 @@
         </div>
       </div>
 
+      <!-- Total Outcomers Amount  -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h4 class="card-title mb-2">Outcomers Amount</h4>
+                <p class="text-muted fw-medium fs-22 mb-0">{{TotalOutComersPrice | number}} EGP</p>
+              </div>
+
+              <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- Total Amount -->
       <div class="col-lg-3 col-md-6 col-12">
@@ -87,7 +105,7 @@
 
 
       <!-- Total Visitors -->
-      <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-12">
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-center justify-content-between gap-5">
@@ -113,27 +131,87 @@
       </div>
 
       <!-- Images Transactions -->
-      <div class="col-md-3">
-        <h4>Screen Deposit</h4>
-        <div class="div-image-trans">
-          <img [src]="bookingDate?.payOneImage" class="w-100 h-100 object-fit-cover" [alt]="">
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card p-3 rounded-3 h-100">
+          <h4 class="mb-2 main-color">Screen Deposit</h4>
+
+          <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
+            <span>Price : {{bookingDate?.payOneAmount | number}} EGP</span>
+            <span>created At : {{bookingDate?.createdAtOne?.toDate() | date:"medium"}}</span>
+            <span>Referance No. : {{bookingDate?.payOneRef || '-'}}</span>
+          </div>
+
+
+          <div class="image-trans">
+            <img [src]="bookingDate?.payOneImage" [alt]="">
+          </div>
         </div>
       </div>
 
-      <div class="col-md-3">
-        <h4>Screen Last Payment</h4>
-        <div class="div-image-trans">
-          <img [src]="bookingDate?.payTwoImage" class="w-100 h-100 object-fit-cover" [alt]="">
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card p-3 rounded-3 h-100">
+
+          <h4 class="mb-2 main-color">Screen Last Payment</h4>
+
+          <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
+            <span>Price : {{bookingDate?.payTwoAmount | number}} EGP</span>
+            <span>created At : {{bookingDate?.createdAtTwo?.toDate() | date:"medium"}}</span>
+            <span>Referance No. : {{bookingDate?.payTwoRef || '-'}}</span>
+          </div>
+
+
+          <div class="image-trans">
+            <img [src]="bookingDate?.payTwoImage" [alt]="">
+          </div>
         </div>
       </div>
-
 
       @if(bookingDate?.VisitorCount){
         @for (screen of bookingDate?.newOutcomers; track $index) {
-          <div class="col-md-3">
-            <h4>Screen Outcomers Payments ({{$index + 1}})</h4>
-            <div class="div-image-trans h-100">
-              <img [src]="screen?.payImage" class="w-100 h-100 object-fit-cover" [alt]="">
+          <div class="col-lg-3 col-md-6 col-12">
+            <div class="card p-3 rounded-3 h-100">
+              <h4 class="mb-2 main-color">Screen Outcomers Payments ({{$index + 1}})</h4>
+
+              <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
+                <span>Outcomer(s) : {{screen?.count | number}} Outcomer(s)</span>
+                <span>Price : {{screen?.price | number}} EGP</span>
+                <span>created At : {{screen?.createdAt?.toDate() | date:"medium"}}</span>
+                <span>Referance No. : {{screen?.payRef || '-'}}</span>
+              </div>
+
+              @if(!screen?.price){
+                <div class="input-payment">
+                  <div class="main-color fw-bold mb-1">
+                    <span>Amount Paid : {{ ((screen?.count * eventDate?.VisitorPrice) * 1.02) | number }} EGP</span>
+                  </div>
+                  <input
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    [name]="'payment' + $index"
+                    [(ngModel)]="outcomerPayments[$index]"
+                    placeholder="Enter User Amount Paid..."
+                  />
+                </div>
+
+                <div class="text-center my-2">
+                  <button
+                    class="btn main-btn w-100"
+                    [disabled]="
+                      outcomerPayments[$index] != ((screen?.count * eventDate?.VisitorPrice) * 1.02) ||
+                      loadingIndex === $index
+                    "
+                    (click)="confirmOutcomerPayment(outcomerPayments[$index], $index)">
+                    Submit
+                  </button>
+                </div>
+              }
+
+
+              <div class="image-trans h-100">
+                <img [src]="screen?.payImage" [alt]="">
+              </div>
+
             </div>
           </div>
         }

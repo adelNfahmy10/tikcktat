@@ -293,7 +293,6 @@ export class OrganizerEventAttendeesComponent {
     );
 
     this.filteredData = [...this.attendeesWithUsers];
-    console.log(this.filteredData);
 
     this.updatePagination();
   }
@@ -630,8 +629,6 @@ export class OrganizerEventAttendeesComponent {
 
   // Delete Booking
   deleteBooking(booking: any): void {
-    console.log(booking);
-
     Swal.fire({
       title: 'Are you sure?',
       text: 'This booking will be deleted!',
