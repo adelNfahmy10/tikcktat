@@ -2,10 +2,12 @@
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
 
+      <!-- <button class="btn main-btn" (click)="updateDepartments()">Update Deparemtents</button> -->
       <!-- ===================== STATS ===================== -->
+
       <div class="row g-2">
         <!-- Total Graduates -->
-        <div class="col-lg-3 col-md-6 col-12">
+        <div class="col-md-6 col-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
@@ -24,7 +26,7 @@
         </div>
 
         <!-- Total Visitors -->
-        <div class="col-lg-4 col-md-6 col-12">
+        <div class="col-md-6 col-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between gap-5">
@@ -42,6 +44,44 @@
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
                     <i class="fs-32 main-color avatar-title ri-user-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Deposits -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Deposits</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalPayOne || 0 | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Final Payment -->
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Final Payment</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalPayTwo || 0 | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
                   </div>
                 </div>
               </div>
@@ -69,13 +109,13 @@
         </div>
 
         <!-- Total Tax -->
-        <div class="col-lg-2 col-md-6 col-12">
+        <div class="col-lg-3 col-md-6 col-12">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Taxes</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalTaxes || 0 | number }} EGP</p>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ ((eventData?.bookingCount * eventData?.TicketPrice) + (totalVisitorCount * eventData.VisitorPrice)) * 0.02 || 0 | number }} EGP</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -291,7 +331,7 @@
             @for (user of paginatedData; track $index) {
               <tr>
                 <td>
-                  <div class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="d-flex flex-column justify-content-center align-items-center" [ngClass]="{'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount }">
                     <span>
                       {{
                         $index + 1 + ((page - 1) * pageSize)
@@ -359,19 +399,19 @@
                       <i class="fa-regular fa-trash-can text-danger cr" (click)="deleteBooking(user)"></i>
                     }
 
-                    <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user.id)"></i>
+                    <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user?.id)"></i>
 
                     @if(!user?.payOneAmount){
-                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user?.id)"></i>
                     }
 
                     @if(user?.payOneAmount && !user?.payTwoAmount){
-                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user.id)"></i>
+                      <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user?.id)"></i>
                     }
 
                     @if(user?.payTwoAmount && user?.payOneAmount){
                       <i class="fa-solid fa-check-double text-success"></i>
-                      <i class="fa-solid fa-arrows-down-to-people" (click)="goToAttendeesDetails(user.id)"></i>
+                      <i class="fa-solid fa-arrows-down-to-people" (click)="goToAttendeesDetails(user?.id)"></i>
                     }
                   </div>
                 </td>

@@ -21,7 +21,7 @@
                   </button>
                 </li>
               } @else {
-                @if(bookingData.VisitorCount < 3){
+                @if(bookingData?.payOneAmount && bookingData?.VisitorCount < 3){
                   <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="extra-services-tab" data-bs-toggle="tab" data-bs-target="#extra-services"
                       type="button" role="tab" aria-controls="extra-services" aria-selected="false" (click)="scrollToBookNow()">
@@ -509,128 +509,140 @@
 
                   @if(eventData?.lastPhase){
 
-                    @if(bookingData.payOneAmount && !bookingData.payTwoAmount){
-                      <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
-                        <h3 class="m-0 mb-2">Continue Booking</h3>
+                    @if(bookingData?.payOneAmount && !bookingData?.payTwoAmount){
+                      @if(!bookingData?.createdAtTwo){
+                        <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                          <h3 class="m-0 mb-2">Continue Booking</h3>
 
-                        <div class="user-data row g-3 rounded-3">
-                          <!-- User Info -->
-                          <div class="col-md-3 col-sm-6 col-12">
-                              <div class="user-info shadow-sm text-center border border-1 p-2">
+                          <div class="user-data row g-3 rounded-3">
+                            <!-- User Info -->
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="user-info shadow-sm text-center border border-1 p-2">
+                                  @if(bookingData.userImage){
+                                    <div class="user-image">
+                                      <img [src]="bookingData.userImage" [alt]="bookingData.userName">
+                                    </div>
+                                  }
+                                  <div class="info-body my-2">
+                                    <p>{{bookingData.userName}}</p>
+                                    <p>{{bookingData.userEmail}}</p>
+                                    <p>{{bookingData.userPhone}}</p>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <!-- Paid One Info -->
+                            <div class="col-md-3 col-sm-6 col-12">
+                              <div class="payOne-info shadow-sm text-center border border-1 p-2">
                                 @if(bookingData.userImage){
-                                  <div class="user-image">
-                                    <img [src]="bookingData.userImage" [alt]="bookingData.userName">
+                                  <div class="payOne-image">
+                                    <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
                                   </div>
                                 }
-                                <div class="info-body my-2">
-                                  <p>{{bookingData.userName}}</p>
-                                  <p>{{bookingData.userEmail}}</p>
-                                  <p>{{bookingData.userPhone}}</p>
+                                <div class="payOne-body my-2">
+                                  <p>Reference: {{bookingData.payOneRef}}</p>
+                                  <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
+                                  <p>Date: {{ bookingData.createdAtOne?.toDate() | date:'medium' }}</p>
                                 </div>
-                              </div>
-                          </div>
-
-                          <!-- Paid One Info -->
-                          <div class="col-md-3 col-sm-6 col-12">
-                            <div class="payOne-info shadow-sm text-center border border-1 p-2">
-                              @if(bookingData.userImage){
-                                <div class="payOne-image">
-                                  <img [src]="bookingData.payOneImage" [alt]="bookingData.userName">
-                                </div>
-                              }
-                              <div class="payOne-body my-2">
-                                <p>Reference: {{bookingData.payOneRef}}</p>
-                                <p>Paid: {{bookingData.payOneAmount | number}} EGP</p>
-                                <p>Date: {{ bookingData.createdAtOne?.toDate() | date:'medium' }}</p>
                               </div>
                             </div>
-                          </div>
 
-                          <!-- Phase Two -->
-                          <div class="col-md-6 h-100" id="bookNowSection">
-                            <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
-                              <div class="col-12">
-                                <h3 class="text-center fww-bold">Checkout</h3>
-                              </div>
-
-                              <!-- Previous Payment -->
-                              <div class="col-md-6">
-                                <h4>Previous Payment : </h4>
-
-                                <div class="payOne-body my-2">
-                                  <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
-                                  <!-- <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p> -->
-                                  <p>Your Paid: <span class="fw-bold">{{payOneNetForView | number}} EGP</span></p>
-                                  <!-- <div class="mt-2">
-                                    <small> Visitor Count </small>
-                                    <input
-                                      type="number"
-                                      class="form-control"
-                                      [(ngModel)]="visitorCount"
-                                      name="visitorCount"
-                                      (ngModelChange)="calculatePriceAfterFinalPaid()"
-                                      placeholder="Enter Visitor Count..."
-                                    >
-                                  </div> -->
+                            <!-- Phase Two -->
+                            <div class="col-md-6 h-100" id="bookNowSection">
+                              <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
+                                <div class="col-12">
+                                  <h3 class="text-center fww-bold">Checkout</h3>
                                 </div>
-                              </div>
 
-                              <hr class="d-block d-md-none">
+                                <!-- Previous Payment -->
+                                <div class="col-md-6">
+                                  <h4>Previous Payment : </h4>
 
-                              <!-- Final Payment -->
-                              <div class="col-md-6">
-                                <h4>Final Payment : </h4>
-                                <div class="payOne-body my-2">
-                                  <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
-                                  <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
-                                  <h4 class="main-color fw-bold my-2 text-center text-md-start"> Total : <span class="fw-bold">{{ total | number }} EGP</span> </h4>
-                                </div>
-                              </div>
-
-                              <div class="col-12">
-                                <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
-                                  <div class="w-100">
-                                    <small>
-                                      Reference Number 12 Digits
-                                    </small>
-                                    <input
-                                      type="text"
-                                      class="form-control w-100"
-                                      placeholder="Enter Transaction Reference"
-                                      maxlength="12"
-                                      [(ngModel)]="transactionRef"
-                                      name="transactionRef"
-                                      inputmode="numeric"
-                                    />
-                                  </div>
-
-                                  <div class="w-100">
-                                    <small>
-                                      Upload Image Transaction
-                                    </small>
-                                    <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
-                                  </div>
-
-                                  <div class="w-100 text-center">
-                                    <span class="text-danger fw-bold">{{MsgErr}}</span>
+                                  <div class="payOne-body my-2">
+                                    <p>Ticket Price : <span class="fw-bold">{{eventData.TicketPrice | number}} EGP</span></p>
+                                    <!-- <p>Visitor Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></p> -->
+                                    <p>Your Paid: <span class="fw-bold">{{payOneNetForView | number}} EGP</span></p>
+                                    <!-- <div class="mt-2">
+                                      <small> Visitor Count </small>
+                                      <input
+                                        type="number"
+                                        class="form-control"
+                                        [(ngModel)]="visitorCount"
+                                        name="visitorCount"
+                                        (ngModelChange)="calculatePriceAfterFinalPaid()"
+                                        placeholder="Enter Visitor Count..."
+                                      >
+                                    </div> -->
                                   </div>
                                 </div>
-                              </div>
 
-                              <div class="col-12 text-center">
-                                <button
-                                  type="button"
-                                  class="btn btn-primary"
-                                  (click)="continueBooking()"
-                                >
-                                  Confirm
-                                </button>
+                                <hr class="d-block d-md-none">
+
+                                <!-- Final Payment -->
+                                <div class="col-md-6">
+                                  <h4>Final Payment : </h4>
+                                  <div class="payOne-body my-2">
+                                    <p> SubTotal : <span class="fw-bold">{{ subTotal || eventData.TicketPrice - bookingData.payOneAmount | number }} EGP</span> </p>
+                                    <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
+                                    <h4 class="main-color fw-bold my-2 text-center text-md-start"> Total : <span class="fw-bold">{{ total | number }} EGP</span> </h4>
+                                  </div>
+                                </div>
+
+                                <div class="col-12">
+                                  <div class="d-flex flex-wrap justify-content-center align-items-center gap-1">
+                                    <div class="w-100">
+                                      <small>
+                                        Reference Number 12 Digits
+                                      </small>
+                                      <input
+                                        type="text"
+                                        class="form-control w-100"
+                                        placeholder="Enter Transaction Reference"
+                                        maxlength="12"
+                                        [(ngModel)]="transactionRef"
+                                        name="transactionRef"
+                                        inputmode="numeric"
+                                      />
+                                    </div>
+
+                                    <div class="w-100">
+                                      <small>
+                                        Upload Image Transaction
+                                      </small>
+                                      <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+                                    </div>
+
+                                    <div class="w-100 text-center">
+                                      <span class="text-danger fw-bold">{{MsgErr}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    (click)="continueBooking()"
+                                  >
+                                    Confirm
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    } @else if(bookingData.VisitorCount < 3){
+                      } @else {
+                        <div class="text-center my-4">
+                          <h4 dir="rtl">برجاء الإنتظار لحين تأكيد دفع المرحلة الثانية من قبل المنظم المسئول</h4>
+                          <h4>Please wait while the responsible organizer confirms the first payment.</h4>
+
+                          <button class="btn main-btn mt-4" routerLink="/">
+                            <i class="fa-solid fa-arrow-left"></i> Back
+                          </button>
+                        </div>
+                      }
+
+                    } @else if(bookingData.VisitorCount < 3 && bookingData.payOneAmount){
                       <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                         <h3 class="m-0 mb-2">Booking Outcomer</h3>
                         <h5>You can add <span class="fw-bold main-color">{{ fixedOutcomerCount - this.bookingData?.VisitorCount }}</span> more outcomer(s).</h5>
@@ -727,6 +739,15 @@
 
                         <h4 dir="rtl">نعتذر، لا يمكن إضافة مرافقين جدد في الوقت الحالي.</h4>
                         <h4>We’re sorry, you cannot add any more companions at this time.</h4>
+
+                        <button class="btn main-btn mt-4" routerLink="/">
+                          <i class="fa-solid fa-arrow-left"></i> Back
+                        </button>
+                      </div>
+                    } @else {
+                      <div class="text-center my-4">
+                        <h4 dir="rtl">برجاء الإنتظار لحين تأكيد دفع المرحلة الأولى من قبل المنظم المسئول</h4>
+                        <h4>Please wait while the responsible organizer confirms the first payment.</h4>
 
                         <button class="btn main-btn mt-4" routerLink="/">
                           <i class="fa-solid fa-arrow-left"></i> Back

@@ -63,7 +63,7 @@ export class BookingService {
     return from(addDoc(bookingRef, data));
   }
 
-  // Update Booking
+  // Update Booking By Id
   updateBooking(bookingId: string, data: any) {
     const bookingDoc = doc(this.firestore, `bookings/${bookingId}`);
     return from(updateDoc(bookingDoc, data));

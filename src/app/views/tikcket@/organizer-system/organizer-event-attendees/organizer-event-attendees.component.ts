@@ -16,6 +16,8 @@ import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { SendmailService } from '@core/services/send-email/sendmail.service';
 import Swal from 'sweetalert2';
+import { doc, writeBatch } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-organizer-event-attendees',
@@ -173,6 +175,8 @@ export class OrganizerEventAttendeesComponent {
   totalOutComerCount:number = 0
   totalVisitorCount:number = 0
   totalDefaultVisitorCount:number = 0
+  totalPayOne:number = 0
+  totalPayTwo:number = 0
   totalRevenue:number = 0
   totalTaxes:number = 0
   hasStudentsColumn: boolean = false;
@@ -215,6 +219,12 @@ export class OrganizerEventAttendeesComponent {
 
           // 💰 total revenue
           this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
+
+          // 💰 total pay one
+          this.totalPayOne = this.allBooking.reduce((sum, item) => sum + (item.payOneAmount || 0), 0);
+
+          // 💰 total pay two
+          this.totalPayTwo = this.allBooking.reduce((sum, item) => sum + (item.payTwoAmount || 0), 0);
 
           this.totalTaxes = Math.ceil(this.totalRevenue * 0.02);
 
@@ -283,6 +293,7 @@ export class OrganizerEventAttendeesComponent {
     );
 
     this.filteredData = [...this.attendeesWithUsers];
+    console.log(this.filteredData);
 
     this.updatePagination();
   }
@@ -1076,5 +1087,36 @@ export class OrganizerEventAttendeesComponent {
     const content = await zip.generateAsync({ type: 'blob' });
 
     saveAs(content, 'event-images.zip');
+  }
+
+
+  // Update All Bookings Departments
+  private firestore = inject(Firestore);
+
+  async updateDepartments() {
+    const batch = writeBatch(this.firestore);
+
+    this._NgxSpinnerService.show();
+
+    this.filteredData.forEach((booking) => {
+      const bookingRef = doc(this.firestore, `bookings/${booking.id}`);
+
+      batch.update(bookingRef, {
+        department:
+          booking.status === 'Pending'
+            ? 'Chinese'
+            : 'Chinese Credit',
+      });
+    });
+
+    try {
+      await batch.commit();
+      this._ToastrService.success('All bookings updated successfully');
+    } catch (err) {
+      console.error(err);
+      this._ToastrService.error('Update Booking Failed');
+    } finally {
+      this._NgxSpinnerService.hide();
+    }
   }
 }
