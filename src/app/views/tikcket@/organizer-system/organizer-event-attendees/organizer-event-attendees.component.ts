@@ -131,7 +131,6 @@ export class OrganizerEventAttendeesComponent {
         this._NgxSpinnerService.hide()
         this.eventData = res;
 
-        this.totalTaxes = (this.eventData?.TicketPrice * this.eventData?.bookingCount) * 0.02
         this.checkEventOwner()
       },
       error: (err) => {
@@ -173,6 +172,7 @@ export class OrganizerEventAttendeesComponent {
   }
 
   totalOutComerCount:number = 0
+  totalNewOutcomersPrice:number = 0
   totalVisitorCount:number = 0
   totalDefaultVisitorCount:number = 0
   totalPayOne:number = 0
@@ -203,30 +203,49 @@ export class OrganizerEventAttendeesComponent {
             return aDate - bDate; // 🔥 القديم فوق - الجديد تحت
           });
 
-          // 👨‍👩‍👧 total Vsisitos
+          // console.log(this.allBooking);
+
+
+          // 👨‍👩‍👧 total outcomers Count
           this.totalOutComerCount= this.allBooking.reduce((sum, b) => {
             return sum + (b.VisitorCount + b.defaultVisitorCount || 0);
           }, 0);
 
+          // total new outcomers extra count
           this.totalVisitorCount = this.allBooking.reduce((sum, b) => {
             return sum + (b.VisitorCount || 0);
           }, 0);
 
-          // 👨‍👩‍👧 defaultVisitorCount لوحده
+          // total default outcomers count
           this.totalDefaultVisitorCount = this.allBooking.reduce((sum, b) => {
             return sum + (b.defaultVisitorCount || 0);
           }, 0);
 
-          // 💰 total revenue
+          // 💰 total revenue amount
           this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
 
-          // 💰 total pay one
+          // 💰 total pay one amount
           this.totalPayOne = this.allBooking.reduce((sum, item) => sum + (item.payOneAmount || 0), 0);
 
-          // 💰 total pay two
+          // 💰 total pay two amount
           this.totalPayTwo = this.allBooking.reduce((sum, item) => sum + (item.payTwoAmount || 0), 0);
 
-          this.totalTaxes = Math.ceil(this.totalRevenue * 0.02);
+          // 💰 total new outcomers amount
+          this.totalNewOutcomersPrice = this.allBooking.reduce(
+            (total, booking) =>
+              total +
+              (booking.newOutcomers || []).reduce(
+                (sum:any, outcomer:any) => sum + Number(outcomer.price || 0),
+                0
+              ),
+            0
+          );
+
+
+          this.totalTaxes = Math.ceil((this.totalRevenue + this.totalNewOutcomersPrice) * 0.02);
+
+          console.log(this.totalTaxes);
+
 
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {

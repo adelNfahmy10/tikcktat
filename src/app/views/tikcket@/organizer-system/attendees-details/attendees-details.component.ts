@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
+import { SendmailService } from '@core/services/send-email/sendmail.service';
 import { serverTimestamp, Timestamp } from 'firebase/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-attendees-details',
@@ -19,6 +21,7 @@ export class AttendeesDetailsComponent implements OnInit{
   private readonly _EventService = inject(EventService)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
+  private readonly _SendmailService = inject(SendmailService)
   private readonly _ToastrService = inject(ToastrService)
 
 
@@ -110,4 +113,111 @@ export class AttendeesDetailsComponent implements OnInit{
     });
 
   }
+
+  // Delete Ourcomer
+  deleteOutcomers(index: number) {
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This outcomer and its QR will be permanently deleted.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d'
+    }).then((result) => {
+
+      if (!result.isConfirmed) return;
+
+      this._NgxSpinnerService.show();
+
+      // الـ Outcomer اللي هيتمسح
+      const deletedOutcomer = this.bookingDate.newOutcomers[index];
+
+      // حذف الـ Outcomer
+      const newOutcomers = [...this.bookingDate.newOutcomers];
+      newOutcomers.splice(index, 1);
+
+      // حذف الـ QR المقابل ليه
+      const qrs = this.bookingDate.qrs.filter((qr: any) => {
+        return !(
+          qr.type === 'guest' &&
+          qr.createdAt?.seconds === deletedOutcomer.createdAt?.seconds &&
+          qr.createdAt?.nanoseconds === deletedOutcomer.createdAt?.nanoseconds
+        );
+      });
+
+      this._BookingService.updateBooking(this.bookingDate.id, {
+        newOutcomers,
+        qrs,
+        VisitorCount: this.bookingDate.VisitorCount - 1,
+        totalVisitors: this.bookingDate.totalVisitors - 1
+      }).subscribe({
+        next: () => {
+
+          this.bookingDate.newOutcomers = newOutcomers;
+          this.bookingDate.qrs = qrs;
+          this.bookingDate.VisitorCount--;
+          this.bookingDate.totalVisitors--;
+
+          this._NgxSpinnerService.hide();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Outcomer deleted successfully.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+        },
+        error: (err) => {
+          console.error(err);
+          this._NgxSpinnerService.hide();
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Failed to delete outcomer.'
+          });
+        }
+      });
+
+    });
+
+  }
+
+  // Send QRs Code | STMP QRS Bravo
+  sendFinalQrs(email:string, eventName:string, userName:string, qrs: any[]):void{
+    const data = {
+      to: email,
+      name: userName,
+      eventName: eventName,
+      qrs: qrs
+    };
+
+    this._SendmailService.sendQrs(data).subscribe({
+      next: () => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error('Email failed!');
+      }
+    });
+  }
+
+  canSendQrs(): boolean {
+    if (!this.bookingDate?.newOutcomers?.length) {
+      return true;
+    }
+
+    return this.bookingDate.newOutcomers.every((outcomer: any) => !!outcomer.price);
+  }
+
+  checkNewOutcomer():boolean{
+    return this.bookingDate.newOutcomers.every((outcomer: any) => !!outcomer.price);
+  }
+
 }
