@@ -18,8 +18,8 @@
 
     <div class="qrcode-info">
       @if(qr){
-        @if (isUsed == false) {
-          <div class="row g-2">
+        <div class="row g-2">
+          @if(isUsed == false){
             <div class="col-6">
               <div class="qr-wrapper h-100 w-100 d-flex justify-content-center align-items-center">
                 <qrcode
@@ -33,25 +33,26 @@
                 </qrcode>
               </div>
             </div>
-
+          } @else if(isUsed == true){
             <div class="col-6">
-              <div class="logos h-100 w-100 d-flex flex-column justify-content-center align-items-center gap-1">
-                <div class="logo">
-                  <img src="https://res.cloudinary.com/ticketat/image/upload/v1782735826/remold-qr-logo_jrp53i.png" alt="remold event">
-                </div>
+              <div class="text-center h-100 w-100 d-flex flex-column justify-content-center align-items-center">
+                <h5 class="text-success fw-bold">This QR has already been used.</h5>
+                <p class="m-0 p-0 main-color">{{qr?.usedAt?.toDate() | date:'medium'}}</p>
+              </div>
+            </div>
+          }
+          <div class="col-6">
+            <div class="logos h-100 w-100 d-flex flex-column justify-content-center align-items-center gap-1">
+              <div class="logo">
+                <img src="https://res.cloudinary.com/ticketat/image/upload/v1782735826/remold-qr-logo_jrp53i.png" alt="remold event">
+              </div>
 
-                <div class="logo">
-                  <img src="assets/images/tikecktImages/logos/mini-icon.png" alt="ticketat.eg">
-                </div>
+              <div class="logo">
+                <img src="assets/images/tikecktImages/logos/mini-icon.png" alt="ticketat.eg">
               </div>
             </div>
           </div>
-        } @else if(isUsed == true){
-          <div class="text-center">
-            <h5 class="text-success fw-bold">This QR has already been used.</h5>
-            <p class="m-0 p-0 main-color">{{qr?.usedAt?.toDate() | date:'medium'}}</p>
-          </div>
-        }
+        </div>
       } @else {
         <h4 class="text-danger fw-bold">❌ QR not found</h4>
       }
