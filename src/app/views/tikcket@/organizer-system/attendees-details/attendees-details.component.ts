@@ -40,7 +40,6 @@ export class AttendeesDetailsComponent implements OnInit{
     this._EventService.getEventById(this.bookingDate?.EventId).subscribe({
       next:(res)=>{
         this.eventDate = res
-        console.log(this.eventDate);
       }
     })
   }
