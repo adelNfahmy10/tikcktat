@@ -47,7 +47,10 @@
             </div>
           </div>
         } @else if(isUsed == true){
-          <h4 class="text-success fw-bold">This QR has already been used</h4>
+          <div class="text-center">
+            <h5 class="text-success fw-bold">This QR has already been used.</h5>
+            <p class="m-0 p-0 main-color">{{qr?.usedAt.toDate() | date : 'medium'}}</p>
+          </div>
         }
       } @else {
         <h4 class="text-danger fw-bold">❌ QR not found</h4>
