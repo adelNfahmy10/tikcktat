@@ -1,45 +1,104 @@
-<section class="qrcode" id="qrcode">
-  <div class="container py-5">
-    <div class="logo text-center shadow-lg p-3 mt-4 rounded-4">
-      <img loading="lazy" src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" alt="ticketat">
+@if(book){
+  <section class="qrcode" id="qrcode">
+
+    <div class="header">
+      <div class="image-event d-flex justify-content-center align-items-center rounded-bottom-4 overflow-hidden">
+        <img [src]="eventData?.Image || 'assets/images/tikecktImages/logos/mini-icon.png'" [alt]="eventData?.EventName">
+      </div>
+
+      <div class="event-info mx-2 mt-3">
+        <h4 class="main-color fw-bold">{{eventData?.EventName}}</h4>
+        <p class="m-0 mb-1 p-0"> Powerd By <span class="main-color fw-bold">{{ownerData?.fullName}}</span></p>
+        <p class="m-0 p-0">Date : <span class="main-color fw-semibold">{{eventData?.Date | date:'dd/MM/yyyy'}}</span></p>
+        <p class="m-0 p-0">Location : <a class="main-color fw-semibold" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></p>
+      </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center">
-      @if(book){
-        @if(qr){
-          @if (isUsed == false) {
-            <div class="qr-wrapper">
-              <qrcode
-                [qrdata]="qrValue!"
-                [width]="250"
-                [margin]="1"
-                colorDark="#222"
-                colorLight="#fff"
-                errorCorrectionLevel="M"
-                ariaLabel="Scan to complete checkout">
-              </qrcode>
-            </div>
-          } @else if(isUsed == true){
-            <h2 class="mt-3 text-danger">❌ This QR has already been used</h2>
-          }
-        } @else {
-          <h2 class="mt-3 text-danger">❌ QR not found</h2>
-        }
 
-      } @else {
-        <h2 class="mt-3 text-danger">❌ No booking found</h2>
-      }
+    <hr />
 
-
-
-
-      <!-- @if(book){
-        <h2 class="mt-3 text-danger">❌ No booking found</h2>
-      }
-
+    <div class="qrcode-info">
       @if(qr){
-        <h2 class="mt-3 text-danger">❌ This QR not found</h2>
-      } -->
+        @if (isUsed == false) {
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="qr-wrapper h-100 w-100 d-flex justify-content-center align-items-center">
+                <qrcode
+                  [qrdata]="qrValue!"
+                  [width]="150"
+                  [margin]="1"
+                  colorDark="#222"
+                  colorLight="#fff"
+                  errorCorrectionLevel="M"
+                  ariaLabel="Scan to complete checkout">
+                </qrcode>
+              </div>
+            </div>
 
+            <div class="col-6">
+              <div class="logos h-100 w-100 d-flex flex-column justify-content-center align-items-center gap-1">
+                <div class="logo">
+                  <img src="https://res.cloudinary.com/ticketat/image/upload/v1782442502/remold-events-removebg-preview_uo7lxg.png" alt="remold event">
+                </div>
+
+                <div class="logo">
+                  <img src="assets/images/tikecktImages/logos/mini-icon.png" alt="ticketat.eg">
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else if(isUsed == true){
+          <h4 class="text-success fw-bold">This QR has already been used</h4>
+        }
+      } @else {
+        <h4 class="text-danger fw-bold">❌ QR not found</h4>
+      }
     </div>
-  </div>
-</section>
+
+    <hr />
+
+    <div class="graduate-info my-3">
+      <div class="row g-3">
+        <div class="col-4">
+          <div class="image-graduate h-100 w-100 d-flex justify-content-center align-items-center text-center">
+            <img [src]="'assets/images/tikecktImages/logos/mini-icon.png'" [alt]="book?.EventName">
+          </div>
+        </div>
+
+        <div class="col-8">
+          <div class="info h-100 d-flex flex-column justify-content-center">
+            <p class="m-0 p-0">Name : <span class="main-color fw-bold">{{book?.userName}}</span></p>
+            @if(book?.department){
+              <p class="m-0 p-0">Department : <span class="main-color fw-bold">{{book?.department}}</span></p>
+            }
+            <p class="m-0 p-0">Location: <a class="main-color fw-bold" [href]="book?.location">book?.locationName</a></p>
+
+            <p class="m-0 p-0">Seat No. : <span class="main-color fw-bold">{{qr?.seatNumber}} - {{qr?.type == 'owner' ? 'Garduate' : 'Outcomer'}}</span></p>
+            <p class="m-0 p-0">
+              QR Status :
+              <span
+                class="fw-bold"
+                [ngClass]="{
+                  'text-warning': !qr?.isUsed,
+                  'main-color': qr?.isUsed
+                }"
+              >
+                @if (qr?.isUsed) {
+                  تم التسجيل -
+                  {{ qr?.usedAt?.toDate() | date:'medium' }}
+                } @else {
+                  لم يستخدم بعد
+                }
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+} @else {
+  <section class="qrcode text-center" id="qrcode">
+    <h2 class="mt-3 text-danger">❌ No booking found</h2>
+  </section>
+}
+
