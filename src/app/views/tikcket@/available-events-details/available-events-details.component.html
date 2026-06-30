@@ -23,12 +23,37 @@
 
           <h4 class="fw-bold">Event Details :</h4>
           <ul class="list-unstyled my-2">
-              @for (item of features; track $index) {
-                <li>
-                  - {{ item }}
-                </li>
-              }
-            </ul>
+            @for (item of features; track $index) {
+              <li>
+                - {{ item }}
+              </li>
+            }
+          </ul>
+
+          <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
+            <div class="accordion-item" ngbAccordionItem [collapsed]="true" >
+              <h2 class="accordion-header" id="headingOne" ngbAccordionHeader>
+                <button class="accordion-button fw-medium fs-3" ngbAccordionButton type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" > Event Policy : </button>
+              </h2>
+              <div id="collapseOne" ngbAccordionCollapse class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body" ngbAccordionBody >
+                  <ul class="list-unstyled">
+                    @for (item of eventData?.policy?.ar; track $index) {
+                      <li dir="rtl">
+                        - {{ item  }}
+                      </li>
+                    }
+
+                    @for (item of eventData?.policy?.en; track $index) {
+                      <li>
+                        - {{ item  }}
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           @if(eventData?.TermsOfEntries?.length > 0){
             <div class="accordion" id="accordionExample" ngbAccordion [closeOthers]="true" >
@@ -50,6 +75,8 @@
               </div>
             </div>
           }
+
+
 
 
           <div class="text-center">

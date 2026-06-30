@@ -2,6 +2,7 @@
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
       <h1>Event Details</h1>
+      <h2 class="cr" (click)="updateEvent()">Update</h2>
       <div class="row g-2">
         <div class="col-md-4">
           <div class="card cr" [routerLink]="'/event-attendees/' + eventData?.Type + '/' + eventData?.id">
@@ -205,6 +206,21 @@
                 @for (term of termsList; track $index) {
                   <li>
                     {{ term }}
+                  </li>
+                }
+              </ul>
+
+              <h5 class="text-dark fw-medium mt-3">Event Policies :</h5>
+              <ul>
+                @for (item of eventData?.policy?.ar; track $index) {
+                  <li>
+                    {{ item  }}
+                  </li>
+                }
+
+                @for (item of eventData?.policy?.en; track $index) {
+                  <li>
+                    {{ item  }}
                   </li>
                 }
               </ul>

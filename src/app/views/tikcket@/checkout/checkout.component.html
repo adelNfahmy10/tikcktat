@@ -684,12 +684,21 @@
 
                                 <p>
                                   Service Fee :
-                                  <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  @if(eventData.id == 'uvoo0zHQzwK1efCTBynh'){
+                                    <span class="fw-bold text-success"> <i class="fa-solid fa-square-check"></i> Paid By Remold Events</span>
+                                  } @else {
+                                    <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  }
                                 </p>
 
                                 <p>
                                   Total :
-                                  <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) + ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  @if(eventData.id == 'uvoo0zHQzwK1efCTBynh'){
+                                    <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) | number }} EGP</span>
+                                  } @else {
+                                    <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 1.02) | number }} EGP</span>
+
+                                  }
                                 </p>
                               </div>
 

@@ -16,6 +16,13 @@ export class EventService {
     return from(addDoc(eventsRef, event));
   }
 
+  // Update Event Data
+  updateEvent(eventId: string, data: any) {
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+    return from(updateDoc(eventRef, data));
+  }
+
+
   // update OwnerPayment
   updateOwnerPaymentInEvent(eventId: string, amount: number) {
     const eventRef = doc(this.firestore, `events/${eventId}`);

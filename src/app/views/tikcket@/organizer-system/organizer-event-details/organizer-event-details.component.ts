@@ -5,6 +5,7 @@ import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { switchMap } from 'rxjs';
 
 @Component({
@@ -20,6 +21,7 @@ export class OrganizerEventDetailsComponent {
   private readonly _BookingService = inject(BookingService)
   private readonly _ActivatedRoute = inject(ActivatedRoute)
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
+  private readonly _ToastrService = inject(ToastrService)
 
   eventData:any
   eventId:string = ''
@@ -53,6 +55,9 @@ export class OrganizerEventDetailsComponent {
         this._NgxSpinnerService.hide()
           this.eventData = res;
           this.getOwnerById()
+
+          console.log(this.eventData);
+
         },
         error: (err) => {
           this._NgxSpinnerService.hide()
@@ -108,6 +113,43 @@ export class OrganizerEventDetailsComponent {
     })
   }
 
+  updateEvent(): void {
+    const eventPolicy = {
+      ar: [
+        "جميع المبالغ المدفوعة لهذا الحدث غير قابلة للاسترداد تحت أي ظرف من الظروف.",
+        "التذكرة صالحة فقط لحضور حفل التخرج المحدد ولا يمكن استبدالها أو استخدامها في أي فعالية أخرى.",
+        "في حالة عدم الحضور أو التأخر عن موعد الحفل، لن يتم استرداد أي مبالغ أو تقديم أي تعويض.",
+        "في حال تأجيل الحفل لأسباب خارجة عن إرادة الجهة المنظمة، تظل جميع الحجوزات والتذاكر سارية للموعد الجديد.",
+        "يتحمل المشارك مسؤولية صحة جميع البيانات الشخصية المدخلة أثناء عملية الحجز.",
+        "تحتفظ الجهة المنظمة بحقها في إجراء تعديلات معقولة على جدول الحفل أو أماكن الجلوس أو برنامج الفعالية عند الحاجة.",
+        "يحق للجهة المنظمة استبعاد أي شخص يخالف قواعد المكان أو يتسبب في أي سلوك غير لائق دون أحقية في استرداد أي مبالغ.",
+        "بإتمام عملية الحجز، يقر المشارك بأنه قد قرأ ووافق على جميع الشروط والأحكام والسياسات الخاصة بالفعالية."
+      ],
+      en: [
+        "All payments made for this event are non-refundable under any circumstances.",
+        "This ticket is valid only for the specified graduation ceremony and cannot be exchanged or used for any other event.",
+        "No refunds or compensation will be provided in the event of absence or late arrival to the ceremony.",
+        "If the event is postponed due to circumstances beyond the organizer's control, all reservations and tickets will remain valid for the rescheduled date.",
+        "The participant is responsible for ensuring that all personal information provided during the booking process is accurate.",
+        "The organizer reserves the right to make reasonable changes to the event schedule, seating arrangements, or program whenever necessary.",
+        "The organizer reserves the right to remove any participant who violates the venue rules or engages in inappropriate behavior, without any entitlement to a refund.",
+        "By completing the reservation, the participant acknowledges that they have read and agreed to all the terms, conditions, and event policies."
+      ]
+    };
+
+    this._EventService.updateEvent(this.eventId, {
+      policy: eventPolicy
+    }).subscribe({
+      next: () => {
+        this._ToastrService.success('Event policy added successfully.');
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error('Error updating event.');
+      }
+    });
+  }
+  
   get eventDetailsList(): string[] {
     if (!this.eventData?.EventDetails) return [];
     return this.eventData.EventDetails
