@@ -348,7 +348,6 @@
                           </div>
                         </div>
 
-
                         <div class="col-md-6">
                           <div id="bookNowSection">
                             <form class="d-flex flex-column gap-3" [formGroup]="conferenceForm">
@@ -586,6 +585,12 @@
                                     <p> Service Fee : <span class="fw-bold">{{ tax | number }} EGP</span> </p>
                                     <h4 class="main-color fw-bold my-2 text-center text-md-start"> Total : <span class="fw-bold">{{ total | number }} EGP</span> </h4>
                                   </div>
+
+                                  <div class="text-center my-2">
+                                    <button class="btn main-btn fs-4">
+                                      <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
+                                    </button>
+                                  </div>
                                 </div>
 
                                 <div class="col-12">
@@ -686,6 +691,12 @@
                                   Total :
                                   <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) + ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
                                 </p>
+                              </div>
+
+                              <div class="text-center my-2">
+                                <button class="btn main-btn fs-4">
+                                  <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
+                                </button>
                               </div>
 
                               <div class="d-flex flex-wrap justify-content-center align-items-center gap-1 mt-2">

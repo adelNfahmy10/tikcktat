@@ -12,9 +12,12 @@
           <p class="mb-3">
             Location : <span class="text-dark"><a class="cr text-dark" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></span> <br>
             @if(eventData?.lastPhase){
-              Date : <span> {{ eventData?.Date | date:'dd/MM/yyyy' }} </span>
+              Date : <span> {{ eventData?.Date | date:'dd/MM/yyyy' }} </span> <br>
             } @else {
-              Date : <span> To be determined (TBD) </span>
+              Date : <span> To be determined (TBD) </span> <br>
+            }
+            @if(eventId == 'uvoo0zHQzwK1efCTBynh'){
+              Outcomer Price : <span>{{eventData?.VisitorPrice | number}} EGP</span>
             }
           </p>
 
