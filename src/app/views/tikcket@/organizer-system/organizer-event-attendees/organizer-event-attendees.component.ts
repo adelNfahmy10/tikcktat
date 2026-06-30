@@ -313,6 +313,8 @@ export class OrganizerEventAttendeesComponent {
 
     this.filteredData = [...this.attendeesWithUsers];
 
+    this.getUnCheckAttendess()
+
     this.updatePagination();
   }
 
@@ -433,6 +435,13 @@ export class OrganizerEventAttendeesComponent {
       this.MsgErr = 'Not Fount User Email'
     }
 
+  }
+
+  unCheckedAttendess:any[] = []
+  // Get UnCheck Attendess Paid Two
+  getUnCheckAttendess():void{
+    this.unCheckedAttendess = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq != item.payTwoAmount))
+    console.log(this.unCheckedAttendess);
   }
 
   // 🔍 Search
