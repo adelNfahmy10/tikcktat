@@ -438,10 +438,16 @@ export class OrganizerEventAttendeesComponent {
   }
 
   unCheckedAttendess:any[] = []
+  allCheck:any[] = []
+  finalCheckCount:number = 0
   // Get UnCheck Attendess Paid Two
   getUnCheckAttendess():void{
     this.unCheckedAttendess = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq != item.payTwoAmount))
-    console.log(this.unCheckedAttendess);
+
+    this.finalCheckCount = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount)).length
+    this.allCheck = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount))
+    console.log(this.finalCheckCount);
+
   }
 
   // 🔍 Search
