@@ -212,11 +212,11 @@ export class AttendeesDetailsComponent implements OnInit{
       return true;
     }
 
-    return this.bookingDate.newOutcomers.every((outcomer: any) => !!outcomer.price);
+    return this.bookingDate?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
   }
 
   checkNewOutcomer():boolean{
-    return this.bookingDate.newOutcomers.every((outcomer: any) => !!outcomer.price);
+    return this.bookingDate?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
   }
 
 }
