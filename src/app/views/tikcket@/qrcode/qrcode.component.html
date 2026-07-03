@@ -3,7 +3,7 @@
 
     <div class="header">
       <div class="image-event d-flex justify-content-center align-items-center rounded-bottom-4 overflow-hidden">
-        <img [src]="eventData?.Image || 'assets/images/tikecktImages/logos/mini-icon.png'" [alt]="eventData?.EventName">
+        <img [src]="eventData?.Image || 'https://res.cloudinary.com/ticketat/image/upload/v1782899692/logo-1-removebg-preview_1_vfmifb.png'" [alt]="eventData?.EventName">
       </div>
 
       <div class="event-info mx-2 mt-3">
@@ -48,7 +48,7 @@
               </div>
 
               <div class="logo">
-                <img loading="lazy" class="ticketat-logo-qr" src="https://res.cloudinary.com/ticketat/image/upload/v1782899692/logo-1-removebg-preview_1_vfmifb.png" alt="ticketat.eg">
+                <img loading="lazy" class="ticketat-logo-qr" src="assets/images/tikecktImages/logos/ticketat-logo-3.png" alt="ticketat.eg">
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
       <div class="row g-3">
         <div class="col-4">
           <div class="image-graduate h-100 w-100 d-flex justify-content-center align-items-center text-center">
-            <img [src]="'assets/images/tikecktImages/logos/mini-icon.png'" [alt]="book?.EventName">
+            <img [src]="book?.userImage || 'assets/images/tikecktImages/logos/ticketat-logo-4.png'" [alt]="book?.EventName">
           </div>
         </div>
 

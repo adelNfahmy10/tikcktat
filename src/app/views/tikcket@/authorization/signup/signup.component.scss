@@ -3,6 +3,12 @@
   .auth-card{
     width: 75%;
   }
+
+  .head-image{
+    img{
+      filter: drop-shadow(0 0 2px rgba(#7C3AED, 0.9))
+    }
+  }
 }
 
 @media (max-width:991px) {

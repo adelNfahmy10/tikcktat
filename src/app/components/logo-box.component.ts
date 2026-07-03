@@ -9,30 +9,30 @@ import { RouterLink } from '@angular/router'
     <div [class]="className">
       <a routerLink="/" class="logo-dark">
         @if (size) {
-          <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" class="logo-sm" alt="logo sm" />
+          <img src="assets/images/tikecktImages/logos/ticketat-logo-3.png" class="logo-sm" alt="logo sm" />
           <img
-            src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png"
+            src="assets/images/tikecktImages/logos/ticketat-logo-3.png"
             class="logo-lg"
             alt="logo dark"
           />
         } @else {
           <div class="p-3 border border-2 rounded bg-light-subtle">
-            <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" height="50" alt="logo dark" />
+            <img src="assets/images/tikecktImages/logos/ticketat-logo-3.png" height="50" alt="logo dark" />
           </div>
         }
       </a>
 
       <a routerLink="/" class="logo-light">
         @if (size) {
-          <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" class="logo-sm" alt="logo sm" />
+          <img src="assets/images/tikecktImages/logos/ticketat-logo-3.png" class="logo-sm" alt="logo sm" />
           <img
-            src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png"
+            src="assets/images/tikecktImages/logos/ticketat-logo-3.png"
             class="logo-lg"
-            alt="logo light"
+            alt="logo light /////////////"
           />
         } @else {
           <div class="p-3 border border-2 rounded bg-light-subtle">
-            <img src="assets/images/tikecktImages/logos/tiecktat-logo-removebg-preview.png" height="50" alt="logo dark" />
+            <img src="assets/images/tikecktImages/logos/ticketat-logo-3.png" height="50" alt="logo dark" />
           </div>
         }
       </a>

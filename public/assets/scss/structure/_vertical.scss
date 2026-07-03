@@ -23,8 +23,10 @@
      }
 
      .logo-lg {
-          height: $logo-lg-height;
-     }
+        width: 80%;
+        padding: 30px 0 10px;
+        // height: $logo-lg-height;
+        }
 
      .logo-light {
           display: none;

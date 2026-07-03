@@ -13,7 +13,7 @@ header {
 
 .topbar {
      transition: all 0.3s ease-in-out;
-     height: $topbar-height;
+    //  height: $topbar-height;
      background-color: $topbar-bg;
      margin-left: $main-nav-width;
      margin-right: 10px;
@@ -67,10 +67,12 @@ header {
 
      .ticketat-logo-topbar{
         width: 200px;
+        padding: 5px 0;
+        filter: drop-shadow(0 0 2px rgba(#7C3AED, 0.9))
      }
      @media (max-width:567px) {
       .ticketat-logo-topbar{
-        width: 130px;
+        width: 100px;
       }
      }
 
