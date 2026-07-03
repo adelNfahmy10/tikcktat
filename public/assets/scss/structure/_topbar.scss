@@ -68,10 +68,13 @@ header {
      .ticketat-logo-topbar{
         width: 200px;
         padding: 5px 0;
+        position: relative;
+        left: 20px;
         filter: drop-shadow(0 0 2px rgba(#7C3AED, 0.9))
      }
      @media (max-width:567px) {
       .ticketat-logo-topbar{
+        left: 0px;
         width: 100px;
       }
      }
