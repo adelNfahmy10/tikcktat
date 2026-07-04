@@ -25,6 +25,8 @@ export class AttendeesDetailsComponent implements OnInit{
   private readonly _ToastrService = inject(ToastrService)
 
 
+  role:string | null = localStorage.getItem('role')
+  userId:string | null = localStorage.getItem('userId')
   eventDate:any = {}
   bookingDate:any = {}
   bookingId:string | null = ''
@@ -214,9 +216,4 @@ export class AttendeesDetailsComponent implements OnInit{
 
     return this.bookingDate?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
   }
-
-  checkNewOutcomer():boolean{
-    return this.bookingDate?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
-  }
-
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
 import { EventService } from '@core/services/event/event.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-my-booking',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './my-booking.component.html',
   styleUrl: './my-booking.component.scss'
 })

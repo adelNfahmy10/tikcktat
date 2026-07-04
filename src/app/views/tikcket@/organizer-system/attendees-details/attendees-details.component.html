@@ -14,13 +14,13 @@
           </div>
           <div class="col-md-8">
             <div class="user-info d-flex flex-column justify-content-center h-100">
-              @if(!checkNewOutcomer()){
+              @if(!canSendQrs()){
                 <span class="new-outcomer-check bg-danger text-white rounded-5 px-3 py-1 mb-3">New Outcomer</span>
               }
               <h4>Name : {{bookingDate?.userName}}</h4>
-              <h4>Email : {{bookingDate?.userEmail}}</h4>
-              <h4>Phone : {{bookingDate?.userPhone}}</h4>
-              <h4>Seat No. : ({{ bookingDate?.qrs ? bookingDate?.qrs[0]?.seatNumber : '-'}})</h4>
+              <h4>Email : <a href="mailto:{{bookingDate?.userEmail}}" target="_blank">{{bookingDate?.userEmail}}</a></h4>
+              <h4>Phone : <a href="whatsapp://send?phone={{bookingDate?.userPhone}}" target="_blank">{{bookingDate?.userPhone}}</a></h4>
+              <h4>Seat No. : ({{ bookingDate?.qrs ? bookingDate?.qrs[0]?.seatNumber || '-' : '-'}})</h4>
 
               <h4>Status : <span [ngClass]="{
                 'text-danger' : bookingDate?.status == 'Rejected',
@@ -28,7 +28,7 @@
                 'second-color' : bookingDate?.status == 'Par-Paid',
                 'main-color fw-bold' : bookingDate?.status == 'Paid',
               }">{{bookingDate?.status}}</span></h4>
-              @if(canSendQrs()){
+              @if(canSendQrs() && bookingDate?.status == 'Paid' && (bookingDate?.OwnerId == userId || role == 'Admin')){
                 <h4>Send QRs : <span class="main-color fw-bold cr" (click)="(sendFinalQrs(bookingDate?.userEmail,bookingDate?.EventName, bookingDate?.userName,bookingDate?.qrs))"><i class="fa-solid fa-envelope"></i> QRs Email</span></h4>
               }
             </div>
@@ -92,7 +92,6 @@
         </div>
       </div>
 
-
       <!-- Total Amount -->
       <div class="col-lg-3 col-md-6 col-12">
         <div class="card">
@@ -111,7 +110,6 @@
           </div>
         </div>
       </div>
-
 
       <!-- Total Visitors -->
       <div class="col-12">
@@ -179,7 +177,9 @@
         @for (screen of bookingDate?.newOutcomers; track $index) {
           <div class="col-lg-3 col-md-6 col-12">
             <div class="card position-relative p-3 rounded-3 h-100">
-              <span class="delete-icon text-center d-flex justify-content-center align-items-center cr" (click)="deleteOutcomers($index)"> <i class="fa-solid fa-xmark"></i> </span>
+              @if(role == 'Admin'){
+                <span class="delete-icon text-center d-flex justify-content-center align-items-center cr" (click)="deleteOutcomers($index)"> <i class="fa-solid fa-xmark"></i> </span>
+              }
 
               <h4 class="mb-2 main-color">Screen Outcomers Payments ({{$index + 1}})</h4>
 

@@ -129,12 +129,14 @@
                     class="badge px-3 py-1 fs-6"
                     [class.bg-success]="book.status == 'Paid'"
                     [class.bg-warning]="book.status == 'Pending'"
+                    [class.main-bg]="book.status == 'Par-Paid'"
                   >
                     {{ book.status }}
                   </span>
                 </td>
                 <td>
                   <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(book.id)"></i>
+                  <!-- <i class="fa-solid fa-circle-info cr" [routerLink]="['/attendees-details/', book.id]"></i> -->
                 </td>
               </tr>
             }
