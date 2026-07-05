@@ -41,7 +41,19 @@
   color: $main-color;
 }
 .search{
-  width: 300px;
+  width: 350px;
+  border: 2px solid $main-color;
+  .icon-search{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: $main-color;
+    font-size: 18px;
+  }
+  @media (max-width:400px) {
+    width: 100%;
+  }
 }
 .btn-send-qr{
   padding: 0;

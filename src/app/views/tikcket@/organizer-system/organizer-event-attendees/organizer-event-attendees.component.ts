@@ -834,15 +834,14 @@ export class OrganizerEventAttendeesComponent {
           this._UsersService.getUserById(item.userId).pipe(
             take(1),
             map(user => ({
-              id: item.id,
-              department: item.department,
-              userImage: item.userImage || '',
-              userName: item.userName,
+              userNameEn: item.userName,
               userNameAr: user?.fullNameAr || '',
               userPhone: item.userPhone,
               userEmail: item.userEmail,
+              department: item.department,
               ScarfName: item.GraduationScarfName,
               status: item.status,
+              userImage: item.userImage || '',
             }))
           )
         ),
@@ -930,10 +929,15 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
-  // Download Sort Name Sheet By Departments
+  // Download Sort Name Sheet By Departments (FIXED VERSION)
   downloadAllDepartmentsSorted(type: 'arabic' | 'english'): void {
 
     const departments = this.eventData?.departments || [];
+
+    const collator = new Intl.Collator(type === 'arabic' ? 'ar' : 'en', {
+      sensitivity: 'base',
+      numeric: true
+    });
 
     departments.forEach((dept: string) => {
 
@@ -945,31 +949,33 @@ export class OrganizerEventAttendeesComponent {
 
       if (!deptData.length) return;
 
-      from(deptData).pipe(
-
-        mergeMap(item =>
+      forkJoin(
+        deptData.map(item =>
           this._UsersService.getUserById(item.userId).pipe(
             take(1),
             map(user => ({
-              userNameAr: user?.fullNameAr || item.userName,
               userName: item.userName,
+              userNameAr: user?.fullNameAr || item.userName,
               department: item.department,
+              userImage: item.userImage,
             }))
           )
-        ),
-
-        toArray(),
+        )
+      ).pipe(
 
         map(list => {
 
           return list.sort((a, b) => {
 
-            const nameA = type === 'arabic' ? a.userNameAr : a.userName;
-            const nameB = type === 'arabic' ? b.userNameAr : b.userName;
+            const nameA =
+              (type === 'arabic' ? a.userNameAr : a.userName) || '';
 
-            return (nameA || '').localeCompare(
-              nameB || '',
-              type === 'arabic' ? 'ar' : 'en'
+            const nameB =
+              (type === 'arabic' ? b.userNameAr : b.userName) || '';
+
+            return collator.compare(
+              nameA.trim(),
+              nameB.trim()
             );
           });
 
@@ -978,9 +984,10 @@ export class OrganizerEventAttendeesComponent {
       ).subscribe(sorted => {
 
         const sheetData = sorted.map(item => ({
+          userNameEn: item.userName,
           userNameAr: item.userNameAr,
-          userName: item.userName,
           department: item.department,
+          userImage: item.userImage,
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(sheetData);
@@ -1002,6 +1009,68 @@ export class OrganizerEventAttendeesComponent {
         saveAs(blob, `${dept}-sorted-${type}.xlsx`);
       });
 
+    });
+  }
+
+  downloadAllSorted(type: 'arabic' | 'english'): void {
+
+    const allData = this.allBooking || [];
+
+    const collator = new Intl.Collator(type === 'arabic' ? 'ar' : 'en', {
+      sensitivity: 'base',
+      numeric: true
+    });
+
+    const requests = allData.map(item =>
+      this._UsersService.getUserById(item.userId).pipe(
+        take(1),
+        map(user => ({
+          userNameAr: user?.fullNameAr || item.userName,
+          userName: item.userName,
+          department: item.department,
+          userImage: item.userImage,
+        }))
+      )
+    );
+
+    forkJoin(requests).pipe(
+
+      map(list =>
+        list.sort((a, b) => {
+
+          const nameA = (type === 'arabic' ? a.userNameAr : a.userName) || '';
+          const nameB = (type === 'arabic' ? b.userNameAr : b.userName) || '';
+
+          return collator.compare(nameA.trim(), nameB.trim());
+        })
+      )
+
+    ).subscribe(sorted => {
+
+      const sheetData = sorted.map(item => ({
+        userNameEn: item.userName,
+        userNameAr: item.userNameAr,
+        department: item.department,
+        userImage: item.userImage,
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(sheetData);
+
+      const workbook: XLSX.WorkBook = {
+        Sheets: { data: worksheet },
+        SheetNames: ['data']
+      };
+
+      const buffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array'
+      });
+
+      const blob = new Blob([buffer], {
+        type: 'application/octet-stream'
+      });
+
+      saveAs(blob, `all-data-sorted-${type}.xlsx`);
     });
   }
 
