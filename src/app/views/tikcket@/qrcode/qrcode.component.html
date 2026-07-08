@@ -8,7 +8,7 @@
 
       <div class="event-info mx-2 mt-3">
         <h4 class="main-color fw-bold">{{eventData?.EventName}}</h4>
-        <p class="m-0 mb-1 p-0"> Powerd By <span class="main-color fw-bold">{{ownerData?.fullName}}</span></p>
+        <p class="m-0 mb-1 p-0"> Powerd By  <a class="fw-bold cr main-color" href="https://www.facebook.com/share/1aXbvWkoPm/" target="_blank">{{ownerData?.fullName}}</a></p>
         <p class="m-0 p-0">Date : <span class="main-color fw-semibold">{{eventData?.Date | date:'dd/MM/yyyy'}}</span></p>
         <p class="m-0 p-0">Location : <a class="main-color fw-semibold" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></p>
       </div>
@@ -74,9 +74,11 @@
             @if(book?.department){
               <p class="m-0 p-0">Department : <span class="main-color fw-bold">{{book?.department}}</span></p>
             }
-            <p class="m-0 p-0">Location: <a class="main-color fw-bold" [href]="book?.location">book?.locationName</a></p>
+            <!-- <p class="m-0 p-0">Location: <a class="main-color fw-bold" [href]="eventData?.Location" target="_blank">{{eventData?.LocationName}}</a></p> -->
 
-            <p class="m-0 p-0">Seat No. : <span class="main-color fw-bold">{{qr?.seatNumber}} - {{qr?.type == 'owner' ? 'Garduate' : 'Outcomer'}}</span></p>
+            <p class="m-0 p-0">Seat No. : <span class="main-color fw-bold">({{qr?.seatNumber}})</span></p>
+            <p class="m-0 p-0">Type : <span class="main-color fw-bold">{{qr?.type == 'owner' ? 'Garduate' : 'Outcomer'}}</span></p>
+
             <p class="m-0 p-0">
               QR Status :
               <span
