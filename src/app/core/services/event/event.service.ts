@@ -72,33 +72,40 @@ export class EventService {
   updateAllBookingsQrsWithSeats(bookings: any[]) {
     const batch = writeBatch(this.firestore);
 
+    // Global counters لكل الأقسام
+    const deptCounters = new Map<string, number>();
+
+    // حروف الأقسام
+    const departments = [
+      ...new Set(
+        bookings.flatMap(b =>
+          (b.qrs || []).map((q: any) => q.department || b.department)
+        )
+      )
+    ].sort();
+
+    const deptMap = new Map<string, string>();
+
+    departments.forEach((dep: any, index) => {
+      deptMap.set(dep, String.fromCharCode(65 + index));
+    });
+
     bookings.forEach((booking) => {
 
-      if (!booking.qrs || booking.qrs.length === 0) return;
+      if (!booking.qrs?.length) return;
 
       const bookingRef = doc(this.firestore, `bookings/${booking.id}`);
-
-      const departments = [...new Set(booking.qrs.map((q: any) => q.department))].sort();
-
-      const deptMap = new Map<string, string>();
-
-      departments.forEach((dep:any, index) => {
-        deptMap.set(dep, String.fromCharCode(65 + index));
-      });
-
-      const deptCounters = new Map<string, number>();
 
       let currentSeat = '';
 
       const updatedQrs = booking.qrs.map((qr: any) => {
 
         const dept = qr.department || booking.department;
-
         const deptLetter = deptMap.get(dept) || 'A';
 
-        // 👉 لو owner: نطلع رقم جديد
         if (qr.type === 'owner') {
           const nextIndex = (deptCounters.get(dept) || 0) + 1;
+
           deptCounters.set(dept, nextIndex);
 
           currentSeat = `${deptLetter}${nextIndex}`;
@@ -106,7 +113,9 @@ export class EventService {
 
         return {
           ...qr,
-          seatNumber: qr.type === 'owner' ? currentSeat : `+${currentSeat}`
+          seatNumber: qr.type === 'owner'
+            ? currentSeat
+            : `+${currentSeat}`
         };
       });
 
@@ -114,6 +123,7 @@ export class EventService {
         qrs: updatedQrs,
         qrsGenerated: true
       });
+
     });
 
     return from(batch.commit());

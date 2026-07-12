@@ -576,17 +576,23 @@ export class CheckoutComponent {
   }
 
   newOutComerCount:number = 0
-  fixedOutcomerCount:number = 3
+  fixedOutcomerCount:number = 15
 
   async addOutComer() {
     this._NgxSpinnerService.show();
 
-    if (this.bookingData?.VisitorCount && this.newOutComerCount > this.bookingData?.VisitorCount) {
+
+    const totalPersons = this.bookingData.VisitorCount + this.newOutComerCount;
+
+    if (totalPersons > this.fixedOutcomerCount) {
+
+      const remaining = this.fixedOutcomerCount - this.bookingData.VisitorCount;
+
       this._ToastrService.error(
-        `You can only add ${this.fixedOutcomerCount - this.bookingData?.VisitorCount } outcomers(s).`
+        `You can only add ${remaining} outcomer(s).`
       );
 
-      this.MsgErr = `You can only add ${this.fixedOutcomerCount - this.bookingData?.VisitorCount } outcomers(s).`
+      this.MsgErr = `You can only add ${remaining} outcomer(s).`;
 
       this._NgxSpinnerService.hide();
       return;
@@ -611,7 +617,6 @@ export class CheckoutComponent {
       return;
     }
 
-    let totalPersons = this.newOutComerCount + this.bookingData.VisitorCount;
     const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
 
     this._BookingService.updateBooking(this.bookingData.id, {

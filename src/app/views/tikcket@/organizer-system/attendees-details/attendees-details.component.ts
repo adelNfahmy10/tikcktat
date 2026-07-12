@@ -135,6 +135,12 @@ export class AttendeesDetailsComponent implements OnInit{
 
       // الـ Outcomer اللي هيتمسح
       const deletedOutcomer = this.bookingDate.newOutcomers[index];
+      const deletedCount = deletedOutcomer.count;
+
+      if (!deletedOutcomer) {
+        this._NgxSpinnerService.hide();
+        return;
+      }
 
       // حذف الـ Outcomer
       const newOutcomers = [...this.bookingDate.newOutcomers];
@@ -142,25 +148,40 @@ export class AttendeesDetailsComponent implements OnInit{
 
       // حذف الـ QR المقابل ليه
       const qrs = this.bookingDate.qrs.filter((qr: any) => {
+
+        if (qr.type !== 'guest') {
+          return true;
+        }
+
         return !(
-          qr.type === 'guest' &&
           qr.createdAt?.seconds === deletedOutcomer.createdAt?.seconds &&
           qr.createdAt?.nanoseconds === deletedOutcomer.createdAt?.nanoseconds
         );
+
       });
+
+      console.log({
+          deletedCount,
+          before: this.bookingDate.qrs.length,
+          after: qrs.length,
+          removed: this.bookingDate.qrs.length - qrs.length
+      });
+
+      const visitorCount = Math.max(0, this.bookingDate.VisitorCount - deletedCount);
+
+      const totalVisitors = Math.max(0, this.bookingDate.totalVisitors - deletedCount);
 
       this._BookingService.updateBooking(this.bookingDate.id, {
         newOutcomers,
         qrs,
-        VisitorCount: this.bookingDate.VisitorCount - 1,
-        totalVisitors: this.bookingDate.totalVisitors - 1
+        VisitorCount: visitorCount,
+        totalVisitors: totalVisitors
       }).subscribe({
-        next: () => {
-
+        next: (res) => {
           this.bookingDate.newOutcomers = newOutcomers;
           this.bookingDate.qrs = qrs;
-          this.bookingDate.VisitorCount--;
-          this.bookingDate.totalVisitors--;
+          this.bookingDate.VisitorCount = visitorCount;
+          this.bookingDate.totalVisitors = totalVisitors;
 
           this._NgxSpinnerService.hide();
 

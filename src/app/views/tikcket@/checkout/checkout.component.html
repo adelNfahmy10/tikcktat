@@ -647,10 +647,10 @@
                         </div>
                       }
 
-                    } @else if(bookingData.VisitorCount < 3 && bookingData.payOneAmount){
+                    } @else if(bookingData.VisitorCount < 15 && bookingData.payOneAmount){
                       <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                         <h3 class="m-0 mb-2">Booking Outcomer</h3>
-                        <h5>You can add <span class="fw-bold main-color">{{ fixedOutcomerCount - this.bookingData?.VisitorCount }}</span> more outcomer(s).</h5>
+                        <h5>You can add <span class="fw-bold main-color">{{ fixedOutcomerCount - bookingData?.VisitorCount }}</span> more outcomer(s).</h5>
                         <div class="user-data rounded-3 my-3">
                           <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
                             <div class="col-12">
@@ -661,15 +661,15 @@
                                   <input
                                     type="number"
                                     min="1"
-                                    [max]="fixedOutcomerCount - this.bookingData?.VisitorCount"
+                                    [max]="fixedOutcomerCount - bookingData?.VisitorCount"
                                     class="form-control"
                                     [(ngModel)]="newOutComerCount"
                                     name="newOutComer"
                                     placeholder="Enter New Outcomer..."
                                   >
 
-                                  @if(newOutComerCount > (fixedOutcomerCount - this.bookingData?.VisitorCount)){
-                                    <small class="text-danger">You can add {{ fixedOutcomerCount - this.bookingData?.VisitorCount }} outcomer(s) only</small>
+                                  @if(newOutComerCount > (fixedOutcomerCount - bookingData?.VisitorCount)){
+                                    <small class="text-danger">You can add {{ fixedOutcomerCount - bookingData?.VisitorCount }} outcomer(s) only</small>
                                   }
                                 </div>
                               </div>
@@ -740,7 +740,7 @@
 
                                 <button
                                   type="button"
-                                  [disabled]="!newOutComerCount || newOutComerCount > (fixedOutcomerCount - this.bookingData?.VisitorCount)"
+                                  [disabled]="!newOutComerCount || newOutComerCount > (fixedOutcomerCount - bookingData?.VisitorCount)"
                                   class="btn btn-primary"
                                   (click)="addOutComer()"
                                 >
@@ -752,7 +752,7 @@
                           </div>
                         </div>
                       </div>
-                    } @else if (bookingData.VisitorCount == 3){
+                    } @else if (bookingData.VisitorCount == 15){
                       <div class="text-center my-4">
                         <h4 dir="rtl">لقد وصلت إلى الحد الأقصى المسموح به من المرافقين لهذا الحجز.</h4>
                         <h4>You have reached the maximum number of companions allowed for this booking.</h4>
