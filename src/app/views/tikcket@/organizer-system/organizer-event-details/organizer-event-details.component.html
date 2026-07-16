@@ -2,9 +2,9 @@
   <div class="container-fluid py-3">
     <div class="bg-white rounded-3 p-3 shadow-lg">
       <h1>Event Details</h1>
-      <h2 class="cr" (click)="updateEvent()">Update</h2>
+      <!-- <h2 class="cr" (click)="updateEvent()">Update</h2> -->
       <div class="row g-2">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="card cr" [routerLink]="'/event-attendees/' + eventData?.Type + '/' + eventData?.id">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between">
@@ -22,19 +22,19 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="card cr">
             <div class="card-body">
               <div class="d-flex align-items-center justify-content-between gap-5">
-                <div>
+                <div class="flex-grow-1">
                   <h4 class="card-title mb-2">Total Visitors</h4>
-                  <div class="d-flex flex-wrap justify-content-between align-items-center w-100">
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount | number }} Outcomers</p>
-                    <sub class="mt-sm-3 mt-1 mx-sm-2 mx-0">
-                      <span class="fw-bold main-color">{{totalDefaultVisitorCount | number }} Defualt</span>
+                  <div class="w-100 d-flex justify-content-between align-items-center flex-wrap">
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount || 0 | number }} Outcomers</p>
+                    <div>
+                      <span class="fw-bold main-color">{{totalDefaultVisitorCount || 0 | number }} Defualt</span>
                       <span class="fw-bold main-color"> - </span>
-                      <span class="fw-bold main-color">{{totalVisitorCount | number }} New</span>
-                    </sub>
+                      <span class="fw-bold main-color">{{totalVisitorCount || 0 | number }} New</span>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -53,7 +53,43 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalNewOutcomersPrice + totalRevenue | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card cr">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Tickets Amount</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue | number }} EGP</p>
+                </div>
+                <div>
+                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card cr">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Outcomers Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalNewOutcomersPrice | number }} EGP</p>
                 </div>
                 <div>
                   <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -176,11 +212,11 @@
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-money-pound-circle-line fs-18 main-color"></i>
-                    {{eventData?.TicketPrice}} EGP Per Ticket
+                    {{eventData?.TicketPrice | number }} EGP Per Ticket
                   </p>
                   <p class="d-flex align-items-center gap-1 mt-1 mb-0">
                     <i class="ri-graduation-cap-line fs-18 main-color"></i>
-                    {{eventData?.VisitorPrice }} EGP Per Visitor
+                    {{eventData?.VisitorPrice | number }} EGP Per Visitor
                   </p>
                 </div>
               </div>
@@ -189,7 +225,7 @@
                 <div class="avatar-sm rounded">
                   <iconify-icon icon="solar:wallet-money-bold-duotone" class="fs-24 main-color border border-2 rounded-3 avatar-title" ></iconify-icon>
                 </div>
-                <p class="fw-bold fs-18 mb-0 main-color">{{ totalRevenue }} EGP</p>
+                <p class="fw-bold fs-18 mb-0 main-color">{{ totalRevenue + totalNewOutcomersPrice | number }} EGP</p>
               </div>
 
               <h5 class="text-dark fw-medium mt-3">Event Details :</h5>

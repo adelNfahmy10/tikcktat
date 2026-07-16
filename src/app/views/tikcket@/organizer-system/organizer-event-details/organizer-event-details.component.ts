@@ -35,6 +35,7 @@ export class OrganizerEventDetailsComponent {
   totalVisitorCount:number = 0
   totalDefaultVisitorCount:number = 0
   totalRevenue:number = 0
+  totalNewOutcomersPrice:number = 0
 
   ngOnInit(): void {
     this.getEventById()
@@ -88,6 +89,17 @@ export class OrganizerEventDetailsComponent {
         this.totalDefaultVisitorCount = this.allBooking.reduce((sum, b) => {
           return sum + (b.defaultVisitorCount || 0);
         }, 0);
+
+        // 💰 total new outcomers amount
+        this.totalNewOutcomersPrice = this.allBooking.reduce(
+          (total, booking) =>
+            total +
+            (booking.newOutcomers || []).reduce(
+              (sum:any, outcomer:any) => sum + Number(outcomer.price || 0),
+              0
+            ),
+          0
+        );
 
         // 💰 total revenue
         this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
@@ -149,7 +161,7 @@ export class OrganizerEventDetailsComponent {
       }
     });
   }
-  
+
   get eventDetailsList(): string[] {
     if (!this.eventData?.EventDetails) return [];
     return this.eventData.EventDetails

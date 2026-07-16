@@ -213,9 +213,10 @@
         }
       </div>
 
+      <!-- Check Final Payments -->
       @if(this.unCheckedAttendess.length){
-        <div class="my-4">
-          <h2 class="text-danger fw-bold">UnChecked Payment</h2>
+        <div class="my-4 shadow-lg pt-3 rounded-4">
+          <h2 class="text-danger fw-bold px-2">Unchecked Final Payment</h2>
           <div class="table-responsive">
             <table class="table table-hover align-middle text-center">
               <thead class="table-light">
@@ -382,7 +383,7 @@
                 @for (user of unCheckedAttendess; track $index) {
                   <tr>
                     <td>
-                      <div class="d-flex flex-column justify-content-center align-items-center" [ngClass]="{'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount }">
+                      <div class="d-flex flex-column justify-content-center align-items-center rounded-3" [ngClass]="{'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount }">
                         <span>
                           {{
                             $index + 1 + ((page - 1) * pageSize)
@@ -476,12 +477,279 @@
               </tbody>
             </table>
           </div>
-
-          <hr>
-          <hr>
-          <hr>
         </div>
+      }
 
+      <!-- Check Outcomers Payments -->
+      @if(this.unCheckedOutcomersPayment.length){
+        <div class="my-4 shadow-lg pt-3 rounded-4">
+          <h2 class="text-danger fw-bold px-2">Unchecked Outcomers Payment</h2>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle text-center">
+              <thead class="table-light">
+                <tr>
+                  <th (click)="sort('id')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>ID</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'id' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'id' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  <th (click)="sort('userName')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Name</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'userName' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'userName' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  <th (click)="sort('userPhone')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Phone</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'userPhone' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'userPhone' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  <th (click)="sort('userEmail')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Email</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'userEmail' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'userEmail' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  @if(hasDepartmentColumn){
+                    <th (click)="sort('department')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>Department</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'department' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'department' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+
+                  }
+
+                  @if(hasStudentsColumn){
+                    <th (click)="sort('studentsIDs')" class="sortable">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <span>Students ID</span>
+                        <span class="sort-icons">
+                          <i
+                            class="fa-solid fa-caret-up"
+                            [class.active]="sortColumn === 'studentsIDs' && sortDirection === 'asc'"
+                          ></i>
+                          <i
+                            class="fa-solid fa-caret-down"
+                            [class.active]="sortColumn === 'studentsIDs' && sortDirection === 'desc'"
+                          ></i>
+                        </span>
+                      </div>
+                    </th>
+                  }
+
+                  <th (click)="sort('VisitorCount')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Visitors</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'VisitorCount' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'VisitorCount' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  <th (click)="sort('totalAmount')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Total Price</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'totalAmount' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'totalAmount' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+
+                  <th (click)="sort('status')" class="sortable">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Status</span>
+                      <span class="sort-icons">
+                        <i
+                          class="fa-solid fa-caret-up"
+                          [class.active]="sortColumn === 'status' && sortDirection === 'asc'"
+                        ></i>
+                        <i
+                          class="fa-solid fa-caret-down"
+                          [class.active]="sortColumn === 'status' && sortDirection === 'desc'"
+                        ></i>
+                      </span>
+                    </div>
+                  </th>
+
+                  <th>
+                    <div class="d-flex justify-content-center align-items-center">
+                      <span>Action</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (user of unCheckedOutcomersPayment; track $index) {
+                  <tr>
+                    <td>
+                      <div class="d-flex flex-column justify-content-center align-items-center" [ngClass]="{'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount }">
+                        <span>
+                          {{
+                            $index + 1 + ((page - 1) * pageSize)
+                          }}
+                        </span>
+                        @if(!canSendQrs(user)){
+                          <span class="bg-warning text-white px-1 rounded-3 cr" (click)="goToAttendeesDetails(user?.id)">
+                            Outcomer
+                          </span>
+                        }
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <img loading="lazy" [src]="user?.userImage" width="50" class="rounded" [alt]="user?.userName" />
+                        <h6 class="m-0">{{ user?.userName }}</h6>
+                      </div>
+                    </td>
+                    <td>
+                      <a [href]="'https://wa.me/20' + user?.userPhone?.substring(1)" target="_blank" >
+                        {{ user?.userPhone }}
+                      </a>
+                    </td>
+                    <td>
+                      {{ user?.userEmail }}
+                    </td>
+
+                    @if(hasDepartmentColumn){
+                      <td>{{ user?.department }}</td>
+                    }
+
+                    @if(hasStudentsColumn){
+                      <td>{{ user?.studentsIDs }}</td>
+                    }
+
+                    <td>{{ user?.VisitorCount + user?.defaultVisitorCount }} Visitors</td>
+                    <td>
+                      <span>
+                        Total: {{ user?.totalAmount | number }} EGP
+                      </span>
+                      <br>
+
+                      <span>
+                        Tax (2%):
+                        {{ getTax(user?.totalAmount) | number:'1.0-2' }} EGP
+                      </span>
+                      <br>
+
+                      <span class="fw-bold">
+                        Final:
+                        {{ getFinal(user?.totalAmount) | number }} EGP
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'bg-success': user?.status === 'Paid',
+                          'bg-primary': user?.status === 'Par-Paid',
+                          'bg-danger': user?.status === 'Pending'
+                        }"
+                      >
+                        {{ user?.status }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex justify-content-center align-items-center gap-2">
+                        @if(role == 'Admin'){
+                          <span class="confirm-depoist-email email-icon" (click)="sendConfirmEmail(user?.userEmail, eventData?.EventName, user?.userName)">
+                            <i class="fa-solid fa-envelope cr"></i>
+                          </span>
+                          <span class="confirm-booking-email email-icon" (click)="sendFinalConfirmEmail(user?.userEmail, eventData?.EventName, user?.userName)">
+                            <i class="fa-solid fa-envelope cr"></i>
+                          </span>
+                          <i class="fa-regular fa-trash-can text-danger cr" (click)="deleteBooking(user)"></i>
+                        }
+
+                        <i class="fa-solid fa-circle-info cr" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getBookById(user?.id)"></i>
+
+                        @if(!user?.payOneAmount){
+                          <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user?.id)"></i>
+                        }
+
+                        @if(user?.payOneAmount && !user?.payTwoAmount){
+                          <i class="fa-solid fa-paper-plane cr" data-bs-toggle="modal" data-bs-target="#exampleModal-Check-One" (click)="getBookById(user?.id)"></i>
+                        }
+
+                        @if(user?.payTwoAmount && user?.payOneAmount){
+                          <i class="fa-solid fa-check-double text-success"></i>
+                          <i class="fa-solid fa-arrows-down-to-people cr" (click)="goToAttendeesDetails(user?.id)"></i>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
       }
 
       <!-- ===================== TABLE All Attendess ===================== -->
@@ -651,13 +919,24 @@
             @for (user of paginatedData; track $index) {
               <tr>
                 <td>
-                  <div class="d-flex flex-column justify-content-center align-items-center" [ngClass]="{'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount }">
+                  <div class="d-flex flex-column justify-content-center align-items-center rounded-3"
+                    [ngClass]="{
+                      'bg-danger text-white': user?.createdAtTwo && !user?.payTwoAmount
+                    }"
+                  >
                     <span>
                       {{
                         $index + 1 + ((page - 1) * pageSize)
                       }}
                     </span>
+                    @if(!canSendQrs(user)){
+                      <span class="bg-warning text-white px-1 rounded-3">
+                        Outcomer
+                      </span>
+                    }
                   </div>
+
+
                 </td>
                 <td>
                   <div class="d-flex align-items-center gap-2">

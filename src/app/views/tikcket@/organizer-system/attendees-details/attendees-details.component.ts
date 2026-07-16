@@ -160,13 +160,6 @@ export class AttendeesDetailsComponent implements OnInit{
 
       });
 
-      console.log({
-          deletedCount,
-          before: this.bookingDate.qrs.length,
-          after: qrs.length,
-          removed: this.bookingDate.qrs.length - qrs.length
-      });
-
       const visitorCount = Math.max(0, this.bookingDate.VisitorCount - deletedCount);
 
       const totalVisitors = Math.max(0, this.bookingDate.totalVisitors - deletedCount);

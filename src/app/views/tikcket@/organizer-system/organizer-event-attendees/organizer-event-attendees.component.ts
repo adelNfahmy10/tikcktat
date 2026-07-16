@@ -203,9 +203,6 @@ export class OrganizerEventAttendeesComponent {
             return aDate - bDate; // 🔥 القديم فوق - الجديد تحت
           });
 
-          // console.log(this.allBooking);
-
-
           // 👨‍👩‍👧 total outcomers Count
           this.totalOutComerCount= this.allBooking.reduce((sum, b) => {
             return sum + (b.VisitorCount + b.defaultVisitorCount || 0);
@@ -438,16 +435,21 @@ export class OrganizerEventAttendeesComponent {
   }
 
   unCheckedAttendess:any[] = []
+  unCheckedOutcomersPayment:any[] = []
   allCheck:any[] = []
   finalCheckCount:number = 0
   // Get UnCheck Attendess Paid Two
   getUnCheckAttendess():void{
     this.unCheckedAttendess = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq != item.payTwoAmount))
+    this.unCheckedOutcomersPayment = this.filteredData.filter((item: any) =>
+      item?.newOutcomers?.some((outcomer: any) => outcomer.price === 0)
+    );
+
+    console.log(this.unCheckedOutcomersPayment);
+
 
     this.finalCheckCount = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount)).length
     this.allCheck = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount))
-    console.log(this.finalCheckCount);
-
   }
 
   // 🔍 Search
@@ -550,6 +552,14 @@ export class OrganizerEventAttendeesComponent {
     this.departmentPages[dept] = page;
   }
 
+  canSendQrs(bookingData:any): boolean {
+    if (!bookingData?.newOutcomers?.length) {
+      return true;
+    }
+
+    return bookingData?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
+  }
+
   // ########################## Set QRs SeatNumber ##########################
   complateSeatNumber(): void {
 
@@ -606,8 +616,8 @@ export class OrganizerEventAttendeesComponent {
   sendFinalConfirmEmail(email:string, eventName:string, userName:string):void{
     let data = {
       to: email,
-      userName: eventName,
-      eventName: userName
+      userName: userName,
+      eventName: eventName
     }
 
     this._SendmailService.sendConfirmBooking(data).subscribe({
