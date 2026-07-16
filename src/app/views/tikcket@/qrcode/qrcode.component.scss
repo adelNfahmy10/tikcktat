@@ -2,14 +2,22 @@
   .image-event{
     box-shadow: 0 10px 10px #ccc;
     img{
-      height: 250px;
+      height: 200px;
       width: 100%;
       object-fit: cover;
     }
   }
-
 }
 
+@media (max-width:567px) {
+  .header{
+    .image-event{
+      img{
+        height: 150px;
+      }
+    }
+  }
+}
 .image-graduate{
   img{
     width: 100%;
@@ -37,4 +45,43 @@
   .qr-wrapper {
     overflow: hidden;
   }
+}
+
+
+.rule-card{
+    height: 100%;
+    padding: 18px 15px;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: .25s;
+}
+
+.rule-card:hover{
+    transform: translateY(-3px);
+    border-color: #2563EB;
+    box-shadow: 0 8px 20px rgba(37,99,235,.12);
+}
+
+.rule-card i{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(37,99,235,.1);
+    color: #2563EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.rule-card span{
+    font-size: 12px;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.5;
 }
