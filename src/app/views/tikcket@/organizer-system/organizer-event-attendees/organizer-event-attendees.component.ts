@@ -552,14 +552,23 @@ export class OrganizerEventAttendeesComponent {
     this.departmentPages[dept] = page;
   }
 
-  canSendQrs(bookingData:any): boolean {
+  canSendQrs(bookingData: any): boolean {
+
+    // لازم يكون الدفع الأساسي مكتمل
+    if (bookingData?.status !== 'Paid') {
+      return false;
+    }
+
+    // لو مفيش مرافقين يبقى خلاص
     if (!bookingData?.newOutcomers?.length) {
       return true;
     }
 
-    return bookingData?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
+    // كل المرافقين لازم يكون عندهم price
+    return bookingData.newOutcomers.every(
+      (outcomer: any) => Number(outcomer.price) > 0
+    );
   }
-
   // ########################## Set QRs SeatNumber ##########################
   complateSeatNumber(): void {
 
@@ -648,6 +657,71 @@ export class OrganizerEventAttendeesComponent {
         this._ToastrService.error('Email failed!');
       }
     });
+  }
+
+  sendAllFinalQrs(): void {
+
+    // كل الحجوزات اللي ينفع يتبعتلها
+    const bookings = this.filteredData.filter((booking: any) =>
+      this.canSendQrs(booking)
+    );
+
+    if (!bookings.length) {
+      this._ToastrService.warning('No eligible bookings found.');
+      return;
+    }
+
+    let success = 0;
+    let failed = 0;
+
+    bookings.forEach((booking: any) => {
+
+      const data = {
+        to: booking.userEmail,
+        name: booking.userName,
+        eventName: booking.EventName,
+        qrs: booking.qrs
+      };
+
+      this._SendmailService.sendQrs(data).subscribe({
+        next: () => {
+          success++;
+          checkFinished();
+        },
+        error: (err) => {
+          console.error(err);
+          failed++;
+          checkFinished();
+        }
+      });
+
+    });
+
+    const checkFinished = () => {
+
+      if (success + failed !== bookings.length) {
+        return;
+      }
+
+      const eventData = {
+        successQrs: success,
+        failedQrs: failed,
+      };
+
+      this._EventService.updateEvent(this.eventData.id, eventData).subscribe({
+        next: () => {
+          this._ToastrService.success(
+            `${success} emails sent, ${failed} failed`
+          );
+        },
+        error: (err) => {
+          console.error(err);
+          this._ToastrService.error('Update Event Failed');
+        }
+      });
+
+    };
+
   }
 
   // EmailJS
