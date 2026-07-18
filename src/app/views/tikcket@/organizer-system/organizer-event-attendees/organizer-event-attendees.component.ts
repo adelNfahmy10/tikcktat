@@ -241,9 +241,6 @@ export class OrganizerEventAttendeesComponent {
 
           this.totalTaxes = Math.ceil((this.totalRevenue + this.totalNewOutcomersPrice) * 0.02);
 
-          console.log(this.totalTaxes);
-
-
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {
             const dept = item.department || 'Unknown';
@@ -444,9 +441,6 @@ export class OrganizerEventAttendeesComponent {
     this.unCheckedOutcomersPayment = this.filteredData.filter((item: any) =>
       item?.newOutcomers?.some((outcomer: any) => outcomer.price === 0)
     );
-
-    console.log(this.unCheckedOutcomersPayment);
-
 
     this.finalCheckCount = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount)).length
     this.allCheck = this.filteredData.filter((item)=>  item.totalReq && (item.totalReq == item.payTwoAmount))
@@ -1159,83 +1153,50 @@ export class OrganizerEventAttendeesComponent {
   }
 
   // Download Seat No. Sheet
-  downloadDepartmentsWithSeatNumber(): void {
+  downloadSeatNumbers(): void {
 
-    const departments = this.eventData?.departments || [];
+    const finalData = this.allBooking.map((booking: any) => {
 
-    const prefixMap: { [key: string]: string } = {};
-    let charCode = 65;
+      // يجيب كرسي الـ owner أو أول QR
+      const ownerQr = booking.qrs?.find((q: any) => q.type === 'owner');
 
-    departments.forEach((dept: string) => {
-      prefixMap[dept.trim().toLowerCase()] = String.fromCharCode(charCode++);
-    });
-
-    departments.forEach((dept: string) => {
-
-      const deptClean = dept.trim().toLowerCase();
-      const prefix = prefixMap[deptClean] || '';
-
-      const deptData = this.allBooking.filter(b =>
-        (b.department || '').trim().toLowerCase() === deptClean
-      );
-
-      if (!deptData.length) return;
-
-      from(deptData).pipe(
-
-        mergeMap(item =>
-          this._UsersService.getUserById(item.userId).pipe(
-            take(1),
-            map(user => {
-
-              const outComers =
-                (item?.defaultVisitorCount || 0) +
-                (item?.VisitorCount || 0);
-
-              return {
-                id: item.id,
-                userName: user?.fullName || item.userName,
-                outComers: outComers
-              };
-            })
-          )
-        ),
-
-        toArray(),
-
-        map(list => {
-
-          let counter = 1;
-
-          return list.map(item => ({
-            'Seat No.': `${prefix}${counter++}`,
-            userName: item.userName,
-            OutComers: item.outComers,
-          }));
-        })
-
-      ).subscribe(finalData => {
-
-        const worksheet = XLSX.utils.json_to_sheet(finalData);
-
-        const workbook: XLSX.WorkBook = {
-          Sheets: { data: worksheet },
-          SheetNames: ['data']
-        };
-
-        const buffer = XLSX.write(workbook, {
-          bookType: 'xlsx',
-          type: 'array'
-        });
-
-        const blob = new Blob([buffer], {
-          type: 'application/octet-stream'
-        });
-
-        saveAs(blob, `${dept}-seat-order.xlsx`);
-      });
+      return {
+        'Seat No.': ownerQr?.seatNumber || booking.qrs?.[0]?.seatNumber || '',
+        'Name': booking.userName,
+        'OutComers': (booking.defaultVisitorCount || 0) + (booking.VisitorCount || 0)
+      };
 
     });
+
+    // ترتيب حسب رقم الكرسي
+    finalData.sort((a, b) =>
+      a['Seat No.'].localeCompare(
+        b['Seat No.'],
+        undefined,
+        { numeric: true }
+      )
+    );
+
+    const worksheet = XLSX.utils.json_to_sheet(finalData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: {
+        Seats: worksheet
+      },
+      SheetNames: ['Seats']
+    };
+
+    const buffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+
+    saveAs(
+      new Blob([buffer], {
+        type: 'application/octet-stream'
+      }),
+      `${this.eventData?.EventName}-Seat-Numbers.xlsx`
+    );
   }
 
   // Download All Images

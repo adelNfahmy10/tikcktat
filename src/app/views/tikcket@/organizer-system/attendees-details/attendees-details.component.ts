@@ -58,7 +58,6 @@ export class AttendeesDetailsComponent implements OnInit{
           next: (res) => {
             this._NgxSpinnerService.hide();
             this.bookingDate = res;
-            console.log(this.bookingDate);
             this.getEventById();
 
             this.TotalOutComersPrice = (this.bookingDate.newOutcomers || []).reduce(

@@ -56,9 +56,6 @@ export class OrganizerEventDetailsComponent {
         this._NgxSpinnerService.hide()
           this.eventData = res;
           this.getOwnerById()
-
-          console.log(this.eventData);
-
         },
         error: (err) => {
           this._NgxSpinnerService.hide()
