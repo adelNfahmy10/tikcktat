@@ -78,6 +78,29 @@ export class AdminViewEventComponent{
     });
   }
 
+  changeEventStatus(event: any): void {
+
+    const eventId = event?.id
+    const newStatus = event?.status === 'Active' ? 'Inactive' : 'Active';
+
+    console.log('eventId :' + eventId);
+    console.log('new Status :' + newStatus);
+
+    this._EventService.updateEvent(eventId, {
+      status: newStatus
+    }).subscribe({
+      next: () => {
+        event.status = newStatus; // تحديث الـ UI
+        this._ToastrService.success('Event status updated successfully')
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error(err)
+      }
+    });
+
+  }
+
 
   ownerPaymentInEvent:any = {}
   amountPayment:number = 0

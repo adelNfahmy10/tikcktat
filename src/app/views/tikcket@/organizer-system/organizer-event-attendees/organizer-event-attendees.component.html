@@ -187,7 +187,8 @@
             (input)="applySearch()"
           />
         </div>
-        @if(eventData?.ownerPayment || role == 'Admin'){
+        <!-- @if(eventData?.ownerPayment || role == 'Admin'){ -->
+        @if(role == 'Admin'){
           <div class="download d-flex flex-wrap align-items-center gap-2">
             <button class="btn btn-outline-primary" (click)="downloadAll()">All <i class="fa-solid fa-file-csv"></i></button>
             <button class="btn btn-outline-primary" (click)="downloadAllSorted('english')">Sort All EN <i class="fa-solid fa-file-csv"></i></button>

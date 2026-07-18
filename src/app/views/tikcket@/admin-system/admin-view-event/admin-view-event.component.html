@@ -218,9 +218,10 @@
                 <td>{{ event?.ownerPayment || 0 | number}} EGP</td>
                 <td>
                   <span
-                    class="badge"
+                    class="badge cr"
                     [class.bg-success]="event?.status === 'Active'"
                     [class.bg-danger]="event?.status !== 'Active'"
+                    (click)="changeEventStatus(event)"
                   >
                     {{ event?.status }}
                   </span>
