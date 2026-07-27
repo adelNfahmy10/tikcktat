@@ -209,7 +209,7 @@
                       <div class="row g-4">
                         <div class="col-md-8">
                           <div class="row g-2">
-                            @if(eventId == 'HLz7HiRkpk33TSvFDNGy' || eventId == 'uvoo0zHQzwK1efCTBynh'){
+                            @if(eventId == 'HLz7HiRkpk33TSvFDNGy'){
                               <div class="col-12">
                                 <label for="studentsIDs" class="form-label">Student ID</label>
 
@@ -683,22 +683,21 @@
                                 </p>
 
                                 <p>
-                                  Service Fee :
-                                  @if(eventData.id == 'uvoo0zHQzwK1efCTBynh'){
+                                  Service Fee : <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  <!-- @if(eventData.id == ''){
                                     <span class="fw-bold text-success"> <i class="fa-solid fa-square-check"></i> Paid By Remold Events</span>
                                   } @else {
-                                    <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
-                                  }
+                                    Service Fee : <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  } -->
                                 </p>
 
                                 <p>
-                                  Total :
-                                  @if(eventData.id == 'uvoo0zHQzwK1efCTBynh'){
+                                  Total : <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 1.02) | number }} EGP</span>
+                                  <!-- @if(eventData.id == ''){
                                     <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) | number }} EGP</span>
                                   } @else {
                                     <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 1.02) | number }} EGP</span>
-
-                                  }
+                                  } -->
                                 </p>
                               </div>
 
@@ -752,7 +751,7 @@
                           </div>
                         </div>
                       </div>
-                    } @else if (bookingData.VisitorCount == 15){
+                    } @else if (bookingData.VisitorCount == 50){
                       <div class="text-center my-4">
                         <h4 dir="rtl">لقد وصلت إلى الحد الأقصى المسموح به من المرافقين لهذا الحجز.</h4>
                         <h4>You have reached the maximum number of companions allowed for this booking.</h4>

@@ -1,6 +1,6 @@
 <section class="user-events" id="user-events">
   <div class="container-fluid py-3">
-    <div class="bg-white rounded-3 p-3 shadow-lg">
+    <div class="rounded-3 p-3 shadow-lg">
 
       <!-- ===================== Add Department when forget add departments ===================== -->
       <!-- <button class="btn main-btn" (click)="updateDepartments()">Update Deparemtents</button> -->
@@ -15,10 +15,15 @@
                 <div>
                   <h4 class="card-title mb-2">Total Graduates</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ eventData?.bookingCount || 0 | number }} Graduates</p>
+                  <div class="fees-section d-flex align-items-center gap-1">
+                    <span class="text-muted fw-medium mb-0">Pending : {{ pendingCount || 0 | number }} | </span>
+                    <span class="text-muted fw-medium mb-0">Par-Paid : {{ parPaidCount || 0 | number }} | </span>
+                    <span class="text-muted fw-medium mb-0">Paid : {{ paidCount || 0 | number }}</span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-graduation-cap-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <i class="fs-32 main-color avatar-title ri-graduation-cap-line fw-light"></i>
                   </div>
                 </div>
               </div>
@@ -33,18 +38,20 @@
               <div class="d-flex align-items-center justify-content-between gap-5">
                 <div class="flex-grow-1">
                   <h4 class="card-title mb-2">Total Visitors</h4>
-                  <div class="w-100 d-flex justify-content-between align-items-center flex-wrap">
+                  <div class="w-100">
                     <p class="text-muted fw-medium fs-22 mb-0">{{ totalOutComerCount || 0 | number }} Outcomers</p>
-                    <div>
-                      <span class="fw-bold main-color">{{totalDefaultVisitorCount || 0 | number }} Defualt</span>
-                      <span class="fw-bold main-color"> - </span>
-                      <span class="fw-bold main-color">{{totalVisitorCount || 0 | number }} New</span>
+                    <div class="fees-section d-flex align-items-center gap-1">
+                      <span class="text-muted fw-medium mb-0">{{totalDefaultVisitorCount || 0 | number }} Defualt | </span>
+                      <span class="text-muted fw-medium mb-0">{{totalVisitorCount || 0 | number }} Extra </span>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-user-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:users-group-two-rounded-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -60,10 +67,17 @@
                 <div>
                   <h4 class="card-title mb-2">Final Checked</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ finalCheckCount || 0 | number }} Graduates</p>
+                  <div class="fees-section d-flex align-items-center gap-1">
+                    <span class="text-muted fw-medium mb-0">Check : {{ finalCheckCount || 0 | number }} | </span>
+                    <span class="text-muted fw-medium mb-0">UnCheck : {{ eventData?.bookingCount - finalCheckCount || 0 | number }} </span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fa-solid fa-square-check fs-32 main-color avatar-title"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:verified-check-outline"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -81,8 +95,11 @@
                   <p class="text-muted fw-medium fs-22 mb-0">{{ totalTaxes || 0 | number }} EGP</p>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -98,10 +115,16 @@
                 <div>
                   <h4 class="card-title mb-2">Total Deposits</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ totalPayOne || 0 | number }} EGP</p>
+                  <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ (totalPayOne * 0.02) || 0 | number }} EGP</span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -117,10 +140,16 @@
                 <div>
                   <h4 class="card-title mb-2">Total Final Payment</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ totalPayTwo || 0 | number }} EGP</p>
+                  <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ (totalPayTwo * 0.02) || 0 | number }} EGP</span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -136,10 +165,16 @@
                 <div>
                   <h4 class="card-title mb-2">Outcomers Amount</h4>
                   <p class="text-muted fw-medium fs-22 mb-0">{{ totalNewOutcomersPrice || 0 | number }} EGP</p>
+                  <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ (totalNewOutcomersPrice * 0.02) || 0 | number }} EGP</span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -154,11 +189,16 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h4 class="card-title mb-2">Total Amount</h4>
-                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalRevenue + totalNewOutcomersPrice || 0 | number }} EGP</p>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalEventAmount || 0 | number }} EGP</p><div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ totalTaxes || 0 | number }} EGP</span>
+                  </div>
                 </div>
                 <div>
-                  <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                    <i class="fs-32 main-color avatar-title ri-money-pound-circle-line"></i>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
                   </div>
                 </div>
               </div>
@@ -659,7 +699,7 @@
                             $index + 1 + ((page - 1) * pageSize)
                           }}
                         </span>
-                        @if(!canSendQrs(user)){
+                        @if(!canSendQrs(user) && user?.payTwoAmount){
                           <span class="bg-warning text-white px-1 rounded-3 cr" (click)="goToAttendeesDetails(user?.id)">
                             Outcomer
                           </span>
@@ -932,7 +972,7 @@
                         $index + 1 + ((page - 1) * pageSize)
                       }}
                     </span>
-                    @if(!canSendQrs(user)){
+                    @if(!canSendQrs(user) && user?.payTwoAmount){
                       <span class="bg-warning text-white px-1 rounded-3">
                         Outcomer
                       </span>
@@ -1058,7 +1098,7 @@
 
     <!-- ===================== TABLE DPARTMENTS ===================== -->
     @if(hasDepartmentColumn){
-      <div class="sub-main-tables bg-white rounded-3 p-3 shadow-lg mt-4">
+      <div class="sub-main-tables rounded-3 p-3 shadow-lg mt-4">
         <div class="row g-3">
             @for (dept of eventData.departments; track $index) {
               <div class="col-md-6">

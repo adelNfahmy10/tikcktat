@@ -3,10 +3,11 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-owners',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './owners.component.html',
   styleUrl: './owners.component.scss'
 })
@@ -36,6 +37,8 @@ export class OwnersComponent {
     this._UsersService.getOwners().subscribe({
       next: (res) => {
         this.allOwners = res;
+        console.log(this.allOwners);
+
         this.filteredData = [...this.allOwners];
         this.updatePagination();
       },

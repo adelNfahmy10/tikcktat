@@ -1,0 +1,487 @@
+<section class="dashboard" id="dashboard">
+  <div class="container-fluid py-3">
+    <h2>Analytics</h2>
+    <!-- ===================== STATS ===================== -->
+    <div class="rounded-3 p-3 shadow-lg">
+      <div class="row g-2">
+        <!-- Total Events -->
+        <div class="col-md-4 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Events</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ eventsCount | number }} Events</p>
+                  <div class="fees-section d-flex align-items-center gap-1">
+                    <span class="text-muted fw-medium mb-0">Active : {{ eventsActiveCount | number }} | </span>
+                    <span class="text-muted fw-medium mb-0">InActive : {{ eventsInactiveCount | number }} </span>
+                  </div>
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:clipboard-list-outline"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Bookings -->
+        <div class="col-md-4 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between gap-5">
+                <div class="flex-grow-1">
+                  <h4 class="card-title mb-2">Total Bookings</h4>
+                  <div class="w-100">
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ BookingsCount | number }} Bookings</p>
+                    <div class="fees-section d-flex align-items-center gap-1">
+                      <!-- <span class="text-muted fw-medium mb-0">{{BookingsAmount | number }} EGP</span> -->
+                      <span class="text-muted fw-medium mb-0">Pending : {{ BookingsPending | number }} |</span>
+                      <span class="text-muted fw-medium mb-0">Pai-Paid : {{ BookingsParPaid | number }} |</span>
+                      <span class="text-muted fw-medium mb-0">Paid : {{ BookingsPaid | number }} </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:ticket-outline"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Outcomers -->
+        <div class="col-md-4 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between gap-5">
+                <div class="flex-grow-1">
+                  <h4 class="card-title mb-2">Total Outcomers</h4>
+                  <div class="w-100">
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ OutcomersCount | number }} Outcomers</p>
+                    <div class="fees-section d-flex align-items-center gap-1">
+                      <span class="text-muted fw-medium mb-0">Defualt : {{  defualtOutcomersCount | number }} |</span>
+                      <span class="text-muted fw-medium mb-0">Extra : {{  newOutcomersCount | number }}</span>
+                      <!-- <span class="text-muted fw-medium mb-0">{{BookingsOutcomersAmount | number }} EGP</span> -->
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:users-group-two-rounded-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Booking Amount -->
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Bookings Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ BookingsAmount | number }} EGP</p>
+                  <!-- <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ 0 | number }} EGP</span>
+                  </div> -->
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Outcomers Amount -->
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Outcomers Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ BookingsOutcomersAmount | number }} EGP</p>
+                  <!-- <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ 0 | number }} EGP</span>
+                  </div> -->
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Amount -->
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="card-title mb-2">Total Amount</h4>
+                  <p class="text-muted fw-medium fs-22 mb-0">{{ totalAmount | number }} EGP</p>
+                  <!-- <div class="fees-section">
+                    <span class="text-muted fw-medium mb-0">Fees : {{ 0 | number }} EGP</span>
+                  </div> -->
+                </div>
+                <div>
+                  <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                    <iconify-icon
+                      icon="solar:money-bag-broken"
+                      class="fs-32 text-primary avatar-title"
+                    ></iconify-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+    <!-- ===================== Charts ===================== -->
+    <div class="rounded-3 mt-4 p-3 shadow-lg">
+      <h2>Charts</h2>
+      <div class="row g-3">
+        <div class="col-md-8">
+          <div class="card overflow-hidden">
+            <div
+              class="card-header d-flex justify-content-between align-items-center pb-1"
+            >
+              <div>
+                <h4 class="card-title">Sales Analytic</h4>
+              </div>
+              <div ngbDropdown>
+                <a
+                  ngbDropdownToggle
+                  role="button"
+                  class="btn btn-sm btn-outline-light rounded"
+                >
+                  {{filterLabel}}
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu-end">
+                  <a href="javascript:void(0);" class="dropdown-item" (click)="changeFilter('day')">Day</a>
+
+                  <a href="javascript:void(0);" class="dropdown-item" (click)="changeFilter('week')">Week</a>
+
+                  <a href="javascript:void(0);" class="dropdown-item" (click)="changeFilter('month')">Months</a>
+
+                  <a href="javascript:void(0);" class="dropdown-item" (click)="changeFilter('year')">Years</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="text-end">
+                <p class="mb-0 fs-18 fw-medium text-dark">
+                  <i class="ri-wallet-3-fill"></i> Earnings :
+                  <span class="text-primary fw-bold">{{filteredIncome | number}} EGP</span>
+                </p>
+              </div>
+              <div class="row align-items-top text-center">
+                <div class="col-lg-12">
+                  <div class="apex-charts mt-2" id="sales_analytic">
+                    <apx-chart
+                      [chart]="salesAnalyticChart.chart!"
+                      [colors]="salesAnalyticChart.colors!"
+                      [dataLabels]="salesAnalyticChart.dataLabels!"
+                      [stroke]="salesAnalyticChart.stroke!"
+                      [series]="salesAnalyticChart.series!"
+                      [labels]="salesAnalyticChart.labels!"
+                      [xaxis]="salesAnalyticChart.xaxis!"
+                      [yaxis]="salesAnalyticChart.yaxis!"
+                      [grid]="salesAnalyticChart.grid!"
+                      [legend]="salesAnalyticChart.legend!"
+                      [fill]="salesAnalyticChart.fill!"
+                      [responsive]="salesAnalyticChart.responsive!"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer p-2 bg-light-subtle text-center">
+              <div class="row g-3">
+                <div class="col-md-4 border-end">
+                  <p class="text-muted mb-1">Income</p>
+                  <p
+                    class="text-dark fs-18 fw-medium d-flex align-items-center justify-content-center gap-2 mb-0"
+                  >
+                    {{totalAmount | number}} EGP
+                    <!-- <span class="badge text-success bg-success-subtle fs-12"
+                      ><i class="ri-arrow-up-line"></i>0.08%</span
+                    > -->
+                  </p>
+                </div>
+                <div class="col-md-4 border-end">
+                  <p class="text-muted mb-1">Expenses</p>
+                  <p
+                    class="text-dark fs-18 fw-medium d-flex align-items-center justify-content-center gap-2 mb-0"
+                  >
+                    {{totalAmount * 0.02 | number}} EGP
+                    <!-- <span class="badge text-danger bg-danger-subtle fs-12"
+                      ><i class="ri-arrow-down-line"></i>5.38%</span
+                    > -->
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Balance</p>
+                  <p
+                    class="text-dark fs-18 fw-medium d-flex align-items-center justify-content-center gap-2 mb-0"
+                  >
+                    {{totalAmount - (totalAmount * 0.02) | number}} EGP
+                    <!-- <span class="badge text-success bg-success-subtle fs-12"
+                      ><i class="ri-arrow-up-line"></i>2.89%</span
+                    > -->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h4 class="card-title">Top Events</h4>
+            </div>
+            <div class="card-body">
+              <!-- <div class="d-flex align-items-center gap-3">
+                <img
+                  src="assets/images/users/avatar-2.jpg"
+                  class="rounded avatar-xl img-thumbnail"
+                  alt="img-7"
+                />
+                <div class="">
+                  <h4 class="mb-1">
+                    <a routerLink="/customers/details" class="mb-1 link-dark fw-semibold"
+                      >Daavid Nummi</a
+                    >
+                  </h4>
+                  <a href="javascript:void(0);" class="link-primary fw-medium fs-14"
+                    >EastTribune.nl</a
+                  >
+                  <ul
+                    class="list-inline d-flex flex-wrap gap-1 mb-0 align-items-center mt-2"
+                  >
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-soft-primary avatar-sm d-flex align-items-center justify-content-center fs-20"
+                      >
+                        <i class="ri-facebook-fill"></i>
+                      </a>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-soft-danger avatar-sm d-flex align-items-center justify-content-center fs-20"
+                      >
+                        <i class="ri-instagram-fill"></i>
+                      </a>
+                    </li>
+
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-soft-info avatar-sm d-flex align-items-center justify-content-center fs-20"
+                      >
+                        <i class="ri-twitter-fill"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-soft-success avatar-sm d-flex align-items-center justify-content-center fs-20"
+                      >
+                        <i class="ri-whatsapp-fill"></i>
+                      </a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a
+                        href="javascript: void(0);"
+                        class="btn btn-soft-warning avatar-sm d-flex align-items-center justify-content-center fs-20"
+                      >
+                        <i class="ri-mail-fill"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div> -->
+              <div class="">
+                <div id="customer_invest" data-colors="#604ae3" class="apex-charts">
+                  <apx-chart
+                    [chart]="topEventsChart.chart!"
+                    [series]="topEventsChart.series!"
+                    [plotOptions]="topEventsChart.plotOptions!"
+                    [grid]="topEventsChart.grid!"
+                    [colors]="topEventsChart.colors!"
+                    [dataLabels]="topEventsChart.dataLabels!"
+                    [legend]="topEventsChart.legend!"
+                    [xaxis]="topEventsChart.xaxis!"
+                    [yaxis]="topEventsChart.yaxis!"
+                    [tooltip]="topEventsChart.tooltip!"
+                    [responsive]="topEventsChart.responsive!"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- <div class="card-footer border-top border-dashed gap-1 hstack">
+              <a href="javascript:void(0);" class="btn btn-primary w-100">Open Chat</a>
+              <a href="javascript:void(0);" class="btn btn-light w-100"
+                >Go To Customer</a
+              >
+            </div> -->
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0" >
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                  <iconify-icon
+                    icon="solar:users-group-two-rounded-broken"
+                    class="fs-32 text-primary avatar-title"
+                  ></iconify-icon>
+                </div>
+                <h2 class="card-title mb-1 fs-24">Top Customer</h2>
+                <!-- <p class="mb-0 fs-13">{{topCustomers.length | number}} Customer</p> -->
+              </div>
+            </div>
+            <div class="card-body">
+              @for ( item of topCustomers.slice(0, 5); track $index; let first = $first; let last = $last ) {
+                <div
+                  class="d-flex align-items-center justify-content-between"
+                  [ngClass]="{
+                    'pb-3': first,
+                    'border-bottom': !last,
+                    'py-3': !first && !last,
+                    'pt-3': last,
+                  }"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar">
+                      <img
+                        [src]="item.avatar"
+                        alt="avatar-3"
+                        class="rounded-circle user-image border"
+                      />
+                    </div>
+                    <div class="d-block">
+                      <span class="text-dark">
+                        <a href="javascript:void(0);" class="text-dark fw-medium fs-15">{{
+                          item.name
+                        }}</a>
+                      </span>
+                      <p class="mb-0 fs-14 text-muted">
+                        <a [href]="'mailto:' + item.email">{{ item.email }}</a>
+                      </p>
+                      <p class="mb-0 fs-14 text-muted">
+                        <a [href]="'https://wa.me/2' + item.phone" target="_blank" rel="noopener noreferrer">{{ item.phone }}</a>
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-muted fw-medium mb-0">{{ item.amount | number}} EGP</p>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- <div class="card-footer border-top">
+              <a href="javascript:void(0);" class="btn btn-primary w-100">View All</a>
+            </div> -->
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0" >
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-md bg-light bg-opacity-50 rounded-4">
+                  <iconify-icon
+                    icon="solar:clipboard-list-outline"
+                    class="fs-32 text-primary avatar-title"
+                  ></iconify-icon>
+                </div>
+                <h2 class="card-title mb-1 fs-24">Top Events</h2>
+                <!-- <p class="mb-0 fs-13">{{topCustomers.length | number}} Customer</p> -->
+              </div>
+
+            </div>
+            <div class="card-body">
+              @for ( item of topEvents.slice(0, 6); track $index; let first = $first; let last = $last ) {
+                <div
+                  class="d-flex align-items-center justify-content-between"
+                  [ngClass]="{
+                    'pb-3': first,
+                    'border-bottom': !last,
+                    'py-3': !first && !last,
+                    'pt-3': last,
+                  }"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar">
+                      <img
+                        [src]="item.eventImage"
+                        alt="avatar-3"
+                        class="rounded-circle user-image border"
+                      />
+                    </div>
+                    <div class="d-block">
+                      <span class="text-dark">
+                        <a href="javascript:void(0);" class="text-dark fw-medium fs-14">{{
+                          item.eventName
+                        }}</a>
+                      </span>
+                      <p class="mb-0 fs-12 text-muted">
+                        Organizer : {{ item.organizerName }}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-muted fw-medium mb-0">{{ item.amount | number}} EGP</p>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- <div class="card-footer border-top">
+              <a href="javascript:void(0);" class="btn btn-primary w-100">View All</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

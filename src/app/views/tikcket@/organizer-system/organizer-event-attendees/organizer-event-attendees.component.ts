@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BookingService } from '@core/services/booking/booking.service';
@@ -18,12 +18,14 @@ import { SendmailService } from '@core/services/send-email/sendmail.service';
 import Swal from 'sweetalert2';
 import { doc, writeBatch } from 'firebase/firestore';
 import { Firestore } from '@angular/fire/firestore';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organizer-event-attendees',
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './organizer-event-attendees.component.html',
-  styleUrl: './organizer-event-attendees.component.scss'
+  styleUrl: './organizer-event-attendees.component.scss',
+  schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OrganizerEventAttendeesComponent {
   private readonly _EventService = inject(EventService)
@@ -171,6 +173,9 @@ export class OrganizerEventAttendeesComponent {
     });
   }
 
+  pendingCount:number = 0
+  parPaidCount:number = 0
+  paidCount:number = 0
   totalOutComerCount:number = 0
   totalNewOutcomersPrice:number = 0
   totalVisitorCount:number = 0
@@ -179,6 +184,7 @@ export class OrganizerEventAttendeesComponent {
   totalPayTwo:number = 0
   totalRevenue:number = 0
   totalTaxes:number = 0
+  totalEventAmount:number = 0
   hasStudentsColumn: boolean = false;
   hasDepartmentColumn: boolean = false;
 
@@ -195,6 +201,15 @@ export class OrganizerEventAttendeesComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.allBooking = res;
+          this.pendingCount = this.allBooking.filter((book:any)=>{
+            return book.status == 'Pending'
+          }).length
+          this.parPaidCount = this.allBooking.filter((book:any)=>{
+            return book.status == 'Par-Paid'
+          }).length
+          this.paidCount = this.allBooking.filter((book:any)=>{
+            return book.status == 'Paid'
+          }).length
 
            // 🔥 1. sort هنا قبل أي processing
           this.allBooking = res.sort((a: any, b: any) => {
@@ -219,27 +234,36 @@ export class OrganizerEventAttendeesComponent {
           }, 0);
 
           // 💰 total revenue amount
-          this.totalRevenue = this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0);
-
-          // 💰 total pay one amount
-          this.totalPayOne = this.allBooking.reduce((sum, item) => sum + (item.payOneAmount || 0), 0);
-
-          // 💰 total pay two amount
-          this.totalPayTwo = this.allBooking.reduce((sum, item) => sum + (item.payTwoAmount || 0), 0);
-
-          // 💰 total new outcomers amount
-          this.totalNewOutcomersPrice = this.allBooking.reduce(
-            (total, booking) =>
-              total +
-              (booking.newOutcomers || []).reduce(
-                (sum:any, outcomer:any) => sum + Number(outcomer.price || 0),
-                0
-              ),
-            0
+          this.totalRevenue =Math.round(
+            this.allBooking.reduce((sum, item) => sum + (item.totalAmount || 0), 0)
           );
 
+          // 💰 total pay one amount
+          this.totalPayOne =Math.round(
+            this.allBooking.reduce((sum, item) => sum + (item.payOneAmount || 0), 0)
+          );
 
-          this.totalTaxes = Math.ceil((this.totalRevenue + this.totalNewOutcomersPrice) * 0.02);
+          // 💰 total pay two amount
+          this.totalPayTwo =Math.round(
+            this.allBooking.reduce((sum, item) => sum + (item.payTwoAmount || 0), 0)
+          );
+
+          // 💰 total new outcomers amount
+          this.totalNewOutcomersPrice = Math.round(
+            this.allBooking.reduce(
+              (total, booking) =>
+                total +
+                (booking.newOutcomers || []).reduce(
+                  (sum:any, outcomer:any) => sum + Number(outcomer.price || 0),
+                  0
+                ),
+              0
+            )
+          )
+
+          this.totalEventAmount = this.totalRevenue + this.totalNewOutcomersPrice
+
+          this.totalTaxes = Math.round(this.totalEventAmount * 0.02);
 
           // 🔥 تقسيم
           this.groupedByDepartment = this.allBooking.reduce((acc: any, item: any) => {
@@ -549,12 +573,12 @@ export class OrganizerEventAttendeesComponent {
   canSendQrs(bookingData: any): boolean {
 
     // لازم يكون الدفع الأساسي مكتمل
-    if (bookingData?.status !== 'Paid') {
-      return false;
-    }
+    // if (bookingData?.status !== 'Paid') {
+    //   return false;
+    // }
 
     // لو مفيش مرافقين يبقى خلاص
-    if (!bookingData?.newOutcomers?.length) {
+    if (!bookingData?.newOutcomers?.length && bookingData?.status) {
       return true;
     }
 
@@ -571,18 +595,18 @@ export class OrganizerEventAttendeesComponent {
       return;
     }
 
-    const specialEventId = 'uvoo0zHQzwK1efCTBynh';
+    // const specialEventId = 'uvoo0zHQzwK1efCTBynh';
 
     let bookingsToUpdate = [...this.filteredData];
 
-    if (this.eventData?.id === specialEventId) {
-      bookingsToUpdate.sort((a, b) => {
-        const aTime = a.createdAtTwo?.seconds || 0;
-        const bTime = b.createdAtTwo?.seconds || 0;
+    // if (this.eventData?.id === specialEventId) {
+    //   bookingsToUpdate.sort((a, b) => {
+    //     const aTime = a.createdAtTwo?.seconds || 0;
+    //     const bTime = b.createdAtTwo?.seconds || 0;
 
-        return aTime - bTime;
-      });
-    }
+    //     return aTime - bTime;
+    //   });
+    // }
 
 
     this._EventService.updateAllBookingsQrsWithSeats(bookingsToUpdate).subscribe({

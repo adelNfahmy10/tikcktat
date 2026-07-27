@@ -35,6 +35,11 @@ export const MENU_ITEMS: MenuItemType[] = [
     isTitle: true,
   },
   {
+    key: 'organizer-dashboard',
+    label: 'Dashboard',
+    url: '/organizer-dashboard',
+  },
+  {
     key: 'home',
     label: 'Home',
     url: '/home',
