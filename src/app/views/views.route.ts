@@ -103,7 +103,12 @@ export const VIEWS_ROUTES: Route[] = [
   {
     path: 'organizer-dashboard/:id',
     component: OrganizerDashboardComponent,
-    data: { title: 'My Events' },
+    data: { title: 'Dashboard' },
+  },
+  {
+    path: 'organizer-dashboard',
+    component: OrganizerDashboardComponent,
+    data: { title: 'Dashboard' },
   },
   {
     path: 'organizer-events',
