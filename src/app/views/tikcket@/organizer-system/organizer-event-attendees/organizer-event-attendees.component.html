@@ -1106,7 +1106,7 @@
 
                   <!-- ===================== TABLES ===================== -->
                   <div class="department-table">
-                    <h4>{{ dept }} Attendees</h4>
+                    <h4>{{ dept }} Attendees ({{groupedByDepartment[dept]?.length}})</h4>
 
                     <div class="table-responsive">
                       <table class="table table-hover align-middle text-center">
@@ -1127,7 +1127,6 @@
                         <tbody>
                           @for (user of getPaginatedDepartment(dept); track $index) {
                             <tr>
-
                               <!-- index -->
                             <td>
                               {{
