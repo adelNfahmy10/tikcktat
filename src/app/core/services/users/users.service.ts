@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, docData, query, where } from '@angular/fire/firestore';
 import { collectionData } from '@angular/fire/firestore';
-import { doc } from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -33,5 +33,10 @@ export class UsersService {
     const userRef = doc(this.firestore, `users/${id}`);
 
     return docData(userRef, { idField: 'uid' });
+  }
+
+  deleteUser(uid: string): Promise<void> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    return deleteDoc(userRef);
   }
 }

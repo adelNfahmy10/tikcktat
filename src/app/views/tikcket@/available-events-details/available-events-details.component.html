@@ -100,9 +100,18 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">
-          Please Register To Book Your Ticket
-        </h5>
+        @if(haveAcc){
+          <h5 class="modal-title" id="exampleModalCenterTitle">
+            Please Register To Book Your Ticket
+          </h5>
+        }
+
+        @if(!haveAcc){
+          <h5 class="modal-title" id="exampleModalCenterTitle">
+            Welcome To <span class="second-color">Ticketat</span>, Please Login.
+          </h5>
+        }
+
         @if(!OTP){
           <button
             type="button"
@@ -116,7 +125,7 @@
       <div class="modal-body">
         @if(haveAcc){
           @if(!OTP){
-            <p class="text-center m-0">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
+            <p class="text-center m-0 fs-4">I Have Account, <span class="main-color cr" (click)="toggleForm()">SignIn</span></p>
             <form class="mt-2" [formGroup]="registerForm">
               <div class="mb-3">
                 <label class="form-label">Full Name (English)</label>
@@ -289,7 +298,7 @@
         }
 
         @if(!haveAcc){
-          <p class="text-center m-0">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
+          <p class="text-center m-0 fs-4">I Haven't Account, <span class="main-color cr" (click)="toggleForm()">SignUp</span></p>
           <form [formGroup]="loginForm">
             <div class="mb-3">
               <label class="form-label">Email</label>

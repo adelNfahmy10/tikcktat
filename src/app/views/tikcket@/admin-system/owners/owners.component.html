@@ -96,11 +96,19 @@
             @for (event of paginatedData; track $index) {
               <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ event.fullName }}</td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <img class="rounded-circle"  [src]="event.image" [alt]="event.fullName">
+                    <span>{{ event.fullName }}</span>
+                  </div>
+                </td>
                 <td>{{ event.email }}</td>
                 <td>{{ event.phone}}</td>
                 <td>
-                  <i class="fa-solid fa-circle-info cr" [routerLink]="'/organizer-dashboard/' + event.uid"></i>
+                  <div class="d-flex justify-content-center align-items-center gap-1">
+                    <i class="fa-solid fa-circle-info cr" [routerLink]="'/organizer-dashboard/' + event.uid"></i>
+                    <i class="fa-solid fa-trash cr" (click)="deleteOwner(event.uid)"></i>
+                  </div>
                 </td>
               </tr>
             }

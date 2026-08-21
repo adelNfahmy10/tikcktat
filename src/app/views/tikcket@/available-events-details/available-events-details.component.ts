@@ -35,7 +35,7 @@ export class AvailableEventsDetailsComponent {
   eventId:string = ''
   userId:string | null = localStorage.getItem('userId')
   token:string | null = localStorage.getItem('token')
-  haveAcc: boolean = true;
+  haveAcc: boolean = false;
   features: string[] = [];
   terms: string[] = [];
 

@@ -1255,6 +1255,9 @@
               <span>Second Transaction Image</span>
               <div class="images">
                 <img loading="lazy" [src]="bookDataById?.payTwoImage" alt="Second Transaction">
+                @if(bookDataById?.paymentStages?.length > 0){
+                  <img loading="lazy" [src]="bookDataById?.paymentStages[0].paymentImage" alt="Payment Stage">
+                }
               </div>
             </div>
           }
@@ -1399,8 +1402,11 @@
             <div class="col-12">
               <span>Second Transaction Image</span>
               @if(bookDataById?.payTwoImage){
-                <div class="images">
-                  <img loading="lazy" [src]="bookDataById?.payTwoImage" alt="First Transaction">
+                <div class="images d-flex flex-wrap justify-content-center align-items-center gap-2 mt-2">
+                  <img loading="lazy" class="rounded-3 shadow" [src]="bookDataById?.payTwoImage" alt="First Transaction">
+                  @if(bookDataById?.paymentStages?.length > 0){
+                    <img loading="lazy" class="rounded-3 shadow" [src]="bookDataById?.paymentStages[0].paymentImage" alt="Payment Stage">
+                  }
                 </div>
               }
             </div>

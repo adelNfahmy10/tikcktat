@@ -61,7 +61,7 @@
 }
 .modal-body{
   .images{
-    width: 30%;
+    width: 50%;
     margin: 0 auto;
   }
   img{
@@ -69,14 +69,6 @@
   }
 }
 
-@media (max-width:567px) {
-  .modal-body{
-    .images{
-      width: 50%;
-      margin: 0 auto;
-    }
-  }
-}
 .fees-section{
   font-size: 12px;
 }

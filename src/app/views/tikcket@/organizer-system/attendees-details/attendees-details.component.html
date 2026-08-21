@@ -170,8 +170,30 @@
           <div class="image-trans">
             <img [src]="bookingDate?.payTwoImage" [alt]="">
           </div>
+
         </div>
       </div>
+
+      @if(bookingDate?.paymentStages?.length > 0){
+        <div class="col-lg-3 col-md-6 col-12">
+          <div class="card p-3 rounded-3 h-100">
+
+            <h4 class="mb-2 main-color">Screen Payment Stage Two</h4>
+
+            <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
+              <span>created At : {{bookingDate?.paymentStages[0]?.createdAt?.toDate() | date:"medium"}}</span>
+              <span>Referance No. : {{bookingDate?.paymentStages[0]?.paymentRef || '-'}}</span>
+            </div>
+
+
+            <div class="image-trans">
+              <img [src]="bookingDate?.paymentStages[0]?.paymentImage" [alt]="">
+            </div>
+
+          </div>
+        </div>
+      }
+
 
       @if(bookingDate?.VisitorCount){
         @for (screen of bookingDate?.newOutcomers; track $index) {

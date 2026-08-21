@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { EventService } from '@core/services/event/event.service';
 import { UsersService } from '@core/services/users/users.service';
 import { RouterLink } from "@angular/router";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-owners',
@@ -14,6 +15,7 @@ import { RouterLink } from "@angular/router";
 export class OwnersComponent {
 // private readonly _EventService = inject(EventService)
   private readonly _UsersService = inject(UsersService)
+  private readonly _ToastrService = inject(ToastrService)
 
   allOwners:any[] = []
 
@@ -46,6 +48,22 @@ export class OwnersComponent {
         console.error('Error fetching owners:', err);
       }
     });
+  }
+
+  deleteOwner(uid: string) {
+    if (!confirm('هل أنت متأكد من حذف المستخدم؟')) {
+      return;
+    }
+
+    this._UsersService.deleteUser(uid)
+      .then(() => {
+        this._ToastrService.success('تم حذف المستخدم بنجاح');
+        this.getAllOwners()
+      })
+      .catch((err) => {
+        console.error(err);
+        this._ToastrService.error('حدث خطأ أثناء حذف المستخدم');
+      });
   }
 
   // downloadOwnerEvent(): void {

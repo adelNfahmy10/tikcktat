@@ -75,30 +75,11 @@ export class CheckoutComponent {
   bookingData: any = null;
 
   allBookings:any[] = []
-  // validStudentIds:number[] = [
-  //   4000101, 4000102, 4000103, 4000104, 4000105, 4000106, 4000107, 4000108, 4000110,
-  //   4000111, 4000112, 4000113, 4000114, 4000115, 4000116, 4000117, 4000118, 4000119,
-  //   4000120, 4000121, 4000122, 4000123, 4000124, 4000126, 4000127, 4000128, 4000130,
-  //   4000131, 4000132, 4000125, 4000109, 4000129,
+  validStudentIds:number[] = [
+    13000,13001,13002,13003,13004,13005,13006,13007,13008,13009,13010,13011,13012,13013,13014,13015,13016,13017,13018,13020,13021,13022,13023,13024,13025,13026,13027,13028,13029,13030,13031,13032,
 
-  //   6000100,6000101,6000102,6000103,6000104,6000105,6000106,6000107,6000108,6000109,
-  //   6000110,6000111,6000112,6000113,6000114,6000115,6000116,6000117,6000118,6000119,
-  //   6000120,6000121,6000122,6000123,6000124,6000125,6000126,6000127,6000128,6000129,
-  //   6000130,6000131,6000132,6000133,6000134,6000135,6000136,6000137,6000138,6000139,
-  //   6000140,
-
-  //   7000200,7000201,7000202,7000203,7000204,7000205,7000206,7000207,7000208,7000209,
-  //   7000210,7000211,7000212,7000213,7000214,7000215,7000216,7000217,7000218,7000219,
-  //   7000220,7000221,7000222,7000223,7000224,7000225,7000226,7000227,7000228,7000229,
-  //   7000230,7000231,7000232,7000233,7000234,7000235,7000236,7000237,7000238,7000239,
-  //   7000240,
-
-  //   8000300,8000301,8000302,8000303,8000304,8000305,8000306,8000307,8000308,8000309,
-  //   8000310,8000311,8000312,8000313,8000314,8000315,8000316,8000317,8000318,8000319,
-  //   8000320,8000321,8000322,8000323,8000324,8000325,8000326,8000327,8000328,8000329,
-  //   8000330,8000331,8000332,8000333,8000334,8000335,8000336,8000337,8000338,8000339,
-  //   8000340,8000341,8000342,8000343,8000344,8000345,8000346,8000347,8000348
-  // ];
+    22000,22001,22002,22003,22004,22005,22006,22007,22008,22009,22010,22011,22012,22013,22014,22015,22016,22017,22018,22020,22021,22022,22023,22024,22025,22026,22027,22028,22029,22030,22031,22032,22033,22034,22035,22036,22037,22038,22039
+  ];
   bookedStudentIds:number[] = []
 
 
@@ -327,36 +308,36 @@ export class CheckoutComponent {
     }
 
     // ✅ Validate Student ID In List
-    // if (this.eventId === 'uvoo0zHQzwK1efCTBynh') {
+    if (this.eventId === '6t29w3KUr793N6eJ93Ih' || this.eventId === '0fSZiTjFyiz5TL3Bg5xR') {
 
-    //   // ✅ موجود في الليستة الأساسية
-    //   if (!this.validStudentIds.includes(studentId)) {
-    //     this._ToastrService.error('الـ ID غير صحيح');
-    //     this.MsgErr = 'الـ ID غير صحيح'
-    //     this._NgxSpinnerService.hide();
-    //     return;
-    //   }
+      // ✅ موجود في الليستة الأساسية
+      if (!this.validStudentIds.includes(studentId)) {
+        this._ToastrService.error('الـ ID غير صحيح');
+        this.MsgErr = 'الـ ID غير صحيح'
+        this._NgxSpinnerService.hide();
+        return;
+      }
 
-    //   // ✅ متحجز قبل كدا
-    //   if (this.bookedStudentIds.includes(studentId)) {
-    //     this._ToastrService.error('تم استخدام هذا الـ ID من قبل');
-    //     this.MsgErr = 'تم استخدام هذا الـ ID من قبل'
-    //     this._NgxSpinnerService.hide();
-    //     return;
-    //   }
+      // ✅ متحجز قبل كدا
+      if (this.bookedStudentIds.includes(studentId)) {
+        this._ToastrService.error('تم استخدام هذا الـ ID من قبل');
+        this.MsgErr = 'تم استخدام هذا الـ ID من قبل'
+        this._NgxSpinnerService.hide();
+        return;
+      }
 
-    // }
+    }
 
     // ✅ Validate Student IDs
-    // if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'uvoo0zHQzwK1efCTBynh'){
-    //   if (!this.checkoutForm.get('studentsIDs')?.value) {
-    //     this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
-    //     this.MsgErr = 'برجاء أدخل (ID) الخاص بك'
-    //     this._NgxSpinnerService.hide()
+    if(this.eventId == 'HLz7HiRkpk33TSvFDNGy' || this.eventId == 'uvoo0zHQzwK1efCTBynh'){
+      if (!this.checkoutForm.get('studentsIDs')?.value) {
+        this._ToastrService.error('برجاء أدخل (ID) الخاص بك');
+        this.MsgErr = 'برجاء أدخل (ID) الخاص بك'
+        this._NgxSpinnerService.hide()
 
-    //     return;
-    //   }
-    // }
+        return;
+      }
+    }
 
 
     try {
@@ -537,23 +518,25 @@ export class CheckoutComponent {
       const totalPersons = this.bookingData.defaultVisitorCount + 1;
       const qrs = this.generateQRs(totalPersons, this.bookingData.id);
 
-      this._BookingService.updateBooking(this.bookingData.id, {
-        // VisitorCount: this.visitorCount,
-        // totalVisitors: this.visitorCount + this.bookingData.defaultVisitorCount,
+      const updateData: any = {
         payTwoAmount: 0,
         payTwoImage: imagePaymentUrl,
         payTwoRef: this.transactionRef,
         createdAtTwo: new Date(),
-
         totalReq: this.total,
 
         // ✅ الجزء الجديد
         qrs: qrs,
         qrsGenerated: true
-      }).subscribe({
+      };
+
+      if (this.bookingData.EventId === 'k2vYgk5ekOaZLp7y3x1U') {
+        updateData.paymentStages = [];
+      }
+
+      this._BookingService.updateBooking(this.bookingData.id, updateData).subscribe({
         next: () => {
           this._NgxSpinnerService.hide();
-          this._ToastrService.success('Booking Completed Successfully');
           this._ToastrService.success('Booking Completed Successfully');
 
           // reset
@@ -572,11 +555,57 @@ export class CheckoutComponent {
           this._ToastrService.error('Update Failed');
         }
       });
+
+    }
+  }
+
+  async addPaymentStage() {
+    this._NgxSpinnerService.show();
+
+    if (!this.selectedPaymentFile) {
+      this._ToastrService.error('برجاء رفع صورة الدفع');
+      this.MsgErr = 'برجاء رفع صورة الدفع';
+      this._NgxSpinnerService.hide();
+      return;
+    }
+
+    this.MsgErr = '';
+
+    try {
+      const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile);
+
+      this._BookingService.updateBooking(this.bookingData.id, {
+        paymentStages: arrayUnion({
+          createdAt: new Date(),
+          paymentImage: imagePaymentUrl,
+          paymentRef: this.transactionRef
+        })
+      }).subscribe({
+        next: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.success('Booking Payment Stage Successfully');
+
+          // Reset
+          this.transactionRef = '';
+          this.selectedFile = null;
+          this.selectedPaymentFile = null;
+
+          this._Router.navigate(['/payment-success']);
+        },
+        error: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('Update Failed');
+        }
+      });
+
+    } catch (error) {
+      this._NgxSpinnerService.hide();
+      this._ToastrService.error('Image Upload Failed');
     }
   }
 
   newOutComerCount:number = 0
-  fixedOutcomerCount:number = 50
+  fixedOutcomerCount:number = 3
 
   async addOutComer() {
     this._NgxSpinnerService.show();

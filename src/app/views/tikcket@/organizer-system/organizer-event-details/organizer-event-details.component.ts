@@ -23,6 +23,8 @@ export class OrganizerEventDetailsComponent {
   private readonly _NgxSpinnerService = inject(NgxSpinnerService)
   private readonly _ToastrService = inject(ToastrService)
 
+  adminId:string | null = localStorage.getItem('userId');
+
   eventData:any
   eventId:string = ''
 
