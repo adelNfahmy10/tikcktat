@@ -228,9 +228,15 @@
                 </td>
                 <td>
                   <div class="d-flex align-items-center justify-content-center gap-1">
+                    <i class="fa-regular fa-credit-card cr fs-4 second-color" data-bs-toggle="modal" data-bs-target="#exampleModal-payment" (click)="getEventById(event?.id)"></i>
+
+
                     <i class="fa-solid fa-code-compare cr fs-4" [class.text-danger] = '!event.lastPhase' [class.second-color] = 'event.lastPhase' (click)="updateLastPhase(event.id, event.lastPhase)"></i>
+
                     <i class="fa-solid fa-money-bill-transfer cr fs-4 second-color" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getEventById(event?.id)"></i>
+
                     <i class="ri-user-line cr fs-4 second-color" [routerLink]="'/event-attendees/' + event?.Type + '/' + event?.id"></i>
+
                     <i class="fa-solid fa-circle-info cr fs-4 second-color" [routerLink]="'/organizer-event-details/' + event?.id"></i>
                   </div>
                 </td>
@@ -270,7 +276,7 @@
   </div>
 </section>
 
-<!-- Modal -->
+<!-- Modal Owner Payments -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -288,6 +294,29 @@
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-primary" [disabled]="!amountPayment" (click)="updateOwnerPayment()" data-bs-dismiss="modal" aria-label="Close">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Payment Link -->
+<div class="modal fade" id="exampleModal-payment" tabindex="-1" aria-labelledby="exampleModalLabel-payment" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel-payment">Payment Link</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="payment">
+          <h6 class="main-color text-center fw-bold">Amount Payment : {{ownerPaymentInEvent.eventName || 0}} EGP</h6>
+          <label for="paid">Payment Link</label>
+          <input [(ngModel)]="paymentLink" type="text" name="paymentLink" id="paymentLink" class="form-control" placeholder="Payment Link...">
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" [disabled]="!paymentLink" (click)="updatePaymentLink()" data-bs-dismiss="modal" aria-label="Close">Save</button>
       </div>
     </div>
   </div>

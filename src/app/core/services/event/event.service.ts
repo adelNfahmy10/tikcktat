@@ -45,6 +45,17 @@ export class EventService {
     );
   }
 
+  // Update Payment Link
+  updatePaymentLink(eventId: string, paymentLink: string) {
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+
+    return from(
+      updateDoc(eventRef, {
+        paymentLink: paymentLink
+      })
+    );
+  }
+
   // 🔥 Update Event Tickets (بعد الحجز)
   updateEventTickets(eventId: string, bookedTickets: number) {
     const eventRef = doc(this.firestore, `events/${eventId}`);

@@ -45,6 +45,8 @@ export class AdminViewEventComponent{
       next: (res) => {
         this.allEvents = res;
 
+        console.log(this.allEvents);
+
         this.mergeData(); // مهم
 
         this.filteredData = [...this.eventsWithOwnerName]; // 👈 مهم جدًا
@@ -79,7 +81,6 @@ export class AdminViewEventComponent{
   }
 
   changeEventStatus(event: any): void {
-
     const eventId = event?.id
     const newStatus = event?.status === 'Active' ? 'Inactive' : 'Active';
 
@@ -98,10 +99,9 @@ export class AdminViewEventComponent{
         this._ToastrService.error(err)
       }
     });
-
   }
 
-
+  paymentLink: string = '';
   ownerPaymentInEvent:any = {}
   amountPayment:number = 0
   eventId:string = ''
@@ -120,7 +120,6 @@ export class AdminViewEventComponent{
     .subscribe({
       next: (res) => {
         this.ownerPaymentInEvent = res
-        console.log(this.ownerPaymentInEvent);
       }
     });
   }
@@ -142,6 +141,19 @@ export class AdminViewEventComponent{
     this._EventService.updateLastPhase(eventId, status).subscribe({
       next: () => {
         this._ToastrService.success('Last Phase Updated Successfully - ' + `'${status}'`);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  updatePaymentLink(): void {
+    this._EventService.updatePaymentLink(this.eventId, this.paymentLink).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.getAllOwners()
+        this._ToastrService.success('Payment Link Updated Successfully');
       },
       error: (err) => {
         console.log(err);
