@@ -2,14 +2,14 @@
   <div class="container-fluid py-3">
     <div class="row g-3">
       <div class="col-12">
-        <h1>{{bookingDate?.EventName}}</h1>
+        <h1>{{bookingData?.EventName}}</h1>
       </div>
 
       <div class="col-12 card p-3">
         <div class="row g-3">
           <div class="col-md-4">
             <div class="user-image">
-              <img [src]="bookingDate?.userImage" class="w-100 h-100 object-fit-cover" [alt]="bookingDate?.userName">
+              <img [src]="bookingData?.userImage" class="w-100 h-100 object-fit-cover" [alt]="bookingData?.userName">
             </div>
           </div>
           <div class="col-md-8">
@@ -17,19 +17,19 @@
               @if(!canSendQrs()){
                 <span class="new-outcomer-check bg-danger text-white rounded-5 px-3 py-1 mb-3">New Outcomer</span>
               }
-              <h4>Name : {{bookingDate?.userName}}</h4>
-              <h4>Email : <a href="mailto:{{bookingDate?.userEmail}}" target="_blank">{{bookingDate?.userEmail}}</a></h4>
-              <h4>Phone : <a href="whatsapp://send?phone={{bookingDate?.userPhone}}" target="_blank">{{bookingDate?.userPhone}}</a></h4>
-              <h4>Seat No. : ({{ bookingDate?.qrs ? bookingDate?.qrs[0]?.seatNumber || '-' : '-'}})</h4>
+              <h4>Name : {{bookingData?.userName}}</h4>
+              <h4>Email : <a href="mailto:{{bookingData?.userEmail}}" target="_blank">{{bookingData?.userEmail}}</a></h4>
+              <h4>Phone : <a href="whatsapp://send?phone={{bookingData?.userPhone}}" target="_blank">{{bookingData?.userPhone}}</a></h4>
+              <h4>Seat No. : ({{ bookingData?.qrs ? bookingData?.qrs[0]?.seatNumber || '-' : '-'}})</h4>
 
               <h4>Status : <span [ngClass]="{
-                'text-danger' : bookingDate?.status == 'Rejected',
-                'text-warning' : bookingDate?.status == 'Pending',
-                'second-color' : bookingDate?.status == 'Par-Paid',
-                'main-color fw-bold' : bookingDate?.status == 'Paid',
-              }">{{bookingDate?.status}}</span></h4>
-              @if(canSendQrs() && bookingDate?.status == 'Paid' && (bookingDate?.OwnerId == userId || role == 'Admin')){
-                <h4>Send QRs : <span class="main-color fw-bold cr" (click)="(sendFinalQrs(bookingDate?.userEmail,bookingDate?.EventName, bookingDate?.userName,bookingDate?.qrs))"><i class="fa-solid fa-envelope"></i> QRs Email</span></h4>
+                'text-danger' : bookingData?.status == 'Rejected',
+                'text-warning' : bookingData?.status == 'Pending',
+                'second-color' : bookingData?.status == 'Par-Paid',
+                'main-color fw-bold' : bookingData?.status == 'Paid',
+              }">{{bookingData?.status}}</span></h4>
+              @if(canSendQrs() && bookingData?.status == 'Paid' && (bookingData?.OwnerId == userId || role == 'Admin')){
+                <h4>Send QRs : <span class="main-color fw-bold cr" (click)="(sendFinalQrs(bookingData?.userEmail,bookingData?.EventName, bookingData?.userName,bookingData?.qrs))"><i class="fa-solid fa-envelope"></i> QRs Email</span></h4>
               }
             </div>
           </div>
@@ -44,7 +44,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <h4 class="card-title mb-2">Deposit</h4>
-                <p class="text-muted fw-medium fs-22 mb-0">{{bookingDate?.payOneAmount | number}} EGP</p>
+                <p class="text-muted fw-medium fs-22 mb-0">{{bookingData?.payOneAmount | number}} EGP</p>
               </div>
 
               <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -63,7 +63,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <h4 class="card-title mb-2">Final Payment</h4>
-                <p class="text-muted fw-medium fs-22 mb-0">{{bookingDate?.payTwoAmount | number}} EGP</p>
+                <p class="text-muted fw-medium fs-22 mb-0">{{bookingData?.payTwoAmount | number}} EGP</p>
               </div>
 
               <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -99,7 +99,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <div>
                 <h4 class="card-title mb-2">Total Amount</h4>
-                <p class="text-muted fw-medium fs-22 mb-0">{{bookingDate?.totalAmount + TotalOutComersPrice | number}} EGP</p>
+                <p class="text-muted fw-medium fs-22 mb-0">{{bookingData?.totalAmount + TotalOutComersPrice | number}} EGP</p>
               </div>
               <div>
                 <div class="avatar-md bg-primary bg-opacity-10 rounded">
@@ -119,11 +119,11 @@
               <div class="flex-grow-1">
                 <h4 class="card-title mb-2">Total Visitors</h4>
                  <div class="w-100 d-flex justify-content-between align-items-center flex-wrap">
-                    <p class="text-muted fw-medium fs-22 mb-0">{{ (bookingDate?.defaultVisitorCount + bookingDate?.VisitorCount) || 0 | number }} Outcomers</p>
+                    <p class="text-muted fw-medium fs-22 mb-0">{{ (bookingData?.defaultVisitorCount + bookingData?.VisitorCount) || 0 | number }} Outcomers</p>
                     <div>
-                      <span class="fw-bold main-color">{{bookingDate?.defaultVisitorCount || 0 | number }} Defualt</span>
+                      <span class="fw-bold main-color">{{bookingData?.defaultVisitorCount || 0 | number }} Defualt</span>
                       <span class="fw-bold main-color"> - </span>
-                      <span class="fw-bold main-color">{{bookingDate?.VisitorCount || 0 | number }} New</span>
+                      <span class="fw-bold main-color">{{bookingData?.VisitorCount || 0 | number }} New</span>
                     </div>
                   </div>
               </div>
@@ -143,14 +143,14 @@
           <h4 class="mb-2 main-color">Screen Deposit</h4>
 
           <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
-            <span>Price : {{bookingDate?.payOneAmount | number}} EGP</span>
-            <span>created At : {{bookingDate?.createdAtOne?.toDate() | date:"medium"}}</span>
-            <span>Referance No. : {{bookingDate?.payOneRef || '-'}}</span>
+            <span>Price : {{bookingData?.payOneAmount | number}} EGP</span>
+            <span>created At : {{bookingData?.createdAtOne?.toDate() | date:"medium"}}</span>
+            <span>Referance No. : {{bookingData?.payOneRef || '-'}}</span>
           </div>
 
 
           <div class="image-trans">
-            <img [src]="bookingDate?.payOneImage" [alt]="">
+            <img [src]="bookingData?.payOneImage" [alt]="">
           </div>
         </div>
       </div>
@@ -161,33 +161,33 @@
           <h4 class="mb-2 main-color">Screen Last Payment</h4>
 
           <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
-            <span>Price : {{bookingDate?.payTwoAmount | number}} EGP</span>
-            <span>created At : {{bookingDate?.createdAtTwo?.toDate() | date:"medium"}}</span>
-            <span>Referance No. : {{bookingDate?.payTwoRef || '-'}}</span>
+            <span>Price : {{bookingData?.payTwoAmount | number}} EGP</span>
+            <span>created At : {{bookingData?.createdAtTwo?.toDate() | date:"medium"}}</span>
+            <span>Referance No. : {{bookingData?.payTwoRef || '-'}}</span>
           </div>
 
 
           <div class="image-trans">
-            <img [src]="bookingDate?.payTwoImage" [alt]="">
+            <img [src]="bookingData?.payTwoImage" [alt]="">
           </div>
 
         </div>
       </div>
 
-      @if(bookingDate?.paymentStages?.length > 0){
+      @if(bookingData?.paymentStages?.length > 0){
         <div class="col-lg-3 col-md-6 col-12">
           <div class="card p-3 rounded-3 h-100">
 
             <h4 class="mb-2 main-color">Screen Payment Stage Two</h4>
 
             <div class="text-center d-flex flex-column justify-content-center align-items-center gap-1 mb-2">
-              <span>created At : {{bookingDate?.paymentStages[0]?.createdAt?.toDate() | date:"medium"}}</span>
-              <span>Referance No. : {{bookingDate?.paymentStages[0]?.paymentRef || '-'}}</span>
+              <span>created At : {{bookingData?.paymentStages[0]?.createdAt?.toDate() | date:"medium"}}</span>
+              <span>Referance No. : {{bookingData?.paymentStages[0]?.paymentRef || '-'}}</span>
             </div>
 
 
             <div class="image-trans">
-              <img [src]="bookingDate?.paymentStages[0]?.paymentImage" [alt]="">
+              <img [src]="bookingData?.paymentStages[0]?.paymentImage" [alt]="">
             </div>
 
           </div>
@@ -195,8 +195,8 @@
       }
 
 
-      @if(bookingDate?.VisitorCount){
-        @for (screen of bookingDate?.newOutcomers; track $index) {
+      @if(bookingData?.VisitorCount){
+        @for (screen of bookingData?.newOutcomers; track $index) {
           <div class="col-lg-3 col-md-6 col-12">
             <div class="card position-relative p-3 rounded-3 h-100">
               @if(role == 'Admin'){
@@ -215,7 +215,7 @@
               @if(!screen?.price){
                 <div class="input-payment">
                   <div class="main-color fw-bold mb-1">
-                    <span>Amount Paid : {{ ((screen?.count * eventDate?.VisitorPrice) * 1.02) | number }} EGP</span>
+                    <span>Amount Paid : {{ ((screen?.count * eventData?.VisitorPrice) * 1.02) | number }} EGP</span>
                   </div>
                   <input
                     class="form-control"
@@ -231,7 +231,7 @@
                   <button
                     class="btn main-btn w-100"
                     [disabled]="
-                      outcomerPayments[$index] != ((screen?.count * eventDate?.VisitorPrice) * 1.02) ||
+                      outcomerPayments[$index] != ((screen?.count * eventData?.VisitorPrice) * 1.02) ||
                       loadingIndex === $index
                     "
                     (click)="confirmOutcomerPayment(outcomerPayments[$index], $index)">

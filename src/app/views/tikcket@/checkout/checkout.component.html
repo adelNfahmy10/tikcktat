@@ -686,6 +686,106 @@
                         </div>
                       }
 
+                    } @else if(eventData.ExtraOutcomers){
+                      <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
+                        <h3 class="m-0 mb-2">Booking Outcomer</h3>
+                        <div class="user-data rounded-3 my-3">
+                          <div class="row g-2 payOne-info shadow-sm text-start border border-1 p-2">
+                            <div class="col-12">
+                              <div class="payOne-body">
+                                <h5>Available Outcomers : <span class="fw-bold main-color">{{fixedOutcomerCount | number}} outcomer(s)</span></h5>
+                                <h4>Outcomer Price : <span class="fw-bold">{{eventData.VisitorPrice | number}} EGP</span></h4>
+                                <div class="mt-2">
+                                  <small> Outcomer Count </small>
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    [max]="fixedOutcomerCount - bookingData?.VisitorCount"
+                                    class="form-control"
+                                    [(ngModel)]="newOutComerCount"
+                                    name="newOutComer"
+                                    placeholder="Enter New Outcomer..."
+                                  >
+                                <small class="text-danger fw-bold">{{this.newOutComerCount > this.fixedOutcomerCount ? MsgErr : ''}}</small>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-12">
+                              <div class="payOne-body">
+                                <p>
+                                  Outcomer Price :
+                                  <span class="fw-bold">{{ newOutComerCount * eventData.VisitorPrice | number }} EGP</span>
+                                </p>
+
+                                <p>
+                                  @if(eventData.OwnerId == 'hHg7xhcVHrVAPlXa0ITJcJCHzmG3' || eventId == 'seXCdBgEahwpuXnnU0gX'){
+                                    Service Fees : <span class="fw-bold text-success"> <i class="fa-solid fa-square-check"></i> Paid By Remold Events</span>
+                                  } @else {
+                                    Service Fees : <span class="fw-bold"> {{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                  }
+                                </p>
+
+                                <p>
+                                  Total :
+                                  @if(eventData.OwnerId == 'hHg7xhcVHrVAPlXa0ITJcJCHzmG3' || eventId == 'seXCdBgEahwpuXnnU0gX'){
+                                    <span class="fw-bold">{{ (newOutComerCount * eventData.VisitorPrice) | number }} EGP</span>
+                                  } @else {
+                                    <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 1.02) | number }} EGP</span>
+                                  }
+                                </p>
+                              </div>
+
+                              <div class="text-center my-2">
+                                <button class="btn main-btn fs-4">
+                                  <a class="text-white" [href]="eventData.PaymentLink" target="_blank">أدفع من هنا - Pay Now <i class="fa-solid fa-up-right-from-square"></i></a>
+                                </button>
+                              </div>
+
+                              <div class="d-flex flex-wrap justify-content-center align-items-center gap-1 mt-2">
+                                <div class="w-100">
+                                  <small>
+                                    Reference Number 12 Digits
+                                  </small>
+                                  <input
+                                    type="text"
+                                    class="form-control w-100"
+                                    placeholder="Enter Transaction Reference"
+                                    maxlength="12"
+                                    [(ngModel)]="transactionRef"
+                                    name="transactionRef"
+                                    inputmode="numeric"
+                                  />
+                                </div>
+
+                                <div class="w-100">
+                                  <small>
+                                    Upload Image Transaction
+                                  </small>
+                                  <input type="file" class="form-control w-100" id="paymentPhoto" accept="image/*" (change)="onPaymentImageChange($event)">
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="col-12">
+                              <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                                <small class="text-danger fw-bold">{{MsgErr}}</small>
+
+                                <button
+                                  type="button"
+                                  [disabled]="newOutComerCount <= 0 || eventData.ExtraOutcomers < newOutComerCount"
+                                  class="btn btn-primary"
+                                  (click)="addOutComer()"
+                                >
+                                  Add Outcomer
+                                </button>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     } @else if(bookingData.VisitorCount < 3 && bookingData.payOneAmount){
                       <div class="continue-booking tab-pane fade show active shadow-lg border rounded-3 p-3" id="extra-services" role="tabpanel" aria-labelledby="extra-services-tab">
                         <h3 class="m-0 mb-2">Booking Outcomer</h3>
@@ -723,9 +823,9 @@
 
                                 <p>
                                   @if(eventData.OwnerId == 'hHg7xhcVHrVAPlXa0ITJcJCHzmG3'){
-                                    <span class="fw-bold text-success"> <i class="fa-solid fa-square-check"></i> Paid By Remold Events</span>
+                                    Service Fees : <span class="fw-bold text-success"> <i class="fa-solid fa-square-check"></i> Paid By Remold Events</span>
                                   } @else {
-                                    <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
+                                    Service Fees : <span class="fw-bold">{{ ((newOutComerCount * eventData.VisitorPrice) * 0.02) | number }} EGP</span>
                                   }
                                 </p>
 
@@ -789,10 +889,10 @@
                           </div>
                         </div>
                       </div>
-                    } @else if (bookingData.VisitorCount == 3){
+                    } @else if (bookingData.VisitorCount >= 3){
                       <div class="text-center my-4">
-                        <h4 dir="rtl">لقد وصلت إلى الحد الأقصى المسموح به من المرافقين لهذا الحجز.</h4>
-                        <h4>You have reached the maximum number of companions allowed for this booking.</h4>
+                        <h4 dir="rtl">لقد وصلت إلى الحد الأقصى المسموح به من المرافقين لهذا الحجز أو تم إغلاق حجز المرافقين لهذا الحدث.</h4>
+                        <h4>You have reached the maximum number of companions allowed for this booking, or companion booking has been closed for this event.</h4>
 
                         <h4 dir="rtl">نعتذر، لا يمكن إضافة مرافقين جدد في الوقت الحالي.</h4>
                         <h4>We’re sorry, you cannot add any more companions at this time.</h4>
@@ -812,7 +912,6 @@
                       </div>
                     }
                   } @else {
-
                     <div class="text-center mt-3">
                       <h2>The organizers have not set a date for this stage yet.</h2>
                       <h2>المنظمين لم يحددوا معاد هذه المرحلة بعد</h2>

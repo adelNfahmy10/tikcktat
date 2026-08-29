@@ -3,7 +3,10 @@
     <div class="rounded-3 p-3 shadow-lg">
       <h1>Event Details</h1>
       @if(adminId == 'jDVUo3eEtlWOMBAvlacWLlQ8odN2'){
-        <h2 class="cr" (click)="updateEvent()">Update Policy</h2>
+      <div class="d-flex align-items-center gap-2 my-3">
+        <button class="btn main-btn cr" (click)="addPolicyInEvent()">Add Policy</button>
+        <button class="btn main-btn cr" (click)="addExtraOutcomers()">Add Extra Outcomers</button>
+      </div>
       }
       <div class="row g-2">
         <div class="col-md-6">

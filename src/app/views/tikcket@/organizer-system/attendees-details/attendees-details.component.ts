@@ -27,8 +27,8 @@ export class AttendeesDetailsComponent implements OnInit{
 
   role:string | null = localStorage.getItem('role')
   userId:string | null = localStorage.getItem('userId')
-  eventDate:any = {}
-  bookingDate:any = {}
+  eventData:any = {}
+  bookingData:any = {}
   bookingId:string | null = ''
   TotalOutComersPrice:number = 0
   outcomerPayments: number[] = [];
@@ -39,9 +39,9 @@ export class AttendeesDetailsComponent implements OnInit{
 
   // Get Event By Id
   getEventById():void{
-    this._EventService.getEventById(this.bookingDate?.EventId).subscribe({
+    this._EventService.getEventById(this.bookingData?.EventId).subscribe({
       next:(res)=>{
-        this.eventDate = res
+        this.eventData = res
       }
     })
   }
@@ -57,10 +57,11 @@ export class AttendeesDetailsComponent implements OnInit{
         this._BookingService.getBookingById(this.bookingId!).subscribe({
           next: (res) => {
             this._NgxSpinnerService.hide();
-            this.bookingDate = res;
+            this.bookingData = res;
+
             this.getEventById();
 
-            this.TotalOutComersPrice = (this.bookingDate.newOutcomers || []).reduce(
+            this.TotalOutComersPrice = (this.bookingData.newOutcomers || []).reduce(
               (sum: number, item: any) => sum + Number(item.price || 0),
               0
             );
@@ -74,7 +75,6 @@ export class AttendeesDetailsComponent implements OnInit{
     })
   }
 
-
   // Check Amount Paid Outcomers Payments
   loadingIndex: number | null = null;
   confirmOutcomerPayment(amount: number, index: number) {
@@ -82,7 +82,7 @@ export class AttendeesDetailsComponent implements OnInit{
     this._NgxSpinnerService.show();
 
     // نسخة من الـ Array
-    const newOutcomers = [...this.bookingDate.newOutcomers];
+    const newOutcomers = [...this.bookingData.newOutcomers];
 
     // تحديث العنصر المطلوب
     newOutcomers[index] = {
@@ -91,13 +91,13 @@ export class AttendeesDetailsComponent implements OnInit{
       createCheckAt: Timestamp.now()
     };
 
-    this._BookingService.updateBooking(this.bookingDate.id, {
+    this._BookingService.updateBooking(this.bookingData.id, {
       newOutcomers
     }).subscribe({
       next: () => {
 
         // تحديث الـ UI بدون Refresh
-        this.bookingDate.newOutcomers = newOutcomers;
+        this.bookingData.newOutcomers = newOutcomers;
 
         this.outcomerPayments[index] = null!;
 
@@ -133,7 +133,7 @@ export class AttendeesDetailsComponent implements OnInit{
       this._NgxSpinnerService.show();
 
       // الـ Outcomer اللي هيتمسح
-      const deletedOutcomer = this.bookingDate.newOutcomers[index];
+      const deletedOutcomer = this.bookingData.newOutcomers[index];
       const deletedCount = deletedOutcomer.count;
 
       if (!deletedOutcomer) {
@@ -142,11 +142,11 @@ export class AttendeesDetailsComponent implements OnInit{
       }
 
       // حذف الـ Outcomer
-      const newOutcomers = [...this.bookingDate.newOutcomers];
+      const newOutcomers = [...this.bookingData.newOutcomers];
       newOutcomers.splice(index, 1);
 
       // حذف الـ QR المقابل ليه
-      const qrs = this.bookingDate.qrs.filter((qr: any) => {
+      const qrs = this.bookingData.qrs.filter((qr: any) => {
 
         if (qr.type !== 'guest') {
           return true;
@@ -159,21 +159,23 @@ export class AttendeesDetailsComponent implements OnInit{
 
       });
 
-      const visitorCount = Math.max(0, this.bookingDate.VisitorCount - deletedCount);
+      const visitorCount = Math.max(0, this.bookingData.VisitorCount - deletedCount);
 
-      const totalVisitors = Math.max(0, this.bookingDate.totalVisitors - deletedCount);
+      const totalVisitors = Math.max(0, this.bookingData.totalVisitors - deletedCount);
 
-      this._BookingService.updateBooking(this.bookingDate.id, {
+      this._BookingService.updateBooking(this.bookingData.id, {
         newOutcomers,
         qrs,
         VisitorCount: visitorCount,
         totalVisitors: totalVisitors
       }).subscribe({
         next: (res) => {
-          this.bookingDate.newOutcomers = newOutcomers;
-          this.bookingDate.qrs = qrs;
-          this.bookingDate.VisitorCount = visitorCount;
-          this.bookingDate.totalVisitors = totalVisitors;
+          this.bookingData.newOutcomers = newOutcomers;
+          this.bookingData.qrs = qrs;
+          this.bookingData.VisitorCount = visitorCount;
+          this.bookingData.totalVisitors = totalVisitors;
+
+          this.updateExtraOutcomersCount(this.eventData.id, deletedCount)
 
           this._NgxSpinnerService.hide();
 
@@ -197,9 +199,25 @@ export class AttendeesDetailsComponent implements OnInit{
           });
         }
       });
-
     });
+  }
 
+  updateExtraOutcomersCount(eventId:string, totalOutcomers:number):void{
+    if(this.eventData.ExtraOutcomers){
+      this._EventService.updateEvent(eventId, {
+        ExtraOutcomers: this.eventData.ExtraOutcomers + totalOutcomers
+      }).subscribe({
+        next: () => {
+          this._ToastrService.success('Extra Outcomers Updated successfully.');
+        },
+        error: (err) => {
+          console.error(err);
+          this._ToastrService.error('Error updated extra outcomers.');
+        }
+      });
+    } else {
+      this._ToastrService.error('Event have not Extra Outcomers.');
+    }
   }
 
   // Send QRs Code | STMP QRS Bravo
@@ -223,10 +241,10 @@ export class AttendeesDetailsComponent implements OnInit{
   }
 
   canSendQrs(): boolean {
-    if (!this.bookingDate?.newOutcomers?.length) {
+    if (!this.bookingData?.newOutcomers?.length) {
       return true;
     }
 
-    return this.bookingDate?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
+    return this.bookingData?.newOutcomers?.every((outcomer: any) => !!outcomer.price);
   }
 }

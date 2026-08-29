@@ -55,8 +55,6 @@ export class OrganizerDashboardComponent implements OnInit{
           next:(res)=>{
             this.allEvents = res.filter((event: any) => event.OwnerId === this.OwnerId);
             this.eventsCount = this.allEvents.length;
-            console.log(this.allEvents);
-
             this.eventsActiveCount = this.allEvents.filter((event: any) => event.status == 'Active').length
             this.eventsInactiveCount = this.allEvents.filter((event: any) => event.status != 'Active').length
           }
@@ -90,9 +88,6 @@ export class OrganizerDashboardComponent implements OnInit{
             paid: 0,
           }
         );
-
-        console.log(this.allBookings);
-
 
         this.BookingsPending = bookingCounts.pending;
         this.BookingsParPaid = bookingCounts.parPaid;
@@ -189,9 +184,6 @@ export class OrganizerDashboardComponent implements OnInit{
           };
 
         }).sort((a, b) => b.amount - a.amount).slice(0, 50);
-
-        console.log(this.topEvents);
-
 
         this.topEventsChart = {
           ...this.topEventsChart,

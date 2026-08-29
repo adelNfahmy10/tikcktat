@@ -57,6 +57,8 @@ export class OrganizerEventDetailsComponent {
         next: (res) => {
         this._NgxSpinnerService.hide()
           this.eventData = res;
+          console.log(this.eventData);
+
           this.getOwnerById()
         },
         error: (err) => {
@@ -124,7 +126,7 @@ export class OrganizerEventDetailsComponent {
     })
   }
 
-  updateEvent(): void {
+  addPolicyInEvent(): void {
     const eventPolicy = {
       ar: [
         "جميع المبالغ المدفوعة لهذا الحدث غير قابلة للاسترداد تحت أي ظرف من الظروف.",
@@ -157,6 +159,36 @@ export class OrganizerEventDetailsComponent {
       error: (err) => {
         console.error(err);
         this._ToastrService.error('Error updating event.');
+      }
+    });
+  }
+
+  addExtraOutcomers(): void {
+    let eventExtraOutcomers = 0
+
+    if(this.eventId == 'k2vYgk5ekOaZLp7y3x1U' || this.eventId == 'Nu2hA9IFF5XoAiIDKCKl'){
+      eventExtraOutcomers = 70
+    } else if(this.eventId == '0fSZiTjFyiz5TL3Bg5xR'){
+      eventExtraOutcomers = 60
+    } else if(this.eventId == '6KBIPOyo0rK8A3TVad90' || this.eventId == '6t29w3KUr793N6eJ93Ih'){
+      eventExtraOutcomers = 45
+    } else if(this.eventId == 'seXCdBgEahwpuXnnU0gX'){
+      eventExtraOutcomers = 20
+    } else {
+      this._ToastrService.error('Event Have not any extra outcomer.');
+      return;
+    }
+
+    this._EventService.updateEvent(this.eventId, {
+      ExtraOutcomers: eventExtraOutcomers
+    }).subscribe({
+      next: () => {
+        this._ToastrService.success('Extra Outcomers added successfully.');
+        this.getEventById()
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error('Error add extra outcomers.');
       }
     });
   }

@@ -125,6 +125,7 @@ export class CheckoutComponent {
         this._EventService.getEventById(this.eventId).subscribe({
           next: (res) => {
             this.eventData = res;
+            this.fixedOutcomerCount = res.ExtraOutcomers || 3
             this.eventData.departments = (this.eventData.departments || []).filter((d:any) => d && d.trim().length > 0);
             this._NgxSpinnerService.hide()
           }
@@ -605,68 +606,142 @@ export class CheckoutComponent {
   }
 
   newOutComerCount:number = 0
-  fixedOutcomerCount:number = 3
+  fixedOutcomerCount:number = 0
 
   async addOutComer() {
     this._NgxSpinnerService.show();
 
+    if(this.eventData.ExtraOutcomers){
+      const totalPersons = this.bookingData?.VisitorCount + this.newOutComerCount;
 
-    const totalPersons = this.bookingData.VisitorCount + this.newOutComerCount;
+      if (this.newOutComerCount > this.fixedOutcomerCount) {
 
-    if (totalPersons > this.fixedOutcomerCount) {
+        this._ToastrService.error(
+          `You can only add ${this.fixedOutcomerCount} outcomer(s).`
+        );
 
-      const remaining = this.fixedOutcomerCount - this.bookingData.VisitorCount;
+        this.MsgErr = `You can only add ${this.fixedOutcomerCount} outcomer(s).`;
 
-      this._ToastrService.error(
-        `You can only add ${remaining} outcomer(s).`
-      );
+        this._NgxSpinnerService.hide();
+        return;
+      }
 
-      this.MsgErr = `You can only add ${remaining} outcomer(s).`;
+      const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+      const newVisitor = {
+        type: 'outcomer',
+        count: this.newOutComerCount,
+        price: 0,
+        payRef: this.transactionRef,
+        payImage: imagePaymentUrl,
+        createdAt: new Date()
+      };
 
-      this._NgxSpinnerService.hide();
-      return;
+      if (!this.selectedPaymentFile) {
+        this._ToastrService.error('برجاء رفع صورة الدفع');
+        this.MsgErr = 'برجاء رفع صورة الدفع'
+        this._NgxSpinnerService.hide()
+
+        return;
+      }
+
+      const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
+
+      this._BookingService.updateBooking(this.bookingData.id, {
+        VisitorCount: totalPersons,
+        newOutcomers: arrayUnion(newVisitor),
+        totalVisitors: totalPersons + this.bookingData.defaultVisitorCount,
+
+        // ✅ الجزء الجديد
+        qrs: arrayUnion(...newQRs),
+        qrsGenerated: true
+      }).subscribe({
+        next: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.success('✅ Add Outcomer Successfully');
+
+          this.updateExtraOutcomersCount(this.eventData.id, this.newOutComerCount)
+
+          this.modalService.dismissAll();
+          this._Router.navigate(['/payment-success']);
+        },
+        error: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('Update Failed');
+        }
+      });
+    } else {
+      const totalPersons = this.bookingData.VisitorCount + this.newOutComerCount;
+
+      if (totalPersons > this.fixedOutcomerCount) {
+
+        const remaining = this.fixedOutcomerCount - this.bookingData.VisitorCount;
+
+        this._ToastrService.error(
+          `You can only add ${remaining} outcomer(s).`
+        );
+
+        this.MsgErr = `You can only add ${remaining} outcomer(s).`;
+
+        this._NgxSpinnerService.hide();
+        return;
+      }
+
+      const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
+      const newVisitor = {
+        type: 'outcomer',
+        count: this.newOutComerCount,
+        price: 0,
+        payRef: this.transactionRef,
+        payImage: imagePaymentUrl,
+        createdAt: new Date()
+      };
+
+
+      if (!this.selectedPaymentFile) {
+        this._ToastrService.error('برجاء رفع صورة الدفع');
+        this.MsgErr = 'برجاء رفع صورة الدفع'
+        this._NgxSpinnerService.hide()
+
+        return;
+      }
+
+      const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
+
+      this._BookingService.updateBooking(this.bookingData.id, {
+        VisitorCount: totalPersons,
+        newOutcomers: arrayUnion(newVisitor),
+        totalVisitors: totalPersons + this.bookingData.defaultVisitorCount,
+
+        // ✅ الجزء الجديد
+        qrs: arrayUnion(...newQRs),
+        qrsGenerated: true
+      }).subscribe({
+        next: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.success('✅ Add Outcomer Successfully');
+
+          this.modalService.dismissAll();
+          this._Router.navigate(['/payment-success']);
+        },
+        error: () => {
+          this._NgxSpinnerService.hide();
+          this._ToastrService.error('Update Failed');
+        }
+      });
     }
+  }
 
-    const imagePaymentUrl = await this._EventService.uploadImage(this.selectedPaymentFile!);
-    const newVisitor = {
-      type: 'outcomer',
-      count: this.newOutComerCount,
-      price: 0,
-      payRef: this.transactionRef,
-      payImage: imagePaymentUrl,
-      createdAt: new Date()
-    };
-
-
-    if (!this.selectedPaymentFile) {
-      this._ToastrService.error('برجاء رفع صورة الدفع');
-      this.MsgErr = 'برجاء رفع صورة الدفع'
-      this._NgxSpinnerService.hide()
-
-      return;
-    }
-
-    const newQRs = this.generateGuestQRs(this.newOutComerCount, this.bookingData.id);
-
-    this._BookingService.updateBooking(this.bookingData.id, {
-      VisitorCount: totalPersons,
-      newOutcomers: arrayUnion(newVisitor),
-      totalVisitors: totalPersons + this.bookingData.defaultVisitorCount,
-
-      // ✅ الجزء الجديد
-      qrs: arrayUnion(...newQRs),
-      qrsGenerated: true
+  updateExtraOutcomersCount(eventId:string, totalOutcomers:number):void{
+    this._EventService.updateEvent(eventId, {
+      ExtraOutcomers: this.eventData.ExtraOutcomers - totalOutcomers
     }).subscribe({
       next: () => {
-        this._NgxSpinnerService.hide();
-        this._ToastrService.success('✅ Add Outcomer Successfully');
-
-        this.modalService.dismissAll();
-        this._Router.navigate(['/payment-success']);
+        console.log('Extra Outcomers Updated successfully.');
       },
-      error: () => {
-        this._NgxSpinnerService.hide();
-        this._ToastrService.error('Update Failed');
+      error: (err) => {
+        console.error(err);
+        console.log('Error updated extra outcomers.');
+        this._ToastrService.error('Error updated extra outcomers.');
       }
     });
   }
