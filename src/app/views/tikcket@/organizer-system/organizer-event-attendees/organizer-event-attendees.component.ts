@@ -621,6 +621,29 @@ export class OrganizerEventAttendeesComponent {
 
   }
 
+  complateSeatNumberByEvent(): void {
+
+    if (!this.filteredData || this.filteredData.length === 0) {
+      this._ToastrService.warning('No bookings found');
+      return;
+    }
+
+    const bookingsToUpdate = [...this.filteredData];
+
+    this._EventService
+      .updateAllBookingsQrsWithSeatsByEvent(bookingsToUpdate)
+      .subscribe({
+        next: () => {
+          this._ToastrService.success('Seats Updated Successfully');
+        },
+        error: (err) => {
+          console.log(err);
+          this._ToastrService.error('Seats Updated Wrong!');
+        }
+      });
+  }
+
+
   // Email Send Templates
   // SMTP Bravo
   sendConfirmEmail(email:string, eventName:string, userName:string):void{

@@ -79,7 +79,7 @@ export class EventService {
     );
   }
 
-  // Update QRs SeatNubmer
+  // Update QRs SeatNubmer By Departments
   updateAllBookingsQrsWithSeats(bookings: any[]) {
     const batch = writeBatch(this.firestore);
 
@@ -128,6 +128,77 @@ export class EventService {
             ? currentSeat
             : `+${currentSeat}`
         };
+      });
+
+      batch.update(bookingRef, {
+        qrs: updatedQrs,
+        qrsGenerated: true
+      });
+
+    });
+
+    return from(batch.commit());
+  }
+
+  // Update QRs SeatNubmer By Events
+  updateAllBookingsQrsWithSeatsByEvent(bookings: any[]) {
+
+    const batch = writeBatch(this.firestore);
+
+    // Event ID -> Seat Prefix
+    const eventLetters = new Map<string, string>([
+      ['k2vYgk5ekOaZLp7y3x1U', 'A'],
+      ['Nu2hA9IFF5XoAiIDKCKl', 'B'],
+      ['6KBIPOyo0rK8A3TVad90', 'C'],
+      ['6t29w3KUr793N6eJ93Ih', 'D'],
+      ['0fSZiTjFyiz5TL3Bg5xR', 'E']
+    ]);
+
+    // Counter لكل Event
+    const eventCounters = new Map<string, number>();
+
+    bookings.forEach((booking) => {
+
+      if (!booking.qrs?.length) {
+        return;
+      }
+
+      // IMPORTANT: EventId بحرف E كبير
+      const eventId = booking.EventId;
+
+      const eventLetter = eventLetters.get(eventId);
+
+      if (!eventLetter) {
+        console.warn(`No letter assigned for EventId: ${eventId}`);
+        return;
+      }
+
+      const bookingRef = doc(
+        this.firestore,
+        `bookings/${booking.id}`
+      );
+
+      let currentSeat = '';
+
+      const updatedQrs = booking.qrs.map((qr: any) => {
+
+        if (qr.type === 'owner') {
+
+          const nextIndex =
+            (eventCounters.get(eventId) || 0) + 1;
+
+          eventCounters.set(eventId, nextIndex);
+
+          currentSeat = `${eventLetter}${nextIndex}`;
+        }
+
+        return {
+          ...qr,
+          seatNumber: qr.type === 'owner'
+            ? currentSeat
+            : `+${currentSeat}`
+        };
+
       });
 
       batch.update(bookingRef, {
