@@ -57,6 +57,18 @@ export class SendmailService {
     );
   }
 
+  sendUnusedQrs(body:any): Observable<any> {
+    return this._HttpClient.post(
+      'https://ticketat-send-email.vercel.app/api/send-new-outcomers-qrs',
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  }
+
   sendConfiranceEmail(body:any): Observable<any> {
     return this._HttpClient.post(
       'https://ticketat-send-email.vercel.app/api/send-confirance-email',

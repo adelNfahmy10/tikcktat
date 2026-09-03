@@ -29,7 +29,10 @@
 .logos{
   img{
     width: 100px !important;
-    filter: drop-shadow(0 0 3px rgba(#7C3AED, 0.9))
+    filter: drop-shadow(0 0 3px rgba(#7C3AED, 0.9));
+    &.ticketat-logo-qr{
+      width: 120px !important;
+    }
   }
 }
 

@@ -240,6 +240,25 @@ export class AttendeesDetailsComponent implements OnInit{
     });
   }
 
+  sendUnusedQrs(email:string, eventName:string, userName:string, qrs: any[]):void{
+    const data = {
+      to: email,
+      name: userName,
+      eventName: eventName,
+      qrs: qrs
+    };
+
+    this._SendmailService.sendUnusedQrs(data).subscribe({
+      next: () => {
+        this._ToastrService.success('Email Sent');
+      },
+      error: (err) => {
+        console.error(err);
+        this._ToastrService.error('Email failed!');
+      }
+    });
+  }
+
   canSendQrs(): boolean {
     if (!this.bookingData?.newOutcomers?.length) {
       return true;

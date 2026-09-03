@@ -30,6 +30,7 @@
               }">{{bookingData?.status}}</span></h4>
               @if(canSendQrs() && bookingData?.status == 'Paid' && (bookingData?.OwnerId == userId || role == 'Admin')){
                 <h4>Send QRs : <span class="main-color fw-bold cr" (click)="(sendFinalQrs(bookingData?.userEmail,bookingData?.EventName, bookingData?.userName,bookingData?.qrs))"><i class="fa-solid fa-envelope"></i> QRs Email</span></h4>
+                <h4>Send Unused QRs : <span class="main-color fw-bold cr" (click)="(sendUnusedQrs(bookingData?.userEmail,bookingData?.EventName, bookingData?.userName,bookingData?.qrs))"><i class="fa-solid fa-envelope"></i> QRs Email</span></h4>
               }
             </div>
           </div>
