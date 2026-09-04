@@ -84,9 +84,6 @@ export class AdminViewEventComponent{
     const eventId = event?.id
     const newStatus = event?.status === 'Active' ? 'Inactive' : 'Active';
 
-    console.log('eventId :' + eventId);
-    console.log('new Status :' + newStatus);
-
     this._EventService.updateEvent(eventId, {
       status: newStatus
     }).subscribe({

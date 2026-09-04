@@ -624,9 +624,10 @@
                             </div>
                           </div>
                         </div>
-                      } @else if(bookingData?.totalAmount <= eventData?.TicketPrice && bookingData?.createdAtTwo && !bookingData?.paymentStages?.length && !bookingData?.payTwoAmount){
+                      }
+                      <!-- Payment Stage -->
+                      <!-- @else if(bookingData?.totalAmount <= eventData?.TicketPrice && bookingData?.createdAtTwo && !bookingData?.paymentStages?.length && !bookingData?.payTwoAmount){
                         <div class="payment-stage container border rounded-3">
-                          <!-- Payment Stage -->
                           <div class="my-4">
                             <h4 dir="rtl">- في حالة عدم سداد المبلغ بالكامل، يمكنك استكمال الدفع من هنا.</h4>
                             <h4 dir="rtl">- أما إذا قمت بالسداد بالفعل، فيُرجى الانتظار حتى يتم تأكيد الدفع من قِبل المنظم المسؤول.</h4>
@@ -675,7 +676,8 @@
                               </button>
                             </div>
                         </div>
-                      } @else {
+                      } -->
+                      @else {
                         <div class="text-center my-4">
                           <h4 dir="rtl">برجاء الإنتظار لحين تأكيد دفع المرحلة الثانية من قبل المنظم المسئول</h4>
                           <h4>Please wait while the responsible organizer confirms the first payment.</h4>

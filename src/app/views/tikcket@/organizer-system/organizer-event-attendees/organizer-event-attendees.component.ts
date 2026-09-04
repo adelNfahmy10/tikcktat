@@ -201,12 +201,6 @@ export class OrganizerEventAttendeesComponent {
         next: (res) => {
           this._NgxSpinnerService.hide()
           this.allBooking = res;
-          let parPaidAttendess = this.allBooking.filter((book:any)=>{
-            return book.status == 'Par-Paid'
-          })
-
-          console.log(parPaidAttendess);
-
 
           this.pendingCount = this.allBooking.filter((book:any)=>{
             return book.status == 'Pending'
